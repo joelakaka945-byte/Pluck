@@ -1,2 +1,488 @@
-# Pluck
-Video grabber
+!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pluck — grab audio &amp; video from a link</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#10151c;
+    --bg-elevated:#161d27;
+    --bg-input:#0c1116;
+    --border:#2a3340;
+    --text:#edeae3;
+    --text-dim:#8a93a3;
+    --accent:#f2a93b;
+    --accent-dim:#b97f2a;
+    --teal:#5fd3c4;
+    --danger:#e0685f;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:48px 20px 80px;
+  }
+  header{margin-bottom:28px;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:0 0 10px;
+  }
+  h1{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:32px;
+    font-weight:700;
+    margin:0 0 10px;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    color:var(--text-dim);
+    margin:0;
+    font-size:15px;
+    max-width:52ch;
+  }
+
+  .banner{
+    border:1px solid var(--accent-dim);
+    background:rgba(242,169,59,0.08);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    font-size:13.5px;
+    color:var(--text);
+    margin-bottom:24px;
+  }
+  .banner strong{color:var(--accent);}
+  .banner code{
+    font-family:"IBM Plex Mono",monospace;
+    background:var(--bg-input);
+    padding:1px 5px;
+    border-radius:4px;
+    font-size:12.5px;
+  }
+
+  .card{
+    background:var(--bg-elevated);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+  }
+
+  label{
+    display:block;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-bottom:8px;
+  }
+
+  input[type="text"]{
+    width:100%;
+    background:var(--bg-input);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px 14px;
+    color:var(--text);
+    font-size:15px;
+    font-family:inherit;
+  }
+  input[type="text"]:focus{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+    border-color:var(--accent);
+  }
+  input[type="text"]::placeholder{color:#57616f;}
+
+  .waveform{
+    display:flex;
+    align-items:flex-end;
+    gap:3px;
+    height:16px;
+    margin:14px 0 18px;
+    opacity:0.35;
+  }
+  .waveform span{
+    flex:1;
+    background:var(--accent);
+    border-radius:2px;
+    height:20%;
+  }
+  .waveform.active span{animation:bar 1.1s ease-in-out infinite;}
+  .waveform.active span:nth-child(2n){animation-delay:.12s;}
+  .waveform.active span:nth-child(3n){animation-delay:.24s;}
+  .waveform.active span:nth-child(4n){animation-delay:.36s;}
+  @keyframes bar{
+    0%,100%{height:20%;}
+    50%{height:100%;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .waveform.active span{animation:none;height:60%;}
+  }
+
+  .formats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:18px;
+  }
+  button.fmt{
+    background:var(--bg-input);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px 8px;
+    color:var(--text);
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition:border-color .15s ease, transform .1s ease;
+  }
+  button.fmt small{
+    display:block;
+    font-family:"IBM Plex Mono",monospace;
+    font-weight:400;
+    font-size:10.5px;
+    color:var(--text-dim);
+    margin-top:4px;
+    text-transform:none;
+    letter-spacing:0;
+  }
+  button.fmt:hover{border-color:var(--accent);}
+  button.fmt:active{transform:scale(0.98);}
+  button.fmt:disabled{opacity:0.5;cursor:not-allowed;}
+  button.fmt:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  .status{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:13px;
+    min-height:18px;
+    margin-bottom:4px;
+  }
+  .status.error{color:var(--danger);}
+  .status.ok{color:var(--teal);}
+
+  .results{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+  .result-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:var(--bg-input);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:10px 14px;
+    flex-wrap:wrap;
+  }
+  .result-tag{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+  }
+  .result-link{
+    color:var(--accent);
+    font-weight:600;
+    text-decoration:none;
+    font-size:14px;
+  }
+  .result-link:hover{text-decoration:underline;}
+  .result-error{color:var(--danger);font-size:13px;}
+  .picker-list{display:flex;flex-direction:column;gap:6px;align-items:flex-end;}
+
+  .instance-status{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px;
+    color:var(--text-dim);
+    margin-top:14px;
+  }
+  .instance-status.ok{color:var(--teal);}
+  .instance-status.warn{color:var(--accent);}
+
+  footer{
+    margin-top:32px;
+    font-size:12.5px;
+    color:var(--text-dim);
+  }
+  footer h2{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:14px;
+    color:var(--text);
+    margin:0 0 8px;
+  }
+  footer .platforms{
+    display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;
+  }
+  footer .platforms span{
+    border:1px solid var(--border);
+    border-radius:100px;
+    padding:3px 10px;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+  }
+  footer a{color:var(--teal);}
+  footer p{margin:0 0 10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">link in, file out</p>
+    <h1>Pluck</h1>
+    <p>Paste a public link from a supported platform, then pull the audio, the video, or both. This page is just the front end — it sends your link to a cobalt engine you control. See the setup notes below.</p>
+  </header>
+
+  <div class="banner" id="setupBanner">
+    <strong>Setup needed:</strong> this page has no engine wired up yet. Open <code>index.html</code>, find the line
+    <code>const COBALT_API_URL = "";</code> near the top of the <code>&lt;script&gt;</code>, and paste in the URL of your own cobalt instance. Full steps are in the README this file came with.
+  </div>
+
+  <div class="card">
+    <label for="urlInput">Media link</label>
+    <input type="text" id="urlInput" placeholder="https://www.instagram.com/reel/..., youtube.com/watch?v=..., tiktok.com/@..., etc.">
+
+    <div class="waveform" id="waveform">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="formats">
+      <button class="fmt" id="btnMp3" data-mode="mp3">MP3<small>audio only</small></button>
+      <button class="fmt" id="btnMp4" data-mode="mp4">MP4<small>video + audio</small></button>
+      <button class="fmt" id="btnBoth" data-mode="both">Both<small>mp3 &amp; mp4</small></button>
+    </div>
+
+    <div class="status" id="status"></div>
+    <div class="results" id="results"></div>
+    <div class="instance-status" id="instanceStatus">Checking engine…</div>
+  </div>
+
+  <footer>
+    <h2>Platforms cobalt engines commonly support</h2>
+    <div class="platforms">
+      <span>Instagram</span><span>TikTok</span><span>Twitter/X</span><span>Facebook</span>
+      <span>Reddit</span><span>Snapchat</span><span>Pinterest</span><span>Vimeo</span>
+      <span>SoundCloud</span><span>Bandcamp</span><span>Twitch clips</span><span>Bluesky</span>
+      <span>Tumblr</span><span>Dailymotion</span><span>Loom</span><span>YouTube*</span>
+    </div>
+    <p>*YouTube is the one platform that fights back hardest — it blocks the shared public cobalt instance outright, so it only works reliably through your own freshly self-hosted engine, and even then it can need cookies and may stop working again without warning.</p>
+    <p>Only paste links to public content you're allowed to save — not private, paywalled, or DRM-protected media. Downloaded files are yours to manage responsibly; this tool doesn't store or see them (everything streams straight from your engine to your browser).</p>
+    <p>Built on <a href="https://github.com/imputnet/cobalt" target="_blank" rel="noopener">cobalt</a>, an open-source media engine.</p>
+  </footer>
+
+</div>
+
+<script>
+  // ─────────────────────────────────────────────────────────────
+  // PASTE YOUR SELF-HOSTED COBALT INSTANCE URL BELOW.
+  // Example: "https://my-cobalt-production.up.railway.app"
+  // Leave empty and the page will tell users setup isn't done.
+  // ─────────────────────────────────────────────────────────────
+  const COBALT_API_URL = "";
+
+  const urlInput = document.getElementById('urlInput');
+  const statusEl = document.getElementById('status');
+  const resultsEl = document.getElementById('results');
+  const waveform = document.getElementById('waveform');
+  const setupBanner = document.getElementById('setupBanner');
+  const instanceStatusEl = document.getElementById('instanceStatus');
+  const buttons = [document.getElementById('btnMp3'), document.getElementById('btnMp4'), document.getElementById('btnBoth')];
+
+  if (COBALT_API_URL) setupBanner.style.display = 'none';
+
+  buttons.forEach(btn => btn.addEventListener('click', () => handleDownload(btn.dataset.mode)));
+
+  function setLoading(isLoading){
+    buttons.forEach(b => b.disabled = isLoading);
+    waveform.classList.toggle('active', isLoading);
+  }
+
+  function showStatus(msg, kind){
+    statusEl.textContent = msg || '';
+    statusEl.className = 'status' + (kind ? ' ' + kind : '');
+  }
+
+  function clearResults(){ resultsEl.innerHTML = ''; }
+
+  async function callCobalt(url, downloadMode){
+    const res = await fetch(COBALT_API_URL.replace(/\/$/, '') + '/', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url, downloadMode, audioFormat: 'mp3' })
+    });
+    let data;
+    try { data = await res.json(); }
+    catch { throw new Error(`HTTP ${res.status}`); }
+    if (!res.ok || data.status === 'error') {
+      const code = (data && data.error && data.error.code) || `HTTP ${res.status}`;
+      throw new Error(code);
+    }
+    return data;
+  }
+
+  function friendlyError(err){
+    const msg = (err && err.message) ? err.message : String(err);
+    if (msg === 'Failed to fetch' || msg.includes('NetworkError') || msg.includes('Load failed')) {
+      return 'Could not reach your cobalt instance — check the URL and that CORS is allowed for this page\'s origin.';
+    }
+    const known = {
+      'error.api.link.invalid': 'That link isn\'t recognized as valid.',
+      'error.api.link.unsupported': 'This platform isn\'t supported by your instance.',
+      'error.api.service.unsupported': 'This service isn\'t supported by your instance.',
+      'error.api.content.video.unavailable': 'That media is private, deleted, or region-locked.',
+      'error.api.fetch.fail': 'Your instance couldn\'t fetch that link from the source.',
+      'error.api.fetch.rate': 'Rate limited by the source platform — try again shortly.',
+      'error.api.fetch.empty': 'No downloadable media was found at that link.'
+    };
+    return known[msg] || `Engine error: ${msg}`;
+  }
+
+  function makeRow(label){
+    const row = document.createElement('div');
+    row.className = 'result-row';
+    const tag = document.createElement('span');
+    tag.className = 'result-tag';
+    tag.textContent = label;
+    row.appendChild(tag);
+    return row;
+  }
+
+  function renderOutcome(label, settled){
+    const row = makeRow(label);
+
+    if (settled.status === 'rejected') {
+      const err = document.createElement('span');
+      err.className = 'result-error';
+      err.textContent = friendlyError(settled.reason);
+      row.appendChild(err);
+      resultsEl.appendChild(row);
+      return;
+    }
+
+    const data = settled.value;
+
+    if (data.status === 'picker') {
+      const list = document.createElement('div');
+      list.className = 'picker-list';
+      (data.picker || []).forEach((item, i) => {
+        const a = document.createElement('a');
+        a.href = item.url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.className = 'result-link';
+        a.textContent = `Item ${i + 1} (${item.type})`;
+        list.appendChild(a);
+      });
+      if (data.audio) {
+        const a = document.createElement('a');
+        a.href = data.audio;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.className = 'result-link';
+        a.textContent = data.audioFilename || 'Background audio';
+        list.appendChild(a);
+      }
+      row.appendChild(list);
+      resultsEl.appendChild(row);
+      return;
+    }
+
+    let href, filename;
+    if (data.status === 'tunnel' || data.status === 'redirect') {
+      href = data.url; filename = data.filename;
+    } else if (data.status === 'local-processing') {
+      href = Array.isArray(data.tunnel) ? data.tunnel[0] : data.tunnel;
+      filename = data.output && data.output.filename;
+    } else {
+      const err = document.createElement('span');
+      err.className = 'result-error';
+      err.textContent = 'Unexpected response from your instance.';
+      row.appendChild(err);
+      resultsEl.appendChild(row);
+      return;
+    }
+
+    const a = document.createElement('a');
+    a.href = href;
+    if (filename) a.download = filename;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.className = 'result-link';
+    a.textContent = filename ? `Download ${filename}` : 'Download file';
+    row.appendChild(a);
+    resultsEl.appendChild(row);
+  }
+
+  async function handleDownload(mode){
+    const url = urlInput.value.trim();
+    clearResults();
+
+    if (!url) { showStatus('Paste a link first.', 'error'); return; }
+    try { new URL(url); } catch { showStatus('That doesn\'t look like a valid URL.', 'error'); return; }
+    if (!COBALT_API_URL) { showStatus('No engine configured yet — see the setup note above.', 'error'); return; }
+
+    setLoading(true);
+    showStatus('Talking to your cobalt engine…');
+
+    try {
+      if (mode === 'both') {
+        const [video, audio] = await Promise.allSettled([
+          callCobalt(url, 'auto'),
+          callCobalt(url, 'audio')
+        ]);
+        renderOutcome('MP4 (video)', video);
+        renderOutcome('MP3 (audio)', audio);
+        showStatus('Done.', 'ok');
+      } else {
+        const downloadMode = mode === 'mp3' ? 'audio' : 'auto';
+        const label = mode === 'mp3' ? 'MP3 (audio)' : 'MP4 (video)';
+        const result = await callCobalt(url, downloadMode);
+        renderOutcome(label, { status: 'fulfilled', value: result });
+        showStatus('Done.', 'ok');
+      }
+    } catch (err) {
+      showStatus(friendlyError(err), 'error');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function checkInstance(){
+    if (!COBALT_API_URL) {
+      instanceStatusEl.textContent = 'Engine: not configured.';
+      instanceStatusEl.className = 'instance-status warn';
+      return;
+    }
+    try {
+      const res = await fetch(COBALT_API_URL.replace(/\/$/, '') + '/', { headers: { 'Accept': 'application/json' } });
+      const data = await res.json();
+      const n = data.cobalt && Array.isArray(data.cobalt.services) ? data.cobalt.services.length : null;
+      instanceStatusEl.textContent = `Engine connected — cobalt v${data.cobalt.version}${n ? `, ${n} services` : ''}`;
+      instanceStatusEl.className = 'instance-status ok';
+    } catch {
+      instanceStatusEl.textContent = 'Engine: could not reach it (check URL/CORS).';
+      instanceStatusEl.className = 'instance-status warn';
+    }
+  }
+
+  checkInstance();
+</script>
+</body>
+</html>
