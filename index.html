@@ -2,58 +2,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
 <title>Pluck — Universal Media Engine</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0a0a0f; --card:#12121a; --card2:#1a1a27; --line:#232336;
-  --text:#f5f5ff; --muted:#8b8ba7; --accent:#8b5cf6; --accent2:#ec4899;
-  --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444;
-}
+:root{--bg:#0a0a0f;--card:#12121a;--card2:#191927;--line:#26263d;--text:#f5f5ff;--muted:#9494b8;--accent:#8b5cf6;--accent2:#ec4899;--ok:#22c55e;--warn:#f59e0b}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Space Grotesk',system-ui;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(600px 600px at 10% 10%,rgba(139,92,246,.18),transparent 60%),radial-gradient(800px 800px at 90% 20%,rgba(236,72,153,.12),transparent 60%),var(--bg)}
-.wrap{max-width:720px;margin:0 auto;padding:20px 16px 40px}
-.top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--line);background:rgba(18,18,26,.85);backdrop-filter:blur(12px);border-radius:16px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em}
-.logo i{width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));font-style:normal}
-.status{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 6px rgba(245,158,11,.15);animation:pulse 1.8s infinite}
-.dot.ok{background:var(--ok);box-shadow:0 0 0 6px rgba(34,197,94,.15)}
-.dot.bad{background:var(--bad);box-shadow:0 0 0 6px rgba(239,68,68,.15)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.hero{margin:28px 0 18px}
-.hero h1{font-size:44px;line-height:.95;letter-spacing:-.04em}
-.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--muted);margin-top:10px;font-size:15px;line-height:1.55}
-.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(26,26,39,.92),rgba(18,18,26,.92));border-radius:20px;padding:16px;backdrop-filter:blur(10px)}
-.input-row{display:flex;gap:10px}
-.input{flex:1;display:flex;align-items:center;gap:10px;padding:14px 14px;border:1px solid var(--line);background:var(--bg);border-radius:14px;transition:.2s}
-.input:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(139,92,246,.15)}
-.input input{flex:1;background:transparent;border:0;outline:0;color:var(--text);font-size:15px;font-family:'Space Grotesk'}
-.btn{border:0;cursor:pointer;font-weight:600;font-family:'Space Grotesk';border-radius:14px;padding:14px 18px;transition:.2s}
-.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white}
-.btn-primary:active{transform:scale(.98)}
-.btn-ghost{background:var(--card2);color:var(--text);border:1px solid var(--line)}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.select{padding:12px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-family:'Space Grotesk';font-size:14px}
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-family:'JetBrains Mono';letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.2)}
-.result{margin-top:16px;display:none}
-.result.show{display:block}
-.box{border:1px solid var(--line);background:var(--bg);border-radius:16px;padding:14px;margin-top:12px}
-.box pre{white-space:pre-wrap;word-break:break-word;font-family:'JetBrains Mono';font-size:12px;color:#c9c9e2;line-height:1.6}
-.error{border-color:rgba(139,92,246,.25);background:linear-gradient(180deg,rgba(139,92,246,.08),rgba(10,10,15,1))}
-.okbox{border-color:rgba(34,197,94,.3);background:linear-gradient(180deg,rgba(34,197,94,.08),rgba(10,10,15,1))}
-.help{margin-top:22px;display:grid;gap:10px}
-.help h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'JetBrains Mono'}
-.help-item{padding:12px 14px;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.015);font-size:13px;color:var(--muted);line-height:1.6}
-.help-item b{color:var(--text)}
-.fun{margin-top:18px;padding:14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(236,72,153,.08));font-size:13px;line-height:1.5}
-.fun b{color:var(--text)}
-.footer{margin-top:24px;text-align:center;color:var(--muted);font-size:11px;font-family:'JetBrains Mono'}
+body{font-family:'Space Grotesk',system-ui;background:var(--bg);color:var(--text);min-height:100vh}
+code,.mono{font-family:'JetBrains Mono',monospace}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 600px at 12% 8%,rgba(139,92,246,.18),transparent 60%),radial-gradient(800px 700px at 88% 18%,rgba(236,72,153,.12),transparent 60%),var(--bg)}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 44px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--line);background:rgba(18,18,26,.9);backdrop-filter:blur(12px);border-radius:18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em}.logo i{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}.dot{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 6px rgba(245,158,11,.15);animation:pulse 1.6s infinite}.dot.ok{background:var(--ok);box-shadow:0 0 0 6px rgba(34,197,94,.18)}.dot.bad{background:#ef4444}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.hero{margin:26px 4px 16px}.hero h1{font-size:46px;line-height:.92;letter-spacing:-.04em}.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{color:var(--muted);margin-top:10px;line-height:1.6;font-size:15px}
+.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(28,28,42,.96),rgba(18,18,26,.96));border-radius:22px;padding:16px;backdrop-filter:blur(12px)}
+.mode-switch{display:flex;gap:8px;padding:6px;background:var(--bg);border:1px solid var(--line);border-radius:999px;width:fit-content;margin-bottom:14px}.mode-btn{padding:8px 14px;border-radius:999px;border:0;background:transparent;color:var(--muted);font-weight:700;font-size:13px;cursor:pointer}.mode-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;box-shadow:0 6px 18px rgba(139,92,246,.25)}
+.input-row{display:flex;gap:10px}.input{flex:1;display:flex;align-items:center;gap:10px;padding:14px;border:1px solid var(--line);background:var(--bg);border-radius:16px}.input:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(139,92,246,.16)}.input input{flex:1;background:transparent;border:0;outline:0;color:var(--text);font-size:15px}
+.btn{border:0;cursor:pointer;font-weight:700;border-radius:14px;padding:13px 16px;font-family:'Space Grotesk';transition:.18s}.btn:active{transform:scale(.98)}.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}.btn-ghost{background:var(--card2);border:1px solid var(--line);color:var(--text)}
+.format-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
+.fmt{border:1px solid var(--line);background:var(--bg);border-radius:16px;padding:12px;cursor:pointer;text-align:left;transition:.18s}.fmt.active{border-color:var(--accent);box-shadow:0 0 0 4px rgba(139,92,246,.15);background:linear-gradient(180deg,rgba(139,92,246,.12),var(--bg))}.fmt b{display:block;font-size:13px}.fmt code{display:inline-block;margin-top:6px;font-size:12px;padding:4px 8px;border-radius:999px;background:#1f1f33;border:1px solid var(--line);color:#cbb8ff}.fmt small{display:block;margin-top:8px;color:var(--muted);font-size:11.5px;line-height:1.4}
+.expert{display:none;margin-top:14px;border-top:1px dashed var(--line);padding-top:14px}.expert.show{display:block}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.select,.field{padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:13px}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:8px;font-size:12px;color:var(--muted);margin-top:8px}.kv b{color:var(--text);font-weight:500}
+.result{margin-top:16px;display:none}.result.show{display:block}.box{border:1px solid var(--line);background:var(--bg);border-radius:16px;padding:14px;margin-top:12px}.box pre{white-space:pre-wrap;word-break:break-word;font-size:12px;line-height:1.6;color:#d0d0eb}
+.okbox{border-color:rgba(34,197,94,.28);background:linear-gradient(180deg,rgba(34,197,94,.09),rgba(10,10,15,1))}
+.errbox{border-color:rgba(139,92,246,.25);background:linear-gradient(180deg,rgba(139,92,246,.08),rgba(10,10,15,1))}
+.dl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.pill{font-size:11px;border:1px solid var(--line);padding:6px 10px;border-radius:999px;color:var(--muted);background:rgba(0,0,0,.2)}
+.help{margin-top:20px;display:grid;gap:10px}.help h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.help-item{padding:12px 14px;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.015);font-size:13px;color:var(--muted);line-height:1.6}.help-item b{color:var(--text)}
+.fun{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(236,72,153,.09));font-size:13px;line-height:1.55}
+.footer{margin-top:22px;text-align:center;color:var(--muted);font-size:11px}
 a{color:#a78bfa;text-decoration:none}
+@media(max-width:640px){.format-grid{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.dl-grid{grid-template-columns:1fr}.hero h1{font-size:38px}}
 </style>
 </head>
 <body>
@@ -61,170 +42,222 @@ a{color:#a78bfa;text-decoration:none}
 <div class="wrap">
   <div class="top">
     <div class="logo"><i>P</i> Pluck</div>
-    <div class="status"><span id="dot" class="dot"></span><span id="stxt">Warming up engine...</span></div>
+    <div class="status"><span id="dot" class="dot"></span><span id="stxt">Warming up, you are close...</span></div>
   </div>
 
   <div class="hero">
     <h1>You're<br><span>almost there.</span></h1>
-    <p>Paste any TikTok, Instagram, YouTube or Twitter link. Pluck handles the rest. Private, fast, and yours.</p>
+    <p>Paste any link. Pluck handles the rest. You are doing everything right, I promise. Private, fast, and yours. No ads in the engine.</p>
   </div>
 
   <div class="card">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-      <span class="pill">Engine: <b id="ver" style="color:var(--text);margin-left:4px">checking</b></span>
-      <span class="pill" id="latency">— ms</span>
-      <span class="pill">json api</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+      <div class="mode-switch"><button id="mSimple" class="mode-btn active">Simple Mode</button><button id="mExpert" class="mode-btn">Expert Mode</button></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="pill">Engine: <b id="ver" style="color:var(--text)">checking</b></span><span class="pill" id="lat">— ms</span><span class="pill mono" id="baseLabel">cobalt-production-2c27</span></div>
     </div>
 
     <div class="input-row">
-      <div class="input"><span>🔗</span><input id="url" placeholder="Paste link here, you got this" autocomplete="off" spellcheck="false" /></div>
+      <div class="input"><span>🔗</span><input id="url" placeholder="Paste link here, you got this ✨" spellcheck="false" /></div>
       <button id="go" class="btn btn-primary">Pluck</button>
     </div>
 
-    <div class="controls">
-      <select id="vCodec" class="select"><option value="h264">Video: H.264 (works everywhere)</option><option value="av1">Video: AV1 (smaller file)</option><option value="vp9">Video: VP9</option></select>
-      <select id="quality" class="select"><option value="max">Quality: Max</option><option value="1080">1080p</option><option value="720" selected>720p — sweet spot</option><option value="480">480p — super fast</option></select>
-      <select id="aFormat" class="select"><option value="mp3">Audio: mp3</option><option value="best">Audio: best</option><option value="opus">Audio: opus</option></select>
-      <label style="display:flex;align-items:center;gap:8px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:13px"><input id="isAudio" type="checkbox" /> Audio only</label>
+    <div class="format-grid" id="formatGrid">
+      <button class="fmt active" data-fmt="mp4"><b>Video + Audio</b><code>mp4</code><small>What you see is what you get. Perfect for sharing. Most compatible.</small></button>
+      <button class="fmt" data-fmt="mp3"><b>Audio Only</b><code>mp3</code><small>Just the sound. Great for music, podcasts, small file. You are doing great.</small></button>
+      <button class="fmt" data-fmt="both"><b>Both Files</b><code>mp4 + mp3</code><small>Gets you <code>mp4</code> video and separate <code>mp3</code>. Two files, one paste. Nice choice.</small></button>
     </div>
 
-    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-      <button id="wake" class="btn btn-ghost">WAKE Engine</button>
+    <div id="expert" class="expert">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="font-size:13px">Expert settings — explicit track info</b><span class="mono" style="font-size:11px;color:var(--muted)">v1 / a1 / mux</span></div>
+      <div class="controls">
+        <select id="vCodec" class="select"><option value="h264">v1 codec: h264 — v1 = main video track, most compatible</option><option value="av1">v1 codec: av1 — v1 = modern, smaller, slower to encode</option><option value="vp9">v1 codec: vp9 — v1 = YouTube style, high quality</option><option value="h265">v1 codec: h265 — v1 = HEVC, best compression</option></select>
+        <select id="vQuality" class="select"><option value="max">v1 quality: max — keep original</option><option value="2160">v1 quality: 2160p 4K</option><option value="1440">v1 quality: 1440p 2K</option><option value="1080">v1 quality: 1080p Full HD</option><option value="720" selected>v1 quality: 720p — balanced</option><option value="480">v1 quality: 480p — tiny</option></select>
+        <select id="aFormat" class="select"><option value="mp3">a1 format: mp3 — a1 = main audio track</option><option value="best">a1 format: best — keep original a1</option><option value="opus">a1 format: opus — tiny a1</option><option value="wav">a1 format: wav — lossless a1</option></select>
+        <select id="fileName" class="select"><option value="classic">filename: classic — id based</option><option value="pretty">filename: pretty — title + author</option><option value="basic">filename: basic — simple</option><option value="nerdy">filename: nerdy — v1 + a1 + codec in name</option></select>
+      </div>
+      <div class="kv"><span>v1</span><b id="kvV">h264 • 720p • fps auto • muxed with a1</b></div>
+      <div class="kv"><span>a1</span><b id="kvA">mp3 • 128k • a1 = audio track 1</b></div>
+      <div class="kv"><span>request</span><b class="mono" id="kvReq" style="word-break:break-all">POST /api/json { url, vCodec, vQuality, aFormat, isAudioOnly }</b></div>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:13px"><input id="disableMeta" type="checkbox" /> Disable metadata (cleaner file, no title embed) — you are in control</label>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+      <button id="wake" class="btn btn-ghost">WAKE Engine — you got this</button>
       <button id="clear" class="btn btn-ghost">Clear</button>
-      <a id="test" target="_blank" class="btn btn-ghost" style="text-decoration:none;display:inline-flex;align-items:center">Test Engine ↗</a>
+      <a id="test" target="_blank" class="btn btn-ghost" style="text-decoration:none">Test Engine ↗</a>
     </div>
 
     <div id="out" class="result"></div>
   </div>
 
   <div class="help">
-    <h3>Quick reassurance guide</h3>
+    <h3>Quick reassurance guide — kept exactly as before</h3>
     <div class="help-item"><b>Yellow dot? Totally normal.</b> Railway puts the engine to sleep after inactivity to save credits. Click WAKE and give it 6 seconds, it will turn green. You are doing everything right.</div>
     <div class="help-item"><b>502 or Failed to fetch?</b> That just means the engine is still starting up. Your link is correct. Wait for Deployments to show Active, then try again. You have got this.</div>
-    <div class="help-item"><b>Want to check manually?</b> Your engine is <b>https://cobalt-production-2c27.up.railway.app</b> If you open it and see <code>{"cobalt":{"version"...</code> then you are 100% good.</div>
+    <div class="help-item"><b>The string did not match the expected pattern?</b> That was my old bug with <code>download</code> attribute on iPhone. This new version fixes it with iOS Safe and Blob buttons. You did nothing wrong.</div>
+    <div class="help-item"><b>Want to check manually?</b> Your engine is <b>https://cobalt-production-2c27.up.railway.app</b> If you open it and see <code>{"cobalt":{"version"...</code> then you are 100% good. You set it up correctly.</div>
   </div>
 
-  <div id="funbox" class="fun"><b>Random fun fact:</b> <span id="ftext">Loading a good one...</span></div>
-
-  <div class="footer">Built with cobalt • Your engine is yours • Made to feel calm, not stressful</div>
+  <div id="funbox" class="fun"><b>Random fun fact:</b> <span id="ftext">loading...</span> <span style="opacity:.6">• reshuffles every time you pluck</span></div>
+  <div class="footer">Built with cobalt • Blob save works on iOS because blob: URLs are same origin • Made to feel calm, not stressful • You are doing great</div>
 </div>
 
 <script>
-// ====== CONFIG ======
 const BASE = "https://cobalt-production-2c27.up.railway.app";
 const API = BASE + "/api/json";
-// ===================
 
 const facts = [
-  "Octopuses have three hearts and blue blood. Two hearts pump to the gills, one pumps to the rest of the body.",
-  "Honey never spoils. Archaeologists found 3000 year old honey in Egyptian tombs that was still edible.",
-  "A day on Venus is longer than a year on Venus. It rotates super slowly.",
-  "Bananas are berries, but strawberries are not. Botany is weird like that.",
-  "Wombat poop is cube shaped. This helps it not roll away.",
-  "There are more trees on Earth than stars in the Milky Way. About 3 trillion trees.",
-  "Water can boil and freeze at the same time at 0.01°C. It is called the triple point.",
-  "Your stomach gets a new lining every 3 to 4 days, otherwise it would digest itself.",
-  "Light from the Sun takes about 8 minutes to reach Earth, but was created inside the Sun 100,000 years ago.",
-  "Cows have best friends and get stressed when separated from them.",
-  "Sharks existed before trees. Sharks are around 400 million years old, trees 350 million.",
-  "A cloud can weigh over a million pounds but still floats because the weight is spread out."
+  "Octopuses have three hearts and blue blood. Two pump to gills, one pumps to body.",
+  "Honey never spoils. 3000 year old honey in Egyptian tombs was still edible.",
+  "A day on Venus is longer than a year on Venus.",
+  "Bananas are berries, but strawberries are not. Botany is weird.",
+  "Wombat poop is cube shaped so it does not roll away.",
+  "There are more trees on Earth than stars in the Milky Way, about 3 trillion trees.",
+  "Water can boil and freeze at same time at 0.01°C, called triple point.",
+  "Your stomach makes a new lining every 3 to 4 days.",
+  "Light you see from Sun is 8 minutes old, but was made 100k years ago inside Sun.",
+  "Cows have best friends and get stressed when separated.",
+  "Sharks existed before trees, 400m vs 350m years.",
+  "A cloud can weigh over a million pounds but floats.",
+  "Scotland's national animal is the unicorn. Officially.",
+  "Your brain generates about 20 watts, enough to power a dim bulb.",
+  "Octopuses edit their own RNA to adapt to temperature.",
+  "There is a species of jellyfish that is biologically immortal.",
+  "The Eiffel Tower grows 15cm taller in summer due to heat expansion.",
+  "Bananas are slightly radioactive because of potassium 40.",
+  "Sloths can hold their breath longer than dolphins.",
+  "You share 60% of your DNA with bananas, you are doing great banana.",
+  "It rains diamonds on Jupiter and Saturn.",
+  "Hot water freezes faster than cold water sometimes, called Mpemba effect.",
+  "Your phone has more computing power than NASA used to go to the Moon.",
+  "The average person will spend 6 months of life waiting for red lights.",
+  "Ketchup was sold as medicine in the 1830s.",
+  "Sea otters hold hands while sleeping so they do not drift apart.",
+  "You cannot hum while holding your nose, try it.",
+  "A teaspoon of neutron star would weigh 6 billion tons.",
+  "There are more ways to shuffle a deck than atoms on Earth.",
+  "Laughing for 10 to 15 minutes burns about 40 calories."
 ];
+const shuffle = a => { for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]] } return a };
+let factPool = shuffle([...facts]);
+function fun(){ if(factPool.length===0) factPool=shuffle([...facts]); return factPool.pop(); }
 
-function fun(){ return facts[Math.floor(Math.random()*facts.length)]; }
+const $=s=>document.querySelector(s);
+const dot=$("#dot"),stxt=$("#stxt"),ver=$("#ver"),lat=$("#lat"),out=$("#out"),test=$("#test"),ftext=$("#ftext"),kvV=$("#kvV"),kvA=$("#kvA"),kvReq=$("#kvReq");
+test.href=BASE; ftext.textContent=fun();
+let fmt="mp4"; let expertMode=false; let engineOnline=false;
 
-const $ = s => document.querySelector(s);
-const dot = $("#dot"), stxt = $("#stxt"), ver = $("#ver"), latency = $("#latency"), out = $("#out"), test = $("#test"), ftext=$("#ftext");
-test.href = BASE;
-ftext.textContent = fun();
+function updateKV(){
+  const vc=$("#vCodec").value, vq=$("#vQuality").value, af=$("#aFormat").value;
+  kvV.textContent=`${vc} • ${vq} • fps auto • muxed with a1`;
+  kvA.textContent=`${af} • a1 = audio track 1 • ${$("#disableMeta").checked? "metadata stripped" : "metadata kept"}`;
+  kvReq.textContent=`POST /api/json { url: <link>, vCodec: ${vc}, vQuality: ${vq}, aFormat: ${af}, isAudioOnly: ${fmt==="mp3"} }`;
+}
+document.querySelectorAll(".select,input").forEach(e=>e.addEventListener("change",updateKV));
 
-let engineOnline = false;
+$("#mSimple").onclick=()=>{expertMode=false;$("#mSimple").classList.add("active");$("#mExpert").classList.remove("active");$("#expert").classList.remove("show")};
+$("#mExpert").onclick=()=>{expertMode=true;$("#mExpert").classList.add("active");$("#mSimple").classList.remove("active");$("#expert").classList.add("show");updateKV()};
+
+document.querySelectorAll(".fmt").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".fmt").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); fmt=b.dataset.fmt; updateKV();
+});
 
 async function ping(){
-  const t0 = performance.now();
-  stxt.textContent = "Checking engine, you are close...";
-  dot.className = "dot";
+  const t0=performance.now(); stxt.textContent="Checking engine, you are close..."; dot.className="dot";
   try{
-    const r = await fetch(BASE, {cache:"no-store"});
-    const dt = Math.round(performance.now()-t0);
-    latency.textContent = dt + " ms";
-    if(!r.ok) throw new Error("HTTP "+r.status);
-    const j = await r.json();
-    if(!j.cobalt) throw new Error("Not cobalt");
-    engineOnline = true;
-    dot.className = "dot ok";
-    stxt.textContent = "Engine online, ready to pluck";
-    ver.textContent = "cobalt " + (j.cobalt.version || "10.x");
-    return true;
-  }catch(e){
-    engineOnline = false;
-    dot.className = "dot bad";
-    stxt.textContent = "Engine is waking up, hang tight";
-    ver.textContent = "waking";
-    latency.textContent = "— ms";
-    showMsg("Heads up, engine is still waking","Good news, your URL is perfect. Railway just needs a few seconds to start the engine.\n\nTry this:\n1. Click WAKE Engine below\n2. Wait 6 seconds\n3. Click Test Engine, you should see {\"cobalt\":{\"version\"...}}\n\nThis happens to everyone, it is not your fault. You set it up correctly.\n\nFun fact: "+fun(), false);
-    return false;
-  }
+    const r=await fetch(BASE,{cache:"no-store"}); const ms=Math.round(performance.now()-t0); lat.textContent=ms+" ms";
+    if(!r.ok) throw new Error("HTTP "+r.status); const j=await r.json(); if(!j.cobalt) throw new Error("not cobalt");
+    engineOnline=true; dot.className="dot ok"; stxt.textContent="Engine online, ready to pluck"; ver.textContent="cobalt "+(j.cobalt.version||"10.x"); return true;
+  }catch(e){ engineOnline=false; dot.className="dot bad"; stxt.textContent="Engine waking up, hang tight"; ver.textContent="waking"; lat.textContent="— ms"; showErr("Heads up, engine is still waking","Good news, your URL is perfect. Railway just needs a few seconds.\n\n1. Click WAKE Engine\n2. Wait 6s\n3. Test Engine should show {\"cobalt\":...}\n\nThis happens to everyone, not your fault.\n\nFun fact: "+fun()); return false; }
+}
+function showErr(t,m){ out.classList.add("show"); out.innerHTML=`<div class="box errbox"><div style="font-weight:800;margin-bottom:6px">${t}</div><pre>${m}</pre><div style="margin-top:10px;font-size:12px;color:var(--muted)">Fun fact: ${fun()}</div></div>`; }
+function showOK(t,html){ out.classList.add("show"); out.innerHTML=`<div class="box okbox"><div style="font-weight:800;margin-bottom:8px">${t}</div>${html}<div style="margin-top:12px;font-size:12px;color:var(--muted)">Random fact for you: ${fun()}</div></div>`; }
+
+function isValidUrl(s){ try{ const u=new URL(s); return u.protocol==="http:"||u.protocol==="https:" }catch{return false} }
+
+async function fetchCobalt(targetUrl, audioOnly){
+  const body={
+    url: targetUrl,
+    vCodec: $("#vCodec").value,
+    vQuality: $("#vQuality").value,
+    aFormat: $("#aFormat").value,
+    isAudioOnly: audioOnly,
+    filenamePattern: $("#fileName").value,
+    disableMetadata: $("#disableMeta").checked
+  };
+  const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(body)});
+  const txt=await r.text(); let j; try{ j=JSON.parse(txt) }catch{ throw new Error("Engine replied non JSON: "+txt.slice(0,200)) }
+  if(j.status==="error") throw new Error(j.error?.code? `${j.error.code}: ${j.text||j.error.code}` : (j.text||"engine error"));
+  return j;
 }
 
-function showMsg(title, msg, ok=false){
-  out.classList.add("show");
-  out.innerHTML = `<div class="box ${ok?'okbox':'error'}"><div style="font-weight:700;margin-bottom:6px">${title}</div><pre>${msg}</pre></div>`;
+function dlButtons(fileUrl, filename, label){
+  const safeName=(filename||"pluck-media").replace(/[^a-z0-9.\-_ ]/gi,"_");
+  return `
+  <div class="dl-grid">
+    <a href="${fileUrl}" target="_blank" rel="noopener" class="btn btn-primary" style="text-align:center;text-decoration:none">Open in new tab — iOS Safe ✅<br><small style="font-weight:500;opacity:.9">${label}</small></a>
+    <button class="btn btn-ghost" onclick="blobSave('${fileUrl}','${safeName}')">Blob Save — forces download<br><small class="mono" style="font-size:11px;color:var(--muted)">blob: URL • works on Safari</small></button>
+    <button class="btn btn-ghost" onclick="copyL('${fileUrl}')">Copy Link <span class="mono" style="font-size:11px">copy(url)</span></button>
+    <a href="${fileUrl}" target="_blank" rel="noopener" class="btn btn-ghost" style="text-align:center;text-decoration:none">Direct CDN link</a>
+  </div>
+  <div class="box" style="margin-top:10px"><pre>filename: ${safeName}\nv1: ${$("#vCodec").value} • ${$("#vQuality").value}\na1: ${$("#aFormat").value}\nmode: ${fmt} • expert: ${expertMode? "on":"off"}\nTip iPhone: Use Blob Save, then Files app > Downloads. You got this.</pre></div>`;
 }
-function showOK(title, bodyHTML){
-  out.classList.add("show");
-  out.innerHTML = `<div class="box okbox"><div style="font-weight:700;margin-bottom:10px">${title}</div>${bodyHTML}<div style="margin-top:12px;font-size:12px;color:var(--muted)">Fun fact: ${fun()}</div></div>`;
+
+window.blobSave=async(url,name)=>{
+  try{
+    const btn=event?.target; if(btn){ btn.textContent="Fetching blob..."; btn.disabled=true; }
+    const r=await fetch(url); if(!r.ok) throw new Error("CDN blocked blob fetch, use Open in new tab instead. You are doing great.");
+    const b=await r.blob(); const blobUrl=URL.createObjectURL(b);
+    const a=document.createElement("a"); a.href=blobUrl; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(blobUrl),60000);
+    if(btn){ btn.textContent="Saved! Check Files app"; setTimeout(()=>{btn.textContent="Blob Save — forces download"; btn.disabled=false},2000); }
+  }catch(e){ alert(e.message+"\\n\\nFun fact: "+fun()); }
 }
+window.copyL=async(u)=>{ try{ await navigator.clipboard.writeText(u); alert("Copied! Paste anywhere. Fun fact: "+fun()); }catch{ prompt("Copy this link",u) } }
 
 async function pluck(){
-  const url = $("#url").value.trim();
-  if(!url) return showMsg("Paste a link first","You got this, just paste any TikTok, Insta, YouTube or Twitter link in the box above. I will handle the rest. ✨\n\nFun fact: "+fun());
-  
-  $("#go").textContent = "Working on it..."; $("#go").disabled = true;
-  out.classList.add("show"); out.innerHTML = `<div class="box"><pre>Talking to your engine...\nThis usually takes 2 to 4 seconds.\nYou are doing great.</pre></div>`;
-
+  const raw=$("#url").value.trim();
+  if(!raw) return showErr("Paste a link first","You got this, just paste any TikTok, Insta, YouTube or Twitter link in the box above. I will handle the rest. ✨\\n\\nFun fact: "+fun());
+  if(!isValidUrl(raw)) return showErr("That link looks off","Make sure it starts with https:// and has no spaces. Try copying again from the app. You are close.\\n\\nYou pasted: "+raw.slice(0,120)+"\\n\\nFun fact: "+fun());
+  $("#go").textContent="Working on it..."; $("#go").disabled=true; out.classList.add("show"); out.innerHTML=`<div class="box"><pre>Talking to your engine at\\n${BASE}\\nMode: ${fmt} • Simple: ${!expertMode} • Expert: ${expertMode}\\nYou are doing great, this takes 2 to 5s.</pre></div>`;
   try{
-    if(!engineOnline){ await ping(); if(!engineOnline) throw new Error("Engine is still starting, click WAKE and wait 6s. You are doing everything right."); }
-    const body = {
-      url,
-      vCodec: $("#vCodec").value,
-      vQuality: $("#quality").value,
-      aFormat: $("#aFormat").value,
-      isAudioOnly: $("#isAudio").checked,
-      filenamePattern: "classic"
-    };
-    const r = await fetch(API, {method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"}, body: JSON.stringify(body)});
-    const j = await r.json();
-    if(j.status === "error") throw new Error(j.error?.code || j.text || "Something gentle went wrong, try again.");
-    if(j.status === "redirect" || j.status === "stream" || j.url){
-      showOK("Ready, your file is here ✅", `
-        <div style="display:grid;gap:10px">
-          <div style="color:var(--muted);font-size:13px">${j.text ? j.text : "Nice, engine did its thing. Save it now, link expires soon."}</div>
-          <a href="${j.url}" target="_blank" download class="btn btn-primary" style="text-align:center;text-decoration:none">⬇ Download — you got it</a>
-          <div class="box" style="margin-top:4px"><pre>File: ${j.filename || "pluck-media"}\nQuality: ${$("#quality").value} • Codec: ${$("#vCodec").value}\nTip: On iPhone, long press Download > Download Linked File</pre></div>
-        </div>`);
-    } else if(j.picker && j.picker.length){
-      let html = `<div style="color:var(--muted);font-size:13px;margin-bottom:10px">Found multiple files, pick your favorite:</div>`;
-      j.picker.forEach(p=>{ html += `<a href="${p.url}" target="_blank" class="box" style="display:block;text-decoration:none;color:var(--text)"><b>${p.type || "media"}</b><div style="color:var(--muted);font-size:12px;margin-top:4px">${p.url.slice(0,64)}...</div></a>`; });
-      showOK("Choose one", html);
-    } else {
-      showMsg("Hmm, unexpected reply","The engine replied in a format I did not expect, but it is online. Try again, it usually works on the second try. You are close.\n\nDetails:\n"+JSON.stringify(j,null,2)+"\n\nFun fact: "+fun());
+    if(!engineOnline){ await ping(); if(!engineOnline) throw new Error("Engine still waking, click WAKE and wait 6s. You configured everything right."); }
+    if(fmt==="mp4"){
+      const j=await fetchCobalt(raw,false);
+      if(j.url) showOK("Ready — video + audio ✅", dlButtons(j.url,j.filename||"pluck.mp4","mp4 • v1+a1 muxed"));
+      else if(j.picker) showPicker(j.picker);
+      else throw new Error("No URL in response");
+    }else if(fmt==="mp3"){
+      const j=await fetchCobalt(raw,true);
+      if(j.url) showOK("Ready — audio only ✅", dlButtons(j.url,j.filename||"pluck.mp3","mp3 • a1 only"));
+      else throw new Error("No audio URL");
+    }else if(fmt==="both"){
+      const v=await fetchCobalt(raw,false); const a=await fetchCobalt(raw,true);
+      let html=`<div style="color:var(--muted);font-size:13px;margin-bottom:8px">You asked for both. Here are two separate files, you did it right.</div>`;
+      html+=`<div style="margin-bottom:10px"><b>1) Video <code>mp4</code></b>${dlButtons(v.url,v.filename||"pluck.mp4","mp4")}</div>`;
+      html+=`<div><b>2) Audio <code>mp3</code></b>${dlButtons(a.url,a.filename||"pluck.mp3","mp3")}</div>`;
+      showOK("Both ready ✅",html);
     }
+    ftext.textContent=fun();
   }catch(e){
-    let msg = (e && e.message) ? e.message : String(e);
-    if(msg.includes("Failed to fetch")) msg = "Could not reach the engine just yet.\n\nThis is super common and easy to fix:\n• Make sure in Railway > Variables you have:\n  API_URL = https://cobalt-production-2c27.up.railway.app\n  CORS = *\n• No slash at the end of API_URL\n• Check Railway > Deployments says Active\n\nYou configured everything right, it just needs a moment to wake.\n\nFun fact: "+fun();
-    showMsg("Not a big deal, let us retry", msg+"\n\nFun fact to cheer you up: "+fun());
-  }finally{
-    $("#go").textContent = "Pluck"; $("#go").disabled = false;
-    ftext.textContent = fun();
-  }
+    let msg=e.message||String(e);
+    if(msg.includes("Failed to fetch")) msg="Could not reach engine just yet.\\n\\nThis is super common:\\n• Railway Variables must be:\\n API_URL = https://cobalt-production-2c27.up.railway.app\\n CORS = *\\n• No slash at end\\n• Deployments = Active\\n\\nYou configured it right, just needs a moment.\\n\\nFun fact: "+fun();
+    showErr("Not a big deal, let us retry",msg+"\\n\\nFun fact to cheer you up: "+fun());
+  }finally{ $("#go").textContent="Pluck"; $("#go").disabled=false; }
 }
 
-$("#go").onclick = pluck;
-$("#url").addEventListener("keydown", e=>{ if(e.key==="Enter") pluck(); });
-$("#wake").onclick = async()=>{ stxt.textContent="Waking up your engine, almost there..."; await fetch(BASE,{cache:"no-store"}).catch(()=>{}); await new Promise(r=>setTimeout(r,1500)); ping(); ftext.textContent = fun(); };
-$("#clear").onclick = ()=>{ $("#url").value=""; out.classList.remove("show"); out.innerHTML=""; ftext.textContent = fun(); };
+function showPicker(picker){
+  let html=`<div style="color:var(--muted);font-size:13px;margin-bottom:8px">Multiple tracks found. v1 and a1 listed. Pick one, you are doing great.</div>`;
+  picker.forEach((p,i)=>{ html+=`<div class="box"><b class="mono">track ${i+1} — ${p.type||"media"}</b><div style="margin-top:8px">${dlButtons(p.url,p.thumb?"thumb.jpg":"pluck-"+(i+1), p.type||"picker")}</div></div>`; });
+  showOK("Choose a track",html);
+}
 
-ping(); setInterval(()=>{ ping(); ftext.textContent = fun(); }, 14000);
+$("#go").onclick=pluck; $("#url").addEventListener("keydown",e=>{ if(e.key==="Enter") pluck(); });
+$("#wake").onclick=async()=>{ stxt.textContent="Waking up your engine, almost there..."; await fetch(BASE,{cache:"no-store"}).catch(()=>{}); await new Promise(r=>setTimeout(r,1400)); ping(); ftext.textContent=fun(); };
+$("#clear").onclick=()=>{ $("#url").value=""; out.classList.remove("show"); out.innerHTML=""; ftext.textContent=fun(); };
+
+ping(); updateKV(); setInterval(()=>{ ping(); ftext.textContent=fun(); },15000);
 </script>
 </body>
 </html>
