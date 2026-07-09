@@ -1,140 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pluck — Private Media Atelier</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pluck — Watch First, Save Later</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080c12;--card:#111c2b;--input:#0d1829;--line:#1d324d;--line2:#264166;--t:#eef4ff;--d:#7d91ad;--f:#4c5f7d;--a:#f2a93b;--a2:#ff7a2e;--teal:#5fd3c4;--red:#ff8a8a;--r:18px}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at -10% -20%,rgba(242,169,59,.14),transparent),radial-gradient(800px 400px at 110% -10%,rgba(95,211,196,.1),transparent),var(--bg);color:var(--t);font-family:"Space Grotesk",system-ui;line-height:1.6}
-.wrap{max-width:740px;margin:0 auto;padding:48px 18px 90px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px}.brand{display:flex;gap:12px;align-items:center}.logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;color:#000;font-family:"Fraunces",serif;font-weight:700;font-size:20px;box-shadow:0 10px 30px rgba(242,169,59,.3)}.brand b{font-family:"Fraunces",serif;font-size:17px}.brand i{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--d);letter-spacing:.08em;text-transform:uppercase;display:block}
-.badge{font-family:"JetBrains Mono",monospace;font-size:10px;padding:6px 10px;border-radius:100px;border:1px solid var(--line);color:var(--d);background:rgba(255,255,255,.03)}
-.hero h1{font-family:"Fraunces",serif;font-size:46px;line-height:.95;letter-spacing:-.03em;margin:0}.hero h1 span{background:linear-gradient(135deg,var(--a),var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero>p{color:var(--d);font-size:15.5px;max-width:60ch;margin:12px 0 28px;line-height:1.7}
-.card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015)),var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;box-shadow:0 20px 70px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.05)}
-label{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--d);display:flex;justify-content:space-between;margin-bottom:10px}label em{font-style:normal;text-transform:none;color:var(--f);font-family:"Space Grotesk",sans-serif;letter-spacing:0}
-.row-input{display:flex;gap:8px}input{flex:1;background:var(--input);border:1px solid var(--line);border-radius:12px;padding:14px 14px;color:var(--t);font-size:15px;outline:none;transition:.2s}input:focus{border-color:rgba(242,169,59,.5);box-shadow:0 0 0 5px rgba(242,169,59,.12)}
-.mini{border:1px solid var(--line);background:#162840;color:var(--d);border-radius:10px;padding:0 13px;font-family:"JetBrains Mono",monospace;font-size:11px;cursor:pointer}.mini:hover{color:var(--t);border-color:var(--line2)}
-.hint{font-size:12.3px;color:var(--f);margin:10px 2px 18px;line-height:1.5}.hint b{color:var(--d);font-weight:500}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fmt{text-align:left;background:linear-gradient(180deg,#13233a,#0e1b2d);border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}.fmt:hover{transform:translateY(-2px);border-color:var(--line2)}.fmt:disabled{opacity:.45;pointer-events:none}.fmt b{display:block;font-size:14.5px;margin-bottom:4px}.fmt p{margin:0;font-size:12.7px;color:var(--d);line-height:1.55}.fmt small{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--f);display:block;margin-top:10px}.tag{position:absolute;top:12px;right:12px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;background:rgba(242,169,59,.15);border:1px solid rgba(242,169,59,.25);color:var(--a);padding:4px 7px;border-radius:100px}
-.status{margin-top:14px;font-family:"JetBrains Mono",monospace;font-size:12px;padding:11px 12px;border-radius:10px;display:none;border:1px solid transparent}.status.show{display:block}.ok{color:var(--teal);background:rgba(95,211,196,.08);border-color:rgba(95,211,196,.18)}.err{color:var(--red);background:rgba(255,120,120,.08);border-color:rgba(255,120,120,.18)}.load{color:var(--d);background:rgba(255,255,255,.03);border-color:var(--line)}
-.results{margin-top:12px;display:flex;flex-direction:column;gap:8px}.item{display:flex;justify-content:space-between;align-items:center;background:var(--input);border:1px solid var(--line);border-radius:11px;padding:12px 14px;animation:pop.2s ease}@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}.dl{background:linear-gradient(135deg,var(--a),var(--a2));color:#000;font-weight:700;font-size:12.5px;text-decoration:none;padding:7px 13px;border-radius:100px}
-.engine{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px;display:flex;justify-content:space-between;align-items:center;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--f)}.dot{width:8px;height:8px;border-radius:50%;background:var(--f);display:inline-block;margin-right:7px}.engine.ok.dot{background:var(--teal);box-shadow:0 0 10px var(--teal)}.engine.warn.dot{background:var(--a);box-shadow:0 0 10px var(--a)}
-.info3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}.info{border:1px solid var(--line);background:rgba(255,255,255,.02);border-radius:14px;padding:14px}.info h4{margin:0 0 5px;font-size:12.5px}.info p{margin:0;font-size:12px;color:var(--d);line-height:1.6}
-.foot{margin-top:26px;color:var(--d);font-size:13px;line-height:1.7}.foot h3{font-family:"Fraunces",serif;color:var(--t);margin:0 0 6px;font-size:18px}.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chips span{font-family:"JetBrains Mono",monospace;font-size:10px;border:1px solid var(--line);padding:5px 9px;border-radius:100px;color:var(--d)}
-@media(max-width:640px){.hero h1{font-size:34px}.grid,.info3{grid-template-columns:1fr}}
+:root{--bg:#080c12;--card:#101c2d;--input:#0d1829;--line:#1e3654;--t:#eef4ff;--d:#7d91ad;--f:#4b5e7d;--a:#f2a93b;--a2:#ff7a2e;--teal:#5fd3c4;--red:#ff8a8a;--r:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 0% 0%,rgba(242,169,59,.12),transparent),var(--bg);color:var(--t);font-family:"Space Grotesk",system-ui;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding:44px 18px 100px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}.logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;color:#000;font-family:"Fraunces",serif;font-weight:700}.brand b{font-family:"Fraunces",serif}.brand i{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--d);display:block;text-transform:uppercase;letter-spacing:.07em}
+.hero h1{font-family:"Fraunces",serif;font-size:44px;line-height:.95;letter-spacing:-.03em;margin:0}.hero h1 span{background:linear-gradient(135deg,var(--a),var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{color:var(--d);max-width:62ch;margin:10px 0 24px;font-size:15px;line-height:1.7}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+label{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--d);display:flex;justify-content:space-between;margin-bottom:8px}
+.input-row{display:flex;gap:8px}input{flex:1;background:var(--input);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--t);font-size:15px;outline:none}input:focus{border-color:rgba(242,169,59,.5);box-shadow:0 0 0 5px rgba(242,169,59,.12)}
+.btn{border:1px solid var(--line);background:#162845;color:var(--d);border-radius:10px;padding:0 12px;font-family:"JetBrains Mono",monospace;font-size:11px;cursor:pointer}.btn:hover{color:var(--t)}
+.extract{width:100%;margin-top:12px;background:linear-gradient(135deg,var(--a),var(--a2));color:#000;border:0;border-radius:12px;padding:14px;font-weight:700;font-size:14.5px;cursor:pointer;transition:.18s}.extract:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(242,169,59,.3)}.extract:disabled{opacity:.45;pointer-events:none}
+.hint{font-size:12px;color:var(--f);margin:8px 2px 0}
+.status{margin-top:14px;font-family:"JetBrains Mono",monospace;font-size:12px;padding:10px 12px;border-radius:10px;display:none;border:1px solid transparent}.status.show{display:block}.ok{color:var(--teal);background:rgba(95,211,196,.08);border-color:rgba(95,211,196,.18)}.err{color:var(--red);background:rgba(255,120,120,.08);border-color:rgba(255,120,120,.18)}.load{color:var(--d);background:rgba(255,255,255,.03);border-color:var(--line)}
+/* SCREEN */
+.screen-wrap{margin-top:18px;display:none}.screen-wrap.show{display:block}
+.screen{background:#000;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);position:relative}
+.screen video,.screen audio{width:100%;display:block;max-height:460px;background:#000}
+.screen audio{padding:18px 0}
+.screen-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#0b1422;border-top:1px solid var(--line);font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--d);letter-spacing:.06em;text-transform:uppercase}
+.live{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);display:inline-block;margin-right:6px;animation:pulse 1.5s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.download-area{margin-top:14px;border:1px dashed var(--line);border-radius:14px;padding:16px;background:rgba(255,255,255,.02)}.download-area h4{margin:0 0 4px;font-size:13px}.download-area p{margin:0 0 12px;font-size:12.5px;color:var(--d);line-height:1.5}
+.dl-grid{display:grid;grid-template-columns:1fr;gap:8px}.dl-btn{border:1px solid var(--line);background:var(--input);color:var(--t);border-radius:10px;padding:12px 14px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;transition:.15s}.dl-btn:hover{border-color:var(--a);background:#13233b}.dl-btn small{display:block;font-weight:400;font-size:11px;color:var(--d);margin-top:3px;font-family:"JetBrains Mono",monospace}
+.engine{margin-top:16px;display:flex;justify-content:space-between;align-items:center;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--f);border-top:1px dashed var(--line);padding-top:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--f);display:inline-block;margin-right:6px}.engine.ok.dot{background:var(--teal)}.engine.warn.dot{background:var(--a)}
+/* Permission modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);display:none;place-items:center;z-index:50;padding:18px}.modal.show{display:grid}.modal-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.6)}.modal-card h3{margin:0 0 6px;font-size:16px}.modal-card p{margin:0 0 14px;color:var(--d);font-size:13px;line-height:1.6}.modal-actions{display:flex;gap:8px;justify-content:flex-end}.modal-actions button{padding:9px 14px;border-radius:9px;border:1px solid var(--line);background:var(--input);color:var(--t);font-weight:600;cursor:pointer}.modal-actions button.primary{background:linear-gradient(135deg,var(--a),var(--a2));color:#000;border:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chips span{font-family:"JetBrains Mono",monospace;font-size:10px;border:1px solid var(--line);padding:5px 9px;border-radius:100px;color:var(--d)}
+@media(min-width:640px){.dl-grid{grid-template-columns:1fr 1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><div class="brand"><div class="logo">P</div><div><b>PLUCK</b><i>private engine • v4 slangwich</i></div></div><div class="badge">API: /api/json • no cap, fr works</div></div>
+  <div class="top"><div style="display:flex;gap:10px;align-items:center"><div class="logo">P</div><div><b style="font-family:Fraunces">PLUCK</b><i>watch first — no ads, fr</i></div></div><div style="font-family:JetBrains Mono;font-size:10px;color:var(--d);border:1px solid var(--line);padding:5px 9px;border-radius:100px">ENGINE: /api/json</div></div>
 
-  <div class="hero">
-    <h1>Link in, file out. <span>Clean.</span></h1>
-    <p>This is a private frontend, <b>lowkey the most efficient way</b>, to own your media pipeline. Paste a public URL, your own cobalt engine does the heavy lifting, <b>no watermark, no cap</b>, and returns a direct MP3/MP4. Files stream Railway → browser, <b>highkey private</b>, nothing stored.</p>
-  </div>
+  <div class="hero"><h1>Preview it <span>ad-free.</span> Then decide.</h1><p>No more blind downloads, <b>it’s giving try-before-you-save, highkey smarter</b>, for your workflow. We show the clean source on a private screen below, then we ask for explicit hardware permission to save. No watermark, no tracking.</p></div>
 
   <div class="card">
-    <label>Source URL <em id="cnt">paste to begin — we auto-validate, fr</em></label>
-    <div class="row-input">
-      <input id="url" placeholder="https://instagram.com/reel/... / tiktok.com/@.../video/... / youtu.be/...">
-      <button class="mini" id="paste">PASTE</button>
-      <button class="mini" id="clear">CLEAR</button>
-    </div>
-    <div class="hint"><b>What works?</b> Any public link, <b>it’s giving universal extractor</b>, for real use. Private/deleted/age-gated = engine returns unavailable, that’s source limits, not a bug.</div>
-
-    <div class="grid">
-      <button class="fmt" data-m="audio"><span class="tag">most used</span><b>Extract MP3</b><p>Pulls the audio track, <b>no fluff, fr bussin for podcasts</b>, and muxes to clean 128k MP3. Tiny file, instant download, perfect for sampling.</p><small>◆ mp3 • 128k • keeps metadata, no cap</small></button>
-      <button class="fmt" data-m="auto"><b>Extract MP4</b><p>Grabs max progressive video, <b>it ate, highkey crisp visuals</b>, with original audio intact. Best when you need the full reel.</p><small>◆ mp4 • up to 1080p • watermark-free, on god</small></button>
-    </div>
-
+    <label>paste public link <em id="cnt">we validate locally, no cap</em></label>
+    <div class="input-row"><input id="url" placeholder="instagram reel / tiktok / youtube / x link"><button class="btn" id="paste">PASTE</button><button class="btn" id="clear">CLEAR</button></div>
+    <div class="hint"><b>How it works?</b> Cobalt strips ads/trackers server-side, <b>so you see the raw file, fr clean</b>, before any download.</div>
+    <button id="previewBtn" class="extract">Preview without ads — show on screen below</button>
     <div id="status" class="status"></div>
-    <div id="results" class="results"></div>
 
-    <div id="engine" class="engine warn"><span><span class="dot"></span><span id="etxt">Checking engine…</span></span><button class="mini" id="wake">WAKE</button></div>
+    <!-- SCREEN -->
+    <div id="screenWrap" class="screen-wrap">
+      <div class="screen">
+        <div id="playerMount"></div>
+        <div class="screen-bar"><span><span class="live"></span>ad-free preview • private stream</span><span id="meta">ready</span></div>
+      </div>
+
+      <div class="download-area">
+        <h4>Ready to save? Choose how.</h4>
+        <p>We will ask for explicit permission from your device, <b>lowkey the safest way, so you stay in control</b>, before saving anything. Pick one:</p>
+        <div class="dl-grid">
+          <button class="dl-btn" data-dl="mp4">download it as mp 4<small>video + audio •.mp4 • up to 1080p</small></button>
+          <button class="dl-btn" data-dl="mp3">download it as mp3<small>audio only •.mp3 • 128k • small & clean</small></button>
+          <button class="dl-btn" data-dl="both">download it as both combined<small>you get 2 files • mp4 + mp3 • no cap, best value</small></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="engine" class="engine warn"><span><span class="dot"></span><span id="etxt">Checking engine…</span></span><button class="btn" id="wake">WAKE</button></div>
   </div>
 
-  <div class="info3">
-    <div class="info"><h4>Engine dot is yellow?</h4><p>Free tier sleeps after idle, <b>lowkey just napping, fr normal</b>, click Wake, wait 8s. Download still works even if dot is yellow, no cap.</p></div>
-    <div class="info"><h4>405 is dead now</h4><p>We hardcode <code>/api/json</code> and send both new + legacy fields, <b>it’s giving compatibility, so it slaps</b>, on every cobalt version.</p></div>
-    <div class="info"><h4>Download fails?</h4><p>If picker shows, it’s a carousel, <b>choose which one, it’s literally that simple</b>, and you get separate files. Links expire in ~10min.</p></div>
-  </div>
-
-  <div class="foot">
-    <h3>How this thing hits different</h3>
-    1. You paste, <b>we validate locally, no request yet, so it’s safe fr</b>, for speed.<br>
-    2. POST to your Railway, <b>your engine scrapes server-side, highkey private</b>, no browser CORS drama.<br>
-    3. Engine replies with temporary tunnel, <b>direct CDN URL, no re-encode, it just works</b>, for max quality.<br>
-    <div class="chips"><span>Instagram</span><span>TikTok</span><span>YouTube</span><span>X / Twitter</span><span>Facebook</span><span>Reddit</span><span>SoundCloud</span><span>Vimeo</span><span>Twitch</span><span>Pinterest</span></div>
-    <p style="color:var(--f);font-size:11.5px;margin-top:12px">Legal sandwich: Respect creators, <b>only save what you own, fr don’t be weird</b>, and follow platform ToS.</p>
-  </div>
+  <div class="chips"><span>ad-free preview</span><span>explicit permission</span><span>mp4 • mp3 • both</span><span>no watermark</span><span>private tunnel</span></div>
 </div>
 
+<!-- Permission Modal -->
+<div id="permModal" class="modal"><div class="modal-card"><h3>Allow download to device?</h3><p id="permText">Pluck wants explicit permission from your hardware to save this file. Your browser will open the system save dialog. No file is saved until you approve. Continue?</p><div class="modal-actions"><button id="permDeny">Deny</button><button id="permAllow" class="primary">Allow & Save</button></div></div></div>
+
 <script>
-const BASE="https://pluck-production-e8f7.up.railway.app";
-const API=BASE+"/api/json";
-const $url=document.getElementById('url'), $st=document.getElementById('status'), $res=document.getElementById('results'), $eng=document.getElementById('engine'), $etxt=document.getElementById('etxt'), $cnt=document.getElementById('cnt');
+const BASE="https://pluck-production-e8f7.up.railway.app", API=BASE+"/api/json";
+const $url=document.getElementById('url'), $st=document.getElementById('status'), $wrap=document.getElementById('screenWrap'), $mount=document.getElementById('playerMount'), $meta=document.getElementById('meta'), $etxt=document.getElementById('etxt'), $engine=document.getElementById('engine'), $cnt=document.getElementById('cnt');
+let last={video:null,audio:null,videoName:null,audioName:null};
 
-document.getElementById('paste').onclick=async()=>{try{$url.value=(await navigator.clipboard.readText()).trim()}catch{};$url.dispatchEvent(new Event('input'))}
-document.getElementById('clear').onclick=()=>{$url.value='';$res.innerHTML='';$st.className='status';$cnt.textContent='paste to begin — we auto-validate, fr';$url.focus()}
-$url.addEventListener('input',()=>{const v=$url.value.trim();$cnt.textContent=v?`${v.length} chars • ${URL.canParse(v)?'valid ✓':'invalid'}`:'paste to begin — we auto-validate, fr'})
+document.getElementById('paste').onclick=async()=>{try{$url.value=(await navigator.clipboard.readText()).trim()}catch{}; $url.dispatchEvent(new Event('input'))}
+document.getElementById('clear').onclick=()=>{$url.value='';$wrap.classList.remove('show');$mount.innerHTML='';$st.className='status';$cnt.textContent='we validate locally, no cap'}
+$url.addEventListener('input',()=>{const v=$url.value.trim();$cnt.textContent=v?`${v.length} chars • ${URL.canParse(v)?'valid ✓':'invalid'}`:'we validate locally, no cap'})
 
-function show(m,c){$st.textContent=m;$st.className='status show '+c}
-function hide(){$st.className='status'}
+function show(m,c){$st.textContent=m;$st.className='status show '+c} function hide(){$st.className='status'}
 
-// Efficient check - GET / is fastest wake, no 405
-async function check(){
-  $eng.className='engine warn';$etxt.textContent='Waking engine…';
-  try{
-    const r=await fetch(BASE,{cache:'no-store'});
-    const j=await r.json();
-    if(j.cobalt){$eng.className='engine ok';$etxt.textContent=`Engine online — cobalt ${j.cobalt.version} • ready, fr no cap`;return true}
-  }catch{}
-  $eng.className='engine warn';$etxt.textContent='Sleeping (free tier) — click Wake, then download anyway, it will wake';
-  return false;
-}
-document.getElementById('wake').onclick=async()=>{window.open(BASE,'_blank');$etxt.textContent='Waking… 8s…';setTimeout(check,8000)}
-check(); setInterval(check,240000);
+// engine check - efficient GET /
+async function check(){ $engine.className='engine warn'; $etxt.textContent='Waking…'; try{const r=await fetch(BASE,{cache:'no-store'});const j=await r.json();if(j.cobalt){$engine.className='engine ok';$etxt.textContent=`Engine online — cobalt ${j.cobalt.version} • ready`;return true}}catch{} $engine.className='engine warn'; $etxt.textContent='Sleeping — click Wake, then Preview anyway'; return false}
+document.getElementById('wake').onclick=async()=>{window.open(BASE,'_blank');$etxt.textContent='Waking 8s…';setTimeout(check,8000)}; check(); setInterval(check,240000);
 
 async function callCobalt(link,mode){
-  const body={
-    url:link, downloadMode:mode, videoQuality:'1080', audioFormat:'mp3', filenamePattern:'classic',
-    vQuality:'1080', aFormat:'mp3', isAudioOnly:mode==='audio'
-  };
+  const body={url:link,downloadMode:mode,videoQuality:'1080',audioFormat:'mp3',filenamePattern:'classic',vQuality:'1080',aFormat:'mp3',isAudioOnly:mode==='audio'};
   const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body)});
-  const j=await r.json().catch(()=>{throw new Error(`HTTP ${r.status}`)});
-  if(!r.ok||j.status==='error') throw new Error(j.error?.code||`HTTP ${r.status}`);
-  return j;
+  const j=await r.json().catch(()=>{throw new Error(`HTTP ${r.status}`)}); if(!r.ok||j.status==='error') throw new Error(j.error?.code||`HTTP ${r.status}`); return j;
 }
 
-function render(mode,j){
-  $res.innerHTML='';
-  if(j.status==='picker'){
-    show(`Found ${j.picker.length} items — carousel detected, pick one, it’s giving options fr`,'ok');
-    j.picker.forEach((it,i)=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<span><b>Item ${i+1}</b><br><small style="font-family:JetBrains Mono;color:#7d91ad">${it.type||'media'}</small></span><a class="dl" href="${it.url}" target="_blank">Download</a>`;$res.appendChild(d)});
-    return;
+function mountPlayer(j,mode){
+  $mount.innerHTML=''; let href=j.url||j.tunnel||j.output?.tunnel; if(Array.isArray(href)) href=href[0];
+  if(!href) throw new Error('No stream url');
+  if(mode==='audio' || (j.status==='tunnel'&&!j.url&&j.tunnel&&typeof j.tunnel==='string'&&j.tunnel.includes('.mp3'))){
+    const a=document.createElement('audio'); a.controls=true; a.autoplay=false; a.src=href; a.style.width='100%'; $mount.appendChild(a);
+    last.audio=href; last.audioName=j.filename||'pluck-audio.mp3'; $meta.textContent='audio • mp3 • ad-free';
+  } else {
+    const v=document.createElement('video'); v.controls=true; v.playsInline=true; v.preload='metadata'; v.src=href; v.style.background='#000'; $mount.appendChild(v);
+    last.video=href; last.videoName=j.filename||'pluck-video.mp4'; $meta.textContent='video • mp4 • ad-free • no watermark';
   }
-  let href=j.url||j.tunnel||j.output?.tunnel; if(Array.isArray(href)) href=href[0];
-  const name=j.filename||j.output?.filename||(mode==='audio'?'audio.mp3':'video.mp4');
-  show(`${mode==='audio'?'MP3 ready':'MP4 ready'} — ${name} — link expires soon, download now, no cap`,'ok');
-  const d=document.createElement('div');d.className='item';d.innerHTML=`<span><b>${name}</b><br><small style="font-family:JetBrains Mono;color:#7d91ad">${j.status}</small></span><a class="dl" href="${href}" download="${name}" target="_blank">Download</a>`;$res.appendChild(d);
-  setTimeout(()=>window.open(href,'_blank','noopener'),350);
+  $wrap.classList.add('show'); $wrap.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-async function handle(mode){
-  const link=$url.value.trim(); if(!link) return show('Paste a link first, fr you gotta give me something','err');
-  if(!URL.canParse(link)) return show('Invalid URL format — must start with https://, no cap','err');
-  $res.innerHTML=''; show(mode==='audio'?'Extracting audio, lowkey cooking, brb…':'Fetching video, highkey max quality, hold on…','load');
-  document.querySelectorAll('.fmt').forEach(b=>b.disabled=true);
-  try{const j=await callCobalt(link,mode);render(mode,j)}catch(e){
-    const m=e.message;
-    const map={'error.api.link.invalid':'Invalid link — copy full URL, not shortened.','error.api.link.unsupported':'Not supported by this engine build.','error.api.content.video.unavailable':'Private / deleted / region-locked.','Failed to fetch':'Engine waking — click Wake, open Railway URL once, wait 8s, retry, fr it works'};
-    show(map[m]||`Engine says: ${m} — lowkey try again, it slaps on retry`,'err');
-  }finally{document.querySelectorAll('.fmt').forEach(b=>b.disabled=false)}
+async function handlePreview(){
+  const link=$url.value.trim(); if(!link) return show('Paste a link first, fr you gotta give me a URL','err'); if(!URL.canParse(link)) return show('Invalid URL — must start with https://','err');
+  $wrap.classList.remove('show'); show('Fetching clean stream — stripping ads, lowkey cooking, highkey fast…','load'); document.getElementById('previewBtn').disabled=true;
+  try{
+    const j=await callCobalt(link,'auto');
+    if(j.status==='picker'&&j.picker?.length){ // preview first item
+      mountPlayer({url:j.picker[0].url,filename:`item-1.mp4`},'auto'); show(`Carousel found — showing item 1 of ${j.picker.length}, it’s giving options fr, pick download below`,'ok');
+      // store first as video
+      last.video=j.picker[0].url; last.videoName='item-1.mp4'; if(j.audio){last.audio=j.audio; last.audioName='audio.mp3'}
+    } else { mountPlayer(j,'auto'); show('Preview ready below — ad-free, no cap, watch before you save','ok'); if(j.audio){last.audio=j.audio; last.audioName='audio.mp3'} }
+  }catch(e){show({ 'error.api.link.invalid':'Invalid link format','error.api.content.video.unavailable':'Private/deleted/region-locked','Failed to fetch':'Engine sleeping — click Wake, wait 8s, retry'}[e.message]||`Engine: ${e.message}`,'err')}finally{document.getElementById('previewBtn').disabled=false}
 }
 
-document.querySelectorAll('.fmt').forEach(b=>b.addEventListener('click',()=>handle(b.dataset.m)));
-$url.addEventListener('keydown',e=>{if(e.key==='Enter')handle('auto')});
+// Permission flow - explicit hardware permission
+let pendingDl=null;
+const modal=document.getElementById('permModal'), permText=document.getElementById('permText');
+function askPermission(type){
+  return new Promise(res=>{
+    let label=type==='mp4'?'download it as mp 4':type==='mp3'?'download it as mp3':'download it as both combined';
+    permText.textContent=`Pluck requests explicit permission from your hardware to ${label}. Your device will open the system save dialog. No file is saved until you click Allow. Continue with ${label}?`;
+    pendingDl=type; modal.classList.add('show');
+    document.getElementById('permAllow').onclick=()=>{modal.classList.remove('show');res(true)};
+    document.getElementById('permDeny').onclick=()=>{modal.classList.remove('show');res(false)};
+  });
+}
+
+async function saveUrl(url,name){
+  try{
+    if('showSaveFilePicker' in window){
+      const h=await window.showSaveFilePicker({suggestedName:name});
+      const w=await h.createWritable(); const r=await fetch(url); const b=await r.blob(); await w.write(b); await w.close(); return;
+    }
+  }catch(e){ if(e.name==='AbortError') return; }
+  const a=document.createElement('a'); a.href=url; a.download=name; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove();
+}
+
+async function handleDlClick(type){
+  const link=$url.value.trim(); if(!link) return show('Paste link first','err');
+  const ok=await askPermission(type); if(!ok) return show('Permission denied — no file saved, you’re still in control, fr','err');
+  show(`Permission granted — preparing ${type}, lowkey saving now…`,'load');
+  try{
+    if(type==='mp4'){
+      let url=last.video, name=last.videoName; if(!url){const j=await callCobalt(link,'auto'); url=j.url||j.tunnel; if(Array.isArray(url)) url=url[0]; name=j.filename||'video.mp4'} await saveUrl(url,name);
+    } else if(type==='mp3'){
+      let url=last.audio, name=last.audioName; if(!url){const j=await callCobalt(link,'audio'); url=j.url||j.tunnel; if(Array.isArray(url)) url=url[0]; name=j.filename||'audio.mp3'} await saveUrl(url,name);
+    } else { // both combined
+      let vUrl=last.video, vName=last.videoName, aUrl=last.audio, aName=last.audioName;
+      if(!vUrl){const j=await callCobalt(link,'auto'); vUrl=j.url||j.tunnel; if(Array.isArray(vUrl)) vUrl=vUrl[0]; vName=j.filename||'video.mp4'; if(j.audio){aUrl=j.audio; aName='audio.mp3'}}
+      if(!aUrl){const j2=await callCobalt(link,'audio'); aUrl=j2.url||j2.tunnel; if(Array.isArray(aUrl)) aUrl=aUrl[0]; aName=j2.filename||'audio.mp3'}
+      await saveUrl(vUrl,vName); await new Promise(r=>setTimeout(r,600)); await saveUrl(aUrl,aName);
+    }
+    show(`Saved — ${type} complete, highkey clean, check your Downloads, no cap`,'ok');
+  }catch(e){show(`Save failed: ${e.message} — try again, it slaps on retry fr`,'err')}
+}
+
+document.getElementById('previewBtn').addEventListener('click',handlePreview);
+document.querySelectorAll('.dl-btn').forEach(b=>b.addEventListener('click',()=>handleDlClick(b.dataset.dl)));
+$url.addEventListener('keydown',e=>{if(e.key==='Enter')handlePreview()});
 </script>
 </body>
 </html>
