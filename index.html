@@ -34,7 +34,7 @@
       font-family: var(--sans);
       min-height: 100vh;
       overflow-x: hidden;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .mono { font-family: var(--mono) !important; }
@@ -213,8 +213,29 @@
     }
     .fun b { color: var(--text-main); }
 
+    /* Info Section */
+    .info {
+      margin-top: 30px; padding: 20px; border: 1px solid #2b2b4e; border-radius: 18px;
+      background: rgba(18,18,28,.8); font-size: 13.5px; line-height: 1.7;
+    }
+    .info h3 {
+      color: #ec4899; margin-bottom: 10px; font-size: 16px; font-weight: 700;
+    }
+    .info ul {
+      margin-left: 18px; margin-top: 8px; margin-bottom: 10px;
+    }
+    .info li {
+      margin-bottom: 6px;
+    }
+    .info code {
+      background: #1e1e36; padding: 2px 6px; border-radius: 6px; font-size: 12px; color: #cbb8ff;
+    }
+    .info .tip {
+      font-size: 12px; color: #8c8cb6; margin-top: 8px; font-style: italic;
+    }
+
     .footer-note {
-      text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px;
+      text-align: center; margin-top: 20px; color: #6d6d9a; font-size: 11px;
     }
 
     @media (max-width: 680px) {
@@ -321,13 +342,39 @@
 
     <!-- Fun Fact -->
     <div class="fun"><b>Random fact:</b> <span id="ft"></span></div>
+
+    <!-- Info Section -->
+    <div class="info">
+      <h3>How This Engine Works</h3>
+      <p>This frontend connects directly to your private <strong>Cobalt instance</strong> hosted on Railway. It does not store or process your links on any third-party server.</p>
+
+      <h3>Common Issues & Fixes</h3>
+      <ul>
+        <li><strong>“Warming up” or “CORS blocked”</strong>: Your Railway app sleeps after inactivity. Press “Wake Engine” and wait 5–8 seconds. Make sure you have set:</li>
+      </ul>
+      <div class="code-block" style="margin-left:18px;background:#1e1e36;padding:8px;border-radius:8px;color:#cbb8ff;font-size:12px;">
+        <div><code>CORS = *</code></div>
+        <div><code>API_URL = https://cobalt-production-2c27.up.railway.app</code></div>
+      </div>
+      <div class="tip">Go to Railway → Variables → Add them → Click Deploy.</div>
+
+      <ul>
+        <li><strong>“Cannot POST /api/json”</strong>: This endpoint is deprecated. This app now uses only <code>POST /</code>, which is correct.</li>
+        <li><strong>Download doesn’t start on iPhone?</strong>: Use “Blob Save”. Then go to <strong>Files App → Downloads</strong> to find your file.</li>
+        <li><strong>Link looks cut off?</strong>: On iOS, copy from the Share menu, not the address bar.</li>
+      </ul>
+
+      <h3>Privacy Note</h3>
+      <p>No data is saved. Your link is sent directly to your Cobalt engine. This page works offline once loaded.</p>
+    </div>
+
     <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app</div>
   </div>
 
   <script>
     // === CONFIGURATION ===
     const BASE = "https://cobalt-production-2c27.up.railway.app";
-    const ENDPOINT = BASE + "/"; // ✅ Only valid endpoint in Cobalt v7+
+    const ENDPOINT = BASE + "/";
     const FALLBACK_URL = "https://co.wuk.sh/";
     const STORAGE_KEY = "pluck_last_ep";
 
@@ -422,7 +469,7 @@
       els.out.innerHTML = `<div class="${cls}">
         <div style="font-weight:800;margin-bottom:8px">${title}</div>
         ${content}
-        <div style="margin-top:10px;font-size:12px;color:#8c8cb6">Fun fact: ${getFact()}</div>
+        <div style="margin-top:10px;font-size:12px;color:#8c8cb6">💡 Fun fact: ${getFact()}</div>
       </div>`;
     }
 
@@ -434,10 +481,11 @@
         </div>`);
     }
 
-    // Download Handlers
-    window.blobDownload = async (url, name) => {
+    // DOWNLOAD HANDLERS (Now globally available)
+    window.blobDownload = async function(url, name) {
       try {
         const res = await fetch(url, { mode: 'cors' });
+        if (!res.ok) throw new Error('Fetch failed');
         const blob = await res.blob();
         const blobUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -446,9 +494,12 @@
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
-        setTimeout(() => { URL.revokeObjectURL(blobUrl); a.remove(); }, 60000);
-      } catch {
-        // Fallback for blocked CORS
+        setTimeout(() => {
+          URL.revokeObjectURL(blobUrl);
+          a.remove();
+        }, 60000);
+      } catch (err) {
+        console.warn("Blob failed, trying direct download:", err);
         const a = document.createElement('a');
         a.href = url;
         a.download = name;
@@ -456,16 +507,16 @@
         document.body.appendChild(a);
         a.click();
         a.remove();
-        alert("Opened in tab. Long-press video → 'Download'.");
+        alert("Opened in new tab. Long-press video → 'Download'.");
       }
     };
 
-    window.copyLink = async (url) => {
-      try { await navigator.clipboard.writeText(url); alert('Copied!'); }
-      catch { prompt('Copy link:', url); }
+    window.copyLink = async function(url) {
+      try { await navigator.clipboard.writeText(url); alert('✅ Link copied to clipboard!'); }
+      catch { prompt('📋 Copy this link:', url); }
     };
 
-    window.shareFile = async (url, name) => {
+    window.shareFile = async function(url, name) {
       if (navigator.share) {
         try { await navigator.share({ title: name, url }); } catch {}
       } else { copyLink(url); }
@@ -476,9 +527,9 @@
       const name = sanitize(filename);
       return `<div class="dl-grid">
         <a href="${url}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open in Tab ✅<br><small>${label}</small></a>
-        <button class="btn ghost" onclick="blobDownload('${url}','${name}')">Blob Save (iPhone)</button>
-        <button class="btn ghost" onclick="shareFile('${url}','${name}')">Share</button>
-        <button class="btn ghost" onclick="copyLink('${url}')">Copy Link</button>
+        <button class="btn ghost" onclick="blobDownload('${url}','${name}')">💾 Blob Save (iPhone)</button>
+        <button class="btn ghost" onclick="shareFile('${url}','${name}')">📤 Share</button>
+        <button class="btn ghost" onclick="copyLink('${url}')">📋 Copy Link</button>
       </div>`;
     }
 
@@ -509,10 +560,10 @@
         const msg = String(e).toLowerCase();
         const isCors = msg.includes('cors') || msg.includes('failed to fetch');
         showError(
-          isCors ? 'CORS Blocked!' : 'Engine Sleeping',
+          isCors ? '🔐 CORS Blocked!' : '💤 Engine Sleeping',
           isCors
-            ? `Go to Railway → Variables → Add:<br>CORS = *<br>API_URL = ${BASE}<br>Then click Deploy.`
-            : 'Press "Wake Engine" — Railway takes 5–8 sec to boot.'
+            ? `This happens when Railway variables are missing.<br>Add in Variables:<br><code>CORS = *</code><br><code>API_URL = ${BASE}</code>`
+            : 'Railway puts apps to sleep. Press “Wake Engine” and wait 5–8 seconds.'
         );
         return false;
       }
@@ -539,7 +590,7 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return await res.json();
       } catch (e) {
-        throw new Error(`Fetch failed: ${e.message}`);
+        throw new Error(`Request failed: ${e.message}`);
       }
     }
 
@@ -547,8 +598,8 @@
     async function go() {
       const raw = els.url.value.trim();
       const valid = isValidUrl(raw);
-      if (!raw) return showError('Error', 'Please paste a link first.');
-      if (valid !== true) return showError('Invalid Link', `You pasted: ${raw}`);
+      if (!raw) return showError('⚠️ Empty Link', 'Please paste a link first.');
+      if (valid !== true) return showError('❌ Invalid Link', `The link looks incomplete or invalid.`);
 
       els.go.disabled = true;
       els.go.textContent = 'Processing...';
@@ -565,15 +616,15 @@
         let result;
         if (state.fmt === 'mp3') {
           result = await postToCobalt({ ...base, isAudioOnly: true, audioFormat: $('#af').value });
-          showOutput('ok', 'Audio Ready', buildButtons(result.url, result.filename, 'MP3 Audio') + '<br><small>Disable metadata removes song title/artwork.</small>', result);
+          showOutput('ok', '🎧 Audio Ready', buildButtons(result.url, result.filename, 'MP3 Audio Only'), result);
         } else if (state.fmt === 'both') {
           const [vid, aud] = await Promise.all([
             postToCobalt({ ...base, videoQuality: $('#vq').value, audioFormat: $('#af').value }),
             postToCobalt({ ...base, isAudioOnly: true, audioFormat: $('#af').value })
           ]);
-          showOutput('ok', 'Both Files Ready', `
-            <b>📹 Video (${vid.filename})</b>${buildButtons(vid.url, vid.filename, 'MP4 Video')}
-            <b>🎵 Audio (${aud.filename})</b>${buildButtons(aud.url, aud.filename, 'MP3 Audio')}
+          showOutput('ok', '📁 Both Files Ready', `
+            <b>📹 Video (${sanitize(vid.filename)})</b>${buildButtons(vid.url, vid.filename, 'MP4 Video')}
+            <b>🎵 Audio (${sanitize(aud.filename)})</b>${buildButtons(aud.url, aud.filename, 'MP3 Audio')}
           `, { video: vid, audio: aud });
         } else {
           result = await postToCobalt({
@@ -581,11 +632,11 @@
             videoQuality: $('#vq').value,
             audioFormat: $('#af').value
           });
-          showOutput('ok', 'Video Ready', buildButtons(result.url, result.filename, 'MP4 Video + Audio'), result);
+          showOutput('ok', '🎬 Video Ready', buildButtons(result.url, result.filename, 'MP4 Video + Audio'), result);
         }
       } catch (e) {
         console.error(e);
-        showError('Request Failed', `Reason: ${e.message}<br><br>Tip: Check Railway logs. Enable CORS=* and API_URL=${BASE}.`);
+        showError('🔴 Request Failed', `Reason: ${e.message}<br><br>📌 Tip: Check Railway logs and ensure CORS=* is set.`);
       } finally {
         els.go.disabled = false;
         els.go.textContent = 'Pluck';
@@ -594,13 +645,13 @@
 
     // Fallback & Debug
     window.tryFallback = async () => {
-      showError('Trying Public Engine...', `Using ${FALLBACK_URL} as backup.`);
+      showError('🔄 Trying Public Engine...', `Using fallback at ${FALLBACK_URL}.`);
       try {
         const payload = { url: els.url.value.trim(), isAudioOnly: state.fmt === 'mp3' };
         const res = await postToCobalt(payload, FALLBACK_URL);
-        showOutput('ok', 'Success via Fallback', buildButtons(res.url, res.filename, 'From co.wuk.sh'));
+        showOutput('ok', '✅ Success via Fallback', buildButtons(res.url, res.filename, 'From co.wuk.sh'), res);
       } catch (e) {
-        showError('Fallback Failed', e.message);
+        showError('❌ Fallback Failed', e.message);
       }
     };
 
@@ -613,7 +664,7 @@
         isAudioOnly: false
       }, null, 2);
       const cmd = `curl -X POST ${BASE} \\\n-H "Content-Type: application/json" \\\n-d '${body.replace(/'/g, "'\\''")}'`;
-      navigator.clipboard.writeText(cmd).then(() => alert('Curl copied!')).catch(() => prompt('Copy:', cmd));
+      navigator.clipboard.writeText(cmd).then(() => alert('✅ Curl command copied!')).catch(() => prompt('📋 Copy curl:', cmd));
     };
 
     // Events
@@ -643,7 +694,7 @@
     );
 
     $('#wake').addEventListener('click', async () => {
-      els.stxt.textContent = 'Waking engine...';
+      els.stxt.textContent = '🚀 Waking engine...';
       try { await fetch(ENDPOINT, { method: 'HEAD', mode: 'no-cors' }); } catch {}
       setTimeout(ping, 2000);
     });
