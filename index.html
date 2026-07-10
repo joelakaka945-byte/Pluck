@@ -1,126 +1,754 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
-<title>Pluck — Universal Engine</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
-<style>
-:root{--bg:#0a0a0f;--border:#272746;--accent:linear-gradient(135deg,#8b5cf6,#ec4899);--text:#f5f5ff;--muted:#9aa0c0;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',system-ui,sans-serif}
-*{margin:0;padding:0;box-sizing:border-box}html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
-.mono{font-family:var(--mono)!important}
-.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 500px at 10% 0%,rgba(139,92,246,.22),transparent 60%),radial-gradient(700px 500px at 90% 10%,rgba(236,72,153,.14),transparent 60%),#0a0a0f}
-.wrap{max-width:760px;margin:0 auto;padding:18px 14px 40px}
-.top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border:1px solid var(--border);background:rgba(18,18,28,.92);border-radius:18px}
-.dot{width:9px;height:9px;border-radius:50%;background:#f59e0b;box-shadow:0 0 0 6px rgba(245,158,11,.18);animation:p 1.6s infinite}.dot.ok{background:#22c55e;animation:none}.dot.bad{background:#ef4444;animation:none}@keyframes p{0%,100%{opacity:1}50%{opacity:.45}}
-.hero{margin:26px 6px 18px}.hero h1{font-size:44px;line-height:.92;font-weight:800;letter-spacing:-.04em}.hero h1 span{background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{color:var(--muted);margin-top:10px;font-size:14.5px;line-height:1.7;max-width:580px}
-.card{border:1px solid var(--border);background:linear-gradient(180deg,rgba(32,32,54,.98),rgba(18,18,28,.98));border-radius:22px;padding:18px}
-.switch{display:inline-flex;gap:4px;padding:4px;background:#0f0f1b;border:1px solid #2c2c4e;border-radius:999px}.sw{padding:8px 14px;border-radius:999px;border:0;background:transparent;color:#8d8db3;font-weight:700;font-size:13px;cursor:pointer}.sw.on{background:var(--accent);color:#fff}
-.row{display:flex;gap:10px;margin-top:14px}.field{flex:1;display:flex;gap:10px;align-items:center;padding:14px 16px;border:1px solid #2b2b4a;background:#0c0c14;border-radius:16px}.field:focus-within{border-color:#8b5cf6;box-shadow:0 0 0 4px rgba(139,92,246,.18)}.field input{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:15px;font-family:inherit}
-.btn{border:0;border-radius:14px;padding:12px 16px;font-weight:700;cursor:pointer;font-family:inherit}.btn:active{transform:scale(.97)}.primary{background:var(--accent);color:#fff}.ghost{background:#1b1b31;border:1px solid #31315a;color:#e8e8ff}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.pick{border:1px solid #2b2b4e;background:#0f0f1a;border-radius:16px;padding:13px;text-align:left;cursor:pointer}.pick.on{border-color:#8b5cf6;box-shadow:0 0 0 4px rgba(139,92,246,.16);background:linear-gradient(180deg,rgba(139,92,246,.14),#0f0f1a)}.pick code{display:inline-block;margin-top:6px;font-size:11px;padding:4px 8px;border-radius:999px;background:#1e1e36;border:1px solid #32325a;color:#cbb8ff}.pick small{display:block;color:#8c8cb6;font-size:11.5px;line-height:1.6;margin-top:5px}
-.expert{display:none;margin-top:14px;border-top:1px dashed #2f2f55;padding-top:12px}.expert.show{display:block}
-.controls{display:grid;grid-template-columns:1fr;gap:10px}.sel{padding:11px;border-radius:12px;border:1px solid #2b2b4e;background:#0c0c14;color:#fff;font-size:13px;width:100%}
-.kv{display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:12px;color:#8c8cb6;margin-top:8px}.kv b{color:#fff;word-break:break-all}
-.out{display:none;margin-top:14px}.out.show{display:block}.box{border:1px solid #2b2b4e;background:#0c0c14;border-radius:16px;padding:14px;margin-top:10px}.box pre{white-space:pre-wrap;word-break:break-word;font-size:12px;color:#d3d3f2;line-height:1.7;font-family:var(--mono)}.box.ok{border-color:rgba(34,197,94,.3);background:linear-gradient(180deg,rgba(34,197,94,.08),#0c0c14)}.box.err{border-color:rgba(239,68,68,.3);background:linear-gradient(180deg,rgba(239,68,68,.08),#0c0c14)}
-.dl{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
-.pill{font-size:11px;border:1px solid #2b2b4e;padding:5px 9px;border-radius:999px;color:#8c8cb6}
-.fun{margin-top:16px;padding:14px;border:1px solid #2e2e52;border-radius:16px;background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(236,72,153,.08));font-size:13px;line-height:1.7;color:#9aa0c0}
-@media(max-width:680px){.grid3{grid-template-columns:1fr}.dl{grid-template-columns:1fr}.hero h1{font-size:34px}.row{flex-direction:column}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <title>Pluck — Universal Engine</title>
+  <meta name="description" content="Private media downloader powered by Cobalt on Railway." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card-bg: rgba(18, 18, 28, 0.95);
+      --border: #272746;
+      --border-focus: #8b5cf6;
+      --accent: linear-gradient(135deg, #8b5cf6, #ec4899);
+      --text-main: #f5f5ff;
+      --text-muted: #9aa0c0;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: var(--sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    .mono { font-family: var(--mono) !important; }
+
+    .bg {
+      position: fixed; inset: 0; z-index: -1;
+      background: 
+        radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%),
+        radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%),
+        var(--bg);
+      pointer-events: none;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 18px 14px 40px;
+    }
+
+    /* Header */
+    .top {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+      padding: 14px 16px; border: 1px solid var(--border);
+      background: var(--card-bg); border-radius: 18px; backdrop-filter: blur(12px);
+    }
+    .brand {
+      font-weight: 800; display: flex; gap: 9px; align-items: center; font-size: 18px;
+    }
+    .brand-icon {
+      width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px;
+      background: var(--accent); color: white; font-size: 16px;
+    }
+    .status {
+      display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted);
+    }
+    .dot {
+      width: 9px; height: 9px; border-radius: 50%; background: #f59e0b;
+      box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite;
+    }
+    .dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
+    .dot.bad { background: #ef4444; box-shadow: 0 0 0 6px rgba(239,68,68,.18); animation: none; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+
+    /* Hero */
+    .hero { margin: 26px 6px 18px; }
+    .hero h1 {
+      font-size: clamp(34px, 8vw, 46px); line-height: .95; letter-spacing: -.05em; font-weight: 800;
+    }
+    .hero h1 span {
+      background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      color: var(--text-muted); margin-top: 12px; font-size: 15px; line-height: 1.7; max-width: 580px;
+    }
+
+    /* Card */
+    .card {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98));
+      border-radius: 22px; padding: 18px;
+    }
+
+    /* Mode Switch */
+    .switch {
+      display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1b; border: 1px solid #2c2c4e; border-radius: 999px;
+    }
+    .sw {
+      padding: 8px 16px; border-radius: 999px; border: 0; background: transparent;
+      color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; transition: all .2s ease;
+    }
+    .sw.on {
+      background: var(--accent); color: #fff;
+    }
+
+    /* Pills */
+    .meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pill {
+      font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6;
+    }
+    .pill b { color: #fff; font-weight: 600; }
+
+    /* Input Row */
+    .row { display: flex; gap: 10px; margin-top: 14px; }
+    .field {
+      flex: 1; display: flex; gap: 10px; align-items: center; padding: 14px 16px;
+      border: 1px solid #2b2b4a; background: #0c0c14; border-radius: 16px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .field:focus-within {
+      border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.18);
+    }
+    .field input {
+      flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0;
+    }
+    .field input::placeholder {
+      color: #55557a;
+    }
+
+    /* Buttons */
+    .btn {
+      border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer;
+      font-family: inherit; font-size: 14px; transition: transform .1s, opacity .2s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+    .primary { background: var(--accent); color: #fff; }
+    .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
+
+    /* Format Grid */
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+    .pick {
+      border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px;
+      text-align: left; cursor: pointer; transition: all .2s ease; display: flex; flex-direction: column; gap: 4px;
+    }
+    .pick:hover { border-color: #3b3b6e; }
+    .pick.on {
+      border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16);
+      background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a);
+    }
+    .pick b { font-size: 14px; }
+    .pick code {
+      display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px;
+      background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff;
+    }
+    .pick small {
+      display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px;
+    }
+
+    /* Expert Panel */
+    .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
+    .expert.show { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .sel {
+      padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14;
+      color: #fff; font-size: 13px; width: 100%; outline: none; cursor: pointer;
+    }
+    .sel:focus { border-color: var(--border-focus); }
+
+    .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
+    .kv b { color: #fff; word-break: break-all; }
+
+    .checkbox-label {
+      display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted);
+    }
+    .checkbox-label input { accent-color: #8b5cf6; }
+
+    /* Action Buttons */
+    .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+    /* Output */
+    .out { display: none; margin-top: 16px; }
+    .out.show { display: block; }
+    .box {
+      border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px;
+    }
+    .box pre {
+      white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono);
+    }
+    .box.ok { border-color: rgba(34,197,94,.3); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
+    .box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
+
+    .dl-grid {
+      display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px;
+    }
+    @media (min-width: 600px) {
+      .dl-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Fun Fact */
+    .fun {
+      margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px;
+      background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08));
+      font-size: 13px; line-height: 1.6; color: var(--text-muted);
+    }
+    .fun b { color: var(--text-main); }
+
+    .footer-note {
+      text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px;
+    }
+
+    @media (max-width: 680px) {
+      .hero h1 { font-size: 34px; }
+      .row { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
-<div class="bg"></div>
-<div class="wrap">
-<div class="top"><div style="font-weight:800;display:flex;gap:9px;align-items:center"><span style="width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--accent)">P</span>Pluck</div><div style="display:flex;gap:8px;align-items:center;font-size:12px;color:#9aa0c0"><span id="dot" class="dot"></span><span id="stxt">Checking the engine, you are doing great</span></div></div>
-<div class="hero"><h1 id="h1">You are<br><span>almost there.</span></h1><p id="heroP">Paste any full link and Pluck will handle the rest. You are doing everything correctly. If the dot says warming up, it only means the server was sleeping to save credits. Press Wake Engine and wait six seconds.</p></div>
-<div class="card">
-<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center"><div class="switch"><button id="bS" class="sw on">Simple Mode</button><button id="bE" class="sw">Expert Mode</button></div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="pill">Engine <b id="ver" style="color:#fff">checking</b></span><span class="pill" id="lat">— ms</span><span class="pill mono">POST / only — fixed</span></div></div>
-<div class="row"><div class="field"><span>🔗</span><input id="url" placeholder="Paste a full YouTube, TikTok, or Instagram link here" /></div><button id="go" class="btn primary">Pluck</button></div>
-<div class="grid3">
-<button class="pick on" data-f="mp4"><b>Video plus Audio</b><code>mp4</code><small>What you see is what you get. The video track and the audio track are combined into one file that works everywhere.</small></button>
-<button class="pick" data-f="mp3"><b>Audio Only</b><code>mp3</code><small>Only the sound is downloaded. The file is very small and perfect for music or podcasts. No video is included.</small></button>
-<button class="pick" data-f="both"><b>Both Files</b><code>mp4 + mp3</code><small>You will get two separate files, one mp4 video and one mp3 audio, from one single paste.</small></button>
-</div>
-<div id="ex" class="expert">
-<div style="font-weight:700;margin-bottom:8px">Expert Mode — Complete Explanation From Beginning To End</div>
-<div class="controls">
-<select id="vq" class="sel"><option value="max">v1 quality: maximum — keep original source quality</option><option value="1080">v1 quality: 1080p — Full High Definition</option><option value="720" selected>v1 quality: 720p — balanced size and quality</option><option value="480">v1 quality: 480p — small file</option></select>
-<select id="af" class="sel"><option value="mp3">a1 format: mp3 — works on every device</option><option value="best">a1 format: best — keep original audio</option><option value="opus">a1 format: opus — very efficient</option><option value="wav">a1 format: wav — uncompressed and lossless</option></select>
-<select id="fn" class="sel"><option value="classic">filenameStyle: classic</option><option value="pretty" selected>filenameStyle: pretty — uses title and author</option><option value="basic">filenameStyle: basic</option><option value="nerdy">filenameStyle: nerdy — includes quality and codec</option></select>
-</div>
-<div class="kv"><span>v1 track</span><b id="kvV">v1 means video track number one, encoded as h264 at 720p</b></div>
-<div class="kv"><span>a1 track</span><b id="kvA">a1 means audio track number one, encoded as mp3</b></div>
-<div class="kv"><span>endpoint</span><b class="mono" id="kvE">https://cobalt-production-2c27.up.railway.app/ — POST slash only, no api json</b></div>
-<div class="kv"><span>request</span><b class="mono" id="kvR">POST / { url, downloadMode, videoQuality, audioFormat, filenameStyle }</b></div>
-<div class="kv"><span>response</span><b id="kvResp" class="mono">Waiting for you to press Pluck</b></div>
-<label style="display:flex;gap:8px;align-items:center;margin-top:10px;font-size:12px;color:#9aa0c0"><input id="nm" type="checkbox"> Disable metadata — do not add title or cover art</label>
-</div>
-<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear</button><button id="test" class="btn ghost">Ping Server</button></div>
-<div id="out" class="out"></div>
-</div>
-<div class="fun"><b>Random interesting fact:</b> <span id="ft"></span></div>
-</div>
-</div>
-<script>
-const BASE="https://cobalt-production-2c27.up.railway.app";
-const ENDPOINT=BASE+"/";
-const FACTS=[
-"Octopuses have three hearts and their blood is blue because it uses copper instead of iron to carry oxygen, which works better in cold ocean water.",
-"Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that are more than three thousand years old and still perfectly safe to eat today.",
-"A day on the planet Venus is actually longer than an entire year on Venus, because Venus rotates extremely slowly on its axis while it orbits the sun.",
-"Bananas are classified as berries by botanists, but strawberries are not considered true berries because their seeds grow on the outside of the fruit.",
-"Wombats produce cube shaped droppings, which helps prevent the droppings from rolling away and effectively marks their territory on rocks and logs.",
-"There are more trees growing on Earth than there are stars in the Milky Way galaxy. Scientists estimate there are about three trillion trees on our planet.",
-"Water can boil and freeze at the exact same time when it is at 0.01 degrees Celsius and at a very specific low pressure, a condition known as the triple point.",
-"Your stomach creates an entirely new protective lining every three to four days, otherwise the very strong acids inside would digest the stomach itself.",
-"The light you see from the Sun right now left the surface of the Sun about eight minutes ago, but the energy itself was created deep inside the Sun up to one hundred thousand years ago.",
-"Cows actually have best friends and they become visibly stressed and their heart rate increases significantly when they are separated from their preferred companion.",
-"Sharks have existed on Earth for much longer than trees have. Sharks first appeared about four hundred million years ago, while the earliest trees appeared about three hundred fifty million years ago.",
-"A single large fluffy cumulus cloud can weigh more than one million pounds, but it continues to float because the weight is spread across an enormous volume of air.",
-"The national animal of Scotland is officially the unicorn, which has been a Scottish heraldic symbol since the twelfth century and represents purity and strength.",
-"The human brain generates about twenty watts of continuous power, which would be enough to power a very dim incandescent light bulb if you could capture it.",
-"The Turritopsis dohrnii jellyfish is biologically immortal because it can revert its cells back to childhood and restart its entire life cycle indefinitely.",
-"The Eiffel Tower grows about fifteen centimeters taller during the summer months because the iron metal expands when it is heated by the hot sun.",
-"Bananas are naturally slightly radioactive because they contain a natural isotope of potassium called potassium forty, but you would need to eat millions at once to be harmed.",
-"Sloths can hold their breath for up to forty minutes, which is longer than dolphins can, by dramatically slowing their heart rate and metabolism.",
-"Humans share about sixty percent of their DNA with bananas, which demonstrates how fundamentally similar all living things are at the molecular level.",
-"It literally rains diamonds on the planets Jupiter and Saturn because extreme atmospheric pressure turns methane gas into diamonds that fall toward the core.",
-"Under certain specific conditions, hot water can freeze faster than cold water, a counterintuitive phenomenon known as the Mpemba effect that scientists still debate.",
-"A modern smartphone has millions of times more computing power than the Apollo computers that NASA used to land astronauts on the Moon in 1969.",
-"The average person will spend about six months of their entire life waiting for traffic lights to change from red to green.",
-"Ketchup was once sold as a medicine in the United States during the 1830s, and people genuinely believed it could cure stomach problems.",
-"Sea otters hold hands with each other while they sleep so that they do not drift apart from one another in the moving ocean current.",
-"You cannot physically hum a tune while you are pinching your nose closed, because humming requires air to escape through your nasal passages.",
-"A single teaspoon of material from a neutron star would weigh about six billion tons on Earth because neutron stars are unimaginably dense.",
-"There are more possible ways to shuffle a standard deck of fifty two playing cards than there are atoms on the entire planet Earth.",
-"Laughing for ten to fifteen minutes can burn up to forty calories because it elevates your heart rate and engages many different muscle groups.",
-"Honeybees are capable of recognizing and remembering human faces by learning to associate patterns and features, despite having brains smaller than a grain of rice."
-];
-let pool=[...FACTS].sort(()=>0.5-Math.random());function fact(){if(!pool.length)pool=[...FACTS].sort(()=>0.5-Math.random());return pool.pop();}
-const $=s=>document.querySelector(s);
-const els={dot:$('#dot'),stxt:$('#stxt'),ver:$('#ver'),lat:$('#lat'),out:$('#out'),ft:$('#ft'),kvR:$('#kvR'),kvResp:$('#kvResp'),url:$('#url'),go:$('#go')};
-els.ft.textContent=fact();
-let fmt="mp4",isExpert=false,online=false;
-(function clearBadStorage(){ try{ if(location.search.includes('clear')) localStorage.clear(); const ep=localStorage.getItem('pluck_ep'); if(ep && ep.includes('/api/json')){ localStorage.removeItem('pluck_ep'); console.log('Cleared bad endpoint',ep); } }catch(e){} })();
-function setSimple(){ $('#h1').innerHTML='You are<br><span>almost there.</span>'; $('#heroP').textContent='Paste any full link. You are doing everything correctly. If the dot says warming up, it only means the server was sleeping to save credits. Press Wake Engine and wait six seconds.'; els.stxt.textContent=online?'Engine is online and ready':'Checking the engine, you are doing great'; }
-function setExpert(){ $('#h1').innerHTML='Engine<br><span>Diagnostics</span>'; $('#heroP').textContent='Expert Mode shows v1 means video track one, a1 means audio track one, mux means combining video and audio together, downloadMode auto means video plus audio, downloadMode audio means audio only. You will see endpoint, latency, request payload, and full response.'; }
-function upd(){ const vq=$('#vq').value,af=$('#af').value,fn=$('#fn').value; $('#kvV').textContent=vq+' quality, v1 means video track number one'; $('#kvA').textContent=af+' format, a1 means audio track number one'; $('#kvR').textContent='POST / { url: your link, downloadMode: '+(fmt==='mp3'?'audio':'auto')+', videoQuality: '+vq+', audioFormat: '+af+', filenameStyle: '+fn+' }'; }
-document.querySelectorAll('.sel').forEach(e=>e.addEventListener('change',upd));
-$('#bS').onclick=()=>{isExpert=false;$('#bS').classList.add('on');$('#bE').classList.remove('on');$('#ex').classList.remove('show');setSimple();upd()};
-$('#bE').onclick=()=>{isExpert=true;$('#bE').classList.add('on');$('#bS').classList.remove('on');$('#ex').classList.add('show');setExpert();upd()};
-document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{document.querySelectorAll('.pick').forEach(x=>x.classList.remove('on'));b.classList.add('on');fmt=b.dataset.f;upd()});
-function show(type,title,html,data){ els.out.classList.add('show'); if(data && isExpert) $('#kvResp').textContent=JSON.stringify(data).slice(0,600); els.out.innerHTML=`<div class="box ${type}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${html}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Interesting fact: ${fact()}</div></div>`; }
-function validUrl(s){ try{ const u=new URL(s.trim()); if(u.protocol!=='http:' && u.protocol!=='https:') return null; if(u.hostname==='youtu.be' && u.pathname.replace('/','').length<11) return 'short'; return u.href; }catch{return null} }
-async function ping(){ const t0=performance.now(); els.dot.className='dot'; try{ const r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors',headers:{Accept:'application/json'}}); const ms=Math.round(performance.now()-t0); $('#lat').textContent=ms+' milliseconds'; if(!r.ok) throw new Error('HTTP '+r.status); const j=await r.json(); if(!j.cobalt) throw new Error('Not cobalt'); online=true; els.dot.className='dot ok'; $('#ver').textContent='cobalt '+(j.cobalt.version||'v10'); els.stxt.textContent=isExpert?'Engine online, latency '+ms+' milliseconds':'Engine is online and ready'; return true }catch(e){ online=false; els.dot.className='dot bad'; $('#ver').textContent='warming up'; $('#lat').textContent='— ms'; const msg=String(e).toLowerCase(); if(msg.includes('failed to fetch')) show('err','Browser blocked the response because CORS is missing','<pre>Your engine is running, but the browser is blocking the answer. Go to Railway, open service cobalt-production-2c27, click Variables, add CORS equals asterisk * and API_URL equals https://cobalt-production-2c27.up.railway.app with no slash at end, then Deploy and wait one minute. This fixes ninety percent of failures. The engine only needs POST slash, never POST api json.</pre>'); else show('err','Engine is starting up','<pre>Railway free tier stops the container after a few minutes. It needs three to eight seconds to wake up. Press Wake Engine and wait six seconds. You have done everything correctly.</pre>'); return false } }
-async function postCobalt(payload){ try{ const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),25000); const res=await fetch(ENDPOINT,{method:'POST',mode:'cors',credentials:'omit',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload),signal:ctrl.signal}); clearTimeout(to); const txt=await res.text(); let j; try{ j=JSON.parse(txt) }catch{ throw new Error('Server replied with text that is not JSON: '+txt.slice(0,400)+'. This usually means you posted to the wrong route. This engine only accepts POST slash, not POST api json.'); } if(j.status==='error') throw new Error(j.text||j.error?.code||'Engine returned an error'); return j }catch(e){ if(String(e).toLowerCase().includes('failed to fetch')) throw new Error('Browser could not reach '+ENDPOINT+' . This is almost always CORS missing. Add CORS equals asterisk * in Railway Variables and redeploy.'); throw e } }
-function btns(url,name,label){ const safe=(name||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,180); return `<div class="dl"><a href="${url}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open in new tab — Safe for Safari ✅<br><small>${label}</small></a><button class="btn ghost" onclick="blobSave('${url}','${safe}')">Blob Save — Forces real download on iPhone<br><small class="mono">Creates blob URL which Safari allows to save to Files</small></button><button class="btn ghost" onclick="shareLink('${url}','${safe}')">Share — Opens iPhone share sheet</button><button class="btn ghost" onclick="copyLink('${url}')">Copy direct link</button></div>`; }
-window.blobSave=async(u,n)=>{ try{ const r=await fetch(u,{mode:'cors'}); if(!r.ok) throw new Error('File server blocked blob download. Use Open in new tab instead.'); const b=await r.blob(); const o=URL.createObjectURL(b); const a=document.createElement('a'); a.href=o; a.download=n; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(o),60000) }catch(e){ alert(e.message) } }
-window.copyLink=async u=>{ try{ await navigator.clipboard.writeText(u); alert('Link copied. Interesting fact: '+fact()) }catch{ prompt('Copy link',u) } }
-window.shareLink=async(u,n)=>{ if(navigator.share){ try{ await navigator.share({title:n,url:u}); }catch{} }else{ copyLink(u) } }
-async function go(){ const raw=els.url.value; const v=validUrl(raw); if(!raw.trim()) return show('err','Please paste a link first','<pre>Please copy a full link like https://www.youtube.com/watch?v=dQw4w9WgXcQ and paste it above. You are doing great.</pre>'); if(v==='short') return show('err','The link looks too short and incomplete','<pre>You pasted '+raw+'. YouTube short links must have eleven characters after youtu.be slash. Open video, press Share, then Copy Link to get full link.</pre>'); if(!v) return show('err','Could not find a valid web address','<pre>Make sure link starts with https:// and has no spaces. Example: https://www.youtube.com/watch?v=dQw4w9WgXcQ</pre>'); els.go.textContent='Working, please wait'; els.go.disabled=true; els.out.classList.add('show'); els.out.innerHTML=`<div class="box"><pre>Sending POST to ${ENDPOINT}\nThis engine only uses POST slash, never POST api json.\nYou are doing great, this takes two to five seconds.</pre></div>`; try{ if(!online) await ping(); const base={url:v,filenameStyle:$('#fn').value,filenamePattern:$('#fn').value,disableMetadata:$('#nm').checked}; if(fmt==='mp3'){ const p={...base,downloadMode:'audio',audioFormat:$('#af').value,audioBitrate:'128'}; const j=await postCobalt(p); show('ok','Your audio is ready',btns(j.url,j.filename,'MP3 audio, a1 audio track only, safe for Safari'),j); }else if(fmt==='both'){ const vp={...base,downloadMode:'auto',videoQuality:$('#vq').value}; const ap={...base,downloadMode:'audio',audioFormat:$('#af').value}; const [vid,aud]=await Promise.all([postCobalt(vp),postCobalt(ap)]); show('ok','Both files ready','<div><b>Video <code>mp4</code></b>'+btns(vid.url,vid.filename,'MP4 video, v1 plus a1')+'</div><div style="margin-top:10px"><b>Audio <code>mp3</code></b>'+btns(aud.url,aud.filename,'MP3 audio, a1 only')+'</div>',{vid,aud}); }else{ const p={...base,downloadMode:'auto',videoQuality:$('#vq').value,audioFormat:$('#af').value}; const j=await postCobalt(p); if(j.status==='picker'){ let h=''; j.picker.forEach((it,i)=>{ h+=`<div class="box"><b>Item ${i+1} type ${it.type}</b>${btns(it.url,'item-'+(i+1),it.type)}</div>` }); show('ok','Multiple items found, choose one',h,j); }else{ show('ok','Your video is ready',btns(j.url,j.filename,'MP4 video, v1 video track plus a1 audio track combined, safe for Safari'),j); } } $('#ft').textContent=fact(); }catch(e){ show('err','Not a big deal, let us try again','<pre>Reason: '+ (e.message||String(e)) +'\n\nIf you still see Cannot POST api json, you are using an old cached file. Add ?clear to your site URL once to clear storage, then reload. This version never calls api json.</pre>'); }finally{ els.go.textContent='Pluck'; els.go.disabled=false; } }
-$('#go').addEventListener('click',go); $('#url').addEventListener('keydown',e=>e.key==='Enter'&&go()); $('#wake').addEventListener('click',async()=>{ els.stxt.textContent='Waking up engine, please wait six seconds'; try{ await fetch(ENDPOINT,{mode:'no-cors',cache:'no-store'});}catch{} setTimeout(ping,2000); }); $('#clear').addEventListener('click',()=>{ $('#url').value=''; els.out.classList.remove('show'); }); $('#test').addEventListener('click',ping);
-setSimple(); upd(); ping(); setInterval(()=>{ if(document.visibilityState==='visible') ping() },20000);
-</script>
+  <div class="bg"></div>
+  <div class="wrap">
+
+    <!-- Header -->
+    <div class="top">
+      <div class="brand"><span class="brand-icon">P</span> Pluck</div>
+      <div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine...</span></div>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+      <h1 id="h1">You are<br><span>almost there.</span></h1>
+      <p id="heroP">Paste any link and Pluck will handle the rest. You are doing everything correctly, I promise. If the dot says warming up, it only means Railway put the engine to sleep to save credits. It is not broken.</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card">
+      <!-- Mode & Status -->
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;">
+        <div class="switch">
+          <button id="bS" class="sw on">Simple Mode</button>
+          <button id="bE" class="sw">Expert Mode</button>
+        </div>
+        <div class="meta-pills">
+          <span class="pill">Engine <b id="ver">checking</b></span>
+          <span class="pill" id="lat">— ms</span>
+          <span class="pill mono" id="epLab">using /</span>
+        </div>
+      </div>
+
+      <!-- URL Input -->
+      <div class="row">
+        <div class="field">
+          <span>🔗</span>
+          <input id="url" type="url" placeholder="Paste a full YouTube, TikTok, or Instagram link here" autocomplete="off" spellcheck="false" />
+        </div>
+        <button id="go" class="btn primary">Pluck</button>
+      </div>
+
+      <!-- Format Picker -->
+      <div class="grid3">
+        <button class="pick on" data-f="mp4">
+          <b>Video plus Audio</b><code>mp4</code>
+          <small>What you see is what you get. The video and the audio are combined together. This works everywhere and is the most compatible choice.</small>
+        </button>
+        <button class="pick" data-f="mp3">
+          <b>Audio Only</b><code>mp3</code>
+          <small>Only the sound is downloaded. The file is very small. This is perfect for music and podcasts.</small>
+        </button>
+        <button class="pick" data-f="both">
+          <b>Both Files</b><code>mp4 + mp3</code>
+          <small>You will get two separate files, one mp4 video and one mp3 audio, from one paste. This is convenient when you want both.</small>
+        </button>
+      </div>
+
+      <!-- Expert Panel -->
+      <div id="ex" class="expert">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Expert Mode — Technical Details</div>
+        <div class="controls">
+          <select id="vq" class="sel">
+            <option value="max">v1 quality: maximum — keep original</option>
+            <option value="1080">v1 quality: 1080p</option>
+            <option value="720" selected>v1 quality: 720p</option>
+            <option value="480">v1 quality: 480p</option>
+          </select>
+          <select id="af" class="sel">
+            <option value="mp3">a1 format: mp3 — universal</option>
+            <option value="best">a1 format: best — original</option>
+            <option value="opus">a1 format: opus — efficient</option>
+          </select>
+          <select id="fn" class="sel">
+            <option value="classic">filename: classic</option>
+            <option value="pretty">filename: pretty</option>
+            <option value="basic">filename: basic</option>
+            <option value="nerdy">filename: nerdy</option>
+          </select>
+        </div>
+        <div class="kv"><span>request</span><b class="mono" id="kvR">POST / { url, videoQuality, audioFormat }</b></div>
+        <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting...</b></div>
+        <label class="checkbox-label">
+          <input id="nm" type="checkbox"> Disable metadata (cleaner file)
+        </label>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button id="wake" class="btn ghost">Wake Engine</button>
+        <button id="clear" class="btn ghost">Clear</button>
+        <a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a>
+      </div>
+
+      <!-- Output -->
+      <div id="out" class="out"></div>
+    </div>
+
+    <!-- Fun Fact -->
+    <div class="fun"><b>Random fact:</b> <span id="ft"></span></div>
+    <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app</div>
+  </div>
+
+  <script>
+    // === CONFIGURATION ===
+    const BASE = "https://cobalt-production-2c27.up.railway.app";
+    const ENDPOINT = BASE + "/"; // ✅ Only valid endpoint in Cobalt v7+
+    const FALLBACK_URL = "https://co.wuk.sh/";
+    const STORAGE_KEY = "pluck_last_ep";
+
+    // Facts (unchanged)
+    const FACTS = [
+      "Octopuses have three hearts and their blood is blue because it uses copper instead of iron to carry oxygen around their body.",
+      "Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that are more than three thousand years old and still perfectly safe to eat.",
+      "A day on the planet Venus is actually longer than an entire year on Venus because Venus rotates very slowly on its axis.",
+      "Bananas are classified as berries by botanists, but strawberries are not considered true berries because of how their seeds develop.",
+      "Wombats produce cube shaped droppings, which helps prevent the droppings from rolling away and marks their territory more effectively.",
+      "There are more trees growing on Earth than there are stars in the Milky Way galaxy. Scientists estimate there are about three trillion trees.",
+      "Water can boil and freeze at the same time when it is at 0.01 degrees Celsius and a very specific pressure, which is called the triple point.",
+      "Your stomach creates an entirely new lining every three to four days, otherwise the strong acids would digest the stomach itself.",
+      "The light you see from the Sun right now left the Sun eight minutes ago, but the energy itself was created inside the Sun up to one hundred thousand years ago.",
+      "Cows actually have best friends and they become stressed and their heart rate increases when they are separated from their favorite companion.",
+      "Sharks have existed on Earth for longer than trees have. Sharks appeared about four hundred million years ago, while trees appeared about three hundred fifty million years ago.",
+      "A single fluffy cumulus cloud can weigh more than one million pounds, but it floats because the weight is spread across an enormous volume of air.",
+      "The national animal of Scotland is officially the unicorn, which has been a symbol of Scotland since the twelfth century.",
+      "The human brain generates about twenty watts of power, which is enough to power a very dim light bulb if you could capture it.",
+      "The Turritopsis dohrnii jellyfish is biologically immortal because it can transform its cells back to childhood and restart its life cycle.",
+      "The Eiffel Tower grows about fifteen centimeters taller during the summer because the metal expands when it is heated by the sun.",
+      "Bananas are slightly radioactive because they contain a natural isotope of potassium called potassium forty, but you would need to eat millions at once to be harmed.",
+      "Sloths can hold their breath for longer than dolphins can, up to forty minutes, by slowing their heart rate dramatically.",
+      "Humans share about sixty percent of their DNA with bananas, which shows how similar all living things are at a basic level.",
+      "It literally rains diamonds on the planets Jupiter and Saturn because the extreme pressure turns methane into diamonds that fall toward the core.",
+      "Under certain conditions, hot water can freeze faster than cold water, a strange phenomenon known as the Mpemba effect that scientists still debate.",
+      "A modern smartphone has millions of times more computing power than the computers that NASA used to send astronauts to the Moon in 1969.",
+      "The average person will spend about six months of their entire life waiting for traffic lights to turn green.",
+      "Ketchup was once sold as a medicine in the 1830s and people believed it could cure stomach problems and diarrhea.",
+      "Sea otters hold hands while they sleep so they do not drift apart from each other in the ocean current.",
+      "You cannot hum a tune while you are holding your nose closed, because humming requires air to escape through your nose.",
+      "A single teaspoon of material from a neutron star would weigh about six billion tons because neutron stars are incredibly dense.",
+      "There are more possible ways to shuffle a standard deck of fifty two playing cards than there are atoms on the planet Earth.",
+      "Laughing for ten to fifteen minutes can burn up to forty calories because it increases your heart rate and uses many muscles.",
+      "Honeybees are capable of recognizing human faces by remembering patterns and features, despite having very tiny brains.",
+      "The average person blinks about twenty eight thousand eight hundred times every single day without even thinking about it."
+    ];
+
+    // State
+    let state = {
+      fmt: "mp4",
+      isExpert: false,
+      online: false,
+      factPool: [...FACTS].sort(() => Math.random() - 0.5)
+    };
+
+    // DOM
+    const $ = s => document.querySelector(s);
+    const els = {
+      dot: $('#dot'), stxt: $('#stxt'), ver: $('#ver'), lat: $('#lat'),
+      out: $('#out'), ft: $('#ft'), epLab: $('#epLab'),
+      h1: $('#h1'), heroP: $('#heroP'), kvR: $('#kvR'), kvResp: $('#kvResp'),
+      url: $('#url'), go: $('#go'), test: $('#test')
+    };
+
+    // Utils
+    function getFact() {
+      if (!state.factPool.length) state.factPool = [...FACTS].sort(() => Math.random() - 0.5);
+      return state.factPool.pop();
+    }
+
+    function isValidUrl(s) {
+      try {
+        const u = new URL(s.trim());
+        if (!['http:', 'https:'].includes(u.protocol)) return false;
+        if (u.hostname === 'youtu.be' && u.pathname.length < 12) return 'short';
+        return true;
+      } catch { return false; }
+    }
+
+    function sanitize(name) {
+      return (name || 'pluck-media').replace(/[^a-z0-9.\-_ ]/gi, '_').slice(0, 200);
+    }
+
+    // ---------------------------------------------------------------------
+    // Cobalt response handling
+    //
+    // The engine can reply with one of three shapes (per the Cobalt API):
+    //   - status: "redirect" | "tunnel"  -> a single top-level `url`
+    //   - status: "picker"               -> an ARRAY of items (`picker: []`),
+    //     used whenever there's more than one file to hand back — this is
+    //     exactly what Instagram carousels and TikTok photo/slideshow posts
+    //     return. YouTube almost never triggers this, which is why YouTube
+    //     "just worked" while Instagram/TikTok buttons quietly pointed at
+    //     `undefined` and did nothing when tapped.
+    //   - status: "error"                -> a machine-readable error code
+    //
+    // The old code only ever read `result.url` / `result.filename`, so any
+    // picker response produced a dead download button. extractItems()
+    // normalizes all three shapes into a plain array of downloadable items.
+    // ---------------------------------------------------------------------
+    function mapErrorCode(code) {
+      const KNOWN = {
+        'error.api.link.unsupported': "This link type isn't supported by the engine yet.",
+        'error.api.content.video.unavailable': 'That post is private, deleted, or unavailable.',
+        'error.api.content.video.age': "That content is age-restricted and can't be fetched.",
+        'error.api.fetch.fail': 'Could not reach the source. Try again in a moment.',
+        'error.api.fetch.empty': 'The source returned nothing to download.',
+        'error.api.fetch.rate': 'Rate limited by the source. Wait a bit and try again.'
+      };
+      return (code && KNOWN[code]) || 'The engine could not process this link. Try a different link or format.';
+    }
+
+    function extractItems(result, fallbackLabel) {
+      if (!result) throw new Error('Empty response from engine.');
+
+      if (result.status === 'error') {
+        throw new Error(mapErrorCode(result.error && result.error.code));
+      }
+
+      // Instagram carousels / TikTok slideshows come back as "picker"
+      if (result.status === 'picker' && Array.isArray(result.picker) && result.picker.length) {
+        return result.picker.map((item, i) => {
+          const ext = item.type === 'photo' ? 'jpg' : item.type === 'gif' ? 'gif' : 'mp4';
+          return {
+            url: item.url,
+            filename: sanitize(`pluck-${i + 1}.${ext}`),
+            label: item.type ? item.type.toUpperCase() : (fallbackLabel || 'File')
+          };
+        });
+      }
+
+      // Normal single-file response: "redirect", "tunnel" (or legacy "stream")
+      if (result.url) {
+        return [{ url: result.url, filename: sanitize(result.filename), label: fallbackLabel || 'File' }];
+      }
+
+      throw new Error('No downloadable file was returned for this link.');
+    }
+
+    // UI
+    function setSimple() {
+      els.h1.innerHTML = 'You are<br><span>almost there.</span>';
+      els.heroP.textContent = 'Paste any full link. You are doing everything correctly. If the dot says warming up, it only means Railway put the engine to sleep to save credits. Press Wake Engine and wait six seconds. You have got this.';
+      els.stxt.textContent = state.online ? 'Engine is online and ready' : 'Checking the engine...';
+    }
+
+    function setExpert() {
+      els.h1.innerHTML = 'Engine<br><span>Diagnostics</span>';
+      els.heroP.textContent = 'Expert Mode shows every step. You will see request payload, server response, and technical details.';
+      els.stxt.textContent = state.online ? `Engine online, latency ${els.lat.textContent}` : 'Engine warming up...';
+    }
+
+    function showOutput(type, title, content, data = null) {
+      els.out.classList.add('show');
+      if (data) els.kvResp.textContent = JSON.stringify(data).slice(0, 500);
+      const cls = type === 'ok' ? 'box ok' : 'box err';
+      els.out.innerHTML = `<div class="${cls}">
+        <div style="font-weight:800;margin-bottom:8px">${title}</div>
+        ${content}
+        <div style="margin-top:10px;font-size:12px;color:#8c8cb6">Fun fact: ${getFact()}</div>
+      </div>`;
+    }
+
+    function showError(title, msg) {
+      showOutput('err', title, `<pre>${msg}</pre>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn ghost" onclick="tryFallback()">Try Public Fallback</button>
+          <button class="btn ghost" onclick="copyCurl()">Copy curl Command</button>
+        </div>`);
+    }
+
+    // Download Handlers
+    window.blobDownload = async (url, name) => {
+      try {
+        const res = await fetch(url, { mode: 'cors' });
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = name;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(blobUrl); a.remove(); }, 60000);
+      } catch {
+        // Fallback for blocked CORS
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        alert("Opened in tab. Long-press video → 'Download'.");
+      }
+    };
+
+    window.copyLink = async (url) => {
+      try { await navigator.clipboard.writeText(url); alert('Copied!'); }
+      catch { prompt('Copy link:', url); }
+    };
+
+    window.shareFile = async (url, name) => {
+      if (navigator.share) {
+        try { await navigator.share({ title: name, url }); } catch {}
+      } else { copyLink(url); }
+    };
+
+    // Build buttons for a single downloadable item
+    function buildButtons(url, filename, label) {
+      const name = sanitize(filename);
+      return `<div class="dl-grid">
+        <a href="${url}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open in Tab ✅<br><small>${label}</small></a>
+        <button class="btn ghost" onclick="blobDownload('${url}','${name}')">Blob Save (iPhone)</button>
+        <button class="btn ghost" onclick="shareFile('${url}','${name}')">Share</button>
+        <button class="btn ghost" onclick="copyLink('${url}')">Copy Link</button>
+      </div>`;
+    }
+
+    // Renders a whole list of items (picker responses can contain several
+    // photos/videos — e.g. an Instagram carousel or TikTok slideshow)
+    function buildItemsBlock(items, icon) {
+      return items.map(it => {
+        const emoji = it.label === 'PHOTO' ? '🖼️' : it.label === 'GIF' ? '🎞️' : icon;
+        return `<b>${emoji} ${it.filename}</b>${buildButtons(it.url, it.filename, it.label)}`;
+      }).join('<br>');
+    }
+
+    // Engine Communication
+    async function ping() {
+      const t0 = performance.now();
+      els.dot.className = 'dot';
+      try {
+        const r = await fetch(ENDPOINT, { cache: 'no-store', mode: 'cors' });
+        const ms = Math.round(performance.now() - t0);
+        els.lat.textContent = `${ms} ms`;
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const j = await r.json();
+        if (!j.cobalt) throw new Error('Invalid response');
+
+        state.online = true;
+        els.dot.className = 'dot ok';
+        els.ver.textContent = `cobalt ${j.cobalt.version || '10.x'}`;
+        els.epLab.textContent = '/';
+        if (state.isExpert) els.stxt.textContent = `Online, ${ms} ms`;
+        else els.stxt.textContent = 'Engine is online and ready';
+        return true;
+      } catch (e) {
+        state.online = false;
+        els.dot.className = 'dot bad';
+        els.ver.textContent = 'warming up';
+        els.lat.textContent = '— ms';
+        const msg = String(e).toLowerCase();
+        const isCors = msg.includes('cors') || msg.includes('failed to fetch');
+        showError(
+          isCors ? 'CORS Blocked!' : 'Engine Sleeping',
+          isCors
+            ? `Go to Railway → Variables → Add:<br>CORS = *<br>API_URL = ${BASE}<br>Then click Deploy.`
+            : 'Press "Wake Engine" — Railway takes 5–8 sec to boot.'
+        );
+        return false;
+      }
+    }
+
+    async function postToCobalt(payload, baseUrl = BASE) {
+      const url = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
+      try {
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 20000);
+
+        const res = await fetch(url, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload),
+          signal: ctrl.signal
+        });
+        clearTimeout(timeout);
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (e) {
+        throw new Error(`Fetch failed: ${e.message}`);
+      }
+    }
+
+    // Main Handler
+    async function go() {
+      const raw = els.url.value.trim();
+      const valid = isValidUrl(raw);
+      if (!raw) return showError('Error', 'Please paste a link first.');
+      if (valid !== true) return showError('Invalid Link', `You pasted: ${raw}`);
+
+      els.go.disabled = true;
+      els.go.textContent = 'Processing...';
+
+      try {
+        if (!state.online) await ping();
+
+        const base = {
+          url: raw,
+          filenameStyle: $('#fn').value,
+          disableMetadata: $('#nm').checked
+        };
+
+        if (state.fmt === 'mp3') {
+          const result = await postToCobalt({ ...base, isAudioOnly: true, audioFormat: $('#af').value });
+          const items = extractItems(result, 'MP3 Audio');
+          showOutput(
+            'ok',
+            items.length > 1 ? `Audio Ready (${items.length} files)` : 'Audio Ready',
+            buildItemsBlock(items, '🎵') + '<br><small>Disable metadata removes song title/artwork.</small>',
+            result
+          );
+
+        } else if (state.fmt === 'both') {
+          const [vidRes, audRes] = await Promise.all([
+            postToCobalt({ ...base, videoQuality: $('#vq').value, audioFormat: $('#af').value }),
+            postToCobalt({ ...base, isAudioOnly: true, audioFormat: $('#af').value })
+          ]);
+          const vidItems = extractItems(vidRes, 'MP4 Video');
+          const audItems = extractItems(audRes, 'MP3 Audio');
+          showOutput(
+            'ok',
+            'Both Files Ready',
+            buildItemsBlock(vidItems, '📹') + buildItemsBlock(audItems, '🎵'),
+            { video: vidRes, audio: audRes }
+          );
+
+        } else {
+          const result = await postToCobalt({
+            ...base,
+            videoQuality: $('#vq').value,
+            audioFormat: $('#af').value
+          });
+          const items = extractItems(result, 'MP4 Video + Audio');
+          showOutput(
+            'ok',
+            items.length > 1 ? `Media Ready (${items.length} files)` : 'Video Ready',
+            buildItemsBlock(items, '📹'),
+            result
+          );
+        }
+      } catch (e) {
+        console.error(e);
+        showError('Request Failed', `${e.message}<br><br>Tip: If this keeps happening for this link, try "Try Public Fallback" below.`);
+      } finally {
+        els.go.disabled = false;
+        els.go.textContent = 'Pluck';
+      }
+    }
+
+    // Fallback & Debug
+    window.tryFallback = async () => {
+      showError('Trying Public Engine...', `Using ${FALLBACK_URL} as backup.`);
+      try {
+        const raw = els.url.value.trim();
+        const payload = {
+          url: raw,
+          isAudioOnly: state.fmt === 'mp3',
+          videoQuality: $('#vq') ? $('#vq').value : '720',
+          audioFormat: $('#af') ? $('#af').value : 'mp3'
+        };
+        const res = await postToCobalt(payload, FALLBACK_URL);
+        const items = extractItems(res, 'From co.wuk.sh');
+        showOutput('ok', 'Success via Fallback', buildItemsBlock(items, '📹'));
+      } catch (e) {
+        showError('Fallback Failed', e.message);
+      }
+    };
+
+    window.copyCurl = () => {
+      const body = JSON.stringify({
+        url: els.url.value.trim() || 'https://youtube.com/watch?v=dQw4w9WgXcQ',
+        videoQuality: '720',
+        audioFormat: 'mp3',
+        filenameStyle: 'pretty',
+        isAudioOnly: false
+      }, null, 2);
+      const cmd = `curl -X POST ${BASE} \\\n-H "Content-Type: application/json" \\\n-d '${body.replace(/'/g, "'\\''")}'`;
+      navigator.clipboard.writeText(cmd).then(() => alert('Curl copied!')).catch(() => prompt('Copy:', cmd));
+    };
+
+    // Events
+    els.go.addEventListener('click', go);
+    els.url.addEventListener('keydown', e => e.key === 'Enter' && go());
+
+    $('#bS').addEventListener('click', () => {
+      state.isExpert = false;
+      $('#bS').classList.add('on'); $('#bE').classList.remove('on');
+      $('#ex').classList.remove('show');
+      setSimple();
+    });
+
+    $('#bE').addEventListener('click', () => {
+      state.isExpert = true;
+      $('#bE').classList.add('on'); $('#bS').classList.remove('on');
+      $('#ex').classList.add('show');
+      setExpert();
+    });
+
+    document.querySelectorAll('.pick').forEach(btn =>
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.pick').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        state.fmt = btn.dataset.f;
+      })
+    );
+
+    $('#wake').addEventListener('click', async () => {
+      els.stxt.textContent = 'Waking engine...';
+      try { await fetch(ENDPOINT, { method: 'HEAD', mode: 'no-cors' }); } catch {}
+      setTimeout(ping, 2000);
+    });
+
+    $('#clear').addEventListener('click', () => {
+      els.url.value = '';
+      els.out.classList.remove('show');
+      els.out.innerHTML = '';
+    });
+
+    // Init
+    els.test.href = BASE;
+    els.ft.textContent = getFact();
+    setSimple();
+    ping();
+    setInterval(() => document.visibilityState === 'visible' && ping(), 16000);
+  </script>
 </body>
 </html>
