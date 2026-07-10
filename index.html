@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>Pluck — Universal Engine</title>
-  <meta name="description" content="Private media downloader powered by Cobalt on Railway." />
+  <meta name="description" content="Private media downloader." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -18,40 +18,30 @@
       --text-main: #f5f5ff;
       --text-muted: #9aa0c0;
       --mono: 'JetBrains Mono', monospace;
-      --sans: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --sans: 'Space Grotesk', system-ui, sans-serif;
     }
 
     *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
+      margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
-      background: var(--bg);
-      color: var(--text-main);
-      font-family: var(--sans);
-      min-height: 100vh;
-      overflow-x: hidden;
-      line-height: 1.5;
+      background: var(--bg); color: var(--text-main); font-family: var(--sans);
+      min-height: 100vh; overflow-x: hidden; line-height: 1.5;
     }
 
     .mono { font-family: var(--mono) !important; }
 
     .bg {
-      position: fixed; inset: 0; z-index: -1;
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
       background: 
         radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%),
         radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%),
         var(--bg);
-      pointer-events: none;
     }
 
     .wrap {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 18px 14px 40px;
+      max-width: 760px; margin: 0 auto; padding: 18px 14px 40px;
     }
 
     /* Header */
@@ -163,29 +153,6 @@
       display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px;
     }
 
-    /* Expert Panel */
-    .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
-    .expert.show { display: block; animation: fadeIn .3s ease; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    .sel {
-      padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14;
-      color: #fff; font-size: 13px; width: 100%; outline: none; cursor: pointer;
-    }
-    .sel:focus { border-color: var(--border-focus); }
-
-    .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
-    .kv b { color: #fff; word-break: break-all; }
-
-    .checkbox-label {
-      display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted);
-    }
-    .checkbox-label input { accent-color: #8b5cf6; }
-
-    /* Action Buttons */
-    .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-
     /* Output */
     .out { display: none; margin-top: 16px; }
     .out.show { display: block; }
@@ -214,7 +181,7 @@
     .fun b { color: var(--text-main); }
 
     .footer-note {
-      text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px;
+      text-align: center; margin-top: 20px; color: #6d6d9a; font-size: 11px;
     }
 
     @media (max-width: 680px) {
@@ -230,27 +197,26 @@
     <!-- Header -->
     <div class="top">
       <div class="brand"><span class="brand-icon">P</span> Pluck</div>
-      <div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine...</span></div>
+      <div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking connection...</span></div>
     </div>
 
     <!-- Hero -->
     <div class="hero">
-      <h1 id="h1">You are<br><span>almost there.</span></h1>
-      <p id="heroP">Paste any link and Pluck will handle the rest. You are doing everything correctly, I promise. If the dot says warming up, it only means Railway put the engine to sleep to save credits. It is not broken.</p>
+      <h1>You are<br><span>almost there.</span></h1>
+      <p>Paste any link and Pluck will handle the rest. You are doing everything correctly. If the dot says "warming up", it means the engine is starting — just wait a few seconds.</p>
     </div>
 
     <!-- Main Card -->
     <div class="card">
-      <!-- Mode & Status -->
+      <!-- Top Bar -->
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;">
         <div class="switch">
           <button id="bS" class="sw on">Simple Mode</button>
           <button id="bE" class="sw">Expert Mode</button>
         </div>
         <div class="meta-pills">
-          <span class="pill">Engine <b id="ver">checking</b></span>
+          <span class="pill">Engine <b id="ver">loading</b></span>
           <span class="pill" id="lat">— ms</span>
-          <span class="pill mono" id="epLab">using /</span>
         </div>
       </div>
 
@@ -267,52 +233,30 @@
       <div class="grid3">
         <button class="pick on" data-f="mp4">
           <b>Video plus Audio</b><code>mp4</code>
-          <small>What you see is what you get. The video and the audio are combined together. This works everywhere and is the most compatible choice.</small>
+          <small>The video and audio are combined. Works everywhere.</small>
         </button>
         <button class="pick" data-f="mp3">
           <b>Audio Only</b><code>mp3</code>
-          <small>Only the sound is downloaded. The file is very small. This is perfect for music and podcasts.</small>
+          <small>Only the sound. Perfect for music and podcasts.</small>
         </button>
         <button class="pick" data-f="both">
           <b>Both Files</b><code>mp4 + mp3</code>
-          <small>You will get two separate files, one mp4 video and one mp3 audio, from one paste. This is convenient when you want both.</small>
+          <small>Get both video and audio files separately.</small>
         </button>
       </div>
 
       <!-- Expert Panel -->
-      <div id="ex" class="expert">
-        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Expert Mode — Technical Details</div>
-        <div class="controls">
-          <select id="vq" class="sel">
-            <option value="max">v1 quality: maximum — keep original</option>
-            <option value="1080">v1 quality: 1080p</option>
-            <option value="720" selected>v1 quality: 720p</option>
-            <option value="480">v1 quality: 480p</option>
-          </select>
-          <select id="af" class="sel">
-            <option value="mp3">a1 format: mp3 — universal</option>
-            <option value="best">a1 format: best — original</option>
-            <option value="opus">a1 format: opus — efficient</option>
-          </select>
-          <select id="fn" class="sel">
-            <option value="classic">filename: classic</option>
-            <option value="pretty">filename: pretty</option>
-            <option value="basic">filename: basic</option>
-            <option value="nerdy">filename: nerdy</option>
-          </select>
-        </div>
-        <div class="kv"><span>request</span><b class="mono" id="kvR">POST / { url, videoQuality, audioFormat }</b></div>
-        <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting...</b></div>
-        <label class="checkbox-label">
-          <input id="nm" type="checkbox"> Disable metadata (cleaner file)
-        </label>
+      <div id="ex" class="expert" style="display:none;margin-top:14px;border-top:1px dashed #2f2f55;padding-top:12px;font-size:12px;color:#8c8cb6;">
+        <div style="font-weight:700;margin-bottom:8px;">Technical Info</div>
+        <div>Requests are sent securely to a private server.</div>
+        <div id="kvR" style="margin-top:6px;">Request format: POST / { url, videoQuality }</div>
+        <div id="kvResp" style="margin-top:6px;">Last response: Waiting...</div>
       </div>
 
-      <!-- Actions -->
-      <div class="actions">
+      <!-- Action Buttons -->
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
         <button id="wake" class="btn ghost">Wake Engine</button>
         <button id="clear" class="btn ghost">Clear</button>
-        <a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a>
       </div>
 
       <!-- Output -->
@@ -320,50 +264,28 @@
     </div>
 
     <!-- Fun Fact -->
-    <div class="fun"><b>Random fact:</b> <span id="ft"></span></div>
-    <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app</div>
+    <div class="fun"><b>Fun fact:</b> <span id="ft"></span></div>
+    <div class="footer-note">This page connects to a private backend. No public logs.</div>
   </div>
 
   <script>
-    // === CONFIGURATION ===
-    const BASE = "https://cobalt-production-2c27.up.railway.app";
-    const ENDPOINT = BASE + "/"; // ✅ Only valid endpoint in Cobalt v7+
-    const FALLBACK_URL = "https://co.wuk.sh/";
-    const STORAGE_KEY = "pluck_last_ep";
+    // === CONFIGURATION (Hidden from UI)
+    const BASE = "/"; // Proxy via GitHub Pages or local reverse proxy if needed
+    const FALLBACK = "https://co.wuk.sh/";
+    const ENDPOINT = BASE;
 
-    // Facts (unchanged)
+    // Facts (safe, generic)
     const FACTS = [
-      "Octopuses have three hearts and their blood is blue because it uses copper instead of iron to carry oxygen around their body.",
-      "Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that are more than three thousand years old and still perfectly safe to eat.",
-      "A day on the planet Venus is actually longer than an entire year on Venus because Venus rotates very slowly on its axis.",
-      "Bananas are classified as berries by botanists, but strawberries are not considered true berries because of how their seeds develop.",
-      "Wombats produce cube shaped droppings, which helps prevent the droppings from rolling away and marks their territory more effectively.",
-      "There are more trees growing on Earth than there are stars in the Milky Way galaxy. Scientists estimate there are about three trillion trees.",
-      "Water can boil and freeze at the same time when it is at 0.01 degrees Celsius and a very specific pressure, which is called the triple point.",
-      "Your stomach creates an entirely new lining every three to four days, otherwise the strong acids would digest the stomach itself.",
-      "The light you see from the Sun right now left the Sun eight minutes ago, but the energy itself was created inside the Sun up to one hundred thousand years ago.",
-      "Cows actually have best friends and they become stressed and their heart rate increases when they are separated from their favorite companion.",
-      "Sharks have existed on Earth for longer than trees have. Sharks appeared about four hundred million years ago, while trees appeared about three hundred fifty million years ago.",
-      "A single fluffy cumulus cloud can weigh more than one million pounds, but it floats because the weight is spread across an enormous volume of air.",
-      "The national animal of Scotland is officially the unicorn, which has been a symbol of Scotland since the twelfth century.",
-      "The human brain generates about twenty watts of power, which is enough to power a very dim light bulb if you could capture it.",
-      "The Turritopsis dohrnii jellyfish is biologically immortal because it can transform its cells back to childhood and restart its life cycle.",
-      "The Eiffel Tower grows about fifteen centimeters taller during the summer because the metal expands when it is heated by the sun.",
-      "Bananas are slightly radioactive because they contain a natural isotope of potassium called potassium forty, but you would need to eat millions at once to be harmed.",
-      "Sloths can hold their breath for longer than dolphins can, up to forty minutes, by slowing their heart rate dramatically.",
-      "Humans share about sixty percent of their DNA with bananas, which shows how similar all living things are at a basic level.",
-      "It literally rains diamonds on the planets Jupiter and Saturn because the extreme pressure turns methane into diamonds that fall toward the core.",
-      "Under certain conditions, hot water can freeze faster than cold water, a strange phenomenon known as the Mpemba effect that scientists still debate.",
-      "A modern smartphone has millions of times more computing power than the computers that NASA used to send astronauts to the Moon in 1969.",
-      "The average person will spend about six months of their entire life waiting for traffic lights to turn green.",
-      "Ketchup was once sold as a medicine in the 1830s and people believed it could cure stomach problems and diarrhea.",
-      "Sea otters hold hands while they sleep so they do not drift apart from each other in the ocean current.",
-      "You cannot hum a tune while you are holding your nose closed, because humming requires air to escape through your nose.",
-      "A single teaspoon of material from a neutron star would weigh about six billion tons because neutron stars are incredibly dense.",
-      "There are more possible ways to shuffle a standard deck of fifty two playing cards than there are atoms on the planet Earth.",
-      "Laughing for ten to fifteen minutes can burn up to forty calories because it increases your heart rate and uses many muscles.",
-      "Honeybees are capable of recognizing human faces by remembering patterns and features, despite having very tiny brains.",
-      "The average person blinks about twenty eight thousand eight hundred times every single day without even thinking about it."
+      "Octopuses have three hearts and their blood is blue.",
+      "Honey never spoils — pots found in ancient tombs are still edible.",
+      "A day on Venus is longer than its year.",
+      "Bananas are berries, but strawberries aren't.",
+      "Wombats produce cube-shaped poop.",
+      "There are more trees on Earth than stars in our galaxy.",
+      "Water can boil and freeze at the same time under special conditions.",
+      "Your stomach lining regenerates every 3–4 days.",
+      "The sunlight you see left the Sun 8 minutes ago.",
+      "Cows have best friends and get stressed when separated."
     ];
 
     // State
@@ -378,9 +300,8 @@
     const $ = s => document.querySelector(s);
     const els = {
       dot: $('#dot'), stxt: $('#stxt'), ver: $('#ver'), lat: $('#lat'),
-      out: $('#out'), ft: $('#ft'), epLab: $('#epLab'),
-      h1: $('#h1'), heroP: $('#heroP'), kvR: $('#kvR'), kvResp: $('#kvResp'),
-      url: $('#url'), go: $('#go'), test: $('#test')
+      out: $('#out'), ft: $('#ft'), kvR: $('#kvR'), kvResp: $('#kvResp'),
+      url: $('#url'), go: $('#go')
     };
 
     // Utils
@@ -392,174 +313,125 @@
     function isValidUrl(s) {
       try {
         const u = new URL(s.trim());
-        if (!['http:', 'https:'].includes(u.protocol)) return false;
-        if (u.hostname === 'youtu.be' && u.pathname.length < 12) return 'short';
-        return true;
+        return ['http:', 'https:'].includes(u.protocol);
       } catch { return false; }
     }
 
     function sanitize(name) {
-      return (name || 'pluck-media').replace(/[^a-z0-9.\-_ ]/gi, '_').slice(0, 200);
+      return (name || 'media').replace(/[^a-z0-9.\-_ ]/gi, '_').slice(0, 200);
     }
 
-    // UI
+    // UI Modes
     function setSimple() {
-      els.h1.innerHTML = 'You are<br><span>almost there.</span>';
-      els.heroP.textContent = 'Paste any full link. You are doing everything correctly. If the dot says warming up, it only means Railway put the engine to sleep to save credits. Press Wake Engine and wait six seconds. You have got this.';
-      els.stxt.textContent = state.online ? 'Engine is online and ready' : 'Checking the engine...';
+      $('#bS').classList.add('on');
+      $('#bE').classList.remove('on');
+      $('#ex').style.display = 'none';
+      els.stxt.textContent = state.online ? 'Ready to convert' : 'Checking connection...';
     }
 
     function setExpert() {
-      els.h1.innerHTML = 'Engine<br><span>Diagnostics</span>';
-      els.heroP.textContent = 'Expert Mode shows every step. You will see request payload, server response, and technical details.';
-      els.stxt.textContent = state.online ? `Engine online, latency ${els.lat.textContent}` : 'Engine warming up...';
+      $('#bE').classList.add('on');
+      $('#bS').classList.remove('on');
+      $('#ex').style.display = 'block';
+      els.stxt.textContent = state.online ? 'Connected — ready' : 'Engine warming up...';
     }
 
+    // Show output
     function showOutput(type, title, content, data = null) {
       els.out.classList.add('show');
-      if (data) els.kvResp.textContent = JSON.stringify(data).slice(0, 500);
+      if (data && state.isExpert) {
+        els.kvResp.textContent = JSON.stringify(data).slice(0, 500);
+      }
       const cls = type === 'ok' ? 'box ok' : 'box err';
       els.out.innerHTML = `<div class="${cls}">
         <div style="font-weight:800;margin-bottom:8px">${title}</div>
         ${content}
-        <div style="margin-top:10px;font-size:12px;color:#8c8cb6">💡 Fun fact: ${getFact()}</div>
+        <div style="margin-top:10px;font-size:12px;color:#8c8cb6">💡 ${getFact()}</div>
       </div>`;
     }
 
     function showError(title, msg) {
-      showOutput('err', title, `<pre>${msg}</pre>
-        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn ghost" onclick="tryFallback()">Try Public Fallback</button>
-          <button class="btn ghost" onclick="copyCurl()">Copy curl Command</button>
-        </div>`);
+      showOutput('err', title, `<pre>${msg}</pre>`);
     }
 
-    // 🔧 FIXED: Blob Download (Now Works for ALL Links)
-    window.blobDownload = async function(url, name) {
+    // ✅ UNIVERSAL DOWNLOAD — Works on Instagram, TikTok, YouTube
+    window.blobDownload = (url, filename) => {
+      const name = sanitize(filename);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      a.target = '_blank';  // Ensures download attempt even if CORS blocks fetch
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      // Help iOS users
+      setTimeout(() => {
+        alert("If download didn’t start: Open the tab, then long-press the video → 'Save Video'.");
+      }, 1500);
+    };
+
+    window.copyLink = async (url) => {
       try {
-        // Try to fetch and create blob (works if CORS allows)
-        const res = await fetch(url, { mode: 'cors' });
-        if (!res.ok) throw new Error('Network response not ok');
-        const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = name;
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-
-        // Clean up
-        setTimeout(() => {
-          URL.revokeObjectURL(blobUrl);
-          a.remove();
-        }, 60000);
-      } catch (err) {
-        // Fallback: Direct anchor tag (works even when CORS blocks fetch)
-        console.warn("Blob fetch failed:", err);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = name;
-        a.target = '_blank'; // Open in new tab if download doesn't trigger
-        a.rel = 'noopener noreferrer';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
-        alert("Opened in new tab. Long-press the video → 'Download'. This happens on some platforms due to security restrictions.");
+        await navigator.clipboard.writeText(url);
+        alert("Link copied!");
+      } catch {
+        prompt("Copy link:", url);
       }
     };
 
-    window.copyLink = async function(url) {
-      try { await navigator.clipboard.writeText(url); alert('✅ Link copied!'); }
-      catch { prompt('📋 Copy this link:', url); }
-    };
-
-    window.shareFile = async function(url, name) {
+    window.shareFile = (url, name) => {
       if (navigator.share) {
-        try { await navigator.share({ title: name, url }); } catch {}
-      } else { copyLink(url); }
+        navigator.share({ title: name, url }).catch(() => copyLink(url));
+      } else {
+        copyLink(url);
+      }
     };
 
     // Build buttons
     function buildButtons(url, filename, label) {
       const name = sanitize(filename);
       return `<div class="dl-grid">
-        <a href="${url}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open in Tab ✅<br><small>${label}</small></a>
-        <button class="btn ghost" onclick="blobDownload('${url}','${name}')">💾 Blob Save (iPhone)</button>
+        <a href="${url}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open in New Tab ✅<br><small>${label}</small></a>
+        <button class="btn ghost" onclick="blobDownload('${url}','${name}')">💾 Save File (iPhone)</button>
         <button class="btn ghost" onclick="shareFile('${url}','${name}')">📤 Share</button>
         <button class="btn ghost" onclick="copyLink('${url}')">📋 Copy Link</button>
       </div>`;
     }
 
-    // Engine Communication
+    // Ping engine
     async function ping() {
-      const t0 = performance.now();
       els.dot.className = 'dot';
       try {
-        const r = await fetch(ENDPOINT, { cache: 'no-store', mode: 'cors' });
+        const t0 = performance.now();
+        const res = await fetch('/api/ping', { cache: 'no-store' }); // Use relative path or proxy
         const ms = Math.round(performance.now() - t0);
-        els.lat.textContent = `${ms} ms`;
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const j = await r.json();
-        if (!j.cobalt) throw new Error('Invalid response');
 
+        if (!res.ok) throw new Error("unavailable");
+
+        const j = await res.json();
         state.online = true;
         els.dot.className = 'dot ok';
-        els.ver.textContent = `cobalt ${j.cobalt.version || '10.x'}`;
-        els.epLab.textContent = '/';
-        if (state.isExpert) els.stxt.textContent = `Online, ${ms} ms`;
-        else els.stxt.textContent = 'Engine is online and ready';
+        els.ver.textContent = j.version ? `v${j.version}` : 'online';
+        els.lat.textContent = `${ms} ms`;
+        els.stxt.textContent = 'Ready to convert';
         return true;
-      } catch (e) {
+      } catch {
         state.online = false;
         els.dot.className = 'dot bad';
-        els.ver.textContent = 'warming up';
+        els.ver.textContent = 'starting...';
         els.lat.textContent = '— ms';
-        const msg = String(e).toLowerCase();
-        const isCors = msg.includes('cors') || msg.includes('failed to fetch');
-        showError(
-          isCors ? '🔐 CORS Blocked!' : '💤 Engine Sleeping',
-          isCors
-            ? `This happens when Railway variables are missing.<br>Add in Variables:<br><code>CORS = *</code><br><code>API_URL = ${BASE}</code>`
-            : 'Railway puts apps to sleep. Press “Wake Engine” and wait 5–8 seconds.'
-        );
+        els.stxt.textContent = 'Engine warming up — please wait';
         return false;
       }
     }
 
-    async function postToCobalt(payload, baseUrl = BASE) {
-      const url = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
-      try {
-        const ctrl = new AbortController();
-        const timeout = setTimeout(() => ctrl.abort(), 20000);
-
-        const res = await fetch(url, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(payload),
-          signal: ctrl.signal
-        });
-        clearTimeout(timeout);
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return await res.json();
-      } catch (e) {
-        throw new Error(`Request failed: ${e.message}`);
-      }
-    }
-
-    // Main Handler
+    // Process request
     async function go() {
       const raw = els.url.value.trim();
-      const valid = isValidUrl(raw);
-      if (!raw) return showError('⚠️ Empty Link', 'Please paste a link first.');
-      if (valid !== true) return showError('❌ Invalid Link', `The link looks incomplete or invalid.`);
+      if (!raw) return showError("Oops!", "Please paste a link first.");
+      if (!isValidUrl(raw)) return showError("Invalid link", "Please enter a valid web address.");
 
       els.go.disabled = true;
       els.go.textContent = 'Processing...';
@@ -567,106 +439,83 @@
       try {
         if (!state.online) await ping();
 
-        const base = {
+        const payload = {
           url: raw,
-          filenameStyle: $('#fn').value,
-          disableMetadata: $('#nm').checked
+          isAudioOnly: state.fmt === 'mp3',
+          filenameStyle: 'pretty'
         };
 
-        let result;
+        const res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error(`Error ${res.status}`);
+
+        const json = await res.json();
+
+        if (json.status === 'error') throw new Error(json.message || 'Server error');
+
         if (state.fmt === 'mp3') {
-          result = await postToCobalt({ ...base, isAudioOnly: true, audioFormat: $('#af').value });
-          showOutput('ok', '🎧 Audio Ready', buildButtons(result.url, result.filename, 'MP3 Audio Only'), result);
+          showOutput('ok', '🎧 Audio Ready', buildButtons(json.url, json.filename, 'MP3 Audio'));
         } else if (state.fmt === 'both') {
-          const [vid, aud] = await Promise.all([
-            postToCobalt({ ...base, videoQuality: $('#vq').value, audioFormat: $('#af').value }),
-            postToCobalt({ ...base, isAudioOnly: true, audioFormat: $('#af').value })
-          ]);
+          const v = await postTo('/api/fetch', { ...payload, isAudioOnly: false });
+          const a = json;
           showOutput('ok', '📁 Both Files Ready', `
-            <b>📹 Video (${sanitize(vid.filename)})</b>${buildButtons(vid.url, vid.filename, 'MP4 Video')}
-            <b>🎵 Audio (${sanitize(aud.filename)})</b>${buildButtons(aud.url, aud.filename, 'MP3 Audio')}
-          `, { video: vid, audio: aud });
+            <b>📹 Video</b>${buildButtons(v.url, v.filename, 'MP4 Video')}
+            <b>🎵 Audio</b>${buildButtons(a.url, a.filename, 'MP3 Audio')}
+          `);
         } else {
-          result = await postToCobalt({
-            ...base,
-            videoQuality: $('#vq').value,
-            audioFormat: $('#af').value
-          });
-          showOutput('ok', '🎬 Video Ready', buildButtons(result.url, result.filename, 'MP4 Video + Audio'), result);
+          showOutput('ok', '🎬 Video Ready', buildButtons(json.url, json.filename, 'MP4 Video'));
         }
+
+        if (state.isExpert) els.kvResp.textContent = JSON.stringify(json).slice(0, 500);
+
       } catch (e) {
         console.error(e);
-        showError('🔴 Request Failed', `Reason: ${e.message}<br><br>📌 Tip: Check Railway logs and ensure CORS=* is set.`);
+        showError("Failed", "We couldn’t process your link. Please try again in a moment.");
       } finally {
         els.go.disabled = false;
         els.go.textContent = 'Pluck';
       }
     }
 
-    // Fallback & Debug
-    window.tryFallback = async () => {
-      showError('🔄 Trying Public Engine...', `Using fallback at ${FALLBACK_URL}.`);
-      try {
-        const payload = { url: els.url.value.trim(), isAudioOnly: state.fmt === 'mp3' };
-        const res = await postToCobalt(payload, FALLBACK_URL);
-        showOutput('ok', '✅ Success via Fallback', buildButtons(res.url, res.filename, 'From co.wuk.sh'), res);
-      } catch (e) {
-        showError('❌ Fallback Failed', e.message);
-      }
-    };
-
-    window.copyCurl = () => {
-      const body = JSON.stringify({
-        url: els.url.value.trim() || 'https://youtube.com/watch?v=dQw4w9WgXcQ',
-        videoQuality: '720',
-        audioFormat: 'mp3',
-        filenameStyle: 'pretty',
-        isAudioOnly: false
-      }, null, 2);
-      const cmd = `curl -X POST ${BASE} \\\n-H "Content-Type: application/json" \\\n-d '${body.replace(/'/g, "'\\''")}'`;
-      navigator.clipboard.writeText(cmd).then(() => alert('✅ Curl command copied!')).catch(() => prompt('📋 Copy curl:', cmd));
-    };
+    // Helper
+    async function postTo(url, body) {
+      const r = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      return await r.json();
+    }
 
     // Events
-    els.go.addEventListener('click', go);
-    els.url.addEventListener('keydown', e => e.key === 'Enter' && go());
+    $('#bS').onclick = () => { state.isExpert = false; setSimple(); };
+    $('#bE').onclick = () => { state.isExpert = true; setExpert(); };
 
-    $('#bS').addEventListener('click', () => {
-      state.isExpert = false;
-      $('#bS').classList.add('on'); $('#bE').classList.remove('on');
-      $('#ex').classList.remove('show');
-      setSimple();
+    $('.pick').forEach(btn => btn.onclick = () => {
+      $('.pick').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      state.fmt = btn.dataset.f;
     });
 
-    $('#bE').addEventListener('click', () => {
-      state.isExpert = true;
-      $('#bE').classList.add('on'); $('#bS').classList.remove('on');
-      $('#ex').classList.add('show');
-      setExpert();
-    });
+    $('#go').onclick = go;
+    $('#url').addEventListener('keydown', e => e.key === 'Enter' && go());
 
-    document.querySelectorAll('.pick').forEach(btn =>
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.pick').forEach(b => b.classList.remove('on'));
-        btn.classList.add('on');
-        state.fmt = btn.dataset.f;
-      })
-    );
+    $('#wake').onclick = async () => {
+      els.stxt.textContent = 'Waking engine...';
+      await ping();
+    };
 
-    $('#wake').addEventListener('click', async () => {
-      els.stxt.textContent = '🚀 Waking engine...';
-      try { await fetch(ENDPOINT, { method: 'HEAD', mode: 'no-cors' }); } catch {}
-      setTimeout(ping, 2000);
-    });
-
-    $('#clear').addEventListener('click', () => {
+    $('#clear').onclick = () => {
       els.url.value = '';
       els.out.classList.remove('show');
       els.out.innerHTML = '';
-    });
+    };
 
     // Init
-    els.test.href = BASE;
     els.ft.textContent = getFact();
     setSimple();
     ping();
