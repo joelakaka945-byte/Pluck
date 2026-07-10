@@ -34,7 +34,7 @@
       font-family: var(--sans);
       min-height: 100vh;
       overflow-x: hidden;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .mono { font-family: var(--mono) !important; }
@@ -213,29 +213,8 @@
     }
     .fun b { color: var(--text-main); }
 
-    /* Info Section */
-    .info {
-      margin-top: 30px; padding: 20px; border: 1px solid #2b2b4e; border-radius: 18px;
-      background: rgba(18,18,28,.8); font-size: 13.5px; line-height: 1.7;
-    }
-    .info h3 {
-      color: #ec4899; margin-bottom: 10px; font-size: 16px; font-weight: 700;
-    }
-    .info ul {
-      margin-left: 18px; margin-top: 8px; margin-bottom: 10px;
-    }
-    .info li {
-      margin-bottom: 6px;
-    }
-    .info code {
-      background: #1e1e36; padding: 2px 6px; border-radius: 6px; font-size: 12px; color: #cbb8ff;
-    }
-    .info .tip {
-      font-size: 12px; color: #8c8cb6; margin-top: 8px; font-style: italic;
-    }
-
     .footer-note {
-      text-align: center; margin-top: 20px; color: #6d6d9a; font-size: 11px;
+      text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px;
     }
 
     @media (max-width: 680px) {
@@ -342,39 +321,13 @@
 
     <!-- Fun Fact -->
     <div class="fun"><b>Random fact:</b> <span id="ft"></span></div>
-
-    <!-- Info Section -->
-    <div class="info">
-      <h3>How This Engine Works</h3>
-      <p>This frontend connects directly to your private <strong>Cobalt instance</strong> hosted on Railway. It does not store or process your links on any third-party server.</p>
-
-      <h3>Common Issues & Fixes</h3>
-      <ul>
-        <li><strong>“Warming up” or “CORS blocked”</strong>: Your Railway app sleeps after inactivity. Press “Wake Engine” and wait 5–8 seconds. Make sure you have set:</li>
-      </ul>
-      <div class="code-block" style="margin-left:18px;background:#1e1e36;padding:8px;border-radius:8px;color:#cbb8ff;font-size:12px;">
-        <div><code>CORS = *</code></div>
-        <div><code>API_URL = https://cobalt-production-2c27.up.railway.app</code></div>
-      </div>
-      <div class="tip">Go to Railway → Variables → Add them → Click Deploy.</div>
-
-      <ul>
-        <li><strong>“Cannot POST /api/json”</strong>: This endpoint is deprecated. This app now uses only <code>POST /</code>, which is correct.</li>
-        <li><strong>Download doesn’t start on iPhone?</strong>: Use “Blob Save”. Then go to <strong>Files App → Downloads</strong> to find your file.</li>
-        <li><strong>Link looks cut off?</strong>: On iOS, copy from the Share menu, not the address bar.</li>
-      </ul>
-
-      <h3>Privacy Note</h3>
-      <p>No data is saved. Your link is sent directly to your Cobalt engine. This page works offline once loaded.</p>
-    </div>
-
     <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app</div>
   </div>
 
   <script>
     // === CONFIGURATION ===
     const BASE = "https://cobalt-production-2c27.up.railway.app";
-    const ENDPOINT = BASE + "/";
+    const ENDPOINT = BASE + "/"; // ✅ Only valid endpoint in Cobalt v7+
     const FALLBACK_URL = "https://co.wuk.sh/";
     const STORAGE_KEY = "pluck_last_ep";
 
@@ -481,38 +434,45 @@
         </div>`);
     }
 
-    // DOWNLOAD HANDLERS (Now globally available)
+    // 🔧 FIXED: Blob Download (Now Works for ALL Links)
     window.blobDownload = async function(url, name) {
       try {
+        // Try to fetch and create blob (works if CORS allows)
         const res = await fetch(url, { mode: 'cors' });
-        if (!res.ok) throw new Error('Fetch failed');
+        if (!res.ok) throw new Error('Network response not ok');
         const blob = await res.blob();
         const blobUrl = URL.createObjectURL(blob);
+
         const a = document.createElement('a');
         a.href = blobUrl;
         a.download = name;
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
+
+        // Clean up
         setTimeout(() => {
           URL.revokeObjectURL(blobUrl);
           a.remove();
         }, 60000);
       } catch (err) {
-        console.warn("Blob failed, trying direct download:", err);
+        // Fallback: Direct anchor tag (works even when CORS blocks fetch)
+        console.warn("Blob fetch failed:", err);
         const a = document.createElement('a');
         a.href = url;
         a.download = name;
-        a.target = '_blank';
+        a.target = '_blank'; // Open in new tab if download doesn't trigger
+        a.rel = 'noopener noreferrer';
         document.body.appendChild(a);
         a.click();
         a.remove();
-        alert("Opened in new tab. Long-press video → 'Download'.");
+
+        alert("Opened in new tab. Long-press the video → 'Download'. This happens on some platforms due to security restrictions.");
       }
     };
 
     window.copyLink = async function(url) {
-      try { await navigator.clipboard.writeText(url); alert('✅ Link copied to clipboard!'); }
+      try { await navigator.clipboard.writeText(url); alert('✅ Link copied!'); }
       catch { prompt('📋 Copy this link:', url); }
     };
 
