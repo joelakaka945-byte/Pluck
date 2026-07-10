@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>Pluck — Universal Engine</title>
+  <meta name="description" content="Private media downloader powered by Cobalt on Railway." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -42,17 +43,18 @@
    .primary { background: var(--accent); color: #fff; }
    .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
    .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
-   .pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; display: flex; flex-direction: column; gap: 4px; }
+   .pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 4px; }
    .pick.on { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
    .pick b { font-size: 14px; }
    .pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
    .pick small { display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px; }
    .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
    .expert.show { display: block; }
-   .sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; }
+   .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
+   .sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; outline: none; }
    .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
    .kv b { color: #fff; word-break: break-all; }
-   .checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; color: var(--text-muted); }
+   .checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
    .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
    .out { display: none; margin-top: 16px; }
    .out.show { display: block; }
@@ -62,73 +64,96 @@
    .box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
    .dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
     @media (min-width: 600px) {.dl-grid { grid-template-columns: 1fr 1fr; } }
-   .fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; color: var(--text-muted); }
+   .fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+   .footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
     @media (max-width: 680px) {.hero h1 { font-size: 34px; }.row { flex-direction: column; } }
   </style>
 </head>
 <body>
   <div class="bg"></div>
   <div class="wrap">
-    <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking...</span></div></div>
-    <div class="hero"><h1 id="h1">You are<br><span>almost there.</span></h1><p>Paste any link and Pluck will handle the rest.</p></div>
+    <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine...</span></div></div>
+    <div class="hero"><h1 id="h1">You are<br><span>almost there.</span></h1><p id="heroP">Paste any link and Pluck will handle the rest.</p></div>
     <div class="card">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;">
         <div class="switch"><button id="bS" class="sw on">Simple Mode</button><button id="bE" class="sw">Expert Mode</button></div>
-        <div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">— ms</span></div>
+        <div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">— ms</span><span class="pill mono" id="epLab">using /</span></div>
       </div>
       <div class="row"><div class="field"><span>🔗</span><input id="url" type="url" placeholder="Paste a full YouTube, TikTok, or Instagram link here" autocomplete="off" spellcheck="false" /></div><button id="go" class="btn primary">Pluck</button></div>
-      <div class="grid3"><button class="pick on" data-f="mp4"><b>Video plus Audio</b><code>mp4</code><small>Combined video and audio. Works everywhere.</small></button></div>
-      <div id="ex" class="expert"><div class="controls"><select id="vq" class="sel"><option value="max">max</option><option value="1080">1080p</option><option value="720" selected>720p</option><option value="480">480p</option></select><select id="fn" class="sel"><option value="pretty">pretty</option><option value="classic">classic</option></select></div><div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting...</b></div><label class="checkbox-label"><input id="nm" type="checkbox"> Disable metadata</label></div>
-      <div class="actions"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear</button><button id="refreshBtn" class="btn ghost" style="display:none">↻ Refresh / New Download</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
+
+      <!-- ONLY ONE OPTION NOW -->
+      <div class="grid3">
+        <button class="pick on" data-f="mp4"><b>Video plus Audio</b><code>mp4</code><small>What you see is what you get. The video and the audio are combined together. This works everywhere and is the most compatible choice.</small></button>
+      </div>
+
+      <div id="ex" class="expert">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Expert Mode — Technical Details</div>
+        <div class="controls">
+          <select id="vq" class="sel"><option value="max">v1 quality: maximum — keep original</option><option value="1080">v1 quality: 1080p</option><option value="720" selected>v1 quality: 720p</option><option value="480">v1 quality: 480p</option></select>
+          <select id="af" class="sel" style="display:none"><option value="best" selected>best</option></select>
+          <select id="fn" class="sel"><option value="classic">filename: classic</option><option value="pretty">filename: pretty</option><option value="basic">filename: basic</option><option value="nerdy">filename: nerdy</option></select>
+        </div>
+        <div class="kv"><span>request</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div>
+        <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting...</b></div>
+        <label class="checkbox-label"><input id="nm" type="checkbox"> Disable metadata</label>
+      </div>
+      <div class="actions"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
       <div id="out" class="out"></div>
     </div>
     <div class="fun"><b>Random fact:</b> <span id="ft"></span></div>
+    <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app</div>
   </div>
 <script>
-    const BASE="https://cobalt-production-2c27.up.railway.app"; const ENDPOINT=BASE+"/"; const FACTS=["Octopuses have 3 hearts.","Honey never spoils.","Bananas are berries."];
-    let state={online:false,factPool:[...FACTS]}; const $=s=>document.querySelector(s);
-    const els={dot:$('#dot'),stxt:$('#stxt'),ver:$('#ver'),lat:$('#lat'),out:$('#out'),ft:$('#ft'),kvResp:$('#kvResp'),url:$('#url'),go:$('#go'),test:$('#test')};
-    const refreshBtn=$('#refreshBtn');
-    function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS]; return state.factPool.pop(); }
-    function isValidUrl(s){ try{ const u=new URL(s.trim()); return ['http:','https:'].includes(u.protocol); }catch{ return false; } }
+    const BASE = "https://cobalt-production-2c27.up.railway.app";
+    const ENDPOINT = BASE + "/";
+    const FALLBACK_URL = "https://co.wuk.sh/";
+    const FACTS = ["Octopuses have three hearts.","Honey never spoils.","A day on Venus is longer than a year on Venus.","Bananas are berries but strawberries are not.","Wombats poop cubes.","There are more trees than stars in the Milky Way.","Water can boil and freeze at the same time at its triple point.","Your stomach remakes its lining every 3-4 days.","Cows have best friends.","Sharks are older than trees."];
+    let state = { fmt: "mp4", isExpert: false, online: false, factPool: [...FACTS].sort(() => Math.random() - 0.5) };
+    const $ = s => document.querySelector(s);
+    const els = { dot: $('#dot'), stxt: $('#stxt'), ver: $('#ver'), lat: $('#lat'), out: $('#out'), ft: $('#ft'), epLab: $('#epLab'), h1: $('#h1'), heroP: $('#heroP'), kvR: $('#kvR'), kvResp: $('#kvResp'), url: $('#url'), go: $('#go'), test: $('#test') };
+    function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(()=>Math.random()-0.5); return state.factPool.pop(); }
+    function isValidUrl(s){ try{ const u=new URL(s.trim()); if(!['http:','https:'].includes(u.protocol)) return false; return true; }catch{ return false; } }
     function sanitize(n){ return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,200); }
-    function extractItems(r){ if(!r) throw new Error('Empty'); if(r.status==='error') throw new Error(r.error?.code||'Error'); if(r.status==='picker'&&Array.isArray(r.picker)) return r.picker.map((it,i)=>({url:it.url,filename:sanitize(`pluck-${i+1}.${it.type==='photo'?'jpg':'mp4'}`),label:it.type})); if(r.url) return [{url:r.url,filename:sanitize(r.filename||'pluck-media.mp4'),label:'MP4'}]; throw new Error('No file'); }
-    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,400); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}</div>`; if(refreshBtn) refreshBtn.style.display='inline-block'; }
-    function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
-    window.blobDownload=async(url,name)=>{
-      try{
-        const r=await fetch(url,{mode:'cors'});
-        if(!r.ok) throw new Error('cors-blocked');
-        const b=await r.blob();
-        const o=URL.createObjectURL(b);
-        const a=document.createElement('a');
-        a.href=o; a.download=name; a.style.display='none';
-        document.body.appendChild(a); a.click();
-        setTimeout(()=>{URL.revokeObjectURL(o);a.remove();},60000);
-      }catch{
-        const a=document.createElement('a');
-        a.href=url;
-        a.download=name;
-        a.style.display='none';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(()=>a.remove(),1000);
+    function mapErrorCode(c){ const K={'error.api.link.unsupported':"Link not supported.",'error.api.content.video.unavailable':'Private or unavailable.','error.api.content.video.age':'Age-restricted.'}; return (c&&K[c])||'Engine could not process this link.'; }
+    function extractItems(result, fallbackLabel){
+      if(!result) throw new Error('Empty response');
+      if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code));
+      if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){
+        return result.picker.map((it,i)=>{ let ext='mp4'; if(it.type==='photo') ext='jpg'; else if(it.type==='gif') ext='gif'; return {url:it.url,filename:sanitize(`pluck-${i+1}.${ext}`),label:it.type?it.type.toUpperCase():fallbackLabel}; });
       }
-    };
-    window.copyLink=async(u)=>{ try{ await navigator.clipboard.writeText(u); alert('Copied!'); }catch{ prompt('Copy:',u); } };
-    window.shareFile=async(u)=>{ if(navigator.share){ try{ await navigator.share({url:u}); }catch{} } else copyLink(u); };
-    function buildButtons(url,fn){ const n=sanitize(fn); const su=String(url).replace(/'/g,"%27"); const sn=String(n).replace(/'/g,"\\'"); return `<div class="dl-grid"><a href="${su}" target="_blank" class="btn primary" style="text-align:center;text-decoration:none">Open in Tab ✅</a><button class="btn ghost" onclick="blobDownload('${su}','${sn}')">Blob Save (Fixes TikTok)</button><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button></div>`; }
-    function buildItemsBlock(items){ return items.map(it=>`<b>📹 ${it.filename}</b>${buildButtons(it.url,it.filename)}`).join('<br>'); }
-    async function ping(){ const t0=performance.now(); try{ const r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); const ms=Math.round(performance.now()-t0); els.lat.textContent=`${ms} ms`; const j=await r.json(); if(!j.cobalt) throw new Error(); state.online=true; els.dot.className='dot ok'; els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`; els.stxt.textContent='Engine is online'; }catch{ state.online=false; els.dot.className='dot bad'; els.ver.textContent='warming up'; } }
-    async function postToCobalt(p){ const r=await fetch(ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); if(!r.ok) throw new Error(`HTTP ${r.status}`); return await r.json(); }
-    async function go(){ const raw=els.url.value.trim(); if(!raw) return showError('Error','Paste a link'); if(!isValidUrl(raw)) return showError('Invalid','Bad URL'); els.go.disabled=true; els.go.textContent='Processing...'; try{ if(!state.online) await ping(); const base={url:raw,filenameStyle:$('#fn').value,disableMetadata:$('#nm').checked}; const result=await postToCobalt({...base,downloadMode:'auto',videoQuality:$('#vq').value,audioFormat:'best'}); const items=extractItems(result); showOutput('ok','Video Ready',buildItemsBlock(items),result); }catch(e){ showError('Failed',e.message); }finally{ els.go.disabled=false; els.go.textContent='Pluck'; } }
+      if(result.url){ return [{url:result.url,filename:sanitize(result.filename||'pluck-media.mp4'),label:fallbackLabel||'File'}]; }
+      throw new Error('No file returned.');
+    }
+    function setSimple(){ els.h1.innerHTML='You are<br><span>almost there.</span>'; els.stxt.textContent=state.online?'Engine is online and ready':'Checking the engine...'; }
+    function setExpert(){ els.h1.innerHTML='Engine<br><span>Diagnostics</span>'; }
+    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Fun fact: ${getFact()}</div></div>`; }
+    function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" onclick="tryFallback()">Try Public Fallback</button></div>`); }
+    window.blobDownload=async(url,name)=>{ try{ const r=await fetch(url,{mode:'cors'}); const b=await r.blob(); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(u);a.remove();},60000);}catch{ const a=document.createElement('a'); a.href=url; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove(); } };
+    window.copyLink=async(url)=>{ try{ await navigator.clipboard.writeText(url); alert('Copied!'); }catch{ prompt('Copy link:',url); } };
+    window.shareFile=async(url,name)=>{ if(navigator.share){ try{ await navigator.share({title:name,url}); }catch{} } else copyLink(url); };
+    function buildButtons(url,fn,label){ const n=sanitize(fn); const su=String(url).replace(/'/g,"%27"); const sn=String(n).replace(/'/g,"\\'"); return `<div class="dl-grid"><a href="${su}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open in Tab ✅<br><small>${label}</small></a><button class="btn ghost" onclick="blobDownload('${su}','${sn}')">Blob Save (iPhone)</button><button class="btn ghost" onclick="shareFile('${su}','${sn}')">Share</button><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button></div>`; }
+    function buildItemsBlock(items,icon){ return items.map(it=>`<b>${icon} ${it.filename}</b>${buildButtons(it.url,it.filename,it.label)}`).join('<br>'); }
+    async function ping(){ const t0=performance.now(); els.dot.className='dot'; try{ const r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); const ms=Math.round(performance.now()-t0); els.lat.textContent=`${ms} ms`; if(!r.ok) throw new Error(); const j=await r.json(); if(!j.cobalt) throw new Error(); state.online=true; els.dot.className='dot ok'; els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`; els.stxt.textContent='Engine is online and ready'; return true; }catch{ state.online=false; els.dot.className='dot bad'; els.ver.textContent='warming up'; return false; } }
+    async function postToCobalt(p,base=BASE){ const u=base.endsWith('/')?base:base+'/'; const c=new AbortController(); const to=setTimeout(()=>c.abort(),20000); const r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(to); if(!r.ok) throw new Error(`HTTP ${r.status}`); return await r.json(); }
+    async function go(){
+      const raw=els.url.value.trim(); if(!raw) return showError('Error','Paste a link first.'); if(!isValidUrl(raw)) return showError('Invalid','Bad URL');
+      els.go.disabled=true; els.go.textContent='Processing...';
+      try{
+        if(!state.online) await ping();
+        const base={ url: raw, filenameStyle: $('#fn').value, disableMetadata: $('#nm').checked };
+        // ONLY VIDEO + AUDIO NOW - fixed audio muxing
+        const result=await postToCobalt({...base, downloadMode:'auto', videoQuality: $('#vq').value, audioFormat:'best' });
+        const items=extractItems(result,'MP4 Video + Audio');
+        showOutput('ok','Video Ready',buildItemsBlock(items,'📹'),result);
+      }catch(e){ showError('Request Failed',e.message); }finally{ els.go.disabled=false; els.go.textContent='Pluck'; }
+    }
+    window.tryFallback=async()=>{ try{ const raw=els.url.value.trim(); const res=await postToCobalt({url:raw,downloadMode:'auto',videoQuality:$('#vq')?$('#vq').value:'720',audioFormat:'best'},FALLBACK_URL); const items=extractItems(res,'MP4'); showOutput('ok','Success via Fallback',buildItemsBlock(items,'📹')); }catch(e){ showError('Fallback Failed',e.message); } };
     els.go.addEventListener('click',go); els.url.addEventListener('keydown',e=>e.key==='Enter'&&go());
-    $('#bS').addEventListener('click',()=>{ $('#bS').classList.add('on'); $('#bE').classList.remove('on'); $('#ex').classList.remove('show'); });
-    $('#bE').addEventListener('click',()=>{ $('#bE').classList.add('on'); $('#bS').classList.remove('on'); $('#ex').classList.add('show'); });
-    $('#wake').addEventListener('click',async()=>{ els.stxt.textContent='Waking...'; try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(ping,1500); });
-    $('#clear').addEventListener('click',()=>{ els.url.value=''; els.out.classList.remove('show'); els.out.innerHTML=''; if(refreshBtn) refreshBtn.style.display='none'; });
-    refreshBtn.addEventListener('click',()=>location.reload());
-    els.test.href=BASE; els.ft.textContent=getFact(); ping();
+    $('#bS').addEventListener('click',()=>{ state.isExpert=false; $('#bS').classList.add('on'); $('#bE').classList.remove('on'); $('#ex').classList.remove('show'); setSimple(); });
+    $('#bE').addEventListener('click',()=>{ state.isExpert=true; $('#bE').classList.add('on'); $('#bS').classList.remove('on'); $('#ex').classList.add('show'); setExpert(); });
+    $('#wake').addEventListener('click',async()=>{ els.stxt.textContent='Waking...'; try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(ping,2000); });
+    $('#clear').addEventListener('click',()=>{ els.url.value=''; els.out.classList.remove('show'); els.out.innerHTML=''; });
+    els.test.href=BASE; els.ft.textContent=getFact(); setSimple(); ping();
 </script>
 </body>
 </html>
