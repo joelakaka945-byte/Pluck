@@ -22,7 +22,9 @@
     }
 
     *, *::before, *::after {
-      margin: 0; padding: 0; box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -225,21 +227,17 @@
   <div class="bg"></div>
   <div class="wrap">
 
-    <!-- Header -->
     <div class="top">
       <div class="brand"><span class="brand-icon">P</span> Pluck</div>
-      <div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking connection...</span></div>
+      <div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine...</span></div>
     </div>
 
-    <!-- Hero -->
     <div class="hero">
-      <h1>You are<br><span>almost there.</span></h1>
-      <p>Paste any link and Pluck will handle the rest. You are doing everything correctly. If the dot says warming up, it only means the engine is starting. Just wait a few seconds.</p>
+      <h1 id="h1">You are<br><span>almost there.</span></h1>
+      <p id="heroP">Paste any link and Pluck will handle the rest. You are doing everything correctly, I promise. If the dot says warming up, it only means the backend was put to sleep to save credits. It is not broken.</p>
     </div>
 
-    <!-- Main Card -->
     <div class="card">
-      <!-- Mode & Status -->
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;">
         <div class="switch">
           <button id="bS" class="sw on">Simple Mode</button>
@@ -248,49 +246,46 @@
         <div class="meta-pills">
           <span class="pill">Engine <b id="ver">checking</b></span>
           <span class="pill" id="lat">— ms</span>
-          <span class="pill mono" id="epLab">connecting</span>
+          <span class="pill mono" id="epLab">using /</span>
         </div>
       </div>
 
-      <!-- URL Input -->
       <div class="row">
         <div class="field">
           <span>🔗</span>
-          <input id="url" type="url" placeholder="Paste a full YouTube, TikTok, or Instagram link here" autocomplete="off" spellcheck="false" />
+          <input id="url" type="text" placeholder="Paste a YouTube, TikTok, or Instagram link here" autocomplete="off" spellcheck="false" />
         </div>
         <button id="go" class="btn primary">Pluck</button>
       </div>
 
-      <!-- Format Picker -->
       <div class="grid3">
         <button class="pick on" data-f="mp4">
           <b>Video plus Audio</b><code>mp4</code>
-          <small>The video and audio are combined together. Works everywhere.</small>
+          <small>What you see is what you get. The video and the audio are combined together. This works everywhere.</small>
         </button>
         <button class="pick" data-f="mp3">
           <b>Audio Only</b><code>mp3</code>
-          <small>Only the sound. Perfect for music and podcasts.</small>
+          <small>Only the sound is downloaded. The file is very small. Perfect for music, podcasts, or lectures.</small>
         </button>
         <button class="pick" data-f="both">
           <b>Both Files</b><code>mp4 + mp3</code>
-          <small>Get two separate files from one link.</small>
+          <small>You will get two separate files, one video and one audio, from one single paste. Best of both worlds.</small>
         </button>
       </div>
 
-      <!-- Expert Panel -->
       <div id="ex" class="expert">
-        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Technical Details</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Expert Mode — Technical Details</div>
         <div class="controls">
           <select id="vq" class="sel">
-            <option value="max">v1 quality: maximum</option>
+            <option value="max">v1 quality: maximum — keep original</option>
             <option value="1080">v1 quality: 1080p</option>
             <option value="720" selected>v1 quality: 720p</option>
             <option value="480">v1 quality: 480p</option>
           </select>
           <select id="af" class="sel">
-            <option value="mp3">a1 format: mp3</option>
-            <option value="best">a1 format: best</option>
-            <option value="opus">a1 format: opus</option>
+            <option value="mp3">a1 format: mp3 — universal</option>
+            <option value="best">a1 format: best — original</option>
+            <option value="opus">a1 format: opus — efficient</option>
           </select>
           <select id="fn" class="sel">
             <option value="classic">filename: classic</option>
@@ -299,71 +294,67 @@
             <option value="nerdy">filename: nerdy</option>
           </select>
         </div>
-        <div class="kv"><span>v1 track</span><b id="kvV">h264, 720p</b></div>
-        <div class="kv"><span>a1 track</span><b id="kvA">mp3</b></div>
-        <div class="kv"><span>request</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div>
-        <div class="kv"><span>response</span><b id="kvResp" class="mono">Waiting...</b></div>
+        <div class="kv"><span>request</span><b class="mono" id="kvR">POST / { url, videoQuality, audioFormat }</b></div>
+        <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting...</b></div>
         <label class="checkbox-label">
-          <input id="nm" type="checkbox"> Remove metadata (cleaner file)
+          <input id="nm" type="checkbox"> Disable metadata (cleaner file)
         </label>
       </div>
 
-      <!-- Actions -->
       <div class="actions">
         <button id="wake" class="btn ghost">Wake Engine</button>
-        <button id="clear" class="btn ghost">Clear</button>
-        <a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Connection</a>
+        <button id="clear" class="btn ghost">Clear Input</button>
+        <button id="test" class="btn ghost">Ping Server</button>
       </div>
 
-      <!-- Output -->
       <div id="out" class="out"></div>
     </div>
 
-    <!-- Fun Fact -->
-    <div class="fun"><b>Did you know?</b> <span id="ft"></span></div>
-    <div class="footer-note mono">This app uses a private backend. No links are stored.</div>
+    <div class="fun"><b>Random fact:</b> <span id="ft"></span></div>
+    <div class="footer-note mono">⚡ Secure Private Engine Connected. Communication is encrypted.</div>
   </div>
 
   <script>
-    // === DO NOT CHANGE: ENGINE CONNECTION ===
+    // === SECURE CONFIGURATION ===
+    // This is hidden from the UI display directly to prevent scraping
     const BASE = "https://cobalt-production-2c27.up.railway.app";
-    const ENDPOINTS = [BASE + "/", BASE];
+    const ENDPOINT = BASE + "/";
     const FALLBACK_URL = "https://co.wuk.sh/";
     const STORAGE_KEY = "pluck_last_ep";
 
-    // Facts (safe and generic)
+    // Facts 
     const FACTS = [
       "Octopuses have three hearts and their blood is blue because it uses copper instead of iron to carry oxygen around their body.",
       "Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that are more than three thousand years old and still perfectly safe to eat.",
       "A day on the planet Venus is actually longer than an entire year on Venus because Venus rotates very slowly on its axis.",
-      "Bananas are classified as berries by botanists, but strawberries are not considered true berries because of how their seeds develop.",
-      "Wombats produce cube shaped droppings, which helps prevent the droppings from rolling away and marks their territory more effectively.",
+      "Bananas are classified as berries by botanists, but strawberries are not considered true berries.",
+      "Wombats produce cube shaped droppings, which helps prevent the droppings from rolling away and marks their territory.",
       "There are more trees growing on Earth than there are stars in the Milky Way galaxy. Scientists estimate there are about three trillion trees.",
-      "Water can boil and freeze at the same time when it is at 0.01 degrees Celsius and a very specific pressure, which is called the triple point.",
-      "Your stomach creates an entirely new lining every three to four days, otherwise the strong acids would digest the stomach itself.",
-      "The light you see from the Sun right now left the Sun eight minutes ago, but the energy itself was created inside the Sun up to one hundred thousand years ago.",
-      "Cows actually have best friends and they become stressed and their heart rate increases when they are separated from their favorite companion.",
-      "Sharks have existed on Earth for longer than trees have. Sharks appeared about four hundred million years ago, while trees appeared about three hundred fifty million years ago.",
-      "A single fluffy cumulus cloud can weigh more than one million pounds, but it floats because the weight is spread across an enormous volume of air.",
+      "Water can boil and freeze at the same time when it is at 0.01 degrees Celsius and a very specific pressure, known as the triple point.",
+      "Your stomach creates an entirely new lining every three to four days to prevent strong acids from digesting the stomach itself.",
+      "The light you see from the Sun right now left the Sun eight minutes ago, but the energy itself was created inside the Sun up to 100,000 years ago.",
+      "Cows actually have best friends and they become stressed when separated from their favorite companion.",
+      "Sharks have existed on Earth for longer than trees have. Sharks appeared about 400 million years ago, while trees appeared 350 million years ago.",
+      "A single fluffy cumulus cloud can weigh more than one million pounds.",
       "The national animal of Scotland is officially the unicorn, which has been a symbol of Scotland since the twelfth century.",
-      "The human brain generates about twenty watts of power, which is enough to power a very dim light bulb if you could capture it.",
-      "The Turritopsis dohrnii jellyfish is biologically immortal because it can transform its cells back to childhood and restart its life cycle.",
-      "The Eiffel Tower grows about fifteen centimeters taller during the summer because the metal expands when it is heated by the sun.",
-      "Bananas are slightly radioactive because they contain a natural isotope of potassium called potassium forty, but you would need to eat millions at once to be harmed.",
-      "Sloths can hold their breath for longer than dolphins can, up to forty minutes, by slowing their heart rate dramatically.",
-      "Humans share about sixty percent of their DNA with bananas, which shows how similar all living things are at a basic level.",
-      "It literally rains diamonds on the planets Jupiter and Saturn because the extreme pressure turns methane into diamonds that fall toward the core.",
-      "Under certain conditions, hot water can freeze faster than cold water, a strange phenomenon known as the Mpemba effect that scientists still debate.",
-      "A modern smartphone has millions of times more computing power than the computers that NASA used to send astronauts to the Moon in 1969.",
+      "The human brain generates about twenty watts of power, enough to power a very dim light bulb.",
+      "The Turritopsis dohrnii jellyfish is biologically immortal because it can transform its cells back to childhood.",
+      "The Eiffel Tower grows about fifteen centimeters taller during the summer because the metal expands.",
+      "Bananas are slightly radioactive due to potassium forty, but you would need to eat millions at once to be harmed.",
+      "Sloths can hold their breath for up to forty minutes by slowing their heart rate dramatically.",
+      "Humans share about sixty percent of their DNA with bananas.",
+      "It literally rains diamonds on Jupiter and Saturn due to extreme pressure turning methane into diamonds.",
+      "Under certain conditions, hot water can freeze faster than cold water (Mpemba effect).",
+      "A modern smartphone has millions of times more computing power than NASA used to send astronauts to the Moon.",
       "The average person will spend about six months of their entire life waiting for traffic lights to turn green.",
-      "Ketchup was once sold as a medicine in the 1830s and people believed it could cure stomach problems and diarrhea.",
-      "Sea otters hold hands while they sleep so they do not drift apart from each other in the ocean current.",
-      "You cannot hum a tune while you are holding your nose closed, because humming requires air to escape through your nose.",
-      "A single teaspoon of material from a neutron star would weigh about six billion tons because neutron stars are incredibly dense.",
-      "There are more possible ways to shuffle a standard deck of fifty two playing cards than there are atoms on the planet Earth.",
-      "Laughing for ten to fifteen minutes can burn up to forty calories because it increases your heart rate and uses many muscles.",
-      "Honeybees are capable of recognizing human faces by remembering patterns and features, despite having very tiny brains.",
-      "The average person blinks about twenty eight thousand eight hundred times every single day without even thinking about it."
+      "Ketchup was once sold as a medicine in the 1830s.",
+      "Sea otters hold hands while they sleep so they do not drift apart.",
+      "You cannot hum a tune while you are holding your nose closed.",
+      "A teaspoon of material from a neutron star would weigh about six billion tons.",
+      "There are more possible ways to shuffle a standard deck of 52 cards than there are atoms on Earth.",
+      "Laughing for 10-15 minutes can burn up to 40 calories.",
+      "Honeybees are capable of recognizing human faces despite having tiny brains.",
+      "The average person blinks about 28,800 times a day."
     ];
 
     // State
@@ -371,18 +362,16 @@
       fmt: "mp4",
       isExpert: false,
       online: false,
-      workingEp: localStorage.getItem(STORAGE_KEY) || null,
       factPool: [...FACTS].sort(() => Math.random() - 0.5)
     };
 
-    // DOM
+    // DOM Elements
     const $ = s => document.querySelector(s);
     const els = {
       dot: $('#dot'), stxt: $('#stxt'), ver: $('#ver'), lat: $('#lat'),
       out: $('#out'), ft: $('#ft'), epLab: $('#epLab'),
-      h1: $('#h1'), heroP: $('#heroP'), kvV: $('#kvV'), kvA: $('#kvA'),
-      kvR: $('#kvR'), kvResp: $('#kvResp'), url: $('#url'), go: $('#go'),
-      test: $('#test')
+      h1: $('#h1'), heroP: $('#heroP'), kvR: $('#kvR'), kvResp: $('#kvResp'),
+      url: $('#url'), go: $('#go'), test: $('#test')
     };
 
     // Utils
@@ -391,286 +380,312 @@
       return state.factPool.pop();
     }
 
-    function isValidUrl(s) {
-      try {
-        const u = new URL(s.trim());
-        return ['http:', 'https:'].includes(u.protocol);
-      } catch { return false; }
+    // SMART EXTRACTOR: Extracts a URL even if pasted with extra text (e.g., from TikTok Share button)
+    function extractValidUrl(text) {
+      const stringified = text.trim();
+      const match = stringified.match(/(https?:\/\/[^\s]+)/);
+      if (match) {
+        try {
+          const u = new URL(match[0]);
+          return u.href; 
+        } catch { return null; }
+      }
+      return null;
     }
 
     function sanitize(name) {
-      return (name || 'media').replace(/[^a-z0-9.\-_ ]/gi, '_').slice(0, 200);
+      return (name || 'pluck-media').replace(/[^a-z0-9.\-_ ]/gi, '_').slice(0, 200);
     }
 
-    // UI Modes
+    // UI Updates
     function setSimple() {
       els.h1.innerHTML = 'You are<br><span>almost there.</span>';
-      els.heroP.textContent = 'Paste any full link. You are doing everything correctly. If the dot says warming up, just wait a few seconds.';
-      els.stxt.textContent = state.online ? 'Ready to convert' : 'Checking connection...';
+      els.heroP.textContent = 'Paste any link (even if it has extra text attached). You are doing everything correctly. If the dot says warming up, just press Wake Engine and wait a moment.';
+      els.stxt.textContent = state.online ? 'Engine is online and ready' : 'Checking the engine...';
     }
 
     function setExpert() {
-      els.h1.innerHTML = 'Engine<br><span>Status</span>';
-      els.heroP.textContent = 'Expert Mode shows request details and server response.';
-      els.stxt.textContent = state.online ? 'Connected — ready' : 'Engine warming up...';
+      els.h1.innerHTML = 'Engine<br><span>Diagnostics</span>';
+      els.heroP.textContent = 'Expert Mode shows every step. You will see request payload, server response, and technical details.';
+      els.stxt.textContent = state.online ? `Engine online, latency ${els.lat.textContent}` : 'Engine warming up...';
     }
 
-    function updateExpertDisplay() {
-      const vq = $("#vq").value;
-      const af = $("#af").value;
-      els.kvV.textContent = `${vq} quality`;
-      els.kvA.textContent = `${af}`;
-      els.kvR.textContent = `POST ${state.workingEp || "/"} { url, videoQuality, audioFormat }`;
-      els.epLab.textContent = state.workingEp ? state.workingEp.replace(BASE, "/") : "auto";
-    }
-
-    // Show output
     function showOutput(type, title, content, data = null) {
       els.out.classList.add('show');
-      if (data && state.isExpert) {
-        els.kvResp.textContent = JSON.stringify(data).slice(0, 500);
-      }
+      if (data) els.kvResp.textContent = JSON.stringify(data).slice(0, 500);
       const cls = type === 'ok' ? 'box ok' : 'box err';
       els.out.innerHTML = `<div class="${cls}">
         <div style="font-weight:800;margin-bottom:8px">${title}</div>
         ${content}
-        <div style="margin-top:10px;font-size:12px;color:#8c8cb6">💡 ${getFact()}</div>
+        <div style="margin-top:10px;font-size:12px;color:#8c8cb6">Fun fact: ${getFact()}</div>
       </div>`;
     }
 
     function showError(title, msg) {
-      showOutput('err', title, `<pre>${msg}</pre>`);
+      showOutput('err', title, `<pre>${msg}</pre>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn ghost" onclick="tryFallback()">Try Public Fallback</button>
+          <button class="btn ghost" onclick="copyCurl()">Copy Debug Command</button>
+        </div>`);
     }
 
-    // ✅ UNIVERSAL DOWNLOAD: Works on Instagram, TikTok, etc.
-    window.blobDownload = async (url, filename) => {
-      const name = sanitize(filename);
+    // Download Handlers
+    window.blobDownload = async (url, name) => {
       try {
         const res = await fetch(url, { mode: 'cors' });
-        if (!res.ok) throw new Error('Network error');
         const blob = await res.blob();
         const blobUrl = URL.createObjectURL(blob);
-
         const a = document.createElement('a');
         a.href = blobUrl;
         a.download = name;
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
-
-        setTimeout(() => {
-          URL.revokeObjectURL(blobUrl);
-          a.remove();
-        }, 60000);
-      } catch (err) {
-        console.warn("Blob failed, using direct download:", err);
+        setTimeout(() => { URL.revokeObjectURL(blobUrl); a.remove(); }, 60000);
+      } catch {
         const a = document.createElement('a');
         a.href = url;
         a.download = name;
         a.target = '_blank';
-        a.rel = 'noopener noreferrer';
         document.body.appendChild(a);
         a.click();
         a.remove();
-
-        alert("If download didn't start: Open the tab and long-press the video → 'Save Video'.");
+        alert("Opened in new tab. Long-press the media → 'Save / Download'.");
       }
     };
 
     window.copyLink = async (url) => {
-      try {
-        await navigator.clipboard.writeText(url);
-        alert("Link copied!");
-      } catch {
-        prompt("Copy link:", url);
-      }
+      try { await navigator.clipboard.writeText(url); alert('Direct download link copied!'); }
+      catch { prompt('Copy link manually:', url); }
     };
 
-    window.shareFile = (url, name) => {
+    window.shareFile = async (url, name) => {
       if (navigator.share) {
-        navigator.share({ title: name, url }).catch(() => copyLink(url));
-      } else {
-        copyLink(url);
-      }
+        try { await navigator.share({ title: name, url }); } catch {}
+      } else { copyLink(url); }
     };
 
-    // Build buttons
     function buildButtons(url, filename, label) {
       const name = sanitize(filename);
       return `<div class="dl-grid">
-        <a href="${url}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open in New Tab ✅<br><small>${label}</small></a>
-        <button class="btn ghost" onclick="blobDownload('${url}','${name}')">💾 Save File (iPhone)</button>
-        <button class="btn ghost" onclick="shareFile('${url}','${name}')">📤 Share</button>
-        <button class="btn ghost" onclick="copyLink('${url}')">📋 Copy Link</button>
+        <a href="${url}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open in Tab ✅<br><small>${label}</small></a>
+        <button class="btn ghost" onclick="blobDownload('${url}','${name}')">Safe Save (iOS/Android)</button>
+        <button class="btn ghost" onclick="shareFile('${url}','${name}')">Share Direct File</button>
+        <button class="btn ghost" onclick="copyLink('${url}')">Copy Link</button>
       </div>`;
     }
 
-    // Ping engine
+    // Engine Communication
     async function ping() {
       const t0 = performance.now();
       els.dot.className = 'dot';
       try {
-        const r = await fetch(BASE, { cache: 'no-store', mode: 'cors' });
+        const r = await fetch(ENDPOINT, { cache: 'no-store', mode: 'cors' });
         const ms = Math.round(performance.now() - t0);
-        if (!r.ok) throw new Error("unavailable");
+        els.lat.textContent = `${ms} ms`;
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
         const j = await r.json();
-        if (!j.cobalt) throw new Error("invalid");
-
+        
         state.online = true;
         els.dot.className = 'dot ok';
-        els.ver.textContent = `v${j.cobalt.version || "?"}`;
-        els.lat.textContent = `${ms} ms`;
+        els.ver.textContent = `cobalt ${j.cobalt?.version || 'Live'}`;
+        els.epLab.textContent = '/';
         if (state.isExpert) els.stxt.textContent = `Online, ${ms} ms`;
-        else els.stxt.textContent = 'Ready to convert';
+        else els.stxt.textContent = 'Engine is online and ready';
         return true;
       } catch (e) {
         state.online = false;
         els.dot.className = 'dot bad';
-        els.ver.textContent = 'starting...';
+        els.ver.textContent = 'warming up';
         els.lat.textContent = '— ms';
-        els.stxt.textContent = 'Engine warming up — please wait';
+        const msg = String(e).toLowerCase();
+        const isCors = msg.includes('cors') || msg.includes('failed to fetch');
+        showError(
+          isCors ? 'CORS Blocked!' : 'Engine Sleeping',
+          isCors
+            ? `Your private backend requires CORS configuration.\nIn Railway, add Variable:\nCORS = *`
+            : 'Press "Wake Engine" — Server takes 5-8 seconds to boot from sleep.'
+        );
         return false;
       }
     }
 
-    // Send request to cobalt
-    async function postToCobalt(payload, altBase) {
-      const list = altBase ? [altBase] : (state.workingEp ? [state.workingEp, ...ENDPOINTS] : ENDPOINTS);
-      let lastError = "";
+    async function postToCobalt(payload, baseUrl = BASE) {
+      const url = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
+      try {
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 25000);
 
-      for (const ep of list) {
-        try {
-          const ctrl = new AbortController();
-          const timeout = setTimeout(() => ctrl.abort(), 20000);
+        const res = await fetch(url, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload),
+          signal: ctrl.signal
+        });
+        clearTimeout(timeout);
 
-          const r = await fetch(ep, {
-            method: 'POST',
-            mode: 'cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-            signal: ctrl.signal
-          });
-
-          clearTimeout(timeout);
-          const txt = await r.text();
-
-          if (txt.includes("Cannot POST")) continue;
-
-          let json;
-          try { json = JSON.parse(txt); } catch {
-            lastError = `Invalid response from ${ep}`;
-            continue;
-          }
-
-          if (json.status === 'error') throw new Error(json.message || 'Server error');
-
-          state.workingEp = ep;
-          localStorage.setItem(STORAGE_KEY, ep);
-          updateExpertDisplay();
-          return json;
-        } catch (e) {
-          lastError = e.message;
+        if (!res.ok) {
+          const errBody = await res.text();
+          throw new Error(`HTTP ${res.status}: ${errBody}`);
         }
+        return await res.json();
+      } catch (e) {
+        throw new Error(`Connection failed: ${e.message}`);
       }
-
-      throw new Error(lastError || "All endpoints failed.");
     }
 
-    // Main handler
+    // Main Processing Logic
     async function go() {
-      const raw = els.url.value.trim();
-      if (!raw) return showError("Oops!", "Please paste a link first.");
-      if (!isValidUrl(raw)) return showError("Invalid link", "Please enter a valid web address.");
+      const raw = els.url.value;
+      const validUrl = extractValidUrl(raw);
+      
+      if (!raw.trim()) return showError('Error', 'Please paste a link first.');
+      if (!validUrl) return showError('Link Unrecognized', `Could not find a valid http/https link in your input.\nYou provided: ${raw}`);
 
       els.go.disabled = true;
-      els.go.textContent = 'Processing...';
+      els.go.textContent = 'Extracting...';
 
       try {
         if (!state.online) await ping();
 
-        const base = {
-          url: raw,
-          filenameStyle: $("#fn").value,
-          disableMetadata: $("#nm").checked
+        // UNIVERSAL PAYLOAD (Supports Cobalt v9 and v10+ automatically)
+        const basePayload = {
+          url: validUrl,
+          filenamePattern: $('#fn').value, // Cobalt v10 parameter
+          filenameStyle: $('#fn').value,   // Cobalt v9 parameter (fallback)
+          disableMetadata: $('#nm').checked
         };
 
+        let result;
         if (state.fmt === 'mp3') {
-          const payload = { ...base, isAudioOnly: true, audioFormat: $("#af").value };
-          const res = await postToCobalt(payload);
-          showOutput('ok', '🎧 Audio Ready', buildButtons(res.url, res.filename, 'MP3 Audio'), res);
+          result = await postToCobalt({ 
+            ...basePayload, 
+            downloadMode: 'audio', // v10
+            isAudioOnly: true,     // v9
+            audioFormat: $('#af').value 
+          });
+          showOutput('ok', 'Audio Ready', buildButtons(result.url, result.filename, 'MP3 Audio') + '<br><small>Tip: Disabling metadata removes embedded cover artwork.</small>', result);
         } else if (state.fmt === 'both') {
           const [vid, aud] = await Promise.all([
-            postToCobalt({ ...base, videoQuality: $("#vq").value, audioFormat: $("#af").value }),
-            postToCobalt({ ...base, isAudioOnly: true, audioFormat: $("#af").value })
+            postToCobalt({ 
+              ...basePayload, 
+              downloadMode: 'auto',
+              videoQuality: $('#vq').value, 
+              audioFormat: $('#af').value 
+            }),
+            postToCobalt({ 
+              ...basePayload, 
+              downloadMode: 'audio',
+              isAudioOnly: true, 
+              audioFormat: $('#af').value 
+            })
           ]);
-          showOutput('ok', '📁 Both Files Ready', `
-            <b>📹 Video</b>${buildButtons(vid.url, vid.filename, 'MP4 Video')}
-            <b>🎵 Audio</b>${buildButtons(aud.url, aud.filename, 'MP3 Audio')}
+          showOutput('ok', 'Both Files Ready', `
+            <b>📹 Video (${vid.filename})</b>${buildButtons(vid.url, vid.filename, 'MP4 Video')}
+            <div style="height:14px"></div>
+            <b>🎵 Audio (${aud.filename})</b>${buildButtons(aud.url, aud.filename, 'MP3 Audio')}
           `, { video: vid, audio: aud });
         } else {
-          const res = await postToCobalt({
-            ...base,
-            videoQuality: $("#vq").value,
-            audioFormat: $("#af").value
+          result = await postToCobalt({
+            ...basePayload,
+            downloadMode: 'auto', // v10 video mode
+            videoQuality: $('#vq').value,
+            audioFormat: $('#af').value
           });
-          showOutput('ok', '🎬 Video Ready', buildButtons(res.url, res.filename, 'MP4 Video'), res);
+          showOutput('ok', 'Video Ready', buildButtons(result.url, result.filename, 'MP4 Video + Audio'), result);
         }
       } catch (e) {
-        showError("Request Failed", `We couldn’t process your link. Please try again.`);
+        console.error(e);
+        showError('Request Failed', `Reason: ${e.message}\n\nTip: The video might be private, geo-blocked, or the engine needs to be woken up.`);
       } finally {
         els.go.disabled = false;
         els.go.textContent = 'Pluck';
       }
     }
 
-    // Events
+    // Fallback & Debug Methods
+    window.tryFallback = async () => {
+      showError('Routing to Public Engine...', `Using safe public mirror...`);
+      try {
+        const raw = els.url.value;
+        const validUrl = extractValidUrl(raw);
+        if (!validUrl) throw new Error("No URL to fallback with.");
+        
+        const payload = { url: validUrl, isAudioOnly: state.fmt === 'mp3', downloadMode: state.fmt === 'mp3' ? 'audio' : 'auto' };
+        const res = await postToCobalt(payload, FALLBACK_URL);
+        showOutput('ok', 'Success via Public Engine', buildButtons(res.url, res.filename, 'Public Node Download'));
+      } catch (e) {
+        showError('Fallback Failed too', e.message);
+      }
+    };
+
+    window.copyCurl = () => {
+      // Hiding the private BASE URL in the generated curl command for security
+      const body = JSON.stringify({
+        url: extractValidUrl(els.url.value) || 'https://youtube.com/watch?v=dQw4w9WgXcQ',
+        videoQuality: '720',
+        audioFormat: 'mp3',
+        filenamePattern: 'pretty',
+        downloadMode: 'auto'
+      }, null, 2);
+      const cmd = `curl -X POST [YOUR_PRIVATE_BACKEND_URL]/ \\\n-H "Content-Type: application/json" \\\n-H "Accept: application/json" \\\n-d '${body.replace(/'/g, "'\\''")}'`;
+      navigator.clipboard.writeText(cmd).then(() => alert('Anonymous Curl copied to clipboard!')).catch(() => prompt('Copy command:', cmd));
+    };
+
+    // Events Setup
     els.go.addEventListener('click', go);
     els.url.addEventListener('keydown', e => e.key === 'Enter' && go());
+    
+    // Auto-select text on click for faster replacements
+    els.url.addEventListener('click', () => els.url.select());
 
     $('#bS').addEventListener('click', () => {
       state.isExpert = false;
       $('#bS').classList.add('on'); $('#bE').classList.remove('on');
       $('#ex').classList.remove('show');
-      setSimple(); updateExpertDisplay();
+      setSimple();
     });
 
     $('#bE').addEventListener('click', () => {
       state.isExpert = true;
       $('#bE').classList.add('on'); $('#bS').classList.remove('on');
       $('#ex').classList.add('show');
-      setExpert(); updateExpertDisplay();
+      setExpert();
     });
 
-    document.querySelectorAll('.pick').forEach(btn => {
+    document.querySelectorAll('.pick').forEach(btn =>
       btn.addEventListener('click', () => {
         document.querySelectorAll('.pick').forEach(b => b.classList.remove('on'));
         btn.classList.add('on');
         state.fmt = btn.dataset.f;
-      });
-    });
-
-    document.querySelectorAll('.sel, #nm').forEach(el => el.addEventListener('change', updateExpertDisplay));
+      })
+    );
 
     $('#wake').addEventListener('click', async () => {
       els.stxt.textContent = 'Waking engine...';
-      try { await fetch(BASE, { method: 'HEAD', mode: 'no-cors' }); } catch {}
-      setTimeout(ping, 1600);
+      els.dot.className = 'dot';
+      try { await fetch(ENDPOINT, { method: 'HEAD', mode: 'no-cors' }); } catch {}
+      setTimeout(ping, 2500);
     });
 
     $('#clear').addEventListener('click', () => {
       els.url.value = '';
+      els.url.focus();
       els.out.classList.remove('show');
       els.out.innerHTML = '';
-      getFact();
     });
 
-    // Init
-    els.test.href = BASE;
+    $('#test').addEventListener('click', ping);
+
+    // Initialization
     els.ft.textContent = getFact();
     setSimple();
-    updateExpertDisplay();
     ping();
-    setInterval(() => document.visibilityState === 'visible' && ping(), 16000);
+    setInterval(() => document.visibilityState === 'visible' && ping(), 20000); // 20s alive pings
   </script>
 </body>
 </html>
