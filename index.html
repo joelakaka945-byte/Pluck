@@ -63,7 +63,6 @@
    .dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
     @media (min-width: 600px) {.dl-grid { grid-template-columns: 1fr 1fr; } }
    .fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; color: var(--text-muted); }
-   .footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
     @media (max-width: 680px) {.hero h1 { font-size: 34px; }.row { flex-direction: column; } }
   </style>
 </head>
@@ -96,7 +95,6 @@
     function extractItems(r){ if(!r) throw new Error('Empty'); if(r.status==='error') throw new Error(r.error?.code||'Error'); if(r.status==='picker'&&Array.isArray(r.picker)) return r.picker.map((it,i)=>({url:it.url,filename:sanitize(`pluck-${i+1}.${it.type==='photo'?'jpg':'mp4'}`),label:it.type})); if(r.url) return [{url:r.url,filename:sanitize(r.filename||'pluck-media.mp4'),label:'MP4'}]; throw new Error('No file'); }
     function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,400); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}</div>`; if(refreshBtn) refreshBtn.style.display='inline-block'; }
     function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
-    // ===== TIKTOK DOWNLOAD FIX - ONLY THIS FUNCTION CHANGED =====
     window.blobDownload=async(url,name)=>{
       try{
         const r=await fetch(url,{mode:'cors'});
@@ -108,12 +106,10 @@
         document.body.appendChild(a); a.click();
         setTimeout(()=>{URL.revokeObjectURL(o);a.remove();},60000);
       }catch{
-        // Fallback for TikTok CDN which blocks CORS - force download instead of preview
         const a=document.createElement('a');
         a.href=url;
-        a.download=name; // <- this was missing, caused preview only
+        a.download=name;
         a.style.display='none';
-        // no target="_blank" - that forces preview on TikTok
         document.body.appendChild(a);
         a.click();
         setTimeout(()=>a.remove(),1000);
