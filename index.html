@@ -232,12 +232,10 @@
           <button class="qa-q" data-qa="1">What is Pluck and how does it use the Cobalt URL <span class="icon">+</span></button>
           <div class="qa-a" id="qa-1"><strong>Answer:</strong> Pluck is a clean user interface. You paste a link, we create a JSON object containing url, videoQuality, filenameStyle, disableMetadata, downloadMode auto, and audioFormat best, and send a POST request to your base URL, which is https://cobalt-production-2c27.up.railway.app/. The engine then locates the direct MP4 file. We do not modify the base URL or the request structure, so the transaction remains secure. We only process the returned url and filename to display the preview and download options.</div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="2">Does it work with Instagram and TikTok <span class="icon">+</span></button>
           <div class="qa-a" id="qa-2"><strong>Yes, supported platforms include:</strong> Instagram Reels, Posts, and Stories if they are public. TikTok standard videos, usually without watermark if the engine provides it. If the account is private, followers only, or requires login, the engine cannot access it. This is a platform restriction, not a bug. Public links provide the best results. The same process applies to YouTube, X, and Reddit.</div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="3">How do I use it step by step <span class="icon">+</span></button>
           <div class="qa-a" id="qa-3">
@@ -251,7 +249,6 @@
             </ul>
           </div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="4">Which download button should I use for Android, iPhone, or PC <span class="icon">+</span></button>
           <div class="qa-a" id="qa-4">
@@ -265,22 +262,18 @@
             </ul>
           </div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="5">How do custom and pretty filenames work <span class="icon">+</span></button>
           <div class="qa-a" id="qa-5"><strong>Classic</strong> uses the safe name provided by the engine. <strong>Pretty</strong> cleans unnecessary parts like youtube underscores, decodes the URI, removes common words such as pluck, cobalt, and video, then converts to title case and appends the quality such as 720p or Original Quality. <strong>Basic</strong> is simply video.mp4. <strong>Detailed</strong> adds quality and a unique ID. <strong>Custom</strong> allows you to enter a name such as My Instagram Save. Any.mp4 extension you type is removed, invalid characters are replaced with underscores, and the correct extension.mp4 or.jpg for photos is added. If the custom field is left empty, My Video will be used.</div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="6">How is the MP4 file size detected <span class="icon">+</span></button>
           <div class="qa-a" id="qa-6">We first attempt a HEAD request and read the Content-Length header. If the host blocks HEAD requests or CORS, we attempt a GET request with Range bytes 0-0 and read the total size from the Content-Range header, for example bytes 0-0 / 12345678. If the host blocks CORS headers, we retry the same requests through a proxy such as https://api.allorigins.win/raw and corsproxy.io which add Access-Control-Allow-Origin so the headers can be read. This is why the size can be displayed as 24.73 MB MP4 instead of unknown. If the host hides the size even through a proxy, we display Size hidden by host, use Preview to stream.</div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="7">What does the live process log display <span class="icon">+</span></button>
           <div class="qa-a" id="qa-7">Nine detailed steps with timestamps. Step 1 is validation, Step 2 is engine check and wake, Step 3 is request building with quality and filename mode, Step 4 is POST to your Cobalt URL, Step 5 is waiting for 3 to 10 seconds, Step 6 is parsing and extracting URLs, Step 7 is filename generation, Step 8 is size detection, Step 9 is completion. If it stops at Step 4, the engine is in sleep mode. If an error occurs at Step 5, the link is private or unsupported.</div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="8">What do the error messages mean and how to fix them <span class="icon">+</span></button>
           <div class="qa-a" id="qa-8">
@@ -295,17 +288,14 @@
             </ul>
           </div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="9">Why does Refresh Page to Fix Issues work <span class="icon">+</span></button>
           <div class="qa-a" id="qa-9">At the top of the page, we run a complete hard reset on every refresh or revisit. It clears localStorage, sessionStorage, cookies for this site, Cache API, IndexedDB, service workers, scroll restoration, and timeouts. Most issues are caused by outdated stored state. The refresh button performs the same hard reset and then reloads with a cache bust parameter _r equal to the current timestamp to ensure you receive a fresh copy.</div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="10">Is my link safe and private <span class="icon">+</span></button>
           <div class="qa-a" id="qa-10">Yes. Your link is sent only to your own Cobalt URL configured in the base setting, not to any third party, except when checking file size through a proxy for size detection only. We do not store links. Preview streams directly from the CDN URL returned by the engine. No watermark is added. Custom filenames are processed locally.</div>
         </div>
-
       </div>
     </div>
 
@@ -378,7 +368,9 @@
     function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(()=>Math.random()-0.5); return state.factPool.pop(); }
     function isValidUrl(s){ try{ const u=new URL(s.trim()); if(!['http:','https:'].includes(u.protocol)) return false; return true; }catch{ return false; } }
     function sanitize(n){ return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,200); }
-    function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes || isNaN(bytes)) return null; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]; }
+
+    // FIX: treat 0 as unknown, prevents 0KB badge
+    function formatBytes(bytes){ if(!bytes || isNaN(bytes) || bytes<=0) return null; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]; }
     function parseSizeFromHeaders(headers){
       let len = headers.get('content-length') || headers.get('Content-Length') || headers.get('x-file-size');
       if(len){ let v=parseInt(len,10); if(!isNaN(v) && v>0) return v; }
@@ -387,11 +379,20 @@
       return null;
     }
     async function tryFetchSize(url, opts){ try{ const r = await fetch(url, opts); const s = parseSizeFromHeaders(r.headers); if(s) return s; return null; }catch(e){ return null; } }
+
+    // FIX: YouTube googlevideo URLs hide size and block CORS, skip them
     async function fetchMP4Size(originalUrl){
+      const isGoogleVideo = /googlevideo\.com/i.test(originalUrl);
+      const isYouTubeTunnel = /\/tunnel|\/api\/tunnel/i.test(originalUrl) && /youtube|youtu/i.test(document.getElementById('url').value || '');
+      if(isGoogleVideo){
+        return null;
+      }
       let size = await tryFetchSize(originalUrl, {method:'HEAD', mode:'cors', cache:'no-store'});
       if(size) return size;
       size = await tryFetchSize(originalUrl, {method:'GET', headers:{Range:'bytes=0-0'}, mode:'cors', cache:'no-store'});
       if(size) return size;
+      // Only use proxies for non-YouTube hosts, proxies also fail for googlevideo
+      if(isYouTubeTunnel) return null;
       const proxyBuilders = [function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }, function(u){ return 'https://corsproxy.io/?' + encodeURIComponent(u); }];
       for(let i=0;i<proxyBuilders.length;i++){
         let pUrl = proxyBuilders[i](originalUrl);
@@ -404,6 +405,12 @@
       const nodes = document.querySelectorAll('[data-size-url]');
       for(const el of nodes){
         const u = el.getAttribute('data-size-url');
+        const isYTFile = /googlevideo\.com/i.test(u);
+        if(isYTFile){
+          el.textContent = 'Size hidden by YouTube, use Preview to verify';
+          el.className='size-badge wait';
+          continue;
+        }
         el.textContent = 'Detecting MP4 size...'; el.className='size-badge wait';
         let bytes = await fetchMP4Size(u);
         if(bytes){ el.textContent = formatBytes(bytes) + ' MP4'; el.className='size-badge ok'; }
@@ -459,18 +466,28 @@
     function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Quick fact: ${getFact()}</div></div>`; setTimeout(updateFileSizes, 200); }
     function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
 
+    // FIX: Blob download - never save 0 byte blob, fallback to new tab for YouTube CORS
     window.blobDownload=async function(url,name){
       try{
-        const r=await fetch(url,{mode:'cors'});
+        const r=await fetch(url,{mode:'cors', cache:'no-store'});
+        if(!r.ok) throw new Error('bad status');
         const b=await r.blob();
+        if(!b || b.size===0) throw new Error('empty blob from YouTube');
         const u=URL.createObjectURL(b);
         const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click();
         setTimeout(function(){URL.revokeObjectURL(u);a.remove();},60000);
-      }catch{
-        const a=document.createElement('a'); a.href=url; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove();
+      }catch(e){
+        // For YouTube, fetch is blocked by CORS, must navigate, not save empty file
+        try{ window.open(url,'_blank','noopener'); }catch{ location.href=url; }
       }
     };
+    // FIX: Direct download - cross origin download attribute creates 0KB file, open instead for YouTube
     window.directDownload=function(url,name){
+      const isYT = /googlevideo\.com|youtube\.com|youtu\.be/i.test(url);
+      if(isYT){
+        window.open(url,'_blank','noopener');
+        return;
+      }
       try{
         const a=document.createElement('a');
         a.href=url; a.download=name||'video.mp4'; a.rel='noopener'; a.style.display='none';
@@ -479,12 +496,19 @@
       }catch(e){ window.open(url,'_blank'); }
     };
     window.filePickerSave=async function(url,name){
+      const isYT = /googlevideo\.com/i.test(url);
+      if(isYT){
+        window.open(url,'_blank','noopener');
+        return;
+      }
       try{
         if(!window.showSaveFilePicker) throw new Error('no picker');
         const handle = await window.showSaveFilePicker({suggestedName:name||'video.mp4'});
         const writable = await handle.createWritable();
         const res = await fetch(url,{mode:'cors'});
+        if(!res.ok) throw new Error('fetch failed');
         const blob = await res.blob();
+        if(!blob || blob.size===0) throw new Error('empty');
         await writable.write(blob); await writable.close();
         alert('Saved successfully. Please check the folder you selected.');
       }catch(e){ directDownload(url,name); }
@@ -538,9 +562,20 @@
         const style=els.fn.value; const quality=els.vq.value; const customName=els.customName.value.trim();
         addLog('request','Step 3: Building request, quality='+quality+', filename mode='+style,'active');
         await new Promise(function(r){ setTimeout(r, 100); });
-        updateLog('request','Step 3: Request created. Details: { url, videoQuality: '+quality+', filenameStyle: '+style+' } - Engine transaction unchanged','done');
+
+        // FIX: YouTube needs proxy and h264 for MP4, otherwise Cobalt returns googlevideo link that fails CORS and becomes 0KB
+        const isYTInput = /youtu\.be|youtube\.com|youtube-nocookie|m\.youtube/i.test(raw);
+        const base={
+          url: raw,
+          filenameStyle: style==='custom'?'classic':style,
+          disableMetadata: els.nm.checked,
+          youtubeVideoCodec: 'h264',
+          youtubeDubBrowser: true,
+          alwaysProxy: isYTInput? true : false
+        };
+
+        updateLog('request','Step 3: Request created. Details: { url, videoQuality: '+quality+', filenameStyle: '+style+', alwaysProxy: '+base.alwaysProxy+' }','done');
         addLog('send','Step 4: Sending POST request to Cobalt URL','active');
-        const base={ url: raw, filenameStyle: style==='custom'?'classic':style, disableMetadata: els.nm.checked };
         updateLog('send','Step 4: Request sent, waiting 3 to 8 seconds','active');
         const result=await postToCobalt({...base, downloadMode:'auto', videoQuality: quality, audioFormat:'best' }, BASE);
         updateLog('send','Step 4: Response received, status='+(result.status||'unknown'),'done');
