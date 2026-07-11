@@ -26,12 +26,12 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .mono{font-family:var(--mono)!important}.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 500px at 10% 0%,var(--glow-1),transparent 60%),radial-gradient(700px 500px at 90% 10%,var(--glow-2),transparent 60%),var(--bg)}
 .wrap{max-width:760px;margin:0 auto;padding:18px 14px 40px}.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--card-bg);border-radius:18px}
 .brand{font-weight:800;display:flex;gap:9px;align-items:center}.brand-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--accent);color:#fff}
-.status{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}.dot{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 6px rgba(245,158,11,.18);animation:pulse 1.6s infinite}.dot.ok{background:var(--ok);animation:none}.dot.bad{background:var(--bad);animation:none}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.status{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}.dot{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 6px rgba(245,158,11,.18);animation:pulse 1.6s infinite}.dot.ok{background:var(--ok);animation:none}.dot.bad{background:var(--bad);animation:none}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
 .hero{margin:22px 6px 14px}.hero h1{font-size:clamp(34px,8vw,46px);line-height:.95;font-weight:800}.hero h1 span{background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{color:var(--muted);margin-top:10px;font-size:14px}
 .card{border:1px solid var(--border);background:linear-gradient(180deg,var(--card-bg-2),var(--card-bg));border-radius:22px;padding:18px}
 .switch{display:inline-flex;gap:4px;padding:4px;background:var(--surface-1);border:1px solid var(--border-soft);border-radius:999px}.sw{padding:8px 16px;border-radius:999px;border:0;background:transparent;color:var(--dim);font-weight:700;font-size:13px;cursor:pointer}.sw.on{background:var(--accent);color:#fff}
 .meta-pills{display:flex;gap:6px;flex-wrap:wrap}.pill{font-size:11px;border:1px solid var(--border-soft);padding:5px 9px;border-radius:999px;color:var(--dim);background:var(--surface-3)}.pill b{color:var(--text)}
-.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.field{flex:1 260px;display:flex;align-items:center;padding:14px 16px;border:1px solid var(--border-soft);background:var(--surface-1);border-radius:16px}.field:focus-within{border-color:var(--accent-solid);box-shadow:0 0 4px rgba(139,92,246,.18)}.field input{flex:1;background:transparent;border:0;outline:0;color:var(--text);font-size:15px}
+.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.field{flex:1 260px;display:flex;align-items:center;padding:14px 16px;border:1px solid var(--border-soft);background:var(--surface-1);border-radius:16px}.field:focus-within{border-color:var(--accent-solid);box-shadow:0 0 0 4px rgba(139,92,246,.18)}.field input{flex:1;background:transparent;border:0;outline:0;color:var(--text);font-size:15px}
 .btn{border:0;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer;font-family:inherit}.primary{background:var(--accent);color:#fff}.ghost{background:var(--surface-2);border:1px solid var(--border-strong);color:var(--text)}
 .sel{padding:11px 14px;border-radius:12px;border:1px solid var(--border-soft);background:var(--surface-1);color:var(--text);font-size:13px;width:100%;outline:none}
 .kv{display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:12px;color:var(--dim);margin-top:8px}.kv b{color:var(--text);word-break:break-all;font-family:var(--mono);font-size:11px}
@@ -44,7 +44,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .dl-grid{display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px}@media(min-width:600px){.dl-grid{grid-template-columns:1fr 1fr}}
 .file-row{border:1px solid var(--border-soft);background:var(--surface-2);border-radius:14px;padding:12px;margin-top:10px}.file-info{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.file-info b{flex:1 100%;font-size:13.5px;word-break:break-all}.size-badge{font-size:11px;padding:4px 8px;border-radius:999px;background:var(--surface-3);border:1px solid var(--border-strong);color:var(--dim);font-family:var(--mono)}.size-badge.ok{color:#86efac;border-color:rgba(34,197,94,.35)}
 .highlights{margin:14px 0 0;display:grid;gap:10px}.hl-row{display:flex;flex-wrap:wrap;gap:8px}.hl-badge{font-size:11.5px;padding:7px 11px;border-radius:999px;background:var(--surface-3);border:1px solid var(--border-strong);color:var(--dim)}.hl-badge strong{color:var(--text)}
-.guide-wrap{margin-top:18px;border:1px solid var(--border);background:linear-gradient(180deg,var(--card-bg-2),var(--card-bg));border-radius:22px;overflow:hidden}.guide-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;cursor:pointer}.guide-toggle{font-size:12px;padding:7px 12px;border-radius:999px;background:var(--surface-3);border:1px solid var(--border-strong);color:var(--dim);font-weight:700}.guide-body{display:none;padding:0 14px 14px}.guide-body.open{display:block}.qa-item{margin-top:10px}.qa-q{width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border-soft);border-radius:12px;padding:12px 14px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;display:flex;justify-content:space-between}.qa-q span.icon{color:var(--accent-solid);font-family:var(--mono)}.qa-a{display:none;padding:12px 14px;font-size:12.5px;line-height:1.7;color:var(--muted);background:var(--surface-1);border:1px solid var(--border-soft);border-top:none;border-radius:0 0 12px 12px;margin-top:-2px}.qa-a.open{display:block}.qa-a strong{color:var(--text)}
+.guide-wrap{margin-top:18px;border:1px solid var(--border);background:linear-gradient(180deg,var(--card-bg-2),var(--card-bg));border-radius:22px;overflow:hidden}.guide-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;cursor:pointer}.guide-toggle{font-size:12px;padding:7px 12px;border-radius:999px;background:var(--surface-3);border:1px solid var(--border-strong);color:var(--dim);font-weight:700}.guide-body{display:none;padding:0 14px 14px}.guide-body.open{display:block}.qa-item{margin-top:10px}.qa-q{width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border-soft);border-radius:12px;padding:12px 14px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;display:flex;justify-content:space-between}.qa-q span.icon{color:var(--accent-solid);font-family:var(--mono)}.qa-a{display:none;padding:12px 14px;font-size:12.5px;line-height:1.7;color:var(--muted);background:var(--surface-1);border:1px solid var(--border-soft);border-top:none;border-radius:0 0 12px 12px;margin-top:-2px}.qa-a.open{display:block}.qa-a strong{color:var(--text)}.qa-a ul{margin:6px 0 8px 18px}
 .refresh-area{margin-top:16px;display:grid;gap:8px}.refresh-main{width:100%;padding:15px 18px;border-radius:16px;border:0;background:var(--accent);color:#fff;font-weight:800;font-size:15px;cursor:pointer}.refresh-note{text-align:center;color:var(--muted);font-size:12.5px}
 .fun{margin-top:16px;padding:14px 16px;border:1px solid var(--border);border-radius:16px;background:linear-gradient(135deg,var(--glow-1),var(--glow-2));font-size:13px;color:var(--muted)}
 .error-bible{margin-top:18px;border:1px solid var(--border);background:linear-gradient(180deg,var(--card-bg-2),var(--card-bg));border-radius:22px;padding:18px}.error-bible-head{font-size:15px;font-weight:800;display:flex;gap:10px;flex-wrap:wrap}.error-bible-sub{color:var(--muted);font-size:13px;margin-top:6px}.error-grid{display:grid;gap:10px;margin-top:14px}.err-item{border:1px solid var(--border-soft);background:var(--surface-2);border-radius:14px;padding:12px 14px}.err-item b{font-size:13px;display:block}.err-item p{color:var(--dim);font-size:12.5px;margin-top:6px;line-height:1.6}.err-item code{font-family:var(--mono);font-size:11px;background:var(--surface-3);border:1px solid var(--border-strong);padding:2px 7px;border-radius:999px;color:var(--dim)}
@@ -57,7 +57,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 <div class="bg"></div>
 <div class="wrap">
 <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking engine...</span></div></div>
-<div class="hero"><h1 id="h1">Welcome,<br><span>You are almost ready.</span></h1><p id="heroP">Supports Instagram, TikTok, YouTube, X, Reddit - public links you have rights to. Standard = simple. Pro = separate Video & Audio menus. Mute fixed per platform.</p></div>
+<div class="hero"><h1 id="h1">Welcome,<br><span>You are almost ready.</span></h1><p id="heroP">Supports Instagram, TikTok, YouTube, X, Reddit - public links you have rights to. Standard = simple. Pro = separate Video & Audio menus. YouTube = old logic, Instagram/TikTok = fixed audio pipeline.</p></div>
 
 <div class="card" id="mainTool">
 <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center"><div class="switch"><button id="bS" class="sw on">Standard</button><button id="bE" class="sw">Pro</button></div><div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">using /</span></div></div>
@@ -65,22 +65,22 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 
 <div id="ex" class="expert">
 <div class="expert-grid">
-<div class="expert-box" id="videoBox"><h4>Video [PRO] - Resolution - Mute fixed</h4>
-<select id="mode" class="sel"><option value="auto" selected>auto - Video+Audio</option><option value="mute">mute - Video only (fixed)</option><option value="audio">audio - Audio only</option></select>
+<div class="expert-box" id="videoBox"><h4>Video [PRO] - Resolution - YouTube old logic</h4>
+<select id="mode" class="sel"><option value="auto" selected>auto - Video+Audio</option><option value="audio">audio - Audio only</option></select>
 <select id="vq" class="sel" style="margin-top:8px"><option value="max">Quality: Maximum</option><option value="1080">1080p - Sharp</option><option value="720" selected>720p - Balanced</option><option value="480">480p - Smaller</option></select>
-<div style="font-size:11px;color:var(--dim);margin-top:6px">Mute now forces h264/mp4 + correct MIME + proxy retry until bytes>0 per platform.</div>
+<div style="font-size:11px;color:var(--dim);margin-top:6px">Resolution ignored when Mode = audio. YouTube uses classic.mp4 handling.</div>
 </div>
-<div class="expert-box" id="audioBox"><h4>Audio Only [PRO] - Separate Menu</h4>
-<select id="af" class="sel"><option value="best" selected>Audio: best</option><option value="mp3">mp3</option><option value="ogg">ogg</option><option value="wav">wav</option><option value="opus">opus</option></select>
-<div style="font-size:11px;color:var(--dim);margin-top:6px">Resolution ignored when Mode = audio. Instagram/TikTok fixed.</div>
+<div class="expert-box" id="audioBox"><h4>Audio Only [PRO] - Separate Menu - Instagram / TikTok fixed</h4>
+<select id="af" class="sel"><option value="best" selected>Audio: best - keep original</option><option value="mp3">mp3 - universal fix for 0KB</option><option value="ogg">ogg</option><option value="wav">wav</option><option value="opus">opus</option></select>
+<div style="font-size:11px;color:var(--dim);margin-top:6px">Used when Mode = audio. Correct MIME + proxy retry until bytes &gt; 0. Fixes Instagram/TikTok/X/Reddit 0KB.</div>
 </div>
 <div class="expert-box"><h4>Filename & Engine [PRO]</h4>
 <select id="fn" class="sel"><option value="classic">Filename: Classic</option><option value="pretty">Filename: Pretty - Clean</option><option value="basic">Filename: Basic - video.mp4</option><option value="nerdy">Filename: Detailed + ID</option><option value="custom">Filename: Custom</option></select>
 <input id="customName" class="sel" type="text" placeholder="Custom name without.mp4" style="display:none;margin-top:8px" maxlength="120">
 <div id="customHint" style="display:none;font-size:11px;color:var(--dim);margin-top:6px">Extension added automatically.</div>
 <label class="check"><input id="nm" type="checkbox"> Disable metadata - faster</label>
-<label class="check"><input id="useProxy" type="checkbox" checked> Use proxy fallback - fixes CORS / 0KB / mute unplayable</label>
-<label class="check"><input id="useStream" type="checkbox" checked> Prefer Stream to Disk - flat RAM</label>
+<label class="check"><input id="useProxy" type="checkbox" checked> Use proxy fallback - fixes CORS / 0KB</label>
+<label class="check"><input id="useStream" type="checkbox" checked> Prefer Stream to Disk - FileSystemWritableFileStream - flat RAM</label>
 </div>
 </div>
 <div class="kv"><span>validated payload</span><b id="kvR">{}</b></div>
@@ -93,33 +93,36 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 <div id="out" class="out"></div>
 </div>
 
-<div class="highlights"><div class="hl-row"><span class="hl-badge"><strong>Platforms:</strong> Instagram, TikTok, YouTube, X, Reddit</span><span class="hl-badge"><strong>Mute FIXED</strong> - h264/mp4 + MIME + proxy retry per platform</span><span class="hl-badge"><strong>YouTube</strong> = old logic + mute h264 fix</span><span class="hl-badge"><strong>IG/TT</strong> = fixed audio + mute pipeline</span></div></div>
+<div class="highlights"><div class="hl-row"><span class="hl-badge"><strong>Platforms:</strong> Instagram Reels/Stories, TikTok, YouTube, X, Reddit</span><span class="hl-badge"><strong>YouTube</strong> = old logic classic</span><span class="hl-badge"><strong>Instagram/TikTok</strong> = fixed audio MIME + proxy retry</span><span class="hl-badge"><strong>Standard</strong> = simple</span><span class="hl-badge"><strong>Pro</strong> = separate Video & Audio menus</span></div></div>
 
 <div class="guide-wrap" id="guideWrap"><div class="guide-head" id="guideHead"><b>Complete Guide</b><button class="guide-toggle" id="guideToggleBtn">Open Guide</button></div><div class="guide-body" id="guideBody">
-<div class="qa-item"><button class="qa-q" data-qa="1">Mute not playable fix <span class="icon">+</span></button><div class="qa-a" id="qa-1"><strong>Old bug:</strong> mute returned vp9/webm or avc without moov, saved as.mp4 with type video/mp4, direct fetch blocked -> 0KB or unplayable. <strong>New:</strong> when Mode=mute, payload forces <code>youtubeVideoCodec:h264</code> + <code>youtubeVideoContainer:mp4</code> for YouTube, extension forced <code>.mp4</code> for all, MIME <code>video/mp4</code>, fetch uses byte-checked proxy retry even for YouTube, preview uses <code>&lt;video muted playsinline&gt;</code>. Instagram/TikTok/X/Reddit mute uses same fixed pipeline.</div></div>
+<div class="qa-item"><button class="qa-q" data-qa="1">Platform handling <span class="icon">+</span></button><div class="qa-a" id="qa-1"><strong>YouTube:</strong> Uses old logic - <code>.mp4</code> + <code>video/mp4</code> blob, simple fetch, works as before. <strong>Instagram/TikTok/X/Reddit:</strong> Uses fixed pipeline - extension from <code>audioFormat</code>, MIME <code>audio/mpeg, audio/ogg...</code>, fetch loops <code>direct -> corsproxy.io -> allorigins</code> until first chunk bytes &gt; 0, then streams via <code>FileSystemWritableFileStream</code> for flat RAM.</div></div>
+<div class="qa-item"><button class="qa-q" data-qa="2">Why separate Audio menu <span class="icon">+</span></button><div class="qa-a" id="qa-2">Resolution is meaningless for audio. Old UI mixed <code>vq</code> and <code>af</code> in same box, causing confusion. Now Video box = <code>mode + vq</code> (YouTube old logic), Audio box = <code>af</code> only (Instagram/TikTok fixed). When Mode = audio, quality is dimmed and ignored.</div></div>
 </div></div>
 
-<div class="error-bible"><div class="error-bible-head"><span>Error Bible</span> <span class="pill">Mute playable now</span></div><div class="error-grid">
-<div class="err-item"><b><code>Mute MP4 not playable</code> - FIXED per platform</b><p>YouTube DASH video-only is vp9/webm by default -> saved as.mp4 = unplayable. Fixed: force h264/mp4 in payload, keep.mp4 extension, correct MIME, proxy retry until bytes>0, Stream to Disk writes full file. Instagram/TikTok mute now same fixed pipeline.</p></div>
+<div class="error-bible"><div class="error-bible-head"><span>Error Bible</span> <span class="pill">Audio 0KB fixed per platform</span></div><div class="error-grid">
+<div class="err-item"><b><code>Audio 0KB - Instagram / TikTok / X / Reddit</code></b><p>Fixed: old code forced <code>.mp4</code> + <code>video/mp4</code> for audio + direct fetch blocked by CORS -> opaque 0 bytes. New pipeline: extension from audioFormat, correct MIME, proxy retry until bytes&gt;0. YouTube keeps old classic handling.</p></div>
+<div class="err-item"><b><code>error.api.invalid_body</code></b><p>Allowed: <code>classic/pretty/basic/nerdy</code>, <code>auto/audio/mute</code>, <code>max/1080/720/480</code>, <code>best/mp3/ogg/wav/opus</code>. Custom mapped locally to classic.</p></div>
 </div></div>
 
 <div class="refresh-area"><button id="refreshBtn" class="refresh-main">Refresh Page to Fix Issues</button><div class="refresh-note">Hard reset only on click now, not auto.</div></div>
 <div class="fun"><b>Quick Fact:</b> <span id="ft"></span></div>
-<div class="footer-note mono">Engine https://cobalt-production-2c27.up.railway.app - Mute fixed per platform</div>
+<div class="footer-note mono">Engine https://cobalt-production-2c27.up.railway.app - YouTube old / IG+TT fixed</div>
 </div>
 
-<div id="previewModal" class="modal-backdrop"><div class="modal-card"><div class="modal-head"><b id="previewTitle">Preview</b><button id="closePreview" class="btn ghost">Close</button></div><div id="previewBody" class="modal-body"></div></div></div>
+<div id="previewModal" class="modal-backdrop"><div class="modal-card"><div class="modal-head"><b id="previewTitle">Preview</b><button id="closePreview" class="btn ghost">Close</button></div><div id="previewBody" class="modal-body"></div></div>
 
 <script>
 const BASE="https://cobalt-production-2c27.up.railway.app";const ENDPOINT=BASE+"/";
-const FACTS=["Mute needs h264/mp4 for max compatibility.","Mute video has no audio track - needs muted attribute to autoplay.","Proxy retry fixes 0KB mute on IG/TT/YT."];
+const FACTS=["YouTube = old classic logic.","Instagram/TikTok audio needs correct MIME + proxy retry.","Separate Audio menu stops resolution mixing."];
 let state={isExpert:false,online:false,factPool:[...FACTS].sort(()=>Math.random()-0.5)};
 const $=s=>document.querySelector(s);
 const els={dot:$('#dot'),stxt:$('#stxt'),ver:$('#ver'),lat:$('#lat'),out:$('#out'),ft:$('#ft'),epLab:$('#epLab'),h1:$('#h1'),kvR:$('#kvR'),kvResp:$('#kvResp'),url:$('#url'),go:$('#go'),test:$('#test'),fn:$('#fn'),customName:$('#customName'),customHint:$('#customHint'),vq:$('#vq'),mode:$('#mode'),nm:$('#nm'),processWrap:$('#processWrap'),processLog:$('#processLog'),fill:$('#fill'),pct:$('#pct'),sz:$('#sz'),af:$('#af'),useProxy:$('#useProxy'),useStream:$('#useStream'),jsonPreview:$('#jsonPreview')};
 
+// --- PLATFORM DETECTION - KEEP OLD LOGIC FOR YOUTUBE ---
 function getPlatform(u){try{let h=new URL(u).hostname.toLowerCase();if(h.includes('youtube.com')||h.includes('youtu.be')||h.includes('youtube-nocookie'))return'youtube';if(h.includes('instagram.com'))return'instagram';if(h.includes('tiktok.com'))return'tiktok';if(h.includes('twitter.com')||h.includes('x.com'))return'x';if(h.includes('reddit.com')||h.includes('redd.it'))return'reddit';return'generic'}catch{return'generic'}}
 function extFromAF(f){f=String(f||'best').toLowerCase();if(f==='mp3')return'.mp3';if(f==='ogg')return'.ogg';if(f==='wav')return'.wav';if(f==='opus')return'.opus';return'.m4a'}
-function mimeFromExt(e){e=String(e||'').toLowerCase();if(e==='.mp3')return'audio/mpeg';if(e==='.ogg')return'audio/ogg';if(e==='.wav')return'audio/wav';if(e==='.opus')return'audio/opus';if(e==='.m4a')return'audio/mp4';if(e==='.webm')return'video/webm';return'video/mp4'}
+function mimeFromExt(e){e=String(e||'').toLowerCase();if(e==='.mp3')return'audio/mpeg';if(e==='.ogg')return'audio/ogg';if(e==='.wav')return'audio/wav';if(e==='.opus')return'audio/opus';if(e==='.m4a')return'audio/mp4';return'video/mp4'}
 
 function nowTime(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
 function clearLog(){els.processLog.innerHTML='';els.processWrap.style.display='none';els.fill.style.width='0%';els.pct.textContent='0%';els.sz.textContent='Waiting'}
@@ -136,82 +139,79 @@ async function fetchMP4Size(u){let s=await trySize(u,{method:'HEAD',mode:'cors',
 async function updateFileSizes(){for(let el of document.querySelectorAll('[data-size-url]')){let u=el.getAttribute('data-size-url');let ext=(el.getAttribute('data-ext')||'mp4').toLowerCase();el.textContent='Detecting...';let b=await fetchMP4Size(u);el.textContent=b?formatBytes(b)+' '+ext.toUpperCase():'Size hidden';el.className=b?'size-badge ok':'size-badge wait'}}
 function toPrettyName(r){if(!r)return'Video';let e='';let d=r.lastIndexOf('.');if(d>0){e=r.slice(d);r=r.slice(0,d)}try{r=decodeURIComponent(r)}catch{}r=r.replace(/[_\-.]+/g,' ').replace(/\b(pluck|cobalt|video|audio)\b/gi,'').trim();if(!r)r='Video';return r.split(' ').map(w=>w?w[0].toUpperCase()+w.slice(1).toLowerCase():'').join(' ')+e}
 
-// OLD for YouTube, FIXED for others - both now handle mute correctly
-function applyFilenameStyle_old(o,s,q,i,t,c,mode){let e='.mp4';if(t==='photo')e='.jpg';else if(t==='gif')e='.gif';else if(mode==='mute') e='.mp4';let d=o.lastIndexOf('.');if(d>-1){let orig=o.slice(d).toLowerCase();if(mode!=='mute') e=orig; else e='.mp4'; o=o.slice(0,d)}if(s==='custom'){let cu=(c||'').trim()||(mode==='audio'?'My Audio':'My Video');return sanitize(cu.replace(/\.[a-z0-9]{2,4}$/i,''))+e}if(s==='pretty'){let b=toPrettyName(o);if(q&&q!=='max'&&mode!=='audio')b+=' '+q+'p';return sanitize(b+e)}if(s==='basic')return (mode==='audio'?'audio':'video')+(i?'-'+(i+1):'')+e;if(s==='nerdy')return sanitize(o+'_'+q+'_'+Date.now().toString().slice(-5)+e);return sanitize(o+e)}
+// OLD LOGIC FOR YOUTUBE - KEEP EXACTLY
+function applyFilenameStyle_old(o,s,q,i,t,c){let e='.mp4';if(t==='photo')e='.jpg';else if(t==='gif')e='.gif';let d=o.lastIndexOf('.');if(d>-1){e=o.slice(d).toLowerCase();o=o.slice(0,d)}if(s==='custom'){let cu=(c||'').trim()||'My Video';return sanitize(cu.replace(/\.[a-z0-9]{2,4}$/i,''))+e}if(s==='pretty'){let b=toPrettyName(o);if(q&&q!=='max')b+=' '+q+'p';return sanitize(b+e)}if(s==='basic')return 'video'+(i?'-'+(i+1):'')+e;if(s==='nerdy')return sanitize(o+'_'+q+'_'+Date.now().toString().slice(-5)+e);return sanitize(o+e)}
+// FIXED LOGIC FOR IG/TT/X/REDDIT
 function applyFilenameStyle_fixed(o,s,q,i,t,c,mode,afmt){
-  let isAudio=(mode==='audio'); let isMute=(mode==='mute'); let e=isAudio?extFromAF(afmt):'.mp4';
-  if(t==='photo') e='.jpg'; else if(t==='gif') e='.gif'; else if(isMute) e='.mp4';
-  let d=o.lastIndexOf('.'); if(d>-1){let orig=o.slice(d).toLowerCase(); if(isAudio){ if(afmt==='best'&&['.m4a','.mp3','.ogg','.wav','.opus'].includes(orig)) e=orig; } else if(isMute){ e='.mp4'; } else { e=orig; } o=o.slice(0,d); }
-  if(s==='custom'){let cu=(c||'').trim()||(isAudio?'My Audio':isMute?'My Mute Video':'My Video');return sanitize(cu.replace(/\.[a-z0-9]{2,4}$/i,''))+e}
-  if(s==='pretty'){let b=toPrettyName(o); if(q&&q!=='max'&&!isAudio) b+=' '+q+'p'; if(isMute) b+=' mute'; return sanitize(b+e)}
-  if(s==='basic') return sanitize((isAudio?'audio':isMute?'video-mute':'video')+(i?'-'+(i+1):'')+e);
-  if(s==='nerdy') return sanitize(o+'_'+(q||afmt||'mute')+'_'+Date.now().toString().slice(-5)+e);
+  let isAudio=(mode==='audio'); let e=isAudio?extFromAF(afmt):'.mp4';
+  if(t==='photo') e='.jpg'; else if(t==='gif') e='.gif';
+  let d=o.lastIndexOf('.'); if(d>-1){ let orig=o.slice(d).toLowerCase(); if(!isAudio) e=orig; else if(afmt==='best' && ['.m4a','.mp3','.ogg','.wav','.opus'].includes(orig)) e=orig; o=o.slice(0,d); }
+  if(s==='custom'){let cu=(c||'').trim()||(isAudio?'My Audio':'My Video');return sanitize(cu.replace(/\.[a-z0-9]{2,4}$/i,''))+e}
+  if(s==='pretty'){let b=toPrettyName(o); if(q&&q!=='max'&&!isAudio) b+=' '+q+'p'; return sanitize(b+e)}
+  if(s==='basic') return sanitize((isAudio?'audio':'video')+(i?'-'+(i+1):'')+e);
+  if(s==='nerdy') return sanitize(o+'_'+(q||afmt)+'_'+Date.now().toString().slice(-5)+e);
   return sanitize(o+e);
 }
 function applyFilenameStyle(o,s,q,i,t,c,mode,afmt){
   let plat=window._currentPlatform||'generic';
-  if(plat==='youtube') return applyFilenameStyle_old(o,s,q,i,t,c,mode);
+  if(plat==='youtube') return applyFilenameStyle_old(o,s,q,i,t,c);
   return applyFilenameStyle_fixed(o,s,q,i,t,c,mode,afmt);
 }
 
 function mapError(c){const K={'error.api.link.unsupported':"Link not supported.",'error.api.content.video.unavailable':"Private/deleted.",'error.api.content.video.age':"Age restricted."};return K[c]||'Engine error'}
-function extractItems(r,f,s,q,c,mode,afmt){if(!r)throw new Error('Empty');if(r.status==='error')throw new Error(mapError(r.error?.code));if(r.status==='picker'&&Array.isArray(r.picker))return r.picker.map((it,i)=>{let t=it.type||(mode==='audio'?'audio':mode==='mute'?'video':'video');return{url:it.url,filename:applyFilenameStyle('pluck-'+(i+1),s,q,i,t,c,mode,afmt),label:(mode==='mute'?'MUTE '+t.toUpperCase():t.toUpperCase())}});if(r.url){return[{url:r.url,filename:applyFilenameStyle(r.filename||(mode==='audio'?'audio'+extFromAF(afmt):mode==='mute'?'video-mute.mp4':'pluck-media.mp4'),s,q,0,mode==='mute'?'video':mode==='audio'?'audio':'video',c,mode,afmt),label:f}]}throw new Error('No file')}
-
+function extractItems(r,f,s,q,c,mode,afmt){if(!r)throw new Error('Empty');if(r.status==='error')throw new Error(mapError(r.error?.code));if(r.status==='picker'&&Array.isArray(r.picker))return r.picker.map((it,i)=>{let t=it.type||(mode==='audio'?'audio':'video');return{url:it.url,filename:applyFilenameStyle('pluck-'+(i+1),s,q,i,t,c,mode,afmt),label:t.toUpperCase()}});if(r.url){return[{url:r.url,filename:applyFilenameStyle(r.filename||(mode==='audio'?'audio'+extFromAF(afmt):'pluck-media.mp4'),s,q,0,mode==='audio'?'audio':'video',c,mode,afmt),label:f}]}throw new Error('No file')}
 function buildValidPayload(rawUrl, o, isPro){
   const url=String(rawUrl||'').trim();
   if(!isPro){return {url, downloadMode:'auto', videoQuality:'720', filenameStyle:'classic', audioFormat:'best', disableMetadata:false};}
   const allowedModes=['auto','audio','mute'], allowedQ=['max','1080','720','480'], allowedStyle=['classic','pretty','basic','nerdy'], allowedAudio=['best','mp3','ogg','wav','opus'];
   let mode=allowedModes.includes(o.mode)?o.mode:'auto';let quality=allowedQ.includes(String(o.quality))?String(o.quality):'720';let style=o.style==='custom'?'classic':(allowedStyle.includes(o.style)?o.style:'classic');let af=allowedAudio.includes(o.audioFormat)?o.audioFormat:'best';
   let body={url, downloadMode:mode, videoQuality:quality, filenameStyle:style, audioFormat:af, disableMetadata:!!o.disableMetadata};
-  if(mode==='audio'){ delete body.videoQuality; }
-  if(mode==='mute'){
-    delete body.audioFormat;
-    // MUTE FIX per platform - force h264/mp4 for playable file, don't remove old usable code, just add
-    body.youtubeVideoCodec='h264';
-    body.youtubeVideoContainer='mp4';
-  }
+  if(mode==='audio') delete body.videoQuality;
+  if(mode==='mute') delete body.audioFormat;
   return body;
 }
 function setSimple(){els.h1.innerHTML='Welcome,<br><span>Standard - simple downloads.</span>';document.body.classList.remove('is-expert')}
-function setExpert(){els.h1.innerHTML='Pro Mode<br><span>Mute fixed - h264/mp4 + proxy retry per platform</span>';document.body.classList.add('is-expert'); setTimeout(updateModeUI,0)}
+function setExpert(){els.h1.innerHTML='Pro Mode<br><span>Separate Video & Audio - YouTube old / IG+TT fixed</span>';document.body.classList.add('is-expert'); setTimeout(updateModeUI,0)}
 function showOutput(t,ti,c,d){els.out.classList.add('show');if(d)try{els.kvResp.textContent=JSON.stringify(d).slice(0,500)}catch{}let cl=t==='ok'?'box ok':'box err';els.out.innerHTML=`<div class="${cl}"><div style="font-weight:800;margin-bottom:8px">${ti}</div>${c}<div style="margin-top:10px;font-size:12px;color:var(--dim)">${getFact()}</div></div>`;setTimeout(updateFileSizes,200)}
 function showError(t,m){showOutput('err',t,`<pre>${m}</pre>`)}
 const PROXIES=[u=>u,u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`];
+
+// OLD FETCH FOR YOUTUBE
 async function fetchWithProxyResponse_old(url,useProxy=true){let list=useProxy?PROXIES:[PROXIES[0]];let last;for(let mk of list){try{let r=await fetch(mk(url),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);if(!r.body)throw new Error('No body');return r}catch(e){last=e}}throw last}
+// FIXED FETCH FOR IG/TT/X/REDDIT - checks bytes > 0
 async function fetchWithProxyResponse_fixed(url,useProxy=true){
   let list=useProxy?PROXIES:[PROXIES[0]]; let last;
   for(let mk of list){
     try{
       let r=await fetch(mk(url),{cache:'no-store'}); if(!r.ok) throw new Error('HTTP '+r.status); if(!r.body) throw new Error('No body');
-      let reader=r.body.getReader(); let {value,done}=await reader.read(); if(done||!value||value.byteLength===0) continue;
+      let reader=r.body.getReader(); let {value,done}=await reader.read();
+      if(done ||!value || value.byteLength===0) continue;
       let first=value; let stream=new ReadableStream({start(c){c.enqueue(first); let pump=()=>reader.read().then(({done,val})=>{if(done){c.close();return}c.enqueue(val);return pump()}); return pump()}});
       return new Response(stream,{headers:r.headers});
     }catch(e){last=e}
   }
-  throw last||new Error('0KB');
+  throw last||new Error('0KB - all proxies blocked');
 }
 async function fetchWithProxyResponse(url,useProxy=true){
-  let plat=window._currentPlatform||'generic'; let mode=window._currentMode||'auto';
-  // MUTE FIX: even YouTube mute needs fixed pipeline to avoid 0KB / unplayable
-  if(plat==='youtube' && mode!=='mute') return fetchWithProxyResponse_old(url,useProxy);
+  let plat=window._currentPlatform||'generic';
+  if(plat==='youtube') return fetchWithProxyResponse_old(url,useProxy);
   return fetchWithProxyResponse_fixed(url,useProxy);
 }
 
 window.blobDownload=async function(url,name,useProxy=true){
-  let plat=window._currentPlatform||'generic'; let mode=window._currentMode||'auto';
+  let plat=window._currentPlatform||'generic';
   try{
     let res=await fetchWithProxyResponse(url,useProxy);
-    let ext='.'+(name.split('.').pop()||'mp4').toLowerCase(); let mime=mimeFromExt(ext); if(mode==='mute') mime='video/mp4';
-    if(plat==='youtube' && mode!=='mute') mime='video/mp4';
+    let ext='.'+(name.split('.').pop()||(plat==='youtube'?'mp4':'m4a')).toLowerCase(); let mime=(plat==='youtube')?'video/mp4':mimeFromExt(ext);
     let rd=res.body.getReader(); let ch=[]; let rec=0,total=parseInt(res.headers.get('Content-Length')||'0',10);
     while(true){let {done,value}=await rd.read(); if(done)break; ch.push(value); rec+=value.byteLength; els.fill.style.width=(total?Math.round(rec/total*100):Math.min(99,Math.round(rec/1024/1024)))+'%'; els.pct.textContent=total?Math.round(rec/total*100)+'%':formatBytes(rec); els.sz.textContent=total?formatBytes(total):''}
     if(rec===0) throw new Error('0KB');
     let blob=new Blob(ch,{type:mime}); let u=URL.createObjectURL(blob); let a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(u);a.remove()},60000);
-  }catch(e){ window.open(url,'_blank') }
+  }catch(e){ if(plat!=='youtube'){ try{let r2=await fetchWithProxyResponse_fixed(url,true); let rd=r2.body.getReader(); let ch=[]; while(true){let {done,value}=await rd.read(); if(done)break; ch.push(value)} let ext='.'+(name.split('.').pop()||'mp3'); let blob=new Blob(ch,{type:mimeFromExt(ext)}); if(blob.size===0) throw new Error('still 0'); let u=URL.createObjectURL(blob); let a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); return;}catch(e2){} } window.open(url,'_blank') }
 };
 window.directDownload=function(url,name){let a=document.createElement('a');a.href=url;a.download=name||'video.mp4';a.rel='noopener';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),1200)}
 window.filePickerSave=async function(url,name,useProxy=true,useStream=true){
-  let mode=window._currentMode||'auto';
+  let plat=window._currentPlatform||'generic';
   try{
     if(!window.showSaveFilePicker||!useStream) throw new Error('no picker');
     let h=await window.showSaveFilePicker({suggestedName:name||'video.mp4'});
@@ -219,32 +219,28 @@ window.filePickerSave=async function(url,name,useProxy=true,useStream=true){
     let res=await fetchWithProxyResponse(url,useProxy);
     let rd=res.body.getReader(); let rec=0,total=parseInt(res.headers.get('Content-Length')||'0',10);
     while(true){let {done,value}=await rd.read(); if(done)break; await w.write(value); rec+=value.byteLength; els.fill.style.width=(total?Math.round(rec/total*100):Math.min(99,Math.round(rec/1024/1024)))+'%'; els.pct.textContent=formatBytes(rec); els.sz.textContent=total?formatBytes(total):''}
-    if(rec===0) throw new Error('0KB mute');
-    await w.close(); alert('Saved - '+(mode==='mute'?'Mute fixed h264/mp4':'Flat RAM'));
+    if(rec===0 && plat!=='youtube') throw new Error('0KB');
+    await w.close(); alert('Saved to disk - '+(plat==='youtube'?'YouTube classic':'fixed audio pipeline'));
   }catch(e){ window.blobDownload(url,name,useProxy) }
 };
 window.copyLink=async function(u){try{await navigator.clipboard.writeText(u);alert('Copied')}catch{prompt('Copy:',u)}};
 window.openPreview=function(u,n,l){
-  let plat=window._currentPlatform||'generic'; let mode=window._currentMode||'auto';
+  let plat=window._currentPlatform||'generic';
   let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'),t=document.getElementById('previewTitle');t.textContent=n||'Preview';b.innerHTML='';
   let ext='.'+(n.split('.').pop()||'').toLowerCase(); let isImg=/\.(jpg|jpeg|png|webp|gif)$/i.test(u)|| (l&&l.toLowerCase().includes('photo'));
   let isAud=/\.(mp3|ogg|wav|opus|m4a)$/i.test(ext)|| (l&&l.toLowerCase().includes('audio'));
+  if(plat==='youtube'){ isAud=false; }
   if(isImg){let i=document.createElement('img');i.src=u;i.style.width='100%';i.style.borderRadius='12px';b.appendChild(i)}
-  else if(isAud && mode==='audio'){let a=document.createElement('audio');a.src=u;a.controls=true;a.style.width='100%';b.appendChild(a)}
-  else{
-    // MUTE FIX: video element must be muted + playsinline for silent video to play on iOS/Android
-    let v=document.createElement('video');v.src=u;v.controls=true;v.playsInline=true;v.preload='metadata';v.style.width='100%';v.style.borderRadius='12px';v.style.background='#000';
-    if(mode==='mute'){ v.muted=true; v.setAttribute('muted',''); }
-    b.appendChild(v);
-  }
+  else if(isAud && plat!=='youtube'){let a=document.createElement('audio');a.src=u;a.controls=true;a.style.width='100%';b.appendChild(a)}
+  else{let v=document.createElement('video');v.src=u;v.controls=true;v.playsInline=true;v.style.width='100%';v.style.borderRadius='12px';v.style.background='#000';b.appendChild(v)}
   m.style.display='flex';document.body.style.overflow='hidden'
 };
 window.closePreview=function(){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody');if(m){m.style.display='none';b.innerHTML='';document.body.style.overflow=''}};
-function buildButtons(u,fn,lb,isPro){let n=sanitize(fn),su=String(u).replace(/'/g,"%27"),sn=String(n).replace(/'/g,"\\'"),lbl=String(lb||'File').replace(/'/g,"\\'");let base=`<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="openPreview('${su}','${sn}','${lbl}')">Preview - No Download</button><div class="dl-grid"><button class="btn primary" onclick="directDownload('${su}','${sn}')">Direct Download - Simple</button><button class="btn ghost" onclick="filePickerSave('${su}','${sn}',true,true)">Stream to Disk - Flat RAM - Mute Fixed</button>`;if(isPro){base+=`<button class="btn ghost" onclick="blobDownload('${su}','${sn}',true)">Blob Save - ${window._currentPlatform==='youtube'?'YT mute fixed h264':'IG/TT mute fixed'}</button><a href="${su}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Raw</a><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button>`}base+=`</div>`;return base}
-function buildItemsBlock(items,isPro){return items.map(it=>{let ext='.'+(it.filename.split('.').pop()||'mp4');return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}" data-ext="${ext.replace('.','')}">Detecting...</span><small style="color:var(--dim);font-size:11px">${it.label} - ${window._currentPlatform} - ${window._currentMode}</small></div>${buildButtons(it.url,it.filename,it.label,isPro)}</div>`}).join('')}
+function buildButtons(u,fn,lb,isPro){let n=sanitize(fn),su=String(u).replace(/'/g,"%27"),sn=String(n).replace(/'/g,"\\'"),lbl=String(lb||'File').replace(/'/g,"\\'");let base=`<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="openPreview('${su}','${sn}','${lbl}')">Preview - No Download</button><div class="dl-grid"><button class="btn primary" onclick="directDownload('${su}','${sn}')">Direct Download - Simple</button><button class="btn ghost" onclick="filePickerSave('${su}','${sn}',true,true)">Stream to Disk - Flat RAM</button>`;if(isPro){base+=`<button class="btn ghost" onclick="blobDownload('${su}','${sn}',true)">Blob Save - ${window._currentPlatform==='youtube'?'YouTube old':'IG/TT fixed'}</button><a href="${su}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Raw</a><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button>`}base+=`</div>`;return base}
+function buildItemsBlock(items,isPro){return items.map(it=>{let ext='.'+(it.filename.split('.').pop()||'mp4');return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}" data-ext="${ext.replace('.','')}">Detecting...</span><small style="color:var(--dim);font-size:11px">${it.label} - ${window._currentPlatform}</small></div>${buildButtons(it.url,it.filename,it.label,isPro)}</div>`}).join('')}
 async function ping(){let t0=performance.now();els.dot.className='dot';try{let r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'});let ms=Math.round(performance.now()-t0);if(els.lat)els.lat.textContent=ms+' ms';let j=await r.json();if(!j.cobalt)throw new Error();state.online=true;els.dot.className='dot ok';els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`;els.stxt.textContent='Engine online';return true}catch{state.online=false;els.dot.className='dot bad';els.ver.textContent='sleeping';els.stxt.textContent='Sleeping - click Wake';return false}}
-async function go(){let raw=els.url.value.trim();if(!raw)return showError('Input required','Paste link');if(!isValidUrl(raw))return showError('Invalid URL','Must start https://');window._currentPlatform=getPlatform(raw);els.go.disabled=true;els.go.textContent='Processing...';initLog();try{addLog('01','Validate URL - platform: '+window._currentPlatform,'active');await new Promise(r=>setTimeout(r,60));updateLog('01','URL ok - '+window._currentPlatform,'done');addLog('02','Check engine','active');if(!state.online)await ping();updateLog('02',state.online?'online':'waking','done');let isPro=state.isExpert;let opts={mode:document.getElementById('mode')?.value||'auto',quality:document.getElementById('vq')?.value||'720',style:document.getElementById('fn')?.value||'classic',audioFormat:document.getElementById('af')?.value||'best',disableMetadata:document.getElementById('nm')?.checked};let payload=buildValidPayload(raw,opts,isPro);window._currentMode=payload.downloadMode;document.getElementById('kvR').textContent=JSON.stringify(payload);document.getElementById('jsonPreview').textContent=JSON.stringify(payload,null,2);updateLog('03','Payload validated - mode: '+window._currentMode+' - platform: '+window._currentPlatform,'done');addLog('04','POST to Cobalt','active');let r=await fetch(BASE.replace(/\/$/,'')+'/',{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});let result=await r.json();if(!r.ok||result.status==='error')throw new Error(result.error?.code||'Engine error');updateLog('04','Response '+result.status,'done');let customName=document.getElementById('customName')?.value?.trim()||'';let items=extractItems(result,'Full Video',payload.filenameStyle,payload.videoQuality,customName,payload.downloadMode,payload.audioFormat);addLog('05','Found '+items.length+' file(s) - '+window._currentPlatform+' - '+window._currentMode,'done');showOutput('ok','Success - Mute Fixed - '+window._currentPlatform,buildItemsBlock(items,isPro),result);addLog('06','Ready - mute h264/mp4 per platform','done');}catch(e){addLog('err','ERR '+e.message,'error');showError('Failed',e.message)}finally{els.go.disabled=false;els.go.textContent='Download'}}
-function updateModeUI(){let m=document.getElementById('mode')?.value;let vq=document.getElementById('vq');let videoBox=document.getElementById('videoBox');let audioBox=document.getElementById('audioBox');if(m==='audio'){if(vq){vq.style.opacity='0.35';vq.style.pointerEvents='none'}if(videoBox)videoBox.style.opacity='0.6';if(audioBox){audioBox.style.borderColor='var(--accent-solid)';audioBox.style.boxShadow='0 0 3px var(--glow-1)'}}else if(m==='mute'){if(vq){vq.style.opacity='1';vq.style.pointerEvents='auto'}if(videoBox){videoBox.style.borderColor='var(--accent-solid)';videoBox.style.boxShadow='0 0 3px var(--glow-1)';videoBox.style.opacity='1'}if(audioBox){audioBox.style.opacity='0.5';audioBox.style.borderColor='';audioBox.style.boxShadow=''}}else{if(vq){vq.style.opacity='1';vq.style.pointerEvents='auto'}if(videoBox){videoBox.style.opacity='1';videoBox.style.borderColor='';videoBox.style.boxShadow=''}if(audioBox){audioBox.style.opacity='0.6';audioBox.style.borderColor='';audioBox.style.boxShadow=''}}}
+async function go(){let raw=els.url.value.trim();if(!raw)return showError('Input required','Paste link');if(!isValidUrl(raw))return showError('Invalid URL','Must start https://');window._currentPlatform=getPlatform(raw);els.go.disabled=true;els.go.textContent='Processing...';initLog();try{addLog('01','Validate URL - platform: '+window._currentPlatform,'active');await new Promise(r=>setTimeout(r,60));updateLog('01','URL ok - '+window._currentPlatform,'done');addLog('02','Check engine','active');if(!state.online)await ping();updateLog('02',state.online?'online':'waking','done');let isPro=state.isExpert;let opts={mode:document.getElementById('mode')?.value||'auto',quality:document.getElementById('vq')?.value||'720',style:document.getElementById('fn')?.value||'classic',audioFormat:document.getElementById('af')?.value||'best',disableMetadata:document.getElementById('nm')?.checked};let payload=buildValidPayload(raw,opts,isPro);document.getElementById('kvR').textContent=JSON.stringify(payload);document.getElementById('jsonPreview').textContent=JSON.stringify(payload,null,2);updateLog('03','Payload validated - platform: '+window._currentPlatform,'done');addLog('04','POST to Cobalt','active');let r=await fetch(BASE.replace(/\/$/,'')+'/',{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});let result=await r.json();if(!r.ok||result.status==='error')throw new Error(result.error?.code||'Engine error');updateLog('04','Response '+result.status,'done');let customName=document.getElementById('customName')?.value?.trim()||'';let items=extractItems(result,'Full Video',payload.filenameStyle,payload.videoQuality,customName,payload.downloadMode,payload.audioFormat);addLog('05','Found '+items.length+' file(s) - '+window._currentPlatform+' pipeline','done');showOutput('ok','Success - Ready - '+window._currentPlatform,buildItemsBlock(items,isPro),result);addLog('06','Ready - YouTube old / IG+TT fixed','done');}catch(e){addLog('err','ERR '+e.message,'error');showError('Failed',e.message)}finally{els.go.disabled=false;els.go.textContent='Download'}}
+function updateModeUI(){let m=document.getElementById('mode')?.value;let vq=document.getElementById('vq');let videoBox=document.getElementById('videoBox');let audioBox=document.getElementById('audioBox');if(m==='audio'){if(vq){vq.style.opacity='0.35';vq.style.pointerEvents='none'}if(videoBox)videoBox.style.opacity='0.6';if(audioBox){audioBox.style.borderColor='var(--accent-solid)';audioBox.style.boxShadow='0 0 0 3px var(--glow-1)'}}else{if(vq){vq.style.opacity='1';vq.style.pointerEvents='auto'}if(videoBox)videoBox.style.opacity='1';if(audioBox){audioBox.style.borderColor='';audioBox.style.boxShadow=''}}}
 els.go.addEventListener('click',go);els.url.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
 document.getElementById('bS').addEventListener('click',()=>{state.isExpert=false;document.getElementById('bS').classList.add('on');document.getElementById('bE').classList.remove('on');document.getElementById('ex').classList.remove('show');setSimple()});
 document.getElementById('bE').addEventListener('click',()=>{state.isExpert=true;document.getElementById('bE').classList.add('on');document.getElementById('bS').classList.remove('on');document.getElementById('ex').classList.add('show');setExpert()});
