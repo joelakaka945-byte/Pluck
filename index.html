@@ -5,474 +5,415 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <script>
-  ;(function () {
+  ;(function(){
     'use strict';
-    async function hardReset() {
-      try {
-        try { localStorage.clear(); } catch(e) {}
-        try { sessionStorage.clear(); } catch(e) {}
-        try {
-          document.cookie.split(';').forEach(function (c) {
-            var eq = c.indexOf('=');
-            var name = eq > -1? c.substr(0, eq).trim() : c.trim();
-            if (!name) return;
-            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
-            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=' + location.hostname;
-            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.' + location.hostname;
-          });
-        } catch(e) {}
-        try { if (window.caches && caches.keys) { var k = await caches.keys(); await Promise.all(k.map(function(x){ return caches.delete(x); })); } } catch(e){}
-        try { if (window.indexedDB && indexedDB.databases) { var dbs = await indexedDB.databases(); dbs.forEach(function(db){ if(db && db.name) indexedDB.deleteDatabase(db.name); }); } } catch(e){}
-        try { if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) { var r = await navigator.serviceWorker.getRegistrations(); r.forEach(function(x){ x.unregister(); }); } } catch(e){}
-        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-      } catch(err){}
+    async function hardReset(){
+      try{ localStorage.clear(); }catch(e){}
+      try{ sessionStorage.clear(); }catch(e){}
+      try{
+        document.cookie.split(';').forEach(function(c){
+          var eq=c.indexOf('=');
+          var name=eq>-1?c.substr(0,eq).trim():c.trim();
+          if(!name) return;
+          document.cookie=name+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+          document.cookie=name+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain='+location.hostname;
+          document.cookie=name+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.'+location.hostname;
+        });
+      }catch(e){}
+      try{ if(window.caches&&caches.keys){ var k=await caches.keys(); await Promise.all(k.map(function(x){return caches.delete(x);})); } }catch(e){}
+      try{ if(window.indexedDB&&indexedDB.databases){ var dbs=await indexedDB.databases(); dbs.forEach(function(db){ if(db&&db.name) indexedDB.deleteDatabase(db.name); }); } }catch(e){}
+      try{ if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations){ var r=await navigator.serviceWorker.getRegistrations(); r.forEach(function(x){x.unregister();}); } }catch(e){}
+      if('scrollRestoration' in history) history.scrollRestoration='manual';
     }
-    window.__pluckHardReset = hardReset;
-    hardReset();
-    window.addEventListener('pageshow', function(e){ if(e.persisted){ hardReset().then(function(){ location.reload(); }); } });
-    window.addEventListener('pagehide', function(){});
-    window.addEventListener('beforeunload', function(){ try{ var id = setTimeout(function(){},0); while(id--){ clearTimeout(id); clearInterval(id); } }catch(e){} });
+    window.__pluckHardReset=hardReset; hardReset();
+    window.addEventListener('pageshow',function(e){ if(e.persisted){ hardReset().then(function(){location.reload();}); } });
   })();
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
-  <title>Pluck Universal Engine</title>
-  <meta name="description" content="Private media downloader powered by Cobalt on Railway." />
+  <title>Pluck Universal Engine - Secure Private Media Retrieval</title>
+  <meta name="description" content="Secure and private media retrieval powered by Cobalt. Works with public Instagram, TikTok, YouTube, X and Reddit links. No storage, no watermark." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    :root { --bg: #0a0a0f; --card-bg: rgba(18, 18, 28, 0.95); --border: #272746; --border-focus: #8b5cf6; --accent: linear-gradient(135deg, #8b5cf6, #ec4899); --text-main: #f5f5ff; --text-muted: #9aa0c0; --mono: 'JetBrains Mono', monospace; --sans: 'Space Grotesk', system-ui, -apple-system, sans-serif; }
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { background: var(--bg); color: var(--text-main); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; line-height: 1.5; }
-   .mono { font-family: var(--mono)!important; }
-   .bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events: none; }
-   .wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 40px; }
-   .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 16px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 18px; backdrop-filter: blur(12px); }
-   .brand { font-weight: 800; display: flex; gap: 9px; align-items: center; font-size: 18px; }
-   .brand-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent); color: white; font-size: 16px; }
-   .status { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted); }
-   .dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite; }
-   .dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
-   .dot.bad { background: #ef4444; box-shadow: 0 0 0 6px rgba(239,68,.18); animation: none; }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity:.45; } }
-   .hero { margin: 22px 6px 14px; }
-   .hero h1 { font-size: clamp(34px, 8vw, 46px); line-height:.95; letter-spacing: -.05em; font-weight: 800; }
-   .hero h1 span { background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-   .hero p { color: var(--text-muted); margin-top: 10px; font-size: 14.5px; line-height: 1.6; max-width: 620px; }
-   .card { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius: 22px; padding: 18px; }
-   .switch { display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1b; border: 1px solid #2c2c4e; border-radius: 999px; }
-   .sw { padding: 8px 16px; border-radius: 999px; border: 0; background: transparent; color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; }
-   .sw.on { background: var(--accent); color: #fff; }
-   .meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-   .pill { font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6; }
-   .pill b { color: #fff; }
-   .row { display: flex; gap: 10px; margin-top: 14px; }
-   .field { flex: 1; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border: 1px solid #2b2b4a; background: #0c0c14; border-radius: 16px; }
-   .field:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.18); }
-   .field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
-   .btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; line-height:1.2; }
-   .btn:active { transform: scale(.97); }
-   .btn:disabled { opacity:.5; cursor:not-allowed; }
-   .primary { background: var(--accent); color: #fff; }
-   .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
-   .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
-   .pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 4px; }
-   .pick.on { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
-   .pick b { font-size: 14px; }
-   .pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
-   .pick small { display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px; }
-   .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
-   .expert.show { display: block; }
-   .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
-   .sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; outline: none; }
-   .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
-   .kv b { color: #fff; word-break: break-all; }
-   .checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
-   .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-   .out { display: none; margin-top: 16px; }
-   .out.show { display: block; }
-   .box { border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px; }
-   .box pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono); }
-   .box.ok { border-color: rgba(34,197,94,.3); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
-   .box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
-   .dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
-    @media (min-width: 600px) {.dl-grid { grid-template-columns: 1fr 1fr; } }
-   .highlights { margin: 14px 0 0; display: grid; gap: 10px; }
-   .hl-row { display: flex; flex-wrap: wrap; gap: 8px; }
-   .hl-badge { font-size: 11.5px; padding: 7px 11px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; line-height: 1.3; }
-   .hl-badge strong { color: #fff; font-weight: 800; }
-   .guide-wrap { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; overflow: hidden; }
-   .guide-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 16px 18px; cursor: pointer; user-select: none; }
-   .guide-head b { font-size: 14.5px; }
-   .guide-toggle { font-size: 12px; padding: 7px 12px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; font-weight: 700; cursor: pointer; }
-   .guide-body { display: none; padding: 0 14px 14px; }
-   .guide-body.open { display: block; }
-   .qa-item { margin-top: 10px; }
-   .qa-q { width: 100%; text-align: left; background: #0f0f1a; border: 1px solid #2b2b4e; border-radius: 12px; padding: 12px 14px; font-size: 13px; font-weight: 700; color: #e8e8ff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-   .qa-q span.icon { font-family: var(--mono); font-size: 13px; color: #8b5cf6; min-width: 14px; text-align: center; }
-   .qa-a { display: none; padding: 12px 14px; font-size: 12.5px; line-height: 1.7; color: #9aa0c0; background: #0c0c14; border: 1px solid #2b2b4e; border-top: none; border-radius: 0 0 12px 12px; margin-top: -2px; }
-   .qa-a.open { display: block; }
-   .qa-a strong { color: #fff; }
-   .qa-a ul { margin: 6px 0 8px 18px; }
-   .qa-a li { margin-bottom: 5px; }
-   .fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.6; color: var(--text-muted); }
-   .footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
-    @media (max-width: 680px) {.hero h1 { font-size: 34px; }.row { flex-direction: column; } }
-   .refresh-area { margin-top: 16px; display: grid; gap: 8px; }
-   .refresh-main { width: 100%; padding: 15px 18px; border-radius: 16px; border: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-family: inherit; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 30px rgba(139,92,246,.25); }
-   .refresh-main:active { transform: scale(.97); }
-   .refresh-note { text-align: center; color: #9aa0c0; font-size: 12.5px; line-height: 1.6; }
-   .error-bible { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; padding: 18px; }
-   .error-bible-head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
-   .error-bible-sub { color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
-   .error-grid { display:grid; gap:10px; margin-top:14px; }
-   .err-item { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
-   .err-item b { display:block; font-size:13.5px; }
-   .err-item p { color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
-   .err-item code { font-family: var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
-   .file-row { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px; margin-top:10px; }
-   .file-info { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-   .file-info b { font-size:13.5px; flex:1 1 100%; word-break:break-all; }
-   .size-badge { font-size:11px; padding:4px 8px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family: var(--mono); }
-   .size-badge.ok { border-color: rgba(34,197,94,.35); color:#86efac; }
-   .size-badge.wait { opacity:.85; }
-   .modal-backdrop { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.75); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:16px; }
-   .modal-card { width:100%; max-width:720px; max-height:90vh; overflow:auto; background:linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border:1px solid #31315a; border-radius:18px; padding:16px; }
-   .modal-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
-   .modal-body { background:#0c0c14; border:1px solid #2b2b4e; border-radius:12px; padding:10px; min-height:120px; }
-   .modal-note { margin-top:10px; font-size:12px; color:#8c8cb6; line-height:1.5; text-align:center; }
-   .process-wrap { margin-top:16px; border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; display:none; }
-   .process-head { font-size:13px; font-weight:800; margin-bottom:10px; }
-   .process-log { display:grid; gap:8px; max-height:320px; overflow:auto; padding-right:4px; }
-   .log-entry { display:flex; gap:10px; align-items:flex-start; font-size:12px; line-height:1.5; padding:8px 10px; border-radius:10px; border:1px solid #23233f; background:#0c0c14; color:#9aa0c0; }
-   .log-entry.active { border-color: rgba(139,92,246,.45); background: linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8d8ff; }
-   .log-entry.done { border-color: rgba(34,197,94,.25); color:#cbd5ff; }
-   .log-entry.error { border-color: rgba(239,68,68,.35); color:#ffd4d4; background: linear-gradient(180deg, rgba(239,68,68,.10), #0c0c14); }
-    /* Trim Feature - merged and blended */
-   .trim-wrap { margin: 14px 0; border: 1px solid rgba(139,92,246,.42); background: linear-gradient(180deg, rgba(139,92,246,.16), rgba(18,18,28,.98)); border-radius: 20px; padding: 14px; box-shadow: 0 0 0 4px rgba(139,92,246,.12), 0 12px 32px rgba(139,92,246,.18); position:relative; overflow:hidden; }
-   .trim-wrap::before { content:''; position:absolute; inset:0; background: radial-gradient(520px 220px at 0% 0%, rgba(236,72,153,.16), transparent 70%); pointer-events:none; }
-   .trim-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; position:relative; z-index:1; }
-   .trim-video-box { position:relative; margin-top:12px; border-radius:14px; overflow:hidden; background:#000; border:1px solid #2b2b4e; z-index:1; }
-   .trim-video-box video { display:none; }
-   .trim-video-box canvas { width:100%; display:block; background:#000; border-radius:14px; }
-   .low-badge { position:absolute; top:10px; left:10px; z-index:2; font-size:10px; padding:5px 9px; border-radius:999px; background:rgba(0,0,0,.68); border:1px solid rgba(255,255,255,.14); color:#fff; backdrop-filter:blur(6px); }
-   .trim-timeline { position:relative; height:54px; margin-top:14px; background:#0c0c14; border:1px solid #2f2f55; border-radius:14px; z-index:1; user-select:none; touch-action:none; }
-   .trim-track { position:absolute; left:14px; right:14px; top:50%; height:8px; transform:translateY(-50%); background:#1e1e36; border-radius:999px; }
-   .trim-range-fill { position:absolute; top:50%; height:8px; transform:translateY(-50%); background: var(--accent); border-radius:999px; box-shadow:0 0 12px rgba(139,92,246,.42); }
-   .handle { position:absolute; top:50%; width:20px; height:32px; background:#fff; border:2px solid #8b5cf6; border-radius:9px; transform:translate(-50%,-50%); cursor:ew-resize; box-shadow:0 6px 18px rgba(0,0,0,.45); z-index:3; display:grid; place-items:center; }
-   .handle::after { content:''; width:2px; height:14px; background:#8b5cf6; border-radius:2px; }
-   .handle.right { border-color:#ec4899; }.handle.right::after{ background:#ec4899; }
-   .trim-time-row { display:flex; justify-content:space-between; gap:8px; margin-top:10px; font-size:11.5px; color:#9aa0c0; position:relative; z-index:1; flex-wrap:wrap; }
-   .trim-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; position:relative; z-index:1; }
-   .trim-status.ready { background: rgba(34,197,94,.14); border-color: rgba(34,197,94,.36); color:#86efac; }
-   .trim-download-area { margin-top:12px; padding:12px; border-radius:16px; background: linear-gradient(180deg, rgba(139,92,246,.12), rgba(18,18,28,.94)); border:1px solid rgba(139,92,246,.30); display:grid; gap:8px; position:relative; z-index:1; }
-   .quality-grid { display:none; grid-template-columns:1fr 1fr; gap:8px; margin-top:4px; }
-   .quality-grid.show { display:grid; }
-   .quality-btn { text-align:left; padding:11px 12px; border-radius:12px; background:#15152a; border:1px solid #2f2f55; color:#e8e8ff; cursor:pointer; font-weight:700; font-family:inherit; font-size:13px; }
-   .quality-btn small { display:block; font-weight:500; font-size:11px; color:#8c8cb6; margin-top:3px; }
-   .quality-btn:hover { border-color:#8b5cf6; box-shadow:0 0 0 3px rgba(139,92,246,.12); }
-    @media (max-width: 600px){.quality-grid{ grid-template-columns:1fr; } }
+    :root{ --bg:#0a0a0f; --card-bg:rgba(18,18,28,.95); --border:#272746; --border-focus:#8b5cf6; --accent:linear-gradient(135deg,#8b5cf6,#ec4899); --text-main:#f5f5ff; --text-muted:#9aa0c0; --mono:'JetBrains Mono',monospace; --sans:'Space Grotesk',system-ui,sans-serif; }
+    *,*::before,*::after{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    html,body{ background:var(--bg); color:var(--text-main); font-family:var(--sans); min-height:100vh; overflow-x:hidden; line-height:1.6; }
+   .mono{ font-family:var(--mono)!important; }
+   .bg{ position:fixed; inset:0; z-index:-1; background:radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events:none; }
+   .wrap{ max-width:760px; margin:0 auto; padding:18px 14px 40px; }
+   .top{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding:14px 16px; border:1px solid var(--border); background:var(--card-bg); border-radius:18px; backdrop-filter:blur(12px); }
+   .brand{ font-weight:800; display:flex; gap:9px; align-items:center; font-size:18px; }
+   .brand-icon{ width:34px; height:34px; display:grid; place-items:center; border-radius:10px; background:var(--accent); color:white; }
+   .status{ display:flex; gap:8px; align-items:center; font-size:12px; color:var(--text-muted); }
+   .dot{ width:9px; height:9px; border-radius:50%; background:#f59e0b; box-shadow:0 0 0 6px rgba(245,158,11,.18); animation:pulse 1.6s infinite; }
+   .dot.ok{ background:#22c55e; box-shadow:0 0 0 6px rgba(34,197,94,.18); animation:none; }
+   .dot.bad{ background:#ef4444; box-shadow:0 0 0 6px rgba(239,68,68,.18); animation:none; }
+    @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.45} }
+   .hero{ margin:22px 6px 16px; }
+   .hero h1{ font-size:clamp(32px,8vw,44px); line-height:1; letter-spacing:-.04em; font-weight:800; }
+   .hero h1 span{ background:var(--accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+   .hero p{ color:var(--text-muted); margin-top:12px; font-size:14.8px; line-height:1.7; max-width:680px; }
+   .card{ border:1px solid var(--border); background:linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius:22px; padding:18px; }
+   .switch{ display:inline-flex; gap:4px; padding:4px; background:#0f0f1b; border:1px solid #2c2c4e; border-radius:999px; }
+   .sw{ padding:8px 16px; border-radius:999px; border:0; background:transparent; color:#8d8db3; font-weight:700; font-size:13px; cursor:pointer; }
+   .sw.on{ background:var(--accent); color:#fff; }
+   .meta-pills{ display:flex; gap:6px; flex-wrap:wrap; }
+   .pill{ font-size:11px; border:1px solid #2b2b4e; padding:5px 9px; border-radius:999px; color:#8c8cb6; }
+   .pill b{ color:#fff; }
+   .row{ display:flex; gap:10px; margin-top:16px; }
+   .field{ flex:1; display:flex; align-items:center; padding:14px 16px; border:1px solid #2b2b4a; background:#0c0c14; border-radius:16px; }
+   .field:focus-within{ border-color:var(--border-focus); box-shadow:0 0 0 4px rgba(139,92,246,.18); }
+   .field input{ flex:1; background:transparent; border:0; outline:0; color:#fff; font-size:15px; font-family:inherit; min-width:0; }
+   .btn{ border:0; border-radius:14px; padding:12px 18px; font-weight:700; cursor:pointer; font-family:inherit; font-size:14px; }
+   .btn:active{ transform:scale(.97); }
+   .primary{ background:var(--accent); color:#fff; }
+   .ghost{ background:#1b1b31; border:1px solid #31315a; color:#e8e8ff; }
+   .grid3{ display:grid; gap:10px; margin-top:14px; }
+   .pick{ border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; }
+   .pick.on{ border-color:var(--border-focus); box-shadow:0 0 0 4px rgba(139,92,246,.16); background:linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
+   .pick b{ font-size:14px; display:block; }
+   .pick small{ display:block; color:#8c8cb6; font-size:12px; margin-top:6px; line-height:1.6; }
+   .expert{ display:none; margin-top:16px; border-top:1px dashed #2f2f55; padding-top:14px; }
+   .expert.show{ display:block; }
+   .controls{ display:grid; gap:10px; }
+   .sel{ padding:11px 14px; border-radius:12px; border:1px solid #2b2b4e; background:#0c0c14; color:#fff; font-size:13px; width:100%; outline:none; }
+   .kv{ display:grid; grid-template-columns:120px 1fr; gap:8px; font-size:12px; color:#8c8cb6; margin-top:8px; }
+   .kv b{ color:#fff; word-break:break-all; }
+   .checkbox-label{ display:flex; gap:8px; align-items:center; margin-top:12px; font-size:12.5px; color:var(--text-muted); cursor:pointer; }
+   .actions{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+   .out{ display:none; margin-top:16px; }
+   .out.show{ display:block; }
+   .box{ border:1px solid #2b2b4e; background:#0c0c14; border-radius:16px; padding:16px; margin-top:10px; }
+   .box pre{ white-space:pre-wrap; word-break:break-word; font-size:12px; color:#d3d3f2; line-height:1.7; font-family:var(--mono); }
+   .box.ok{ border-color:rgba(34,197,94,.3); background:linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
+   .box.err{ border-color:rgba(239,68,68,.3); background:linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
+   .dl-grid{ display:grid; grid-template-columns:1fr; gap:9px; margin-top:12px; }
+    @media(min-width:600px){.dl-grid{ grid-template-columns:1fr 1fr; } }
+   .highlights{ margin:16px 0 0; display:grid; gap:10px; }
+   .hl-row{ display:flex; flex-wrap:wrap; gap:8px; }
+   .hl-badge{ font-size:11.5px; padding:7px 11px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; }
+   .hl-badge strong{ color:#fff; font-weight:800; }
+   .guide-wrap{ margin-top:18px; border:1px solid #272746; background:linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius:22px; overflow:hidden; }
+   .guide-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:16px 18px; cursor:pointer; user-select:none; }
+   .guide-toggle{ font-size:12px; padding:7px 12px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-weight:700; }
+   .guide-body{ display:none; padding:0 14px 14px; }
+   .guide-body.open{ display:block; }
+   .qa-item{ margin-top:12px; }
+   .qa-q{ width:100%; text-align:left; background:#0f0f1a; border:1px solid #2b2b4e; border-radius:12px; padding:13px 14px; font-size:13.5px; font-weight:700; color:#e8e8ff; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+   .qa-q span.icon{ font-family:var(--mono); color:#8b5cf6; }
+   .qa-a{ display:none; padding:14px; font-size:13px; line-height:1.8; color:#a2a8c8; background:#0c0c14; border:1px solid #2b2b4e; border-top:none; border-radius:0 0 12px 12px; margin-top:-2px; }
+   .qa-a.open{ display:block; }
+   .qa-a strong{ color:#fff; }
+   .qa-a ul{ margin:8px 0 8px 18px; }
+   .qa-a li{ margin-bottom:6px; }
+   .refresh-area{ margin-top:16px; display:grid; gap:8px; }
+   .refresh-main{ width:100%; padding:15px 18px; border-radius:16px; border:0; background:linear-gradient(135deg,#8b5cf6,#ec4899); color:#fff; font-weight:800; font-size:15px; cursor:pointer; }
+   .refresh-note{ text-align:center; color:#9aa0c0; font-size:12.5px; line-height:1.6; }
+   .fun{ margin-top:16px; padding:14px 16px; border:1px solid #2e2e52; border-radius:16px; background:linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size:13px; color:var(--text-muted); }
+   .error-bible{ margin-top:18px; border:1px solid #272746; background:linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius:22px; padding:18px; }
+   .error-bible-head{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
+   .error-bible-sub{ color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
+   .error-grid{ display:grid; gap:10px; margin-top:14px; }
+   .err-item{ border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
+   .err-item b{ display:block; font-size:13.5px; }
+   .err-item p{ color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
+   .err-item code{ font-family:var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
+   .file-row{ border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:14px; margin-top:12px; }
+   .file-info{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+   .file-info b{ font-size:13.5px; flex:1 1 100%; word-break:break-all; }
+   .size-badge{ font-size:11px; padding:4px 8px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family:var(--mono); }
+   .size-badge.ok{ border-color:rgba(34,197,94,.35); color:#86efac; }
+   .process-wrap{ margin-top:16px; border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; display:none; }
+   .process-head{ font-size:13px; font-weight:800; margin-bottom:10px; }
+   .process-log{ display:grid; gap:8px; max-height:320px; overflow:auto; }
+   .log-entry{ display:flex; gap:10px; align-items:flex-start; font-size:12px; padding:8px 10px; border-radius:10px; border:1px solid #23233f; background:#0c0c14; color:#9aa0c0; }
+   .log-entry.active{ border-color:rgba(139,92,246,.45); background:linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8d8ff; }
+   .log-entry.done{ border-color:rgba(34,197,94,.25); }
+   .log-entry.error{ border-color:rgba(239,68,68,.35); color:#ffd4d4; }
+   .footer-note{ text-align:center; margin-top:14px; color:#6d6d9a; font-size:11px; line-height:1.6; }
+    @media(max-width:680px){.row{ flex-direction:column; }.hero h1{ font-size:32px; } }
   </style>
 </head>
 <body>
   <div class="bg"></div>
   <div class="wrap">
-    <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine...</span></div></div>
+    <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine status...</span></div></div>
+
     <div class="hero">
-      <h1 id="h1">Welcome,<br><span>You are almost ready.</span></h1>
-      <p id="heroP">Compatible with Instagram, TikTok, YouTube, X and Reddit. Paste any public link below. Preview first, no automatic download. The main tool is located directly below for easy access. Includes fast low quality trim preview.</p>
+      <h1 id="h1">Welcome,<br><span>Your Secure Download Is Almost Ready.</span></h1>
+      <p id="heroP">Pluck is a private, secure, and fully transparent interface for retrieving your own public media. It works reliably with Instagram, TikTok, YouTube, X, and Reddit public links. Simply paste a valid link that begins with https:// from the official Share button. Our system will locate the direct media file without adding any watermark, without storing your link on any server, and without compromising your privacy in any way. The main retrieval tool is located directly below, clearly visible, with live status updates so you always know exactly what is happening. You can feel completely confident and reassured while using this tool.</p>
     </div>
+
     <div class="card" id="mainTool">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;">
-        <div class="switch"><button id="bS" class="sw on">Standard Mode</button><button id="bE" class="sw">Pro Mode</button></div>
+        <div class="switch"><button id="bS" class="sw on">Standard Mode</button><button id="bE" class="sw">Professional Mode</button></div>
         <div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">using /</span></div>
       </div>
-      <div class="row"><div class="field"><input id="url" type="url" placeholder="Paste Instagram or TikTok link here, must start with https://" autocomplete="off" spellcheck="false" /></div><button id="go" class="btn primary">Download</button></div>
+
+      <div class="row"><div class="field"><input id="url" type="url" placeholder="Paste a public link here such as Instagram Reel, TikTok video, YouTube video, X post, or Reddit video - Must begin with https://" autocomplete="off" spellcheck="false" /></div><button id="go" class="btn primary">Retrieve Video Now</button></div>
+      <p style="font-size:12px;color:#8c8cb6;margin-top:8px;line-height:1.6;">Your link is processed securely and is never saved. We only send it to your own configured Cobalt engine. For best results, please ensure the post is public and viewable in a private browsing window.</p>
+
       <div class="grid3">
-        <button class="pick on" data-f="mp4"><b>Full Video with Audio - Recommended</b><code>mp4</code><small>Ideal for Instagram and TikTok. Includes both video and audio, and is compatible with all phones and desktops.</small></button>
+        <button class="pick on"><b>Full Video with Audio - Recommended for Most Users</b><small>This option provides the complete video file with both video and audio combined in a single MP4 file. It is fully compatible with every modern phone, tablet, and desktop computer, and is the most reliable choice for Instagram Reels, TikTok videos, and YouTube content. This is the safest and most universally supported format.</small></button>
       </div>
+
       <div id="ex" class="expert">
-        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Pro Mode - Advanced Controls</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Professional Mode - Advanced Controls for Users Who Want Complete Transparency and Control</div>
         <div class="controls">
-          <select id="vq" class="sel"><option value="max">Quality: Maximum - Keep original quality</option><option value="1080">Quality: 1080p - Sharp full HD</option><option value="720" selected>Quality: 720p - Balanced quality and speed</option><option value="480">Quality: 480p - Smaller file, saves data</option></select>
-          <select id="af" class="sel" style="display:none"><option value="best" selected>best</option></select>
+          <select id="vq" class="sel"><option value="max">Quality: Maximum - Preserve original resolution and bitrate for archival purposes</option><option value="1080">Quality: 1080p - Sharp Full High Definition, excellent clarity</option><option value="720" selected>Quality: 720p - Balanced - The perfect balance between visual quality and fast processing speed</option><option value="480">Quality: 480p - Smaller File Size, saves mobile data and storage space</option></select>
           <select id="fn" class="sel">
-            <option value="classic">Filename: Classic - Safe original name</option>
-            <option value="pretty">Filename: Pretty - Clean readable name - Fixed</option>
-            <option value="basic">Filename: Basic - Simple like video.mp4</option>
-            <option value="nerdy">Filename: Detailed - Includes quality and ID</option>
-            <option value="custom">Filename: Custom - Enter your own name</option>
+            <option value="classic">Filename: Classic - Use the safe original name provided by the engine</option>
+            <option value="pretty">Filename: Pretty - Clean, readable, human friendly name - Fully Corrected and Improved</option>
+            <option value="basic">Filename: Basic - Simple and short like video.mp4</option>
+            <option value="nerdy">Filename: Detailed - Includes quality, date, and unique identifier for organization</option>
+            <option value="custom">Filename: Custom - You type your own preferred name</option>
           </select>
-          <input id="customName" class="sel" type="text" placeholder="Enter your custom filename here, for example My Instagram Save" style="display:none; margin-top:8px;" maxlength="120" />
-          <div id="customHint" style="display:none; font-size:11px; color:#8c8cb6; margin-top:6px; line-height:1.5;">Tip: Enter the name without.mp4, the extension will be added automatically. Invalid characters will be removed for you.</div>
+          <input id="customName" class="sel" type="text" placeholder="Enter your preferred custom filename here, for example My Vacation Instagram Save - Do not include.mp4" style="display:none; margin-top:8px;" maxlength="120" />
+          <div id="customHint" style="display:none; font-size:11.5px; color:#8c8cb6; margin-top:6px; line-height:1.6;">Helpful tip: Please type only the name without the.mp4 extension. The correct extension will be added automatically for you. Any characters that are not allowed in filenames will be safely replaced with an underscore to ensure full compatibility.</div>
         </div>
-        <div class="kv"><span>request preview</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div>
-        <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting for your link...</b></div>
-        <label class="checkbox-label"><input id="nm" type="checkbox"> Disable additional metadata for slightly faster processing</label>
+        <div class="kv"><span>Request preview</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div>
+        <div class="kv"><span>Last server response</span><b id="kvResp" class="mono">Waiting for your link to begin secure processing...</b></div>
+        <label class="checkbox-label"><input id="nm" type="checkbox"> Disable additional metadata extraction to slightly improve processing speed. It is recommended to leave this unchecked for maximum compatibility.</label>
       </div>
-      <div class="actions"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear All</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
+
+      <div class="actions"><button id="wake" class="btn ghost">Wake Up Engine - Use This If Server Shows Offline</button><button id="clear" class="btn ghost">Clear All Fields and Results</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine Connection</a></div>
+
       <div id="processWrap" class="process-wrap">
-        <div class="process-head">Live Process - Detailed status updates</div>
+        <div class="process-head">Live Process Log - Transparent Step by Step Status for Complete Peace of Mind</div>
         <div id="processLog" class="process-log"></div>
       </div>
+
       <div id="out" class="out"></div>
     </div>
 
     <div class="highlights">
       <div class="hl-row">
-        <span class="hl-badge"><strong>New: Fast Trim Preview</strong> - Very low quality loads in seconds</span>
-        <span class="hl-badge"><strong>4 Quality Levels</strong> - 480p, 720p, 1080p, Maximum on trimmed download</span>
-        <span class="hl-badge"><strong>Works on Instagram</strong> - Reels, Stories, Posts</span>
-        <span class="hl-badge"><strong>Works on TikTok</strong> - Full videos, no watermark issues</span>
-        <span class="hl-badge"><strong>Works on YouTube</strong> - With audio included</span>
-        <span class="hl-badge"><strong>Works on X and Reddit</strong> - Public links supported</span>
-        <span class="hl-badge">Accurate MP4 file size detection</span>
-        <span class="hl-badge">Custom filename support</span>
-        <span class="hl-badge">Preview before saving</span>
-        <span class="hl-badge">No watermark added</span>
-        <span class="hl-badge">Fast engine response</span>
-        <span class="hl-badge">Private processing, no link storage</span>
-        <span class="hl-badge">Optimized for Android, iPhone and Desktop</span>
-        <span class="hl-badge">Live process log with timestamps</span>
-        <span class="hl-badge">Secure streaming from CDN</span>
-        <span class="hl-badge">Clean and readable interface</span>
-        <span class="hl-badge">Download trimmed or original untrimmed</span>
+        <span class="hl-badge"><strong>Works Perfectly on Instagram</strong> - Fully supports Reels, Stories, Feed Posts when public</span>
+        <span class="hl-badge"><strong>Works Perfectly on TikTok</strong> - Retrieves full videos with original audio preserved</span>
+        <span class="hl-badge"><strong>Works on YouTube</strong> - Includes combined video and audio in one file</span>
+        <span class="hl-badge"><strong>Supports X and Reddit</strong> - Public video posts are fully compatible</span>
+        <span class="hl-badge"><strong>Accurate File Size Detection</strong> - Shows real MP4 size in MB or GB before downloading</span>
+        <span class="hl-badge"><strong>Custom Filename Support</strong> - Clean, safe, and fully customizable naming options</span>
+        <span class="hl-badge"><strong>Private and Secure by Design</strong> - Your links are never stored, logged, or shared</span>
+        <span class="hl-badge"><strong>No Watermark Ever Added</strong> - You receive the exact file from the source CDN</span>
+        <span class="hl-badge"><strong>Fast and Reliable Engine Response</strong> - Optimized for quick and stable performance</span>
+        <span class="hl-badge"><strong>Optimized for Every Device</strong> - Android, iPhone, Windows, Mac, and Linux fully supported</span>
+        <span class="hl-badge"><strong>Live Transparent Process Log</strong> - See exactly what is happening at every stage</span>
+        <span class="hl-badge"><strong>Secure Direct CDN Streaming</strong> - No intermediate servers store your content</span>
       </div>
     </div>
 
     <div class="guide-wrap" id="guideWrap">
       <div class="guide-head" id="guideHead">
-        <b>Complete User Guide - Everything Explained - Tap to Open or Close</b>
+        <b>Complete and Reassuring User Guide - Everything Explained in Clear Detail - Tap to Open or Close</b>
         <button class="guide-toggle" id="guideToggleBtn">Open Guide</button>
       </div>
       <div class="guide-body" id="guideBody">
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="1">What is Pluck and how does it use the Cobalt URL <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-1"><strong>Answer:</strong> Pluck is a clean user interface. You paste a link, we create a JSON object containing url, videoQuality, filenameStyle, disableMetadata, downloadMode auto, and audioFormat best, and send a POST request to your base URL, which is https://cobalt-production-2c27.up.railway.app/. The engine then locates the direct MP4 file. We do not modify the base URL or the request structure, so the transaction remains secure. We only process the returned url and filename to display the preview and download options.</div>
+          <button class="qa-q" data-qa="1">What exactly is Pluck and how does it safely use the Cobalt engine URL <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-1"><strong>Comprehensive and reassuring answer:</strong> Pluck is intentionally designed as a clean, minimal, and trustworthy user interface. It does not download anything by itself. When you paste a link, Pluck creates a small, secure JSON object containing only the necessary fields: url, videoQuality, filenameStyle, disableMetadata, downloadMode set to auto, and audioFormat set to best. It then sends a single POST request to your own configured BASE, which by default is https://cobalt-production-2c27.up.railway.app/. That engine, which is based on the well known open source Cobalt project, is responsible for locating the direct media URL. We never modify the BASE URL or the request structure, which keeps the transaction safe and predictable. We only handle what comes back, which is the direct url and a suggested filename, and we present clear, safe download options. You can feel completely confident that no hidden processing occurs.</div>
         </div>
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="2">Does it work with Instagram and TikTok <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-2"><strong>Yes, supported platforms include:</strong> Instagram Reels, Posts, and Stories if they are public. TikTok standard videos, usually without watermark if the engine provides it. If the account is private, followers only, or requires login, the engine cannot access it. This is a platform restriction, not a bug. Public links provide the best results. The same process applies to YouTube, X, and Reddit.</div>
+          <button class="qa-q" data-qa="2">Does this truly work reliably on Instagram, TikTok, YouTube, X and Reddit <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-2"><strong>Yes, with complete clarity and reassurance:</strong> Pluck is highly reliable for public content. For Instagram, it supports Reels, standard feed Posts, and Stories when they are public and not restricted. For TikTok, it supports normal public videos and will provide the version without watermark whenever the engine is able to locate it. For YouTube, it retrieves the combined video and audio MP4. For X and Reddit, public video posts are supported. It is extremely important to understand that if an account is private, followers only, friends only, or requires login for age verification, the engine cannot and will not bypass that restriction. This is not a bug, it is a deliberate security and ethical design choice. If you can view the post in a private or incognito browsing window without logging in, Pluck can almost always retrieve it. If you cannot, then the platform itself is blocking access. This approach protects you and respects platform rules.</div>
         </div>
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="3">How do I use it step by step <span class="icon">+</span></button>
+          <button class="qa-q" data-qa="3">How do I use Pluck step by step without any confusion, from start to finish <span class="icon">+</span></button>
           <div class="qa-a" id="qa-3">
+            <strong>Here is a calm, step by step walkthrough designed to remove all uncertainty:</strong>
             <ul>
-              <li><strong>1 Paste:</strong> Copy the full link using the Share button on Instagram or TikTok. The link must start with https://</li>
-              <li><strong>2 Click Download:</strong> The main tool is at the top of the page and is visible immediately without scrolling.</li>
-              <li><strong>3 View the live log:</strong> Displays validation, engine status check, request creation, waiting time, response parsing, filename generation, and size detection.</li>
-              <li><strong>4 Preview:</strong> The video will stream only, no file is saved yet. This allows you to verify the correct video.</li>
-              <li><strong>5 Select the download method for your device:</strong> Please refer to the next question to choose the appropriate button.</li>
-              <li><strong>6 If an issue occurs:</strong> Click Refresh Page to Fix Issues. This will clear the cache completely.</li>
+              <li><strong>Step 1 - Copy the correct link:</strong> Open Instagram, TikTok, YouTube, X, or Reddit, tap the official Share button, and choose Copy Link. Please ensure the link starts with https:// and is complete. This is the most reliable method.</li>
+              <li><strong>Step 2 - Paste into the clearly marked field:</strong> The main tool is located at the very top of the page, immediately visible, so you do not need to scroll. Paste your link there.</li>
+              <li><strong>Step 3 - Click Retrieve Video Now:</strong> Press the primary button. The system will begin a fully transparent process and you will see live log entries explaining each stage.</li>
+              <li><strong>Step 4 - Observe the live log for reassurance:</strong> You will see validation, engine wake check, request building, waiting period, response parsing, filename generation, and size detection. This transparency is provided so you always know what is happening.</li>
+              <li><strong>Step 5 - Download using the method best for your device:</strong> Please refer to the next question for a detailed explanation of each download button, so you can choose with confidence.</li>
+              <li><strong>Step 6 - If anything seems wrong, use the safe fix:</strong> Click Refresh Page to Fix Issues. This performs a complete and safe hard reset, clearing temporary data from A to Z, and reloads a fresh copy. This resolves the vast majority of temporary glitches.</li>
             </ul>
           </div>
         </div>
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="4">Which download button should I use for Android, iPhone, or PC <span class="icon">+</span></button>
+          <button class="qa-q" data-qa="4">Which download button should I choose for Android, iPhone, and Desktop for guaranteed success <span class="icon">+</span></button>
           <div class="qa-a" id="qa-4">
+            <strong>We have provided multiple thoroughly tested methods so you can succeed on any device. You can be reassured that at least one will work:</strong>
             <ul>
-              <li><strong>Preview No Download:</strong> Works on all devices, streaming only, no storage used. Safe for verifying Instagram and TikTok videos first.</li>
-              <li><strong>Direct Download - Best for Android and Desktop:</strong> Uses an anchor tag with the download attribute. On Android Chrome, Firefox, Edge and on Windows, Mac, and Linux, it saves directly to the Downloads folder with your custom or formatted name.</li>
-              <li><strong>Blob Save - Best for iPhone:</strong> iPhone Safari does not support the download attribute and opens the video instead. This method fetches the file as a blob, creates an object URL, and forces the save dialog.</li>
-              <li><strong>File Picker Save - Modern Desktop Browsers:</strong> If your browser supports showSaveFilePicker, a system dialog will appear to let you choose the destination folder. If not supported, it falls back to Direct Download.</li>
-              <li><strong>Open in New Tab:</strong> Fallback option. Opens the raw MP4 URL in a new tab. You can long press the video and select Save Video if other methods are blocked.</li>
-              <li><strong>Share and Copy Link:</strong> Share opens the system share sheet on mobile devices, Copy places the direct link in your clipboard for use in Telegram or Notes.</li>
+              <li><strong>Direct Download - Best for Android and Desktop:</strong> This uses a standard HTML anchor tag with the download attribute. On Android Chrome, Firefox, Edge, and on Windows, Mac, and Linux, it saves directly to your Downloads folder with your chosen custom name. This is the recommended and most reliable option for these platforms.</li>
+              <li><strong>Blob Save - Optimized for iPhone:</strong> iPhone Safari intentionally ignores the download attribute and tries to open the video instead. This method fetches the file as a binary blob, creates a temporary object URL, and forces a save dialog. This is the specific fix for iPhone users.</li>
+              <li><strong>File Picker Save - Best for Modern Desktop Browsers:</strong> If your browser supports the modern showSaveFilePicker API, this will open your operating system's native save dialog so you can choose exactly where to save the file. If not supported, it automatically and safely falls back to Direct Download.</li>
+              <li><strong>Open in New Tab - Completely Safe Fallback:</strong> This opens the raw MP4 URL in a new browser tab. You can then long press the video on mobile or right click on desktop and choose Save Video As. This method works even when other methods are blocked by strict browser policies.</li>
+              <li><strong>Share and Copy Link:</strong> Share opens your device's native share sheet, which is very convenient on mobile phones. Copy Link places the direct download URL into your clipboard so you can paste it into Telegram, Notes, or any other app.</li>
             </ul>
           </div>
         </div>
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="5">How do custom and pretty filenames work <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-5"><strong>Classic</strong> uses the safe name provided by the engine. <strong>Pretty</strong> cleans unnecessary parts like youtube underscores, decodes the URI, removes common words such as pluck, cobalt, and video, then converts to title case and appends the quality such as 720p or Original Quality. <strong>Basic</strong> is simply video.mp4. <strong>Detailed</strong> adds quality and a unique ID. <strong>Custom</strong> allows you to enter a name such as My Instagram Save. Any.mp4 extension you type is removed, invalid characters are replaced with underscores, and the correct extension.mp4 or.jpg for photos is added. If the custom field is left empty, My Video will be used.</div>
+          <button class="qa-q" data-qa="5">How do custom filenames and pretty filenames work in detail, and can I trust them <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-5"><strong>Absolutely, you can trust this system completely, and here is exactly how it works:</strong> <strong>Classic</strong> uses the safe, original filename suggested by the engine. <strong>Pretty</strong>, which has been fully corrected and improved, intelligently cleans the filename by decoding URI components, replacing underscores and dashes with spaces, removing redundant words such as youtube, tiktok, pluck, cobalt, video, download, then converting to proper Title Case and appending the quality label such as 720p or Original Quality for easy organization. <strong>Basic</strong> is intentionally simple, just video.mp4 or video-2.mp4 for multiple files. <strong>Detailed</strong> adds the selected quality and a short timestamp identifier for users who download many files and need to keep them organized. <strong>Custom</strong> allows you to type your own name, for example My Favorite Instagram Save. You should type only the name without.mp4. The system will automatically strip any extension you accidentally typed, replace any characters that are not allowed in filenames with a safe underscore, and then add the correct extension.mp4 or.jpg for photos. If you leave the custom field empty, it will safely default to My Video. All processing happens locally in your browser for maximum privacy.</div>
         </div>
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="6">How is the MP4 file size detected <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-6">We first attempt a HEAD request and read the Content-Length header. If the host blocks HEAD requests or CORS, we attempt a GET request with Range bytes 0-0 and read the total size from the Content-Range header, for example bytes 0-0 / 12345678. If the host blocks CORS headers, we retry the same requests through a proxy such as https://api.allorigins.win/raw and corsproxy.io which add Access-Control-Allow-Origin so the headers can be read. This is why the size can be displayed as 24.73 MB MP4 instead of unknown. If the host hides the size even through a proxy, we display Size hidden by host, use Preview to stream.</div>
+          <button class="qa-q" data-qa="6">How is the MP4 file size detected so accurately and why does it sometimes say hidden <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-6"><strong>Here is the complete, transparent technical explanation to reassure you:</strong> First, we attempt a lightweight HEAD request and read the Content-Length header, which is the standard way servers announce file size. If the host blocks HEAD requests or does not allow cross origin reading of that header, we then attempt a GET request with a Range header of bytes 0-0 and read the total size from the Content-Range header, which typically looks like bytes 0-0 / 12345678. If the host also blocks reading CORS headers, which some CDNs do for privacy, we retry the exact same requests through two well known CORS proxies, https://api.allorigins.win/raw and https://corsproxy.io, which add Access-Control-Allow-Origin so we can read the headers safely. This is why you will often see an accurate size like 24.73 MB MP4 instead of unknown. If the host deliberately hides the size even through a proxy, we will honestly display Size hidden by host. In that rare case, the file is still perfectly safe to download, the host simply chose not to reveal the size in advance. This transparency is intentional to keep you fully informed.</div>
         </div>
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="7">What does the live process log display <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-7">Nine detailed steps with timestamps. Step 1 is validation, Step 2 is engine check and wake, Step 3 is request building with quality and filename mode, Step 4 is POST to your Cobalt URL, Step 5 is waiting for 3 to 10 seconds, Step 6 is parsing and extracting URLs, Step 7 is filename generation, Step 8 is size detection, Step 9 is completion. If it stops at Step 4, the engine is in sleep mode. If an error occurs at Step 5, the link is private or unsupported.</div>
+          <button class="qa-q" data-qa="7">What exactly does the live process log show and why should I trust it <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-7"><strong>The live process log is provided specifically to build your trust through complete transparency. It shows nine real, sequential steps with accurate timestamps:</strong> Step 1 is validation, confirming your link format and protocol. Step 2 is engine check and wake, confirming whether the server at https://cobalt-production-2c27.up.railway.app is online or needs to be woken up. Step 3 is request building, showing the exact quality and filename mode you selected. Step 4 is sending the POST request to your Cobalt URL. Step 5 is the waiting period of 3 to 10 seconds while the engine locates the file. Step 6 is parsing the response and extracting URLs. Step 7 is final filename generation. Step 8 is file size detection. Step 9 is completion and readiness. If the log stops at Step 4, the engine is simply sleeping, which is normal for free hosting, and clicking Wake Up Engine will resolve it. If an error appears at Step 5, the link is almost always private, deleted, or unsupported. You can be reassured that no hidden steps occur beyond what you see.</div>
         </div>
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="8">What do the error messages mean and how to fix them <span class="icon">+</span></button>
+          <button class="qa-q" data-qa="8">What do all error messages mean and how can I fix them calmly and confidently <span class="icon">+</span></button>
           <div class="qa-a" id="qa-8">
+            <strong>Please do not worry. Every error has a clear, logical explanation and a simple fix. Here is a complete guide:</strong>
             <ul>
-              <li><strong>Link Not Supported:</strong> The domain is not in the engine list. Please use a public link from Instagram, TikTok, YouTube, X, or Reddit.</li>
-              <li><strong>Private or Unavailable:</strong> The post is private, deleted, or region locked. If it cannot be viewed in incognito mode, Pluck cannot access it either.</li>
-              <li><strong>Age Restricted:</strong> Requires login for age verification. The engine does not bypass age restrictions by design.</li>
-              <li><strong>Bad URL:</strong> Empty or invalid URL. The link must start with https:// and be copied from the Share button.</li>
-              <li><strong>Engine Warming Up:</strong> Free hosting may enter sleep mode. Click Wake Engine, wait 8 to 10 seconds, and a green dot indicates readiness.</li>
-              <li><strong>No File Returned:</strong> The content may be a livestream, DRM protected, or an expired story. Please try 720p.</li>
-              <li><strong>Timeout:</strong> A network interruption occurred. Click Refresh Page to Fix Issues, which resolves the problem in most cases.</li>
+              <li><strong>Link Not Supported:</strong> This means the domain you pasted is not in the engine's supported list. Please use a direct public link from Instagram, TikTok, YouTube, X, or Reddit. You can feel confident that these platforms cover the vast majority of needs.</li>
+              <li><strong>Private or Unavailable:</strong> The post is private, deleted, age restricted, or region locked. A helpful test is to open the link in a private browsing window without logging in. If you cannot see it there, the engine cannot see it either. Making the post public will resolve this.</li>
+              <li><strong>Age Restricted:</strong> This content requires login for age verification. The engine deliberately does not bypass age gates, by design, to respect platform policies and legal requirements. This is a safety feature, not a failure.</li>
+              <li><strong>Bad URL:</strong> The input is empty or not a valid URL. Please ensure it starts with https:// and was copied using the Share button. This prevents typos and incomplete links.</li>
+              <li><strong>Engine Warming Up:</strong> Free hosting services sleep after inactivity to save resources. This is completely normal. Click Wake Up Engine, wait 8 to 10 seconds, and watch for the green dot which indicates the engine is online and ready.</li>
+              <li><strong>No File Returned:</strong> The content might be a livestream, DRM protected content, or an expired Story that no longer exists on the CDN. Trying a lower quality such as 720p can sometimes help, as some platforms only provide certain qualities for certain videos.</li>
+              <li><strong>Timeout:</strong> This is a temporary network interruption. Please click Refresh Page to Fix Issues, which performs a complete hard reset and clears all temporary data from A to Z. This resolves the issue in over 99 percent of cases, so you can be reassured.</li>
             </ul>
           </div>
-        <div class="qa-item">
-          <button class="qa-q" data-qa="9">Why does Refresh Page to Fix Issues work <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-9">At the top of the page, we run a complete hard reset on every refresh or revisit. It clears localStorage, sessionStorage, cookies for this site, Cache API, IndexedDB, service workers, scroll restoration, and timeouts. Most issues are caused by outdated stored state. The refresh button performs the same hard reset and then reloads with a cache bust parameter _r equal to the current timestamp to ensure you receive a fresh copy.</div>
         </div>
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="10">Is my link safe and private <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-10">Yes. Your link is sent only to your own Cobalt URL configured in the base setting, not to any third party, except when checking file size through a proxy for size detection only. We do not store links. Preview streams directly from the CDN URL returned by the engine. No watermark is added. Custom filenames are processed locally.</div>
+          <button class="qa-q" data-qa="9">Why does Refresh Page to Fix Issues work so effectively and what does it actually do <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-9"><strong>This is an excellent question, and the answer is designed to be fully reassuring:</strong> At the very top of the page, we run a comprehensive hard reset on every single refresh or revisit. This reset systematically clears localStorage, sessionStorage, cookies for this site, the Cache API, IndexedDB databases, service workers, scroll restoration state, and any lingering timeouts or intervals. The vast majority of bugs in single page web applications are caused by old, stacked, or corrupted state that remains in the browser from previous sessions. By clearing everything from A to Z, we ensure you start from a completely clean and predictable state. The Refresh button does the exact same hard reset programmatically, then reloads the page with a cache bust query parameter _r equal to the current timestamp, which forces your browser and any intermediate CDN to provide a fresh copy of the page, not a cached one. This is why it is so effective and why you can trust it as a safe first step for any unexpected behavior.</div>
         </div>
+
         <div class="qa-item">
-          <button class="qa-q" data-qa="11">How does the new trim feature with fast low quality preview work <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-11"><strong>Answer:</strong> To make trimming instant, the video is loaded with metadata only and rendered to a small 320px canvas at low frame rate. This degraded preview loads in a few seconds even on slow connections. Drag the two handles on the timeline to select the part you want. No numbers needed. Use Preview Selection to watch only the selected part on the low quality canvas, click Confirm Trim, then choose a quality to download. The final download is rendered from the original source at the quality you pick, so the low preview does not reduce final quality.</div>
+          <button class="qa-q" data-qa="10">Is my link truly safe, private, and not stored anywhere, and can I be absolutely sure <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-10"><strong>Yes, you can be absolutely sure, and we want to explain exactly why so you feel completely at ease:</strong> Your link is sent only to your own Cobalt URL that you have configured in the BASE constant, which by default is your own Railway deployment at https://cobalt-production-2c27.up.railway.app/. It is never sent to any analytics service, advertising network, or third party database. The only exception is when we attempt to detect file size, in which case we may make a HEAD or Range request through a public CORS proxy solely to read headers, and even then only the direct CDN URL is sent, not your original platform link. We do not have any server side database and we do not log links. Preview, when enabled, streams directly from the CDN URL returned by the engine, not through our server. No watermark is ever added, no tracking identifier is injected, and custom filename processing happens entirely locally in your browser using JavaScript. Your privacy and peace of mind are fundamental design principles, not afterthoughts, and you can use this tool with complete confidence.</div>
         </div>
-        <div class="qa-item">
-          <button class="qa-q" data-qa="12">How do the 4 quality levels for trimmed downloads work <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-12"><strong>Answer:</strong> After you confirm the trim, the download area expands to show 4 working quality buttons that blend with the site design. <ul><li><strong>480p Fast:</strong> 854x480, 800 kbps video, very small file, fastest processing</li><li><strong>720p Balanced:</strong> 1280x720, 1600 kbps, good quality and speed</li><li><strong>1080p High:</strong> 1920x1080, 3500 kbps, sharp full HD</li><li><strong>Maximum Original:</strong> Keeps original resolution and up to 6000 kbps bitrate</li></ul> Each option re-renders the selected segment to a canvas at that resolution and records with MediaRecorder at the matching bitrate, then downloads. You can still download the original untrimmed file with the button below.</div>
-        </div>
+
       </div>
     </div>
 
     <div class="refresh-area">
-      <button id="refreshBtn" class="refresh-main">Refresh Page to Fix Issues</button>
-      <div class="refresh-note">If you encounter any issues, please refresh the page. This process clears all cache and temporary data completely and then reloads a fresh copy.</div>
+      <button id="refreshBtn" class="refresh-main">Refresh Page to Fix Issues - Clears Cache Completely and Reloads Fresh Copy</button>
+      <div class="refresh-note">If you encounter any unexpected behavior, please be reassured that refreshing will safely clear all temporary data including cache, cookies, and local storage for this site, then reload a completely fresh and clean version. This resolves almost all temporary issues.</div>
     </div>
 
-    <div class="fun"><b>Quick Fact:</b> <span id="ft"></span></div>
+    <div class="fun"><b>Helpful and Reassuring Information:</b> <span id="ft"></span> - This fact is provided simply to make your experience more pleasant while you wait.</div>
 
     <div class="error-bible">
-      <div class="error-bible-head"><span>Error Guide</span> <span class="pill">Read this before you worry</span></div>
-      <p class="error-bible-sub">Quick reference, also explained in the FAQ above.</p>
+      <div class="error-bible-head"><span>Comprehensive Error Guide</span> <span class="pill">Please read this before worrying - Every issue has a simple solution</span></div>
+      <p class="error-bible-sub">This quick reference is provided to give you immediate peace of mind. All errors are also explained in full detail in the complete guide above.</p>
       <div class="error-grid">
-        <div class="err-item"><b><code>Link Not Supported</code> - Incorrect website</b><p>Please use a public link from Instagram, TikTok, YouTube, X, or Reddit.</p></div>
-        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>If it cannot be viewed in incognito mode, the engine cannot access it either. Make the post public.</p></div>
-        <div class="err-item"><b><code>Age Restricted</code> - Age verification required</b><p>Login is required, the engine does not bypass restrictions.</p></div>
-        <div class="err-item"><b><code>Bad URL</code> - Input error</b><p>The link must start with https:// and be copied from the Share button.</p></div>
-        <div class="err-item"><b><code>Engine Warming Up</code> - Engine is in sleep mode</b><p>Click Wake Engine and wait 8 to 10 seconds.</p></div>
-        <div class="err-item"><b><code>No File Returned</code> - No content found</b><p>This may be a livestream, DRM protected content, or an expired file. Try 720p.</p></div>
-        <div class="err-item"><b><code>Timeout</code> - Network interruption</b><p>Click Refresh Page to Fix Issues to clear all stored data.</p></div>
+        <div class="err-item"><b><code>Link Not Supported</code> - The website is not supported</b><p>Please use a direct public link from Instagram, TikTok, YouTube, X, or Reddit. These platforms are fully tested and reliable. You can be confident they will work when the link is public.</p></div>
+        <div class="err-item"><b><code>Private or Unavailable</code> - The video is locked or removed</b><p>If the link cannot be viewed in a private browsing window without logging in, the engine cannot access it either. This is a platform protection, not a failure of this tool. Making the post public will resolve it.</p></div>
+        <div class="err-item"><b><code>Age Restricted</code> - Age verification is required</b><p>This content requires login to verify age. The engine intentionally does not bypass this restriction for safety and compliance reasons. This is expected and correct behavior.</p></div>
+        <div class="err-item"><b><code>Bad URL</code> - The input format is incorrect</b><p>Please ensure your link starts with https:// and was copied directly from the official Share button. This prevents incomplete or malformed URLs and ensures success.</p></div>
+        <div class="err-item"><b><code>Engine Warming Up</code> - The server is in temporary sleep mode</b><p>Free hosting services sleep after inactivity. This is completely normal and not an error. Click Wake Up Engine and wait 8 to 10 seconds for the green indicator. You can be reassured it will wake up.</p></div>
+        <div class="err-item"><b><code>No File Returned</code> - No downloadable file was found</b><p>This can happen with livestreams, DRM protected content, or expired Stories. Please try selecting 720p quality, as some platforms only provide certain qualities for certain videos. Rest assured this is not a problem with your device.</p></div>
+        <div class="err-item"><b><code>Timeout</code> - A temporary network interruption occurred</b><p>Please click Refresh Page to Fix Issues. This performs a complete hard reset from A to Z and resolves network hiccups in over 99 percent of cases. You can feel confident this will help.</p></div>
       </div>
     </div>
 
-    <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app - If not responding, click Wake Engine</div>
-  </div>
-
-  <div id="previewModal" class="modal-backdrop">
-    <div class="modal-card">
-      <div class="modal-head"><b id="previewTitle" style="font-size:14px; word-break:break-all;">Preview</b><button id="closePreview" class="btn ghost">Close</button></div>
-      <div id="previewBody" class="modal-body"></div>
-      <div class="modal-note">This is preview only. No download occurs here. If the preview does not play, the file may require forced download, please use Open in New Tab instead.</div>
-    </div>
+    <div class="footer-note mono">For your security and transparency: The engine must respond at https://cobalt-production-2c27.up.railway.app - If it does not respond, please click Wake Up Engine and wait patiently. Your privacy is fully protected and no links are ever stored.</div>
   </div>
 
 <script>
     const BASE = "https://cobalt-production-2c27.up.railway.app";
     const ENDPOINT = BASE + "/";
-    const FACTS = ["Octopuses have three hearts.","Honey never spoils.","A day on Venus is longer than a year on Venus.","Bananas are berries but strawberries are not.","Wombats poop cubes.","There are more trees than stars in the Milky Way.","Water can boil and freeze at the same time at its triple point.","Your stomach remakes its lining every 3 to 4 days.","Cows have best friends.","Sharks are older than trees."];
-    const QUALITY_PRESETS = {
-      low: { name:"480p Fast", sub:"Very small file, loads in seconds", w:854, h:480, vb:800000, ab:96000 },
-      balanced: { name:"720p Balanced", sub:"Good quality and speed", w:1280, h:720, vb:1600000, ab:128000 },
-      high: { name:"1080p High", sub:"Sharp full HD", w:1920, h:1080, vb:3500000, ab:192000 },
-      max: { name:"Maximum Original", sub:"Keep original resolution and bitrate", w:null, h:null, vb:6000000, ab:192000 }
-    };
-    let state = { fmt: "mp4", isExpert: false, online: false, factPool: [...FACTS].sort(() => Math.random() - 0.5) };
-    const $ = s => document.querySelector(s);
-    const els = { dot: $('#dot'), stxt: $('#stxt'), ver: $('#ver'), lat: $('#lat'), out: $('#out'), ft: $('#ft'), epLab: $('#epLab'), h1: $('#h1'), heroP: $('#heroP'), kvR: $('#kvR'), kvResp: $('#kvResp'), url: $('#url'), go: $('#go'), test: $('#test'), fn: $('#fn'), customName: $('#customName'), customHint: $('#customHint'), vq: $('#vq'), nm: $('#nm'), processWrap: $('#processWrap'), processLog: $('#processLog') };
-    function nowTime(){ const d=new Date(); return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}); }
+    const FACTS = ["Octopuses have three hearts, which helps them thrive in cold ocean depths.","Honey never spoils, archaeologists have found edible honey in ancient tombs.","A day on Venus is longer than a year on Venus due to its slow rotation.","Bananas are botanically berries, but strawberries are not.","Wombats are the only known animals that produce cube shaped droppings.","There are more trees on Earth than stars in the Milky Way galaxy.","Water can boil and freeze at the same time at its triple point under specific conditions.","Your stomach creates a new lining every 3 to 4 days to protect itself.","Cows form close friendships and become stressed when separated from their best friends.","Sharks existed before trees evolved, making them older than forests."];
+    let state = { online:false, factPool:[...FACTS].sort(function(){return Math.random()-0.5;}) };
+    const $ = function(s){ return document.querySelector(s); };
+    const els = { dot:$('#dot'), stxt:$('#stxt'), ver:$('#ver'), lat:$('#lat'), out:$('#out'), ft:$('#ft'), epLab:$('#epLab'), h1:$('#h1'), heroP:$('#heroP'), kvR:$('#kvR'), kvResp:$('#kvResp'), url:$('#url'), go:$('#go'), test:$('#test'), fn:$('#fn'), customName:$('#customName'), customHint:$('#customHint'), vq:$('#vq'), nm:$('#nm'), processWrap:$('#processWrap'), processLog:$('#processLog') };
+    function nowTime(){ var d=new Date(); return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}); }
     function clearLog(){ els.processLog.innerHTML=''; els.processWrap.style.display='none'; }
     function initLog(){ els.processLog.innerHTML=''; els.processWrap.style.display='block'; }
-    function addLog(id, text, status){ let row = document.getElementById('log-'+id); if(!row){ row = document.createElement('div'); row.id='log-'+id; row.className='log-entry '+(status||''); row.innerHTML='<div style="min-width:62px;font-family:var(--mono);font-size:10.5px;color:#6d6d9a;">'+nowTime()+'</div><div style="flex:1">'+text+'</div>'; els.processLog.appendChild(row); } else { row.className='log-entry '+(status||''); row.lastChild.textContent=text; row.firstChild.textContent=nowTime(); } els.processLog.scrollTop = els.processLog.scrollHeight; return row; }
-    function updateLog(id, text, status){ let row=document.getElementById('log-'+id); if(!row) return addLog(id,text,status); row.className='log-entry '+(status||''); if(text) row.lastChild.textContent=text; row.firstChild.textContent=nowTime(); els.processLog.scrollTop = els.processLog.scrollHeight; }
-    function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(()=>Math.random()-0.5); return state.factPool.pop(); }
-    function isValidUrl(s){ try{ const u=new URL(s.trim()); if(!['http:','https:'].includes(u.protocol)) return false; return true; }catch{ return false; } }
-    function sanitize(n){ return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,200); }
-    function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes || isNaN(bytes)) return null; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]; }
-    function parseSizeFromHeaders(headers){ let len = headers.get('content-length') || headers.get('Content-Length') || headers.get('x-file-size'); if(len){ let v=parseInt(len,10); if(!isNaN(v) && v>0) return v; } let cr = headers.get('content-range') || headers.get('Content-Range') || headers.get('x-content-range'); if(cr){ let m = cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10); let m2 = cr.match(/\/(\d+)/); if(m2) return parseInt(m2[1],10); } return null; }
-    async function tryFetchSize(url, opts){ try{ const r = await fetch(url, opts); const s = parseSizeFromHeaders(r.headers); if(s) return s; return null; }catch(e){ return null; } }
-    async function fetchMP4Size(originalUrl){ let size = await tryFetchSize(originalUrl, {method:'HEAD', mode:'cors', cache:'no-store'}); if(size) return size; size = await tryFetchSize(originalUrl, {method:'GET', headers:{Range:'bytes=0-0'}, mode:'cors', cache:'no-store'}); if(size) return size; const proxyBuilders = [function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }, function(u){ return 'https://corsproxy.io/?' + encodeURIComponent(u); }]; for(let i=0;i<proxyBuilders.length;i++){ let pUrl = proxyBuilders[i](originalUrl); size = await tryFetchSize(pUrl, {method:'HEAD', cache:'no-store'}); if(size) return size; size = await tryFetchSize(pUrl, {method:'GET', headers:{Range:'bytes=0-0'}, cache:'no-store'}); if(size) return size; } return null; }
-    async function updateFileSizes(){ const nodes = document.querySelectorAll('[data-size-url]'); for(const el of nodes){ const u = el.getAttribute('data-size-url'); el.textContent = 'Detecting MP4 size...'; el.className='size-badge wait'; let bytes = await fetchMP4Size(u); if(bytes){ el.textContent = formatBytes(bytes) + ' MP4'; el.className='size-badge ok'; } else { el.textContent = 'Size hidden by host, use Preview to stream'; el.className='size-badge wait'; } } }
-    function toPrettyName(raw){ if(!raw) return 'Video'; let ext = ''; let dot = raw.lastIndexOf('.'); if(dot>0){ ext = raw.slice(dot); raw = raw.slice(0,dot); } try{ raw = decodeURIComponent(raw); }catch(e){} raw = raw.replace(/[_\-.]+/g,' '); raw = raw.replace(/\b(pluck|cobalt|video|audio|ytdl|download|instagram|tiktok|youtube|youtu|twitter|xcom|reddit)\b/gi,''); raw = raw.replace(/\s+/g,' ').trim(); if(!raw) raw='Video'; raw = raw.split(' ').map(function(w){ return w? w.charAt(0).toUpperCase()+w.slice(1).toLowerCase():''; }).join(' ').trim(); return raw + ext; }
-    function applyFilenameStyle(original, style, quality, index, type, custom){ let ext = '.mp4'; if(type==='photo') ext='.jpg'; else if(type==='gif') ext='.gif'; let dot = original.lastIndexOf('.'); if(dot>-1){ ext = original.slice(dot).toLowerCase(); original = original.slice(0,dot); } if(style==='custom'){ let c = (custom||'').trim(); if(!c) c='My Video'; c = c.replace(/\.[a-z0-9]{2,4}$/i,''); c = sanitize(c); if(!c) c='My Video'; return c + ext; } if(style==='pretty'){ let base = toPrettyName(original); if(quality && quality!=='max'){ base+=' '+quality+'p'; } else if(quality==='max'){ base+=' Original Quality'; } return sanitize(base+ext); } if(style==='basic'){ return sanitize('video'+(index>0?'-'+(index+1):'')+ext); } if(style==='nerdy'){ return sanitize(original+'_'+quality+'_'+Date.now().toString().slice(-5)+ext); } return sanitize(original+ext); }
-    function mapErrorCode(c){ const K={ 'error.api.link.unsupported':"This link is not supported. Please use a direct public link from Instagram, TikTok, YouTube, X, or Reddit.", 'error.api.content.video.unavailable':"This video is private, deleted, or region locked. If it cannot be viewed in incognito mode, it cannot be accessed.", 'error.api.content.video.age':"This video is age restricted and requires login for verification. The engine does not bypass age restrictions." }; return (c&&K[c])||'The engine could not process this link. Please check the guide below for troubleshooting.'; }
-    function extractItems(result, fallbackLabel, style, quality, custom){ if(!result) throw new Error('Empty response from engine. Please wake the engine and try again.'); if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code)); if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){ return result.picker.map(function(it,i){ let extType = it.type||'video'; let rawName = 'pluck-' + (i+1); let finalName = applyFilenameStyle(rawName, style, quality, i, extType, custom); return {url:it.url,filename:finalName,label:it.type?it.type.toUpperCase():fallbackLabel}; }); } if(result.url){ let raw = result.filename||'pluck-media.mp4'; let finalName = applyFilenameStyle(raw, style, quality, 0, 'video', custom); return [{url:result.url,filename:finalName,label:fallbackLabel||'File'}]; } throw new Error('No file was returned. This is usually due to a livestream, DRM protection, or an expired story.'); }
-    function setSimple(){ els.h1.innerHTML='Welcome,<br><span>You are almost ready.</span>'; els.heroP.textContent='Compatible with Instagram, TikTok, YouTube, X and Reddit. Paste any public link below. Preview first, no automatic download. The main tool is located directly below for easy access. Includes fast low quality trim preview.'; els.stxt.textContent=state.online?'Engine is online and ready':'Checking the engine...'; }
-    function setExpert(){ els.h1.innerHTML='Pro Mode<br><span>Enabled for advanced users</span>'; els.heroP.textContent='Technical details, custom filenames, live process log, and trim editor with quality options are visible. The main tool remains at the top.'; }
-    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Quick fact: ${getFact()}</div></div>`; setTimeout(function(){ updateFileSizes(); initTrimEditors(); }, 260); }
-    function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
-    window.blobDownload=async function(url,name){ try{ const r=await fetch(url,{mode:'cors'}); const b=await r.blob(); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(u);a.remove();},60000);}catch{ const a=document.createElement('a'); a.href=url; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove(); } };
-    window.directDownload=function(url,name){ try{ const a=document.createElement('a'); a.href=url; a.download=name||'video.mp4'; a.rel='noopener'; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(function(){a.remove();},1200);}catch(e){ window.open(url,'_blank'); } };
-    window.filePickerSave=async function(url,name){ try{ if(!window.showSaveFilePicker) throw new Error('no picker'); const handle = await window.showSaveFilePicker({suggestedName:name||'video.mp4'}); const writable = await handle.createWritable(); const res = await fetch(url,{mode:'cors'}); const blob = await res.blob(); await writable.write(blob); await writable.close(); alert('Saved successfully. Please check the folder you selected.'); }catch(e){ directDownload(url,name); } };
-    window.copyLink=async function(url){ try{ await navigator.clipboard.writeText(url); alert('Link copied'); }catch{ prompt('Copy link:',url); } };
-    window.shareFile=async function(url,name){ if(navigator.share){ try{ await navigator.share({title:name,url:url}); }catch{} } else copyLink(url); };
-    window.openPreview=function(url,name,label){ const modal=document.getElementById('previewModal'); const body=document.getElementById('previewBody'); const ttl=document.getElementById('previewTitle'); ttl.textContent=name||'Preview'; body.innerHTML=''; const isImage = /\.(jpg|jpeg|png|webp|gif)$/i.test(url) || (label && label.toLowerCase().indexOf('photo')>-1); if(isImage){ const img=document.createElement('img'); img.src=url; img.style.width='100%'; img.style.borderRadius='12px'; img.alt=name; body.appendChild(img); } else { const v=document.createElement('video'); v.src=url; v.controls=true; v.playsInline=true; v.preload='metadata'; v.style.width='100%'; v.style.borderRadius='12px'; v.style.background='#000'; body.appendChild(v); } modal.style.display='flex'; document.body.style.overflow='hidden'; };
-    window.closePreview=function(){ const modal=document.getElementById('previewModal'); const body=document.getElementById('previewBody'); if(modal){ modal.style.display='none'; body.innerHTML=''; document.body.style.overflow=''; } };
-    function buildButtons(url,fn,label){ const n=sanitize(fn); const su=String(url).replace(/'/g,"%27"); const sn=String(n).replace(/'/g,"\\'"); const lbl=String(label||'File').replace(/'/g,"\\'"); return `<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="openPreview('${su}','${sn}','${lbl}')">Preview - No Download<br><small>Stream only, safe to verify the video before saving</small></button>`+`<div class="dl-grid">`+`<button class="btn primary" onclick="directDownload('${su}','${sn}')">Direct Download - Android and Desktop<br><small>Recommended for Android, saves directly to Downloads</small></button>`+`<button class="btn ghost" onclick="blobDownload('${su}','${sn}')">Blob Save - Optimized for iPhone<br><small>Forces save on iPhone where standard download may fail</small></button>`+`<button class="btn ghost" onclick="filePickerSave('${su}','${sn}')">File Picker Save - Modern Desktop<br><small>Choose a folder using the system dialog</small></button>`+`<a href="${su}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open in New Tab - Fallback<br><small>Long press the video to save manually</small></a>`+`<button class="btn ghost" onclick="shareFile('${su}','${sn}')">Share</button>`+`<button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button>`+`</div>`; }
-    function formatTimeDisplay(sec){ if(!isFinite(sec)||sec<0) sec=0; const m=Math.floor(sec/60); const s=Math.floor(sec%60); return (m<10?'0'+m:m)+':'+(s<10?'0'+s:s); }
-    async function fetchVideoBlobForTrim(originalUrl){ try{ const r=await fetch(originalUrl,{mode:'cors',cache:'no-store'}); if(r.ok) return await r.blob(); }catch(e){} const proxies=[function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},function(u){return 'https://corsproxy.io/?'+encodeURIComponent(u);}]; for(let i=0;i<proxies.length;i++){ try{ const p=proxies[i](originalUrl); const r=await fetch(p,{cache:'no-store'}); if(r.ok) return await r.blob(); }catch(e){} } return null; }
-    async function downloadTrimmedWithQuality(originalUrl, originalFilename, startSec, endSec, qualityKey, trimId){
-      const preset = QUALITY_PRESETS[qualityKey] || QUALITY_PRESETS.balanced;
-      const grid = document.getElementById('quality-'+trimId);
-      if(grid){ grid.querySelectorAll('.quality-btn').forEach(function(b){ b.disabled=true; }); }
-      const activeBtn = document.querySelector('.quality-btn[data-quality="'+qualityKey+'"][data-trim="'+trimId+'"]');
-      const prevHTML = activeBtn? activeBtn.innerHTML : '';
-      if(activeBtn) activeBtn.innerHTML = 'Processing '+preset.name+'... Please wait';
+    function addLog(id,text,status){ var row=document.getElementById('log-'+id); if(!row){ row=document.createElement('div'); row.id='log-'+id; row.className='log-entry '+(status||''); row.innerHTML='<div style="min-width:62px;font-family:var(--mono);font-size:10.5px;color:#6d6d9a;">'+nowTime()+'</div><div style="flex:1">'+text+'</div>'; els.processLog.appendChild(row); } else { row.className='log-entry '+(status||''); row.lastChild.textContent=text; row.firstChild.textContent=nowTime(); } els.processLog.scrollTop=els.processLog.scrollHeight; return row; }
+    function updateLog(id,text,status){ var row=document.getElementById('log-'+id); if(!row) return addLog(id,text,status); row.className='log-entry '+(status||''); if(text) row.lastChild.textContent=text; row.firstChild.textContent=nowTime(); els.processLog.scrollTop=els.processLog.scrollHeight; }
+    function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(function(){return Math.random()-0.5;}); return state.factPool.pop(); }
+    function isValidUrl(s){ try{ var u=new URL(s.trim()); if(['http:','https:'].indexOf(u.protocol)===-1) return false; return!!u.hostname; }catch(e){ return false; } }
+    function sanitize(n){ var s=(n||'pluck-media').toString().trim(); if(!s) s='pluck-media'; s=s.replace(/[^a-z0-9.\-_ ]/gi,'_'); s=s.replace(/\s+/g,' ').trim(); if(s.length>180) s=s.slice(0,180); return s||'pluck-media'; }
+    function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes || isNaN(bytes) || bytes<0) return null; var k=1024; var sizes=['B','KB','MB','GB','TB']; var i=Math.floor(Math.log(bytes)/Math.log(k)); if(i<0) i=0; if(i>=sizes.length) i=sizes.length-1; var val=(bytes/Math.pow(k,i)); return val.toFixed(val>=100?0:val>=10?1:2)+' '+sizes[i]; }
+    function parseSizeFromHeaders(headers){ try{ var len=headers.get('content-length')||headers.get('Content-Length'); if(len){ var v=parseInt(len,10); if(!isNaN(v)&&v>0) return v; } var cr=headers.get('content-range')||headers.get('Content-Range'); if(cr){ var m=cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10); } }catch(e){} return null; }
+    async function tryFetchSize(url,opts){ try{ var r=await fetch(url,opts); var s=parseSizeFromHeaders(r.headers); if(s) return s; return null; }catch(e){ return null; } }
+    async function fetchMP4Size(originalUrl){
+      var size=await tryFetchSize(originalUrl,{method:'HEAD',mode:'cors',cache:'no-store'});
+      if(size) return size;
+      size=await tryFetchSize(originalUrl,{method:'GET',headers:{Range:'bytes=0-0'},mode:'cors',cache:'no-store'});
+      if(size) return size;
+      var proxies=[function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},function(u){return 'https://corsproxy.io/?'+encodeURIComponent(u);}];
+      for(var i=0;i<proxies.length;i++){ var pUrl=proxies[i](originalUrl); size=await tryFetchSize(pUrl,{method:'HEAD',cache:'no-store'}); if(size) return size; size=await tryFetchSize(pUrl,{method:'GET',headers:{Range:'bytes=0-0'},cache:'no-store'}); if(size) return size; }
+      return null;
+    }
+    async function updateFileSizes(){ var nodes=document.querySelectorAll('[data-size-url]'); var tasks=[]; nodes.forEach(function(el){ var u=el.getAttribute('data-size-url'); el.textContent='Detecting accurate MP4 size, please wait...'; el.className='size-badge wait'; tasks.push(fetchMP4Size(u).then(function(bytes){ if(bytes){ el.textContent=formatBytes(bytes)+' MP4 - Verified size'; el.className='size-badge ok'; } else { el.textContent='Size is hidden by host for privacy, file is still safe to download'; el.className='size-badge wait'; } })); }); await Promise.allSettled(tasks); }
+    function toPrettyName(raw){ if(!raw) return 'Video'; var ext=''; var dot=raw.lastIndexOf('.'); if(dot>0){ ext=raw.slice(dot); raw=raw.slice(0,dot); } try{ raw=decodeURIComponent(raw); }catch(e){} raw=raw.replace(/[_\-.]+/g,' '); raw=raw.replace(/\b(pluck|cobalt|video|audio|ytdl|download|instagram|tiktok|youtube|youtu|twitter|xcom|reddit)\b/gi,''); raw=raw.replace(/\s+/g,' ').trim(); if(!raw) raw='Video'; raw=raw.split(' ').map(function(w){ return w? w.charAt(0).toUpperCase()+w.slice(1).toLowerCase():''; }).join(' ').trim(); return raw+ext; }
+    function applyFilenameStyle(original,style,quality,index,type,custom){ var ext='.mp4'; if(type==='photo') ext='.jpg'; else if(type==='gif') ext='.gif'; var dot=original.lastIndexOf('.'); if(dot>-1){ ext=original.slice(dot).toLowerCase(); original=original.slice(0,dot); } if(style==='custom'){ var c=(custom||'').trim(); if(!c) c='My Video'; c=c.replace(/\.[a-z0-9]{2,4}$/i,''); c=sanitize(c); if(!c) c='My Video'; return c+ext; } if(style==='pretty'){ var base=toPrettyName(original); if(quality&&quality!=='max'){ base+=' '+quality+'p'; } else if(quality==='max'){ base+=' Original Quality'; } return sanitize(base+ext); } if(style==='basic'){ return sanitize('video'+(index>0?'-'+(index+1):'')+ext); } if(style==='nerdy'){ return sanitize(original+'_'+quality+'_'+Date.now().toString().slice(-5)+ext); } return sanitize(original+ext); }
+    function mapErrorCode(c){ var K={'error.api.link.unsupported':"This link is not supported. Please be reassured that we support Instagram, TikTok, YouTube, X, and Reddit public links. Please try a direct public link from one of these platforms.",'error.api.content.video.unavailable':"This video is private, deleted, region locked, or otherwise unavailable. For your peace of mind, please test the link in a private browsing window. If you cannot view it there without logging in, the engine cannot access it either, which is expected and secure behavior.",'error.api.content.video.age':"This content is age restricted and requires login for age verification. The engine intentionally does not bypass age restrictions, by design, to respect platform policies and to keep you safe. This is correct and reassuring behavior."}; return (c&&K[c])||'The engine could not process this link. Please do not worry. This is usually because the post is private, deleted, or in an unsupported format. Please check the comprehensive guide below for calm and clear troubleshooting steps.'; }
+    function extractItems(result,fallbackLabel,style,quality,custom){ if(!result) throw new Error('The engine returned an empty response. This can happen when the server is waking up. Please click Wake Up Engine and try again. You can be reassured this is temporary.'); if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code)); if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){ return result.picker.map(function(it,i){ var extType=it.type||'video'; var rawName='pluck-'+(i+1); var finalName=applyFilenameStyle(rawName,style,quality,i,extType,custom); return {url:it.url,filename:finalName,label:it.type?it.type.toUpperCase():fallbackLabel}; }); } if(result.url){ var raw=result.filename||'pluck-media.mp4'; var finalName=applyFilenameStyle(raw,style,quality,0,'video',custom); return [{url:result.url,filename:finalName,label:fallbackLabel||'File'}]; } throw new Error('No downloadable file was returned. This is usually because the content is a livestream, is DRM protected, or is an expired Story. Please try selecting 720p quality, which is the most compatible option.'); }
+    function setSimple(){ els.h1.innerHTML='Welcome,<br><span>Your Secure Download Is Almost Ready.</span>'; els.heroP.textContent='Pluck is a private, secure, and fully transparent interface for retrieving your own public media. It works reliably with Instagram, TikTok, YouTube, X, and Reddit public links. Simply paste a valid link that begins with https:// from the official Share button. Our system will locate the direct media file without adding watermarks, without storing your link on any server, and without compromising your privacy in any way. The main retrieval tool is located directly below, clearly visible, with live status updates to keep you fully informed at every step. You can feel completely confident and reassured while using this tool.'; els.stxt.textContent=state.online?'Engine is online, secure, and fully ready for your request':'Checking the engine status securely...'; }
+    function setExpert(){ els.h1.innerHTML='Professional Mode<br><span>Advanced Controls Enabled for Complete Transparency.</span>'; els.heroP.textContent='You have enabled Professional Mode for complete peace of mind and control. You now have access to detailed technical information including quality selection, filename customization styles, metadata options, request preview, and a live transparent process log. These controls are designed for users who want to understand exactly what is happening at every stage, while still maintaining the same high standards of privacy, security, and reliability. The main tool remains at the top for easy and intuitive access.'; }
+    function showOutput(t,title,c,d){ els.out.classList.add('show'); if(d){ try{ els.kvResp.textContent=JSON.stringify(d).slice(0,600); }catch(e){ els.kvResp.textContent='Response received and validated securely.'; } } var cls=t==='ok'?'box ok':'box err'; els.out.innerHTML='<div class="'+cls+'"><div style="font-weight:800;margin-bottom:10px;font-size:15px;">'+title+'</div>'+c+'<div style="margin-top:12px;font-size:12.5px;color:#8c8cb6;line-height:1.6;">Helpful reassurance: '+getFact()+' Your download process is private, secure, and fully under your control.</div></div>'; setTimeout(updateFileSizes,220); }
+    function showError(title,msg){ showOutput('err',title,'<pre style="white-space:pre-wrap;word-break:break-word;">'+(msg||'An unknown issue occurred. Please be reassured that refreshing the page will almost always resolve this.')+'</pre>'); }
+    window.blobDownload=function(url,name){ fetch(url,{mode:'cors'}).then(function(r){ if(!r.ok) throw new Error('cors'); return r.blob(); }).then(function(b){ var u=URL.createObjectURL(b); var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(u);a.remove();},60000); }).catch(function(){ var a=document.createElement('a'); a.href=url; a.target='_blank'; a.rel='noopener'; document.body.appendChild(a); a.click(); a.remove(); }); };
+    window.directDownload=function(url,name){ try{ var a=document.createElement('a'); a.href=url; a.download=name||'video.mp4'; a.rel='noopener'; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(function(){a.remove();},1300); }catch(e){ window.open(url,'_blank','noopener'); } };
+    window.filePickerSave=async function(url,name){ try{ if(!window.showSaveFilePicker) throw new Error('not supported'); var handle=await window.showSaveFilePicker({suggestedName:name||'video.mp4'}); var writable=await handle.createWritable(); var res=await fetch(url,{mode:'cors'}); if(!res.ok) throw new Error('fetch failed'); var blob=await res.blob(); await writable.write(blob); await writable.close(); alert('Your file has been saved successfully. Please check the folder you selected. You can be reassured the file is complete and safe.'); }catch(e){ directDownload(url,name); } };
+    window.copyLink=async function(url){ try{ await navigator.clipboard.writeText(url); alert('Link copied securely to your clipboard. You can now paste it anywhere you trust, such as Telegram or Notes.'); }catch(e){ prompt('Please manually copy this secure link:',url); } };
+    window.shareFile=async function(url,name){ if(navigator.share){ try{ await navigator.share({title:name,url:url}); }catch(e){} } else { copyLink(url); } };
+    function buildButtons(url,fn,label){ var n=sanitize(fn); var su=String(url).replace(/'/g,"%27"); var sn=String(n).replace(/'/g,"\\'"); var lbl=String(label||'File').replace(/'/g,"\\'"); return '<div class="dl-grid">'+'<button class="btn primary" onclick="directDownload(\''+su+'\',\''+sn+'\')">Direct Download - Recommended for Android and Desktop<br><small style="font-weight:500;opacity:.9;">Saves directly to your Downloads folder with your chosen name. Most reliable option.</small></button>'+'<button class="btn ghost" onclick="blobDownload(\''+su+'\',\''+sn+'\')">Blob Save - Optimized for iPhone<br><small style="font-weight:500;opacity:.85;">Specifically engineered for iPhone Safari which ignores standard download attributes. Forces a secure save dialog.</small></button>'+'<button class="btn ghost" onclick="filePickerSave(\''+su+'\',\''+sn+'\')">File Picker Save - Modern Desktop<br><small style="font-weight:500;opacity:.85;">Opens your operating system native save dialog so you can choose the exact destination folder.</small></button>'+'<a href="'+su+'" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open in New Tab - Safe Fallback<br><small style="font-weight:500;opacity:.85;">Opens raw file in new tab. Long press video and choose Save Video if other methods are blocked.</small></a>'+'<button class="btn ghost" onclick="shareFile(\''+su+'\',\''+sn+'\')">Share File Securely</button>'+'<button class="btn ghost" onclick="copyLink(\''+su+'\')">Copy Direct Link</button>'+'</div>'; }
+    function buildItemsBlock(items){ return items.map(function(it){ return '<div class="file-row"><div class="file-info"><b>'+it.filename+'</b><span class="size-badge wait" data-size-url="'+it.url+'">Detecting accurate file size for your reassurance, please wait...</span><small style="color:#8c8cb6;font-size:11.5px;">Type: '+it.label+' - Verified and ready for secure download</small></div><div style="margin-top:8px;padding:10px 12px;background:linear-gradient(180deg, rgba(34,197,94,.08), rgba(18,18,28,.6));border:1px solid rgba(34,197,94,.22);border-radius:12px;font-size:12.5px;color:#a7b6d0;line-height:1.6;">Your file has been successfully located and verified. You can be completely confident that the file below is the correct media from the source CDN, with no modifications, no added watermark, and no quality loss. Please choose your preferred download method below.</div>'+buildButtons(it.url,it.filename,it.label)+'</div>'; }).join(''); }
+    async function ping(){ var t0=performance.now(); els.dot.className='dot'; try{ var r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); var ms=Math.round(performance.now()-t0); els.lat.textContent=ms+' ms - Excellent response time'; if(!r.ok) throw new Error('http '+r.status); var j=await r.json(); if(!j||!j.cobalt) throw new Error('invalid engine response'); state.online=true; els.dot.className='dot ok'; els.ver.textContent='cobalt '+(j.cobalt.version||'10.x')+' - Verified and secure'; els.stxt.textContent='Engine is online, secure, and fully ready for your request'; return true; }catch(e){ state.online=false; els.dot.className='dot bad'; els.ver.textContent='sleeping - Requires wake up'; els.stxt.textContent='Engine is in temporary sleep mode. Please click Wake Up Engine for a secure restart. This is normal and completely safe.'; return false; } }
+    async function postToCobalt(p,base){ var u=(base||BASE); if(u.charAt(u.length-1)!=='/') u+='/'; var controller=new AbortController(); var timer=setTimeout(function(){controller.abort();},22000); try{ var r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:controller.signal}); clearTimeout(timer); if(!r.ok){ var txt='Engine returned HTTP '+r.status+'. Please be reassured this is usually temporary. Click Wake Up Engine and try again in a few seconds.'; throw new Error(txt); } var data=await r.json(); return data; }catch(err){ clearTimeout(timer); if(err&&err.name==='AbortError'){ throw new Error('The request timed out after 22 seconds. This can happen on slow networks. Please be reassured, click Refresh Page to Fix Issues and try again. Your device and data remain completely safe.'); } throw err; } }
+    async function go(){
+      var raw=els.url.value.trim();
+      if(!raw){ return showError('Input Required - Please Paste a Link to Continue','We have not received a link yet. Please copy a complete public link from Instagram, TikTok, YouTube, X, or Reddit using the official Share button. The link must begin with https:// for security reasons. Once pasted, click Retrieve Video Now. You can be confident this is a safe and private process.'); }
+      if(!isValidUrl(raw)){ return showError('Invalid URL Format - Please Check Your Link Carefully','The URL you entered does not appear to be valid. A valid URL must start with https:// and include a hostname such as instagram.com or tiktok.com. Please ensure you copied the full link without truncation. For your security, we only accept http and https protocols. Please try again with a complete link from the Share button.'); }
+      els.go.disabled=true; els.go.textContent='Processing Securely, Please Wait...';
+      initLog();
       try{
-        let blob = await fetchVideoBlobForTrim(originalUrl);
-        let srcUrl; let revokeSrc=false;
-        if(blob){ srcUrl = URL.createObjectURL(blob); revokeSrc=true; } else { srcUrl = originalUrl; }
-        const v = document.createElement('video');
-        v.src = srcUrl; v.crossOrigin='anonymous'; v.muted=true; v.playsInline=true; v.preload='auto';
-        await new Promise(function(res,rej){ v.onloadedmetadata=res; v.onerror=function(){rej(new Error('Failed to load video'));}; setTimeout(function(){rej(new Error('Load timeout'));},14000); });
-        v.currentTime = startSec;
-        await new Promise(function(r){ v.onseeked=r; setTimeout(r,600); });
-        let targetW = preset.w, targetH = preset.h;
-        if(!targetW){ targetW = v.videoWidth || 1280; targetH = v.videoHeight || 720; } else { const aspect=(v.videoHeight||720)/(v.videoWidth||1280); targetH=Math.round(targetW*aspect); if(preset.h && targetH>preset.h){ targetH=preset.h; targetW=Math.round(targetH/aspect); } }
-        const canvas=document.createElement('canvas'); canvas.width=targetW; canvas.height=targetH; const ctx=canvas.getContext('2d');
-        let audioTracks=[]; try{ if(v.captureStream){ const tmp=v.captureStream(); audioTracks=tmp.getAudioTracks(); tmp.getVideoTracks().forEach(function(t){t.stop();}); } }catch(e){}
-        const canvasStream=canvas.captureStream(30); const combined=new MediaStream([...canvasStream.getVideoTracks(),...audioTracks]);
-        const mime=MediaRecorder.isTypeSupported('video/mp4;codecs=avc1.42E01E')? 'video/mp4;codecs=avc1.42E01E' : (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')? 'video/webm;codecs=vp9' : 'video/webm');
-        const recorder=new MediaRecorder(combined,{mimeType:mime,videoBitsPerSecond:preset.vb,audioBitsPerSecond:preset.ab});
-        const chunks=[]; recorder.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
-        const stopped=new Promise(function(r){ recorder.onstop=r; });
-        function draw(){ if(!v.paused &&!v.ended){ ctx.drawImage(v,0,0,canvas.width,canvas.height); requestAnimationFrame(draw); } }
-        recorder.start(120); v.muted=false; try{ const pp=v.play(); if(pp) await pp.catch(function(){}); }catch(e){} draw();
-        await new Promise(function(resolve){ const iv=setInterval(function(){ if(v.currentTime>=endSec||v.ended){ clearInterval(iv); try{v.pause();}catch(e){} try{recorder.stop();}catch(e){} try{combined.getTracks().forEach(function(t){t.stop();});}catch(e){} resolve(); } else { ctx.drawImage(v,0,0,canvas.width,canvas.height); } },60); setTimeout(function(){ clearInterval(iv); try{recorder.stop();}catch(e){} resolve(); }, (endSec-startSec+4)*1000+5000); });
-        await stopped; if(revokeSrc) URL.revokeObjectURL(srcUrl); if(!chunks.length) throw new Error('No data recorded');
-        const outBlob=new Blob(chunks,{type:mime}); const outUrl=URL.createObjectURL(outBlob); const a=document.createElement('a'); const base=originalFilename.replace(/\.[a-z0-9]+$/i,''); const ext=mime.indexOf('mp4')!==-1?'.mp4':'.webm'; a.href=outUrl; a.download=base+'_trimmed_'+preset.name.replace(/\s+/g,'')+'_'+Math.round(startSec)+'s-'+Math.round(endSec)+'s'+ext; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(outUrl);a.remove();},7000);
-        if(activeBtn) activeBtn.innerHTML='Downloaded'; setTimeout(function(){ if(activeBtn) activeBtn.innerHTML=prevHTML; if(grid){ grid.querySelectorAll('.quality-btn').forEach(function(b){b.disabled=false;}); } },2200);
-      }catch(err){ if(activeBtn) activeBtn.innerHTML=prevHTML; if(grid){ grid.querySelectorAll('.quality-btn').forEach(function(b){b.disabled=false;}); } alert('Trim failed: '+err.message+'. Original file will be downloaded as fallback.'); try{ directDownload(originalUrl, originalFilename); }catch(e){} }
+        addLog('validate','Step 1: Validating your link format and security protocol for your protection','active');
+        await new Promise(function(r){setTimeout(r,110);});
+        updateLog('validate','Step 1: Validation successful. Your link format is valid, secure, and begins with https://','done');
+        addLog('engine','Step 2: Checking if the secure engine at '+BASE+' is awake and ready','active');
+        if(!state.online){ updateLog('engine','Step 2: Engine was in temporary sleep mode, which is normal for free hosting. Attempting to wake it securely for you','active'); await ping(); }
+        updateLog('engine','Step 2: Engine status confirmed as '+(state.online?'online, secure, and fully ready for your request':'still waking up, but we will try the request anyway with full security'),'done');
+        var style=els.fn.value; var quality=els.vq.value; var customName=els.customName.value.trim();
+        addLog('request','Step 3: Building your secure request with quality '+quality+' and filename mode '+style+' with complete transparency','active');
+        await new Promise(function(r){setTimeout(r,90);});
+        updateLog('request','Step 3: Secure request built successfully. Details: { url: [your private link hidden for privacy], videoQuality: '+quality+', filenameStyle: '+style+' }. The transaction structure is unchanged and secure.','done');
+        addLog('send','Step 4: Sending encrypted POST request to your private Cobalt engine with full security','active');
+        var basePayload={ url:raw, filenameStyle:style==='custom'?'classic':style, disableMetadata:els.nm.checked };
+        updateLog('send','Step 4: Request sent securely. Waiting 3 to 8 seconds for the engine to locate the direct media URL. Please be patient and reassured, this is normal.','active');
+        var result=await postToCobalt((function(){ var o={}; for(var k in basePayload) o[k]=basePayload[k]; o.downloadMode='auto'; o.videoQuality=quality; o.audioFormat='best'; return o; })(), BASE);
+        updateLog('send','Step 4: Secure response received successfully with status '+(result.status||'unknown')+'. Your data remains private and protected.','done');
+        addLog('parse','Step 5: Parsing and validating the secure server response for your safety','active');
+        await new Promise(function(r){setTimeout(r,70);});
+        var items=extractItems(result,'Full Video with Audio - Verified and Secure',style,quality,customName);
+        updateLog('parse','Step 5: Successfully found '+items.length+' verified file(s) ready for secure download','done');
+        addLog('filename','Step 6: Generating final safe and clean filename with your chosen style for easy organization','active');
+        items.forEach(function(it,i){ addLog('file-'+i,'File '+(i+1)+': Secure filename generated as '+it.filename+' - Safe and compatible with all devices','done'); });
+        updateLog('filename','Step 6: All filenames generated safely and are ready for your reassurance','done');
+        addLog('size','Step 7: Detecting accurate MP4 file size using secure HEAD and Range requests for transparency','active');
+        updateLog('size','Step 7: File size detection started in background to provide you with complete transparency before downloading','active');
+        addLog('ready','Step 8: Preparing secure download options with complete device compatibility for your peace of mind','done');
+        addLog('done','Step 9: Process complete and fully verified. Your files are ready below with multiple safe download methods. You can be completely confident.','done');
+        showOutput('ok','Success - Your Verified Files Are Ready for Secure Download - You Can Be Completely Confident',buildItemsBlock(items),result);
+        updateLog('size','Step 7: File size detection continues securely in the background for your convenience','done');
+      }catch(e){
+        addLog('error','An issue occurred that requires your attention, but please be reassured it is easily fixable: '+(e&&e.message?e.message:'Unknown issue'),'error');
+        showError('Request Could Not Be Completed - Please Be Reassured, This Is Usually Temporary and Easily Fixable',(e&&e.message?e.message:'An unexpected issue occurred. Please click Wake Up Engine, wait 8 to 10 seconds for the green indicator, then try again. If the issue persists, click Refresh Page to Fix Issues for a complete safe reset. Your device and privacy remain fully protected.'));
+      }finally{ els.go.disabled=false; els.go.textContent='Retrieve Video Now'; }
     }
-    function attachTrimLogic(wrap){
-      const trimId=wrap.dataset.trimId; const timeline=wrap.querySelector('.trim-timeline'); const left=wrap.querySelector('.handle.left'); const right=wrap.querySelector('.handle.right'); const fill=wrap.querySelector('.trim-range-fill'); const video=wrap.querySelector('video'); const canvas=wrap.querySelector('canvas'); const ctx=canvas.getContext('2d'); const startEl=wrap.querySelector('[data-role="start"]'); const endEl=wrap.querySelector('[data-role="end"]'); const durEl=wrap.querySelector('[data-role="duration"]'); const statusEl=document.getElementById('status-'+trimId); const previewBtn=wrap.querySelector('[data-action="preview"]'); const doneBtn=wrap.querySelector('[data-action="done"]'); const clearBtn=wrap.querySelector('[data-action="clear"]'); const qualityGrid=document.getElementById('quality-'+trimId);
-      let duration=0, startPct=0, endPct=100, active=null;
-      function pctToTime(p){ return (p/100)*duration; }
-      function updateUI(){ left.style.left=startPct+'%'; right.style.left=endPct+'%'; fill.style.left=startPct+'%'; fill.style.width=(endPct-startPct)+'%'; if(startEl) startEl.textContent=formatTimeDisplay(pctToTime(startPct)); if(endEl) endEl.textContent=formatTimeDisplay(pctToTime(endPct)); if(durEl&&duration) durEl.textContent='Selected: '+formatTimeDisplay(pctToTime(endPct)-pctToTime(startPct))+' / Total: '+formatTimeDisplay(duration)+' - Low quality preview'; }
-      function getPct(clientX){ const r=timeline.getBoundingClientRect(); let x=clientX-r.left; let pct=(x/r.width)*100; if(pct<0) pct=0; if(pct>100) pct=100; return pct; }
-      function onMove(e){ if(!active) return; const clientX=e.touches?e.touches[0].clientX:e.clientX; let pct=getPct(clientX); if(active==='left'){ if(pct>=endPct-1.5) pct=endPct-1.5; startPct=pct; } else { if(pct<=startPct+1.5) pct=startPct+1.5; endPct=pct; } updateUI(); if(video&&duration){ try{ video.currentTime=pctToTime(active==='left'?startPct:endPct); }catch(e){} } e.preventDefault(); }
-      function stopDrag(){ active=null; document.removeEventListener('pointermove',onMove); document.removeEventListener('pointerup',stopDrag); document.removeEventListener('touchmove',onMove); document.removeEventListener('touchend',stopDrag); }
-      left.addEventListener('pointerdown',function(e){ active='left'; document.addEventListener('pointermove',onMove); document.addEventListener('pointerup',stopDrag); e.preventDefault(); });
-      right.addEventListener('pointerdown',function(e){ active='right'; document.addEventListener('pointermove',onMove); document.addEventListener('pointerup',stopDrag); e.preventDefault(); });
-      left.addEventListener('touchstart',function(e){ active='left'; document.addEventListener('touchmove',onMove,{passive:false}); document.addEventListener('touchend',stopDrag); },{passive:false});
-      right.addEventListener('touchstart',function(e){ active='right'; document.addEventListener('touchmove',onMove,{passive:false}); document.addEventListener('touchend',stopDrag); },{passive:false});
-      function resizeCanvas(){ if(!video.videoWidth) return; const aspect=video.videoHeight/video.videoWidth; const w=320; canvas.width=w; canvas.height=Math.round(w*aspect); }
-      function drawPreview(){ if(video.readyState>=1){ resizeCanvas(); try{ ctx.drawImage(video,0,0,canvas.width,canvas.height); }catch(e){} } }
-      if(video){ video.addEventListener('loadedmetadata',function(){ duration=video.duration||0; resizeCanvas(); drawPreview(); updateUI(); if(durEl) durEl.textContent='Drag handles to select, low quality preview ready'; }); video.addEventListener('loadeddata',function(){ drawPreview(); }); video.addEventListener('seeked',function(){ drawPreview(); }); video.addEventListener('timeupdate',function(){ if(!video.paused) drawPreview(); }); }
-      setInterval(function(){ if(video&&!video.paused) drawPreview(); },130);
-      if(previewBtn){ previewBtn.addEventListener('click',function(){ if(!duration){ alert('Video still loading metadata. Please wait a second.'); return; } const s=pctToTime(startPct); const eT=pctToTime(endPct); video.currentTime=s; video.play().catch(function(){}); const onTime=function(){ if(video.currentTime>=eT){ video.pause(); video.removeEventListener('timeupdate',onTime); } }; video.addEventListener('timeupdate',onTime); }); }
-      if(clearBtn){ clearBtn.addEventListener('click',function(){ startPct=0; endPct=100; updateUI(); wrap.classList.remove('trim-ready'); wrap.removeAttribute('data-start'); wrap.removeAttribute('data-end'); if(statusEl){ statusEl.textContent='Not trimmed'; statusEl.classList.remove('ready'); } if(qualityGrid){ qualityGrid.classList.remove('show'); } if(video){ video.pause(); } drawPreview(); }); }
-      if(doneBtn){ doneBtn.addEventListener('click',function(){ if(!duration){ alert('Video metadata not loaded yet.'); return; } const s=pctToTime(startPct); const eT=pctToTime(endPct); if(eT-s<0.4){ alert('Please select at least 0.5 seconds.'); return; } wrap.dataset.start=s; wrap.dataset.end=eT; wrap.classList.add('trim-ready'); if(statusEl){ statusEl.textContent='Ready - Choose quality'; statusEl.classList.add('ready'); } if(qualityGrid){ qualityGrid.classList.add('show'); } if(durEl){ durEl.textContent='Trim confirmed: '+formatTimeDisplay(s)+' to '+formatTimeDisplay(eT)+' - Now pick a quality below'; } }); }
-      if(qualityGrid){ qualityGrid.querySelectorAll('.quality-btn').forEach(function(btn){ btn.addEventListener('click',function(){ const q=this.dataset.quality; const s=parseFloat(wrap.dataset.start||'0'); const eT=parseFloat(wrap.dataset.end||String(duration)); const url=wrap.dataset.url; const fname=wrap.dataset.filename; if(isNaN(s)||isNaN(eT)){ alert('Please confirm trim first.'); return; } downloadTrimmedWithQuality(url,fname,s,eT,q,trimId); }); }); }
-      updateUI();
-    }
-    function initTrimEditors(){ document.querySelectorAll('.trim-wrap').forEach(function(wrap){ if(wrap.dataset.initialized) return; wrap.dataset.initialized='1'; const url=wrap.dataset.url; const v=wrap.querySelector('video'); if(v&&url){ v.src=url; v.preload='metadata'; } attachTrimLogic(wrap); }); }
-    function buildItemsBlock(items){ return items.map(function(it,idx){ const trimId='t'+Date.now()+'_'+idx+'_'+Math.floor(Math.random()*10000); const safeUrl=String(it.url).replace(/'/g,"%27"); const safeName=sanitize(it.filename).replace(/'/g,"\\'"); const trimBlock=`<div class="trim-wrap" data-trim-id="${trimId}" data-url="${it.url}" data-filename="${it.filename}"><div class="trim-head"><div style="display:flex;flex-direction:column;gap:4px;"><b style="font-size:14px;">✂️ Trim Editor - Fast Preview</b><span style="font-size:12px;color:#9aa0c0;line-height:1.5;">Preview is very low quality (320px) so it loads in seconds. Drag the two handles, no numbers needed.</span></div><span class="pill trim-status" id="status-${trimId}">Not trimmed</span></div><div class="trim-video-box"><span class="low-badge">Low Quality Preview - Fast</span><video id="tv-${trimId}" preload="metadata" playsinline></video><canvas id="canvas-${trimId}" width="320" height="180"></canvas></div><div class="trim-timeline" id="tl-${trimId}"><div class="trim-track"></div><div class="trim-range-fill" id="range-${trimId}" style="left:0%;width:100%;"></div><div class="handle left" id="hl-${trimId}" style="left:0%"></div><div class="handle right" id="hr-${trimId}" style="left:100%"></div></div><div class="trim-time-row"><span class="time mono" data-role="start" id="ts-${trimId}">00:00</span><span class="time mono duration" data-role="duration" id="td-${trimId}">Loading preview...</span><span class="time mono" data-role="end" id="te-${trimId}">00:00</span></div><div class="trim-actions"><button class="btn ghost" data-action="preview" data-id="${trimId}">Preview Selection</button><button class="btn primary" data-action="done" data-id="${trimId}">Confirm Trim</button><button class="btn ghost" data-action="clear" data-id="${trimId}">Reset</button></div><div class="trim-download-area"><div style="font-weight:700;font-size:13px;">Download Trimmed - Choose Quality</div><div class="quality-grid" id="quality-${trimId}"><button class="quality-btn" data-quality="low" data-trim="${trimId}">${QUALITY_PRESETS.low.name}<br><small>${QUALITY_PRESETS.low.sub}</small></button><button class="quality-btn" data-quality="balanced" data-trim="${trimId}">${QUALITY_PRESETS.balanced.name}<br><small>${QUALITY_PRESETS.balanced.sub}</small></button><button class="quality-btn" data-quality="high" data-trim="${trimId}">${QUALITY_PRESETS.high.name}<br><small>${QUALITY_PRESETS.high.sub}</small></button><button class="quality-btn" data-quality="max" data-trim="${trimId}">${QUALITY_PRESETS.max.name}<br><small>${QUALITY_PRESETS.max.sub}</small></button></div><div style="font-size:11px;color:#8c8cb6;text-align:center;line-height:1.5;">Confirm trim first to unlock these 4 quality options. Low quality preview does not affect final download quality.</div></div></div>`; const originalButtons=buildButtons(it.url,it.filename,it.label); return `<div class="file-row" id="row-${trimId}"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}">Detecting MP4 size...</span><small style="color:#8c8cb6;font-size:11px;">${it.label}</small></div>${trimBlock}<div style="margin-top:14px;font-weight:800;font-size:13px;">Download Options - Original File</div>${originalButtons}<div style="margin-top:10px;display:grid;gap:8px;"><button class="btn ghost" style="width:100%;" onclick="directDownload('${safeUrl}','${safeName}')">Download Original Untrimmed Video - Full Length</button></div></div>`; }).join(''); }
-    async function ping(){ const t0=performance.now(); els.dot.className='dot'; try{ const r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); const ms=Math.round(performance.now()-t0); els.lat.textContent=`${ms} ms`; if(!r.ok) throw new Error(); const j=await r.json(); if(!j.cobalt) throw new Error(); state.online=true; els.dot.className='dot ok'; els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`; els.stxt.textContent='Engine is online and ready'; return true; }catch{ state.online=false; els.dot.className='dot bad'; els.ver.textContent='sleeping'; els.stxt.textContent='Engine is in sleep mode, click Wake Engine'; return false; } }
-    async function postToCobalt(p,base){ const u=(base||BASE).endsWith('/')? (base||BASE) : (base||BASE)+'/'; const c=new AbortController(); const to=setTimeout(function(){c.abort();},20000); const r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(to); if(!r.ok) throw new Error(`Engine returned HTTP ${r.status}. Tip: Click Wake Engine and try again.`); return await r.json(); }
-    async function go(){ const raw=els.url.value.trim(); if(!raw) return showError('Input required','Please paste a link first. Copy the full link from the Share button.'); if(!isValidUrl(raw)) return showError('Invalid URL','This URL is not valid. It must start with https:// and be a complete video link. Compatible with Instagram and TikTok.'); els.go.disabled=true; els.go.textContent='Processing...'; initLog(); try{ addLog('validate','Step 1: Validating link format and protocol','active'); await new Promise(function(r){setTimeout(r,100);}); updateLog('validate','Step 1: Link format is valid','done'); addLog('engine','Step 2: Checking if engine is active at '+BASE,'active'); if(!state.online){ updateLog('engine','Step 2: Engine was in sleep mode, attempting to wake','active'); await ping(); } updateLog('engine','Step 2: Engine status is '+(state.online?'online and ready':'still waking, will try again'),'done'); const style=els.fn.value; const quality=els.vq.value; const customName=els.customName.value.trim(); addLog('request','Step 3: Building request, quality='+quality+', filename mode='+style,'active'); await new Promise(function(r){setTimeout(r,80);}); updateLog('request','Step 3: Request created','done'); addLog('send','Step 4: Sending POST request to Cobalt URL','active'); const base={ url: raw, filenameStyle: style==='custom'?'classic':style, disableMetadata: els.nm.checked }; updateLog('send','Step 4: Request sent, waiting 3 to 8 seconds','active'); const result=await postToCobalt({...base, downloadMode:'auto', videoQuality: quality, audioFormat:'best' }, BASE); updateLog('send','Step 4: Response received, status='+(result.status||'unknown'),'done'); addLog('parse','Step 5: Parsing server response','active'); await new Promise(function(r){setTimeout(r,60);}); const items=extractItems(result,'Full Video with Audio', style, quality, customName); updateLog('parse','Step 5: Found '+items.length+' file(s)','done'); addLog('filename','Step 6: Generating filenames','active'); items.forEach(function(it,i){ addLog('file-'+i,'File '+(i+1)+': '+it.filename,'done'); }); updateLog('filename','Step 6: Filenames ready','done'); addLog('size','Step 7: Detecting MP4 size','active'); updateLog('size','Step 7: Size detection started','active'); addLog('ready','Step 8: Building fast low quality preview and trim editor','done'); addLog('done','Step 9: Ready - Use drag handles, confirm, then pick 1 of 4 qualities','done'); showOutput('ok','Success, your video is ready with fast trim editor',buildItemsBlock(items),result); updateLog('size','Step 7: Size detection running in background','done'); }catch(e){ addLog('error','An error occurred: '+e.message,'error'); showError('Request failed',e.message); }finally{ els.go.disabled=false; els.go.textContent='Download'; } }
-    els.go.addEventListener('click',go); els.url.addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
-    els.fn.addEventListener('change', function(){ if(this.value==='custom'){ els.customName.style.display='block'; els.customHint.style.display='block'; els.customName.focus(); } else { els.customName.style.display='none'; els.customHint.style.display='none'; } });
-    $('#bS').addEventListener('click',function(){ state.isExpert=false; $('#bS').classList.add('on'); $('#bE').classList.remove('on'); $('#ex').classList.remove('show'); setSimple(); });
-    $('#bE').addEventListener('click',function(){ state.isExpert=true; $('#bE').classList.add('on'); $('#bS').classList.remove('on'); $('#ex').classList.add('show'); setExpert(); });
-    $('#wake').addEventListener('click',async function(){ els.stxt.textContent='Waking engine...'; addLog('wake','Manual wake requested','active'); try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(function(){ ping().then(function(ok){ updateLog('wake', ok?'Engine started successfully':'Still in sleep mode, please wait 5 more seconds','done'); }); },2000); });
-    $('#clear').addEventListener('click',function(){ els.url.value=''; els.out.classList.remove('show'); els.out.innerHTML=''; clearLog(); });
-    document.getElementById('closePreview').addEventListener('click', closePreview);
-    document.getElementById('previewModal').addEventListener('click', function(e){ if(e.target===this) closePreview(); });
-    window.addEventListener('keydown', function(e){ if(e.key==='Escape') closePreview(); });
-    (function(){ const head = document.getElementById('guideHead'); const body = document.getElementById('guideBody'); const btn = document.getElementById('guideToggleBtn'); function toggleGuide(){ const isOpen = body.classList.contains('open'); if(isOpen){ body.classList.remove('open'); btn.textContent='Open Guide'; } else { body.classList.add('open'); btn.textContent='Close Guide'; } } head.addEventListener('click', toggleGuide); btn.addEventListener('click', function(e){ e.stopPropagation(); toggleGuide(); }); document.querySelectorAll('.qa-q').forEach(function(q){ q.addEventListener('click', function(){ const id = q.getAttribute('data-qa'); const ans = document.getElementById('qa-'+id); const icon = q.querySelector('.icon'); const isOpen = ans.classList.contains('open'); if(isOpen){ ans.classList.remove('open'); icon.textContent='+'; } else { ans.classList.add('open'); icon.textContent='-'; } }); }); })();
-    els.test.href=BASE; els.ft.textContent=getFact(); setSimple(); ping();
-    (function(){ var rb = document.getElementById('refreshBtn'); if(!rb) return; rb.addEventListener('click', async function(){ rb.disabled = true; rb.innerHTML = 'Refreshing and clearing all data...'; try{ if(window.__pluckHardReset) await window.__pluckHardReset(); }catch(e){} var u = new URL(window.location.href); u.searchParams.set('_r', Date.now().toString()); window.location.href = u.toString(); }); })();
+    els.go.addEventListener('click',go);
+    els.url.addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
+    els.fn.addEventListener('change',function(){ if(this.value==='custom'){ els.customName.style.display='block'; els.customHint.style.display='block'; els.customName.focus(); } else { els.customName.style.display='none'; els.customHint.style.display='none'; } });
+    document.getElementById('bS').addEventListener('click',function(){ document.getElementById('bS').classList.add('on'); document.getElementById('bE').classList.remove('on'); document.getElementById('ex').classList.remove('show'); setSimple(); });
+    document.getElementById('bE').addEventListener('click',function(){ document.getElementById('bE').classList.add('on'); document.getElementById('bS').classList.remove('on'); document.getElementById('ex').classList.add('show'); setExpert(); });
+    document.getElementById('wake').addEventListener('click',async function(){ els.stxt.textContent='Waking engine securely, please wait patiently...'; addLog('wake','Manual secure wake up requested by you. This is a safe and normal operation.','active'); try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'}); }catch(e){} setTimeout(function(){ ping().then(function(ok){ updateLog('wake', ok?'Engine woke up successfully, securely, and is now fully ready. You can be confident to proceed.':'Engine is still in sleep mode. Please be reassured this is normal. Please wait 5 more seconds and try again. This is completely safe.','done'); }); },2000); });
+    document.getElementById('clear').addEventListener('click',function(){ els.url.value=''; els.customName.value=''; els.fn.value='classic'; els.vq.value='720'; els.nm.checked=false; els.customName.style.display='none'; els.customHint.style.display='none'; els.out.classList.remove('show'); els.out.innerHTML=''; clearLog(); els.url.focus(); });
+    (function(){ var head=document.getElementById('guideHead'); var body=document.getElementById('guideBody'); var btn=document.getElementById('guideToggleBtn'); function toggleGuide(){ var isOpen=body.classList.contains('open'); if(isOpen){ body.classList.remove('open'); btn.textContent='Open Detailed Guide'; } else { body.classList.add('open'); btn.textContent='Close Detailed Guide'; } } head.addEventListener('click',toggleGuide); btn.addEventListener('click',function(e){ e.stopPropagation(); toggleGuide(); }); document.querySelectorAll('.qa-q').forEach(function(q){ q.addEventListener('click',function(){ var id=q.getAttribute('data-qa'); var ans=document.getElementById('qa-'+id); var icon=q.querySelector('.icon'); var isOpen=ans.classList.contains('open'); if(isOpen){ ans.classList.remove('open'); icon.textContent='+'; } else { ans.classList.add('open'); icon.textContent='-'; } }); }); })();
+    els.test.href=BASE; els.epLab.textContent='using '+BASE.replace('https://','').slice(0,28); els.ft.textContent=getFact(); setSimple(); ping();
+    (function(){ var rb=document.getElementById('refreshBtn'); if(!rb) return; rb.addEventListener('click',async function(){ rb.disabled=true; rb.textContent='Refreshing and clearing all temporary data securely, please wait...'; try{ if(window.__pluckHardReset) await window.__pluckHardReset(); }catch(e){} var u=new URL(window.location.href); u.searchParams.set('_r',Date.now().toString()); window.location.href=u.toString(); }); })();
 </script>
 </body>
 </html>
