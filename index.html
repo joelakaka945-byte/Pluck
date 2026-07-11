@@ -32,7 +32,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .switch{display:inline-flex;gap:4px;padding:4px;background:var(--surface-1);border:1px solid var(--border-soft);border-radius:999px}.sw{padding:8px 16px;border-radius:999px;border:0;background:transparent;color:var(--dim);font-weight:700;font-size:13px;cursor:pointer}.sw.on{background:var(--accent);color:#fff}
 .meta-pills{display:flex;gap:6px;flex-wrap:wrap}.pill{font-size:11px;border:1px solid var(--border-soft);padding:5px 9px;border-radius:999px;color:var(--dim);background:var(--surface-3)}.pill b{color:var(--text)}
 .row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.field{flex:1 260px;display:flex;align-items:center;gap:8px;padding:8px 8px 8px 16px;border:1px solid var(--border-soft);background:var(--surface-1);border-radius:16px}.field:focus-within{border-color:var(--accent-solid);box-shadow:0 0 0 4px rgba(139,92,246,.18)}.field input{flex:1;background:transparent;border:0;outline:0;color:var(--text);font-size:15px;min-width:0}
-.paste-btn{flex:0 0 auto;padding:10px 16px;border-radius:12px;border:0;background:var(--accent);color:#fff;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap;transition:transform.15s,opacity.2s}.paste-btn:active{transform:scale(.96)}.paste-btn:hover{opacity:.9}
+.paste-btn{flex:0 0 auto;padding:10px 16px;border-radius:12px;border:0;background:var(--accent);color:#fff;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}.paste-btn:active{transform:scale(.96)}
 .btn{border:0;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer;font-family:inherit}.primary{background:var(--accent);color:#fff}.ghost{background:var(--surface-2);border:1px solid var(--border-strong);color:var(--text)}
 .sel{padding:11px 14px;border-radius:12px;border:1px solid var(--border-soft);background:var(--surface-1);color:var(--text);font-size:13px;width:100%;outline:none}
 .kv{display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:12px;color:var(--dim);margin-top:8px}.kv b{color:var(--text);word-break:break-all;font-family:var(--mono);font-size:11px}
@@ -121,7 +121,6 @@ const els={dot:$('#dot'),stxt:$('#stxt'),ver:$('#ver'),lat:$('#lat'),out:$('#out
 function getPlatform(u){try{let h=new URL(u).hostname.toLowerCase();if(h.includes('youtube.com')||h.includes('youtu.be')||h.includes('youtube-nocookie'))return'youtube';if(h.includes('instagram.com'))return'instagram';if(h.includes('tiktok.com'))return'tiktok';if(h.includes('twitter.com')||h.includes('x.com'))return'x';if(h.includes('reddit.com')||h.includes('redd.it'))return'reddit';return'generic'}catch{return'generic'}}
 function extFromAF(f){f=String(f||'best').toLowerCase();if(f==='mp3')return'.mp3';if(f==='ogg')return'.ogg';if(f==='wav')return'.wav';if(f==='opus')return'.opus';return'.m4a'}
 function mimeFromExt(e){e=String(e||'').toLowerCase();if(e==='.mp3')return'audio/mpeg';if(e==='.ogg')return'audio/ogg';if(e==='.wav')return'audio/wav';if(e==='.opus')return'audio/opus';if(e==='.m4a')return'audio/mp4';return'video/mp4'}
-
 function nowTime(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
 function clearLog(){els.processLog.innerHTML='';els.processWrap.style.display='none';setProgress(0,'Waiting')}
 function initLog(){els.processLog.innerHTML='';els.processWrap.style.display='block';setProgress(0,'Starting')}
@@ -138,120 +137,29 @@ async function fetchMP4Size(u){let s=await trySize(u,{method:'HEAD',mode:'cors',
 async function updateFileSizes(){for(let el of document.querySelectorAll('[data-size-url]')){let u=el.getAttribute('data-size-url');let ext=(el.getAttribute('data-ext')||'mp4').toLowerCase();el.textContent='Detecting...';let b=await fetchMP4Size(u);el.textContent=b?formatBytes(b)+' '+ext.toUpperCase():'Size hidden';el.className=b?'size-badge ok':'size-badge wait'}}
 function toPrettyName(r){if(!r)return'Video';let e='';let d=r.lastIndexOf('.');if(d>0){e=r.slice(d);r=r.slice(0,d)}try{r=decodeURIComponent(r)}catch{}r=r.replace(/[_\-.]+/g,' ').replace(/\b(pluck|cobalt|video|audio)\b/gi,'').trim();if(!r)r='Video';return r.split(' ').map(w=>w?w[0].toUpperCase()+w.slice(1).toLowerCase():'').join(' ')+e}
 function applyFilenameStyle_old(o,s,q,i,t,c){let e='.mp4';if(t==='photo')e='.jpg';else if(t==='gif')e='.gif';let d=o.lastIndexOf('.');if(d>-1){e=o.slice(d).toLowerCase();o=o.slice(0,d)}if(s==='custom'){let cu=(c||'').trim()||'My Video';return sanitize(cu.replace(/\.[a-z0-9]{2,4}$/i,''))+e}if(s==='pretty'){let b=toPrettyName(o);if(q&&q!=='max')b+=' '+q+'p';return sanitize(b+e)}if(s==='basic')return 'video'+(i?'-'+(i+1):'')+e;if(s==='nerdy')return sanitize(o+'_'+q+'_'+Date.now().toString().slice(-5)+e);return sanitize(o+e)}
-function applyFilenameStyle_fixed(o,s,q,i,t,c,mode,afmt){
-  let isAudio=(mode==='audio'); let e=isAudio?extFromAF(afmt):'.mp4';
-  if(t==='photo') e='.jpg'; else if(t==='gif') e='.gif';
-  let d=o.lastIndexOf('.'); if(d>-1){ let orig=o.slice(d).toLowerCase(); if(!isAudio) e=orig; else if(afmt==='best' && ['.m4a','.mp3','.ogg','.wav','.opus'].includes(orig)) e=orig; o=o.slice(0,d); }
-  if(s==='custom'){let cu=(c||'').trim()||(isAudio?'My Audio':'My Video');return sanitize(cu.replace(/\.[a-z0-9]{2,4}$/i,''))+e}
-  if(s==='pretty'){let b=toPrettyName(o); if(q&&q!=='max'&&!isAudio) b+=' '+q+'p'; return sanitize(b+e)}
-  if(s==='basic') return sanitize((isAudio?'audio':'video')+(i?'-'+(i+1):'')+e);
-  if(s==='nerdy') return sanitize(o+'_'+(q||afmt)+'_'+Date.now().toString().slice(-5)+e);
-  return sanitize(o+e);
-}
-function applyFilenameStyle(o,s,q,i,t,c,mode,afmt){
-  let plat=window._currentPlatform||'generic';
-  if(plat==='youtube') return applyFilenameStyle_old(o,s,q,i,t,c);
-  return applyFilenameStyle_fixed(o,s,q,i,t,c,mode,afmt);
-}
+function applyFilenameStyle_fixed(o,s,q,i,t,c,mode,afmt){let isAudio=(mode==='audio');let e=isAudio?extFromAF(afmt):'.mp4';if(t==='photo')e='.jpg';else if(t==='gif')e='.gif';let d=o.lastIndexOf('.');if(d>-1){let orig=o.slice(d).toLowerCase();if(!isAudio)e=orig;else if(afmt==='best'&&['.m4a','.mp3','.ogg','.wav','.opus'].includes(orig))e=orig;o=o.slice(0,d);}if(s==='custom'){let cu=(c||'').trim()||(isAudio?'My Audio':'My Video');return sanitize(cu.replace(/\.[a-z0-9]{2,4}$/i,''))+e}if(s==='pretty'){let b=toPrettyName(o);if(q&&q!=='max'&&!isAudio)b+=' '+q+'p';return sanitize(b+e)}if(s==='basic')return sanitize((isAudio?'audio':'video')+(i?'-'+(i+1):'')+e);if(s==='nerdy')return sanitize(o+'_'+(q||afmt)+'_'+Date.now().toString().slice(-5)+e);return sanitize(o+e);}
+function applyFilenameStyle(o,s,q,i,t,c,mode,afmt){let plat=window._currentPlatform||'generic';if(plat==='youtube')return applyFilenameStyle_old(o,s,q,i,t,c);return applyFilenameStyle_fixed(o,s,q,i,t,c,mode,afmt);}
 function mapError(c){const K={'error.api.link.unsupported':"Link not supported.",'error.api.content.video.unavailable':"Private/deleted.",'error.api.content.video.age':"Age restricted."};return K[c]||'Engine error'}
 function extractItems(r,f,s,q,c,mode,afmt){if(!r)throw new Error('Empty');if(r.status==='error')throw new Error(mapError(r.error?.code));if(r.status==='picker'&&Array.isArray(r.picker))return r.picker.map((it,i)=>{let t=it.type||(mode==='audio'?'audio':'video');return{url:it.url,filename:applyFilenameStyle('pluck-'+(i+1),s,q,i,t,c,mode,afmt),label:t.toUpperCase()}});if(r.url){return[{url:r.url,filename:applyFilenameStyle(r.filename||(mode==='audio'?'audio'+extFromAF(afmt):'pluck-media.mp4'),s,q,0,mode==='audio'?'audio':'video',c,mode,afmt),label:f}]}throw new Error('No file')}
-function buildValidPayload(rawUrl, o, isPro){
-  const url=String(rawUrl||'').trim();
-  if(!isPro){return {url, downloadMode:'auto', videoQuality:'720', filenameStyle:'classic', audioFormat:'mp3', disableMetadata:false};}
-  const allowedModes=['auto','audio'], allowedQ=['max','1080','720','480'], allowedStyle=['classic','pretty','basic','nerdy'], allowedAudio=['best','mp3','ogg','wav','opus'];
-  let mode=allowedModes.includes(o.mode)?o.mode:'auto';let quality=allowedQ.includes(String(o.quality))?String(o.quality):'720';let style=o.style==='custom'?'classic':(allowedStyle.includes(o.style)?o.style:'classic');let af=allowedAudio.includes(o.audioFormat)?o.audioFormat:'mp3';
-  let body={url, downloadMode:mode, videoQuality:quality, filenameStyle:style, audioFormat:af, disableMetadata:!!o.disableMetadata};
-  if(mode==='audio') delete body.videoQuality;
-  return body;
-}
+function buildValidPayload(rawUrl,o,isPro){const url=String(rawUrl||'').trim();if(!isPro){return{url,downloadMode:'auto',videoQuality:'720',filenameStyle:'classic',audioFormat:'mp3',disableMetadata:false};}const allowedModes=['auto','audio'],allowedQ=['max','1080','720','480'],allowedStyle=['classic','pretty','basic','nerdy'],allowedAudio=['best','mp3','ogg','wav','opus'];let mode=allowedModes.includes(o.mode)?o.mode:'auto';let quality=allowedQ.includes(String(o.quality))?String(o.quality):'720';let style=o.style==='custom'?'classic':(allowedStyle.includes(o.style)?o.style:'classic');let af=allowedAudio.includes(o.audioFormat)?o.audioFormat:'mp3';let body={url,downloadMode:mode,videoQuality:quality,filenameStyle:style,audioFormat:af,disableMetadata:!!o.disableMetadata};if(mode==='audio')delete body.videoQuality;return body;}
 function setSimple(){els.h1.innerHTML='Welcome,<br><span>Standard - simple downloads.</span>';document.body.classList.remove('is-expert')}
-function setExpert(){els.h1.innerHTML='Pro Mode<br><span>mp3 default - real progress - no half files</span>';document.body.classList.add('is-expert'); setTimeout(updateModeUI,0)}
+function setExpert(){els.h1.innerHTML='Pro Mode<br><span>mp3 default - real progress - no half files</span>';document.body.classList.add('is-expert');setTimeout(updateModeUI,0)}
 function showOutput(t,ti,c,d){els.out.classList.add('show');if(d)try{els.kvResp.textContent=JSON.stringify(d).slice(0,500)}catch{}let cl=t==='ok'?'box ok':'box err';els.out.innerHTML=`<div class="${cl}"><div style="font-weight:800;margin-bottom:8px">${ti}</div>${c}<div style="margin-top:10px;font-size:12px;color:var(--dim)">${getFact()}</div></div>`;setTimeout(updateFileSizes,200)}
 function showError(t,m){showOutput('err',t,`<pre>${m}</pre>`)}
 const PROXIES=[u=>u,u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`];
 async function fetchWithProxyResponse_old(url,useProxy=true){let list=useProxy?PROXIES:[PROXIES[0]];let last;for(let mk of list){try{let r=await fetch(mk(url),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);if(!r.body)throw new Error('No body');return r}catch(e){last=e}}throw last}
-async function fetchWithProxyResponse_fixed(url,useProxy=true){
-  let list=useProxy?PROXIES:[PROXIES[0]]; let last;
-  for(let mk of list){
-    try{
-      let r=await fetch(mk(url),{cache:'no-store'}); if(!r.ok) throw new Error('HTTP '+r.status); if(!r.body) throw new Error('No body');
-      let reader=r.body.getReader(); let {value,done}=await reader.read(); if(done||!value||value.byteLength===0) continue;
-      let first=value; let stream=new ReadableStream({start(c){c.enqueue(first); let pump=()=>reader.read().then(({done,val})=>{if(done){c.close();return}c.enqueue(val);return pump()}); return pump()}});
-      return new Response(stream,{headers:r.headers});
-    }catch(e){last=e}
-  }
-  throw last||new Error('0KB - all proxies blocked');
-}
-async function fetchWithProxyResponse(url,useProxy=true){
-  let plat=window._currentPlatform||'generic';
-  if(plat==='youtube') return fetchWithProxyResponse_old(url,useProxy);
-  return fetchWithProxyResponse_fixed(url,useProxy);
-}
-window.blobDownload=async function(url,name,useProxy=true){
-  let plat=window._currentPlatform||'generic';
-  let lastErr;
-  for(let mk of (useProxy?PROXIES:[PROXIES[0]])){
-    try{
-      let pUrl=mk(url); let res=await fetch(pUrl,{cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status); if(!res.body) throw new Error('No body');
-      let total=parseInt(res.headers.get('Content-Length')||'0',10); let rd=res.body.getReader(); let ch=[]; let rec=0;
-      while(true){let {done,value}=await rd.read(); if(done)break; ch.push(value); rec+=value.byteLength;
-        if(total){ let pp=Math.round(rec/total*100); setProgress(pp, formatBytes(rec)+' / '+formatBytes(total)); }
-        else { setProgress(Math.min(95, Math.round(rec/1024/1024*8)), formatBytes(rec)); }
-      }
-      if(rec===0) throw new Error('0KB');
-      if(total && rec < total*0.99) throw new Error('Half file: got '+rec+' expected '+total);
-      let ext='.'+(name.split('.').pop()||(plat==='youtube'?'mp4':'mp3')).toLowerCase(); let mime=(plat==='youtube'&&ext==='.mp4')?'video/mp4':mimeFromExt(ext);
-      let blob=new Blob(ch,{type:mime}); if(blob.size===0) throw new Error('Blob 0');
-      let u=URL.createObjectURL(blob); let a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(u);a.remove()},60000);
-      setProgress(100,'Full file '+formatBytes(rec)); return;
-    }catch(e){ lastErr=e; continue; }
-  }
-  setProgress(0,'Failed - no half file saved'); throw lastErr||new Error('All proxies failed');
-};
+async function fetchWithProxyResponse_fixed(url,useProxy=true){let list=useProxy?PROXIES:[PROXIES[0]];let last;for(let mk of list){try{let r=await fetch(mk(url),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);if(!r.body)throw new Error('No body');let reader=r.body.getReader();let{value,done}=await reader.read();if(done||!value||value.byteLength===0)continue;let first=value;let stream=new ReadableStream({start(c){c.enqueue(first);let pump=()=>reader.read().then(({done,val})=>{if(done){c.close();return}c.enqueue(val);return pump()});return pump()}});return new Response(stream,{headers:r.headers});}catch(e){last=e}}throw last||new Error('0KB - all proxies blocked');}
+async function fetchWithProxyResponse(url,useProxy=true){let plat=window._currentPlatform||'generic';if(plat==='youtube')return fetchWithProxyResponse_old(url,useProxy);return fetchWithProxyResponse_fixed(url,useProxy);}
+window.blobDownload=async function(url,name,useProxy=true){let plat=window._currentPlatform||'generic';let lastErr;for(let mk of(useProxy?PROXIES:[PROXIES[0]])){try{let pUrl=mk(url);let res=await fetch(pUrl,{cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status);if(!res.body)throw new Error('No body');let total=parseInt(res.headers.get('Content-Length')||'0',10);let rd=res.body.getReader();let ch=[];let rec=0;while(true){let{done,value}=await rd.read();if(done)break;ch.push(value);rec+=value.byteLength;if(total){let pp=Math.round(rec/total*100);setProgress(pp,formatBytes(rec)+' / '+formatBytes(total));}else{setProgress(Math.min(95,Math.round(rec/1024/1024*8)),formatBytes(rec));}}if(rec===0)throw new Error('0KB');if(total&&rec<total*0.99)throw new Error('Half file: got '+rec+' expected '+total);let ext='.'+(name.split('.').pop()||(plat==='youtube'?'mp4':'mp3')).toLowerCase();let mime=(plat==='youtube'&&ext==='.mp4')?'video/mp4':mimeFromExt(ext);let blob=new Blob(ch,{type:mime});if(blob.size===0)throw new Error('Blob 0');let u=URL.createObjectURL(blob);let a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(u);a.remove()},60000);setProgress(100,'Full file '+formatBytes(rec));return;}catch(e){lastErr=e;continue;}}setProgress(0,'Failed - no half file saved');throw lastErr||new Error('All proxies failed');};
 window.directDownload=function(url,name){let a=document.createElement('a');a.href=url;a.download=name||'video.mp4';a.rel='noopener';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),1200)}
-window.filePickerSave=async function(url,name,useProxy=true,useStream=true){
-  let writable=null;
-  try{
-    if(!window.showSaveFilePicker||!useStream) throw new Error('no picker');
-    let h=await window.showSaveFilePicker({suggestedName:name||'video.mp4'});
-    writable=await h.createWritable();
-    let lastErr;
-    for(let mk of (useProxy?PROXIES:[PROXIES[0]])){
-      try{
-        let res=await fetch(mk(url),{cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status); if(!res.body) throw new Error('No body');
-        let total=parseInt(res.headers.get('Content-Length')||'0',10); let rd=res.body.getReader(); let rec=0;
-        if(rec===0 && writable){ try{await writable.truncate(0);}catch{} }
-        while(true){let {done,value}=await rd.read(); if(done)break; await writable.write(value); rec+=value.byteLength;
-          if(total) setProgress(Math.round(rec/total*100), formatBytes(rec)+' / '+formatBytes(total));
-          else setProgress(Math.min(95,Math.round(rec/1024/1024*8)), formatBytes(rec));
-        }
-        if(rec===0) throw new Error('0KB');
-        if(total && rec < total*0.99) throw new Error('Half file');
-        await writable.close(); writable=null; setProgress(100,'Full file '+formatBytes(rec)+' - no half'); alert('Saved full file - '+formatBytes(rec)); return;
-      }catch(e){ lastErr=e; continue; }
-    }
-    throw lastErr;
-  }catch(e){
-    try{ if(writable) await writable.abort(); }catch{}
-    setProgress(0,'Aborted - no half file left'); return window.blobDownload(url,name,useProxy);
-  }
-};
+window.filePickerSave=async function(url,name,useProxy=true,useStream=true){let writable=null;try{if(!window.showSaveFilePicker||!useStream)throw new Error('no picker');let h=await window.showSaveFilePicker({suggestedName:name||'video.mp4'});writable=await h.createWritable();let lastErr;for(let mk of(useProxy?PROXIES:[PROXIES[0]])){try{let res=await fetch(mk(url),{cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status);if(!res.body)throw new Error('No body');let total=parseInt(res.headers.get('Content-Length')||'0',10);let rd=res.body.getReader();let rec=0;if(rec===0&&writable){try{await writable.truncate(0);}catch{}}while(true){let{done,value}=await rd.read();if(done)break;await writable.write(value);rec+=value.byteLength;if(total)setProgress(Math.round(rec/total*100),formatBytes(rec)+' / '+formatBytes(total));else setProgress(Math.min(95,Math.round(rec/1024/1024*8)),formatBytes(rec));}if(rec===0)throw new Error('0KB');if(total&&rec<total*0.99)throw new Error('Half file');await writable.close();writable=null;setProgress(100,'Full file '+formatBytes(rec)+' - no half');alert('Saved full file - '+formatBytes(rec));return;}catch(e){lastErr=e;continue;}}throw lastErr;}catch(e){try{if(writable)await writable.abort();}catch{}setProgress(0,'Aborted - no half file left');return window.blobDownload(url,name,useProxy);}};
 window.copyLink=async function(u){try{await navigator.clipboard.writeText(u);alert('Copied')}catch{prompt('Copy:',u)}};
-window.openPreview=function(u,n,l){
-  let plat=window._currentPlatform||'generic';
-  let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'),t=document.getElementById('previewTitle');t.textContent=n||'Preview';b.innerHTML='';
-  let ext='.'+(n.split('.').pop()||'').toLowerCase(); let isImg=/\.(jpg|jpeg|png|webp|gif)$/i.test(u)|| (l&&l.toLowerCase().includes('photo'));
-  let isAud=/\.(mp3|ogg|wav|opus|m4a)$/i.test(ext)|| (l&&l.toLowerCase().includes('audio'));
-  if(isImg){let i=document.createElement('img');i.src=u;i.style.width='100%';i.style.borderRadius='12px';b.appendChild(i)}
-  else if(isAud){let a=document.createElement('audio');a.src=u;a.controls=true;a.style.width='100%';b.appendChild(a)}
-  else{let v=document.createElement('video');v.src=u;v.controls=true;v.playsInline=true;v.style.width='100%';v.style.borderRadius='12px';v.style.background='#000';b.appendChild(v)}
-  m.style.display='flex';document.body.style.overflow='hidden'
-};
+window.openPreview=function(u,n,l){let plat=window._currentPlatform||'generic';let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'),t=document.getElementById('previewTitle');t.textContent=n||'Preview';b.innerHTML='';let ext='.'+(n.split('.').pop()||'').toLowerCase();let isImg=/\.(jpg|jpeg|png|webp|gif)$/i.test(u)||(l&&l.toLowerCase().includes('photo'));let isAud=/\.(mp3|ogg|wav|opus|m4a)$/i.test(ext)||(l&&l.toLowerCase().includes('audio'));if(isImg){let i=document.createElement('img');i.src=u;i.style.width='100%';i.style.borderRadius='12px';b.appendChild(i)}else if(isAud){let a=document.createElement('audio');a.src=u;a.controls=true;a.style.width='100%';b.appendChild(a)}else{let v=document.createElement('video');v.src=u;v.controls=true;v.playsInline=true;v.style.width='100%';v.style.borderRadius='12px';v.style.background='#000';b.appendChild(v)}m.style.display='flex';document.body.style.overflow='hidden'};
 window.closePreview=function(){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody');if(m){m.style.display='none';b.innerHTML='';document.body.style.overflow=''}};
 function buildButtons(u,fn,lb,isPro){let n=sanitize(fn),su=String(u).replace(/'/g,"%27"),sn=String(n).replace(/'/g,"\\'"),lbl=String(lb||'File').replace(/'/g,"\\'");let base=`<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="openPreview('${su}','${sn}','${lbl}')">Preview - No Download</button><div class="dl-grid"><button class="btn primary" onclick="directDownload('${su}','${sn}')">Direct Download</button><button class="btn ghost" onclick="filePickerSave('${su}','${sn}',true,true)">Stream to Disk - Full File</button>`;if(isPro){base+=`<button class="btn ghost" onclick="blobDownload('${su}','${sn}',true)">Blob Save - Full + Verified</button><a href="${su}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Raw</a><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button>`}base+=`</div>`;return base}
 function buildItemsBlock(items,isPro){return items.map(it=>{let ext='.'+(it.filename.split('.').pop()||'mp4');return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}" data-ext="${ext.replace('.','')}">Detecting...</span><small style="color:var(--dim);font-size:11px">${it.label} - ${window._currentPlatform}</small></div>${buildButtons(it.url,it.filename,it.label,isPro)}</div>`}).join('')}
 async function ping(){let t0=performance.now();els.dot.className='dot';try{let r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'});let ms=Math.round(performance.now()-t0);if(els.lat)els.lat.textContent=ms+' ms';let j=await r.json();if(!j.cobalt)throw new Error();state.online=true;els.dot.className='dot ok';els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`;els.stxt.textContent='Engine online';return true}catch{state.online=false;els.dot.className='dot bad';els.ver.textContent='sleeping';els.stxt.textContent='Sleeping - click Wake';return false}}
-async function go(){let raw=els.url.value.trim();if(!raw)return showError('Input required','Paste link');if(!isValidUrl(raw))return showError('Invalid URL','Must start https://');window._currentPlatform=getPlatform(raw);els.go.disabled=true;els.go.textContent='Processing...';initLog();try{addLog('01','Validate URL','active');setProgress(10,'Validating');await new Promise(r=>setTimeout(r,80));updateLog('01','URL ok - '+window._currentPlatform,'done');addLog('02','Check engine','active');setProgress(25,'Engine check');if(!state.online)await ping();updateLog('02',state.online?'online':'waking','done');setProgress(35,'Engine '+ (state.online?'online':'waking'));let isPro=state.isExpert;let opts={mode:document.getElementById('mode')?.value||'auto',quality:document.getElementById('vq')?.value||'720',style:document.getElementById('fn')?.value||'classic',audioFormat:document.getElementById('af')?.value||'mp3',disableMetadata:document.getElementById('nm')?.checked};let payload=buildValidPayload(raw,opts,isPro);window._currentMode=payload.downloadMode;document.getElementById('kvR').textContent=JSON.stringify(payload);document.getElementById('jsonPreview').textContent=JSON.stringify(payload,null,2);updateLog('03','Payload validated - '+window._currentMode,'done');setProgress(45,'Payload ok');addLog('04','POST to Cobalt','active');setProgress(60,'Posting');let r=await fetch(BASE.replace(/\/$/,'')+'/',{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});let result=await r.json();if(!r.ok||result.status==='error')throw new Error(result.error?.code||'Engine error');updateLog('04','Response '+result.status,'done');setProgress(75,'Response ok');let customName=document.getElementById('customName')?.value?.trim()||'';let items=extractItems(result,'Full Video',payload.filenameStyle,payload.videoQuality,customName,payload.downloadMode,payload.audioFormat);addLog('05','Found '+items.length+' file(s)','done');setProgress(85,items.length+' file(s)');showOutput('ok','Success - Ready - '+window._currentPlatform,buildItemsBlock(items,isPro),result);setProgress(100,'Ready - full download ensured');addLog('06','Ready - no half files','done');}catch(e){addLog('err','ERR '+e.message,'error');setProgress(0,'Failed');showError('Failed',e.message)}finally{els.go.disabled=false;els.go.textContent='Download'}}
+async function go(){let raw=els.url.value.trim();if(!raw)return showError('Input required','Paste link');if(!isValidUrl(raw))return showError('Invalid URL','Must start https://');window._currentPlatform=getPlatform(raw);els.go.disabled=true;els.go.textContent='Processing...';initLog();try{addLog('01','Validate URL','active');setProgress(10,'Validating');await new Promise(r=>setTimeout(r,80));updateLog('01','URL ok - '+window._currentPlatform,'done');addLog('02','Check engine','active');setProgress(25,'Engine check');if(!state.online)await ping();updateLog('02',state.online?'online':'waking','done');setProgress(35,'Engine '+(state.online?'online':'waking'));let isPro=state.isExpert;let opts={mode:document.getElementById('mode')?.value||'auto',quality:document.getElementById('vq')?.value||'720',style:document.getElementById('fn')?.value||'classic',audioFormat:document.getElementById('af')?.value||'mp3',disableMetadata:document.getElementById('nm')?.checked};let payload=buildValidPayload(raw,opts,isPro);window._currentMode=payload.downloadMode;document.getElementById('kvR').textContent=JSON.stringify(payload);document.getElementById('jsonPreview').textContent=JSON.stringify(payload,null,2);updateLog('03','Payload validated - '+window._currentMode,'done');setProgress(45,'Payload ok');addLog('04','POST to Cobalt','active');setProgress(60,'Posting');let r=await fetch(BASE.replace(/\/$/,'')+'/',{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});let result=await r.json();if(!r.ok||result.status==='error')throw new Error(result.error?.code||'Engine error');updateLog('04','Response '+result.status,'done');setProgress(75,'Response ok');let customName=document.getElementById('customName')?.value?.trim()||'';let items=extractItems(result,'Full Video',payload.filenameStyle,payload.videoQuality,customName,payload.downloadMode,payload.audioFormat);addLog('05','Found '+items.length+' file(s)','done');setProgress(85,items.length+' file(s)');showOutput('ok','Success - Ready - '+window._currentPlatform,buildItemsBlock(items,isPro),result);setProgress(100,'Ready - full download ensured');addLog('06','Ready - no half files','done');}catch(e){addLog('err','ERR '+e.message,'error');setProgress(0,'Failed');showError('Failed',e.message)}finally{els.go.disabled=false;els.go.textContent='Download'}}
 function updateModeUI(){let m=document.getElementById('mode')?.value;let vq=document.getElementById('vq');let videoBox=document.getElementById('videoBox');let audioBox=document.getElementById('audioBox');if(m==='audio'){if(vq){vq.style.opacity='0.35';vq.style.pointerEvents='none'}if(videoBox)videoBox.style.opacity='0.6';if(audioBox){audioBox.style.borderColor='var(--accent-solid)';audioBox.style.boxShadow='0 0 0 3px var(--glow-1)'}}else{if(vq){vq.style.opacity='1';vq.style.pointerEvents='auto'}if(videoBox)videoBox.style.opacity='1';if(audioBox){audioBox.style.borderColor='';audioBox.style.boxShadow=''}}}
 els.go.addEventListener('click',go);els.url.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
 document.getElementById('bS').addEventListener('click',()=>{state.isExpert=false;document.getElementById('bS').classList.add('on');document.getElementById('bE').classList.remove('on');document.getElementById('ex').classList.remove('show');setSimple()});
