@@ -38,159 +38,577 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>Pluck Universal Engine</title>
-  <meta name="description" content="Private media saver built with care, powered by Cobalt." />
+  <meta name="description" content="Private media downloader powered by Cobalt on Railway." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    :root { --bg: #0a0a12; --card-bg: rgba(20, 20, 34, 0.96); --border: #2a2a4a; --border-focus: #8b5cf6; --accent: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 45%, #ec4899 100%); --text-main: #f6f6ff; --text-muted: #9aa0c0; --mono: 'JetBrains Mono', monospace; --sans: 'Space Grotesk', system-ui, -apple-system, sans-serif; --serif: 'Fraunces', serif; }
+    :root { --bg: #0a0a0f; --card-bg: rgba(18, 18, 28, 0.95); --border: #272746; --border-focus: #8b5cf6; --accent: linear-gradient(135deg, #8b5cf6, #ec4899); --text-main: #f5f5ff; --text-muted: #9aa0c0; --mono: 'JetBrains Mono', monospace; --sans: 'Space Grotesk', system-ui, -apple-system, sans-serif; }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { background: var(--bg); color: var(--text-main); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; line-height: 1.6; }
-    .mono { font-family: var(--mono)!important; }
-    .bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(800px 600px at 8% -10%, rgba(139,92,246,.28), transparent 60%), radial-gradient(800px 600px at 92% 0%, rgba(236,72,153,.18), transparent 60%), radial-gradient(600px 400px at 50% 120%, rgba(99,102,241,.12), transparent 70%), var(--bg); pointer-events: none; }
-    .wrap { max-width: 780px; margin: 0 auto; padding: 20px 14px 44px; }
-    .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 18px; border: 1px solid var(--border); background: linear-gradient(180deg, rgba(28,28,48,.98), rgba(18,18,32,.98)); border-radius: 18px; backdrop-filter: blur(14px); box-shadow: 0 10px 30px rgba(0,0,0,.25); }
-    .brand { font-weight: 800; display: flex; gap: 10px; align-items: center; font-size: 18px; letter-spacing: -.02em; }
-    .brand-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 11px; background: var(--accent); color: white; font-size: 16px; box-shadow: 0 8px 20px rgba(139,92,246,.35); }
-    .brand small { font-weight: 500; color: var(--text-muted); font-size: 11px; display: block; line-height: 1; margin-top: 2px; }
-    .status { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted); }
-    .dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite; }
-    .dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
-    .dot.bad { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,.18); animation: none; }
+    html, body { background: var(--bg); color: var(--text-main); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; line-height: 1.5; }
+.mono { font-family: var(--mono)!important; }
+.bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events: none; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 40px; }
+.top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 16px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 18px; backdrop-filter: blur(12px); }
+.brand { font-weight: 800; display: flex; gap: 9px; align-items: center; font-size: 18px; }
+.brand-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent); color: white; font-size: 16px; }
+.status { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite; }
+.dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
+.dot.bad { background: #ef4444; box-shadow: 0 0 0 6px rgba(239,68,68,.18); animation: none; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity:.45; } }
-    .hero { margin: 28px 6px 16px; }
-    .hero h1 { font-family: var(--serif); font-size: clamp(36px, 8vw, 50px); line-height: .92; letter-spacing: -.04em; font-weight: 600; }
-    .hero h1 span { background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { color: var(--text-muted); margin-top: 12px; font-size: 15px; line-height: 1.7; max-width: 640px; }
-    .owner-note { margin-top: 10px; font-size: 12.5px; color: #b8b8d6; background: rgba(139,92,246,.10); border: 1px solid rgba(139,92,246,.18); border-radius: 12px; padding: 10px 12px; display: inline-block; }
-    .card { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(32,32,56,.98), rgba(18,18,32,.98)); border-radius: 24px; padding: 20px; box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04); }
-    .switch { display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1d; border: 1px solid #2c2c4e; border-radius: 999px; }
-    .sw { padding: 8px 16px; border-radius: 999px; border: 0; background: transparent; color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; transition: .18s ease; }
-    .sw.on { background: var(--accent); color: #fff; box-shadow: 0 6px 16px rgba(139,92,246,.28); }
-    .meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-    .pill { font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6; background: rgba(14,14,26,.6); }
-    .pill b { color: #fff; }
-    .row { display: flex; gap: 10px; margin-top: 16px; }
-    .field { flex: 1; display: flex; gap: 10px; align-items: center; padding: 15px 16px; border: 1px solid #2b2b4a; background: #0c0c18; border-radius: 16px; transition: .18s ease; }
-    .field:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 5px rgba(139,92,246,.16); transform: translateY(-1px); }
-    .field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
-    .btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; transition: .18s ease; }
-    .btn:hover { transform: translateY(-1px); }
-    .btn:active { transform: translateY(0) scale(.98); }
-    .primary { background: var(--accent); color: #fff; box-shadow: 0 10px 24px rgba(139,92,246,.28); }
-    .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
-    .ghost:hover { background: #222240; border-color: #3d3d6a; }
-    .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
-    .pick { border: 1px solid #2b2b4e; background: #0f0f1e; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 5px; }
-    .pick.on { border-color: #7c5cff; box-shadow: 0 0 0 4px rgba(124,92,255,.14), 0 10px 30px rgba(0,0,0,.25); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1e); }
-    .pick b { font-size: 14px; }
-    .pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
-    .pick small { display: block; color: #8c8cb6; font-size: 12px; line-height: 1.6; margin-top: 2px; }
-    .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 16px; }
-    .expert.show { display: block; }
-    .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    .sel { padding: 12px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c18; color: #fff; font-size: 13px; width: 100%; outline: none; transition: .15s ease; }
-    .sel:focus { border-color: #7c5cff; box-shadow: 0 0 0 4px rgba(124,92,255,.14); }
-    .kv { display: grid; grid-template-columns: 132px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 10px; }
-    .kv b { color: #fff; word-break: break-all; font-weight: 500; }
-    .checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
-    .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
-    .out { display: none; margin-top: 16px; }
-    .out.show { display: block; }
-    .box { border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px; }
-    .box pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono); }
-    .box.ok { border-color: rgba(34,197,94,.28); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
-    .box.err { border-color: rgba(239,68,68,.28); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
-    .dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
+.hero { margin: 22px 6px 14px; }
+.hero h1 { font-size: clamp(34px, 8vw, 46px); line-height:.95; letter-spacing: -.05em; font-weight: 800; }
+.hero h1 span { background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { color: var(--text-muted); margin-top: 10px; font-size: 14.5px; line-height: 1.6; max-width: 620px; }
+.card { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius: 22px; padding: 18px; }
+.switch { display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1b; border: 1px solid #2c2c4e; border-radius: 999px; }
+.sw { padding: 8px 16px; border-radius: 999px; border: 0; background: transparent; color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; }
+.sw.on { background: var(--accent); color: #fff; }
+.meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6; }
+.pill b { color: #fff; }
+.row { display: flex; gap: 10px; margin-top: 14px; }
+.field { flex: 1; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border: 1px solid #2b2b4a; background: #0c0c14; border-radius: 16px; }
+.field:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.18); }
+.field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
+.btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; }
+.btn:active { transform: scale(.97); }
+.primary { background: var(--accent); color: #fff; }
+.ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
+.grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+.pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 4px; }
+.pick.on { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
+.pick b { font-size: 14px; }
+.pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
+.pick small { display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px; }
+.expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
+.expert.show { display: block; }
+.controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; outline: none; }
+.kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
+.kv b { color: #fff; word-break: break-all; }
+.checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
+.actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.out { display: none; margin-top: 16px; }
+.out.show { display: block; }
+.box { border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px; }
+.box pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono); }
+.box.ok { border-color: rgba(34,197,94,.3); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
+.box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
+.dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
     @media (min-width: 600px) {.dl-grid { grid-template-columns: 1fr 1fr; } }
-    .highlights { margin: 16px 0 0; display: grid; gap: 10px; }
-    .hl-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .hl-badge { font-size: 11.5px; padding: 7px 11px; border-radius: 999px; background: #1b1b32; border: 1px solid #32325a; color: #cbb8ff; line-height: 1.3; }
-    .hl-badge strong { color: #fff; font-weight: 800; }
-    .abbr-group { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; vertical-align: middle; margin-right: 2px; }
-    .abbr-meaning { font-size: 9.5px; line-height: 1; color: #9aa0c0; font-style: italic; letter-spacing: .01em; white-space: nowrap; }
-    .abbr-label { font-size: 10.5px; font-weight: 800; letter-spacing: .06em; color: #d9d2ff; background: #23233f; border: 1px solid #3a3a66; padding: 2px 7px; border-radius: 6px; }
-    .guide-wrap { margin-top: 18px; border: 1px solid #2a2a4e; background: linear-gradient(180deg, rgba(26,26,44,.98), rgba(18,18,32,.98)); border-radius: 22px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,.28); }
-    .guide-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; cursor: pointer; user-select: none; background: linear-gradient(180deg, rgba(139,92,246,.08), transparent); }
-    .guide-head b { font-size: 14.5px; letter-spacing: -.01em; }
-    .guide-toggle { font-size: 12px; padding: 7px 12px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; font-weight: 700; cursor: pointer; }
-    .guide-body { display: none; padding: 0 14px 16px; }
-    .guide-body.open { display: block; }
-    .qa-item { margin-top: 12px; }
-    .qa-q { width: 100%; text-align: left; background: #12122a; border: 1px solid #2b2b4e; border-radius: 14px; padding: 13px 14px; font-size: 13.5px; font-weight: 700; color: #e8e8ff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: .15s ease; }
-    .qa-q:hover { border-color: #3d3d6a; background: #15152f; transform: translateY(-1px); }
-    .qa-q span.icon { font-family: var(--mono); font-size: 13px; color: #8b5cf6; min-width: 16px; text-align: center; }
-    .qa-a { display: none; padding: 13px 14px; font-size: 13px; line-height: 1.75; color: #a0a6c8; background: #0c0c18; border: 1px solid #2b2b4e; border-top: none; border-radius: 0 0 14px 14px; margin-top: -2px; }
-    .qa-a.open { display: block; animation: fadeIn .18s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-    .qa-a strong { color: #fff; }
-    .qa-a ul { margin: 8px 0 10px 18px; }
-    .qa-a li { margin-bottom: 6px; }
-    .refresh-area { margin-top: 18px; display: grid; gap: 8px; }
-    .refresh-main { width: 100%; padding: 15px 18px; border-radius: 16px; border: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-family: inherit; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 12px 30px rgba(139,92,246,.32); transition: .18s ease; }
-    .refresh-main:hover { transform: translateY(-1px); box-shadow: 0 16px 36px rgba(139,92,246,.38); }
-    .refresh-main:active { transform: translateY(0) scale(.98); }
-    .refresh-note { text-align: center; color: #9aa0c0; font-size: 12.5px; line-height: 1.6; }
-    .error-bible { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; padding: 18px; }
-    .error-bible-head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
-    .error-bible-sub { color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
-    .error-grid { display:grid; gap:10px; margin-top:14px; }
-    .err-item { border:1px solid #2b2b4e; background:#0f0f1e; border-radius:14px; padding:12px 14px; transition: .15s ease; }
-    .err-item:hover { border-color: #3a3a66; transform: translateY(-1px); }
-    .err-item b { display:block; font-size:13.5px; }
-    .err-item p { color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.65; }
-    .err-item code { font-family: var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
-    .file-row { border:1px solid #2b2b4e; background:#0f0f1e; border-radius:16px; padding:14px; margin-top:12px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
-    .file-info { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-    .file-info b { font-size:13.5px; flex:1 1 100%; word-break:break-all; }
-    .size-badge { font-size:11px; padding:5px 9px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family: var(--mono); }
-    .size-badge.ok { border-color: rgba(34,197,94,.36); color:#86efac; background: rgba(34,197,94,.08); }
-    .size-badge.wait { opacity:.9; }
-    .modal-backdrop { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.78); backdrop-filter:blur(12px); display:none; align-items:center; justify-content:center; padding:16px; }
-    .modal-card { width:100%; max-width:720px; max-height:90vh; overflow:auto; background:linear-gradient(180deg, rgba(32,32,56,.98), rgba(18,18,32,.98)); border:1px solid #31315a; border-radius:20px; padding:18px; box-shadow: 0 24px 80px rgba(0,0,0,.5); }
-    .modal-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:14px; }
-    .modal-body { background:#0c0c18; border:1px solid #2b2b4e; border-radius:14px; padding:12px; min-height:120px; }
-    .modal-note { margin-top:12px; font-size:12px; color:#8c8cb6; line-height:1.6; text-align:center; }
-    .process-wrap { margin-top:16px; border:1px solid #2b2b4e; background:#0f0f1e; border-radius:16px; padding:14px; display:none; }
-    .process-head { font-size:13px; font-weight:800; margin-bottom:10px; letter-spacing:.01em; }
-    .process-log { display:grid; gap:8px; max-height:340px; overflow:auto; padding-right:4px; }
-    .log-entry { display:flex; gap:10px; align-items:flex-start; font-size:12px; line-height:1.6; padding:9px 11px; border-radius:12px; border:1px solid #23233f; background:#0c0c14; color:#9aa0c0; }
-    .log-entry.active { border-color: rgba(139,92,246,.42); background: linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8ff; }
-    .log-entry.done { border-color: rgba(34,197,94,.22); color:#cbd5ff; }
-    .log-entry.error { border-color: rgba(239,68,68,.32); color:#ffd4d4; background: linear-gradient(180deg, rgba(239,68,.10), #0c0c14); }
-    .fun { margin-top: 18px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.12), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.65; color: var(--text-muted); }
-    .footer-note { text-align: center; margin-top: 14px; color: #6d6d9a; font-size: 11px; line-height: 1.6; }
-    @media (max-width: 680px) {.hero h1 { font-size: 36px; }.row { flex-direction: column; } }
+.highlights { margin: 14px 0 0; display: grid; gap: 10px; }
+.hl-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.hl-badge { font-size: 11.5px; padding: 7px 11px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; line-height: 1.3; }
+.hl-badge strong { color: #fff; font-weight: 800; }
+.guide-wrap { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; overflow: hidden; }
+.guide-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 16px 18px; cursor: pointer; user-select: none; }
+.guide-head b { font-size: 14.5px; }
+.guide-toggle { font-size: 12px; padding: 7px 12px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; font-weight: 700; cursor: pointer; }
+.guide-body { display: none; padding: 0 14px 14px; }
+.guide-body.open { display: block; }
+.qa-item { margin-top: 10px; }
+.qa-q { width: 100%; text-align: left; background: #0f0f1a; border: 1px solid #2b2b4e; border-radius: 12px; padding: 12px 14px; font-size: 13px; font-weight: 700; color: #e8e8ff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.qa-q span.icon { font-family: var(--mono); font-size: 13px; color: #8b5cf6; min-width: 14px; text-align: center; }
+.qa-a { display: none; padding: 12px 14px; font-size: 12.5px; line-height: 1.7; color: #9aa0c0; background: #0c0c14; border: 1px solid #2b2b4e; border-top: none; border-radius: 0 0 12px 12px; margin-top: -2px; }
+.qa-a.open { display: block; }
+.qa-a strong { color: #fff; }
+.qa-a ul { margin: 6px 0 8px 18px; }
+.qa-a li { margin-bottom: 5px; }
+.fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+.footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
+    @media (max-width: 680px) {.hero h1 { font-size: 34px; }.row { flex-direction: column; } }
+.refresh-area { margin-top: 16px; display: grid; gap: 8px; }
+.refresh-main { width: 100%; padding: 15px 18px; border-radius: 16px; border: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-family: inherit; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 30px rgba(139,92,246,.25); }
+.refresh-main:active { transform: scale(.97); }
+.refresh-note { text-align: center; color: #9aa0c0; font-size: 12.5px; line-height: 1.6; }
+.error-bible { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; padding: 18px; }
+.error-bible-head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
+.error-bible-sub { color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
+.error-grid { display:grid; gap:10px; margin-top:14px; }
+.err-item { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
+.err-item b { display:block; font-size:13.5px; }
+.err-item p { color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
+.err-item code { font-family: var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
+.file-row { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px; margin-top:10px; }
+.file-info { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.file-info b { font-size:13.5px; flex:1 1 100%; word-break:break-all; }
+.size-badge { font-size:11px; padding:4px 8px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family: var(--mono); }
+.size-badge.ok { border-color: rgba(34,197,94,.35); color:#86efac; }
+.size-badge.wait { opacity:.85; }
+.modal-backdrop { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.75); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:16px; }
+.modal-card { width:100%; max-width:720px; max-height:90vh; overflow:auto; background:linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border:1px solid #31315a; border-radius:18px; padding:16px; }
+.modal-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
+.modal-body { background:#0c0c14; border:1px solid #2b2b4e; border-radius:12px; padding:10px; min-height:120px; }
+.modal-note { margin-top:10px; font-size:12px; color:#8c8cb6; line-height:1.5; text-align:center; }
+.process-wrap { margin-top:16px; border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; display:none; }
+.process-head { font-size:13px; font-weight:800; margin-bottom:10px; }
+.process-log { display:grid; gap:8px; max-height:320px; overflow:auto; padding-right:4px; }
+.log-entry { display:flex; gap:10px; align-items:flex-start; font-size:12px; line-height:1.5; padding:8px 10px; border-radius:10px; border:1px solid #23233f; background:#0c0c14; color:#9aa0c0; }
+.log-entry.active { border-color: rgba(139,92,246,.45); background: linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8d8ff; }
+.log-entry.done { border-color: rgba(34,197,94,.25); color:#cbd5ff; }
+.log-entry.error { border-color: rgba(239,68,68,.35); color:#ffd4d4; background: linear-gradient(180deg, rgba(239,68,68,.10), #0c0c14); }
   </style>
 </head>
 <body>
   <div class="bg"></div>
   <div class="wrap">
-    <div class="top">
-      <div class="brand">
-        <span class="brand-icon">P</span>
-        <div>
-          Pluck
-          <small>Built with care for you, by a friend who owns this site</small>
-        </div>
-      </div>
-      <div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine...</span></div>
-    </div>
+    <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine...</span></div></div>
 
     <div class="hero">
-      <h1 id="h1">Welcome friend,<br><span>you are almost there.</span></h1>
-      <p id="heroP">I made Pluck to make saving simple for you. It works beautifully on Instagram and TikTok. Paste your link below and I will handle the rest with care.</p>
-      <div class="owner-note">A note from the owner: I wanted this to feel like help from a friend, not a cold tool. Everything is explained clearly, every short form shows its meaning above it in quotes, so you always know what you are looking at.</div>
+      <h1 id="h1">Welcome,<br><span>You are almost ready.</span></h1>
+      <p id="heroP">Compatible with Instagram, TikTok, YouTube, X and Reddit. Paste any public link below. Preview first, no automatic download. The main tool is located directly below for easy access.</p>
     </div>
 
     <div class="card" id="mainTool">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;">
-        <div class="switch"><button id="bS" class="sw on">Simple View</button><button id="bE" class="sw">Advanced View</button></div>
-        <div class="meta-pills">
-          <span class="pill">Engine <b id="ver">checking</b></span>
-          <span class="pill" id="lat">-- ms</span>
-          <span class="pill mono" id="epLab">using /</span>
-        </div>
+        <div class="switch"><button id="bS" class="sw on">Standard Mode</button><button id="bE" class="sw">Pro Mode</button></div>
+        <div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">using /</span></div>
       </div>
 
-      <div class="row"><div class="field"><input id="url" type="url" placeholder="Paste your Instagram or TikTok link here, it must start with https://" autocomplete="off" spellcheck="false" /></div>
+      <div class="row"><div class="field"><input id="url" type="url" placeholder="Paste Instagram or TikTok link here, must start with https://" autocomplete="off" spellcheck="false" /></div><button id="go" class="btn primary">Download</button></div>
+
+      <div class="grid3">
+        <button class="pick on" data-f="mp4"><b>Full Video with Audio - Recommended</b><code>mp4</code><small>Ideal for Instagram and TikTok. Includes both video and audio, and is compatible with all phones and desktops.</small></button>
+      </div>
+
+      <div id="ex" class="expert">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Pro Mode - Advanced Controls</div>
+        <div class="controls">
+          <select id="vq" class="sel"><option value="max">Quality: Maximum - Keep original quality</option><option value="1080">Quality: 1080p - Sharp full HD</option><option value="720" selected>Quality: 720p - Balanced quality and speed</option><option value="480">Quality: 480p - Smaller file, saves data</option></select>
+          <select id="af" class="sel" style="display:none"><option value="best" selected>best</option></select>
+          <select id="fn" class="sel">
+            <option value="classic">Filename: Classic - Safe original name</option>
+            <option value="pretty">Filename: Pretty - Clean readable name - Fixed</option>
+            <option value="basic">Filename: Basic - Simple like video.mp4</option>
+            <option value="nerdy">Filename: Detailed - Includes quality and ID</option>
+            <option value="custom">Filename: Custom - Enter your own name</option>
+          </select>
+          <input id="customName" class="sel" type="text" placeholder="Enter your custom filename here, for example My Instagram Save" style="display:none; margin-top:8px;" maxlength="120" />
+          <div id="customHint" style="display:none; font-size:11px; color:#8c8cb6; margin-top:6px; line-height:1.5;">Tip: Enter the name without.mp4, the extension will be added automatically. Invalid characters will be removed for you.</div>
+        </div>
+        <div class="kv"><span>request preview</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div>
+        <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting for your link...</b></div>
+        <label class="checkbox-label"><input id="nm" type="checkbox"> Disable additional metadata for slightly faster processing</label>
+      </div>
+
+      <div class="actions"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear All</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
+
+      <div id="processWrap" class="process-wrap">
+        <div class="process-head">Live Process - Detailed status updates</div>
+        <div id="processLog" class="process-log"></div>
+      </div>
+
+      <div id="out" class="out"></div>
+    </div>
+
+    <div class="highlights">
+      <div class="hl-row">
+        <span class="hl-badge"><strong>Works on Instagram</strong> - Reels, Stories, Posts</span>
+        <span class="hl-badge"><strong>Works on TikTok</strong> - Full videos, no watermark issues</span>
+        <span class="hl-badge"><strong>Works on YouTube</strong> - With audio included</span>
+        <span class="hl-badge"><strong>Works on X and Reddit</strong> - Public links supported</span>
+        <span class="hl-badge">Accurate MP4 file size detection</span>
+        <span class="hl-badge">Custom filename support</span>
+        <span class="hl-badge">Preview before saving</span>
+        <span class="hl-badge">No watermark added</span>
+        <span class="hl-badge">Fast engine response</span>
+        <span class="hl-badge">Private processing, no link storage</span>
+        <span class="hl-badge">Optimized for Android, iPhone and Desktop</span>
+        <span class="hl-badge">Live process log with timestamps</span>
+        <span class="hl-badge">Secure streaming from CDN</span>
+        <span class="hl-badge">Clean and readable interface</span>
+      </div>
+    </div>
+
+    <div class="guide-wrap" id="guideWrap">
+      <div class="guide-head" id="guideHead">
+        <b>Complete User Guide - Everything Explained - Tap to Open or Close</b>
+        <button class="guide-toggle" id="guideToggleBtn">Open Guide</button>
+      </div>
+      <div class="guide-body" id="guideBody">
+        <div class="qa-item">
+          <button class="qa-q" data-qa="1">What is Pluck and how does it use the Cobalt URL <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-1"><strong>Answer:</strong> Pluck is a clean user interface. You paste a link, we create a JSON object containing url, videoQuality, filenameStyle, disableMetadata, downloadMode auto, and audioFormat best, and send a POST request to your base URL, which is https://cobalt-production-2c27.up.railway.app/. The engine then locates the direct MP4 file. We do not modify the base URL or the request structure, so the transaction remains secure. We only process the returned url and filename to display the preview and download options.</div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-q" data-qa="2">Does it work with Instagram and TikTok <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-2"><strong>Yes, supported platforms include:</strong> Instagram Reels, Posts, and Stories if they are public. TikTok standard videos, usually without watermark if the engine provides it. If the account is private, followers only, or requires login, the engine cannot access it. This is a platform restriction, not a bug. Public links provide the best results. The same process applies to YouTube, X, and Reddit.</div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-q" data-qa="3">How do I use it step by step <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-3">
+            <ul>
+              <li><strong>1 Paste:</strong> Copy the full link using the Share button on Instagram or TikTok. The link must start with https://</li>
+              <li><strong>2 Click Download:</strong> The main tool is at the top of the page and is visible immediately without scrolling.</li>
+              <li><strong>3 View the live log:</strong> Displays validation, engine status check, request creation, waiting time, response parsing, filename generation, and size detection.</li>
+              <li><strong>4 Preview:</strong> The video will stream only, no file is saved yet. This allows you to verify the correct video.</li>
+              <li><strong>5 Select the download method for your device:</strong> Please refer to the next question to choose the appropriate button.</li>
+              <li><strong>6 If an issue occurs:</strong> Click Refresh Page to Fix Issues. This will clear the cache completely.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-q" data-qa="4">Which download button should I use for Android, iPhone, or PC <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-4">
+            <ul>
+              <li><strong>Preview No Download:</strong> Works on all devices, streaming only, no storage used. Safe for verifying Instagram and TikTok videos first.</li>
+              <li><strong>Direct Download - Best for Android and Desktop:</strong> Uses an anchor tag with the download attribute. On Android Chrome, Firefox, Edge and on Windows, Mac, and Linux, it saves directly to the Downloads folder with your custom or formatted name.</li>
+              <li><strong>Blob Save - Best for iPhone:</strong> iPhone Safari does not support the download attribute and opens the video instead. This method fetches the file as a blob, creates an object URL, and forces the save dialog.</li>
+              <li><strong>File Picker Save - Modern Desktop Browsers:</strong> If your browser supports showSaveFilePicker, a system dialog will appear to let you choose the destination folder. If not supported, it falls back to Direct Download.</li>
+              <li><strong>Open in New Tab:</strong> Fallback option. Opens the raw MP4 URL in a new tab. You can long press the video and select Save Video if other methods are blocked.</li>
+              <li><strong>Share and Copy Link:</strong> Share opens the system share sheet on mobile devices, Copy places the direct link in your clipboard for use in Telegram or Notes.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-q" data-qa="5">How do custom and pretty filenames work <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-5"><strong>Classic</strong> uses the safe name provided by the engine. <strong>Pretty</strong> cleans unnecessary parts like youtube underscores, decodes the URI, removes common words such as pluck, cobalt, and video, then converts to title case and appends the quality such as 720p or Original Quality. <strong>Basic</strong> is simply video.mp4. <strong>Detailed</strong> adds quality and a unique ID. <strong>Custom</strong> allows you to enter a name such as My Instagram Save. Any.mp4 extension you type is removed, invalid characters are replaced with underscores, and the correct extension.mp4 or.jpg for photos is added. If the custom field is left empty, My Video will be used.</div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-q" data-qa="6">How is the MP4 file size detected <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-6">We first attempt a HEAD request and read the Content-Length header. If the host blocks HEAD requests or CORS, we attempt a GET request with Range bytes 0-0 and read the total size from the Content-Range header, for example bytes 0-0 / 12345678. If the host blocks CORS headers, we retry the same requests through a proxy such as https://api.allorigins.win/raw and corsproxy.io which add Access-Control-Allow-Origin so the headers can be read. This is why the size can be displayed as 24.73 MB MP4 instead of unknown. If the host hides the size even through a proxy, we display Size hidden by host, use Preview to stream.</div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-q" data-qa="7">What does the live process log display <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-7">Nine detailed steps with timestamps. Step 1 is validation, Step 2 is engine check and wake, Step 3 is request building with quality and filename mode, Step 4 is POST to your Cobalt URL, Step 5 is waiting for 3 to 10 seconds, Step 6 is parsing and extracting URLs, Step 7 is filename generation, Step 8 is size detection, Step 9 is completion. If it stops at Step 4, the engine is in sleep mode. If an error occurs at Step 5, the link is private or unsupported.</div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-q" data-qa="8">What do the error messages mean and how to fix them <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-8">
+            <ul>
+              <li><strong>Link Not Supported:</strong> The domain is not in the engine list. Please use a public link from Instagram, TikTok, YouTube, X, or Reddit.</li>
+              <li><strong>Private or Unavailable:</strong> The post is private, deleted, or region locked. If it cannot be viewed in incognito mode, Pluck cannot access it either.</li>
+              <li><strong>Age Restricted:</strong> Requires login for age verification. The engine does not bypass age restrictions by design.</li>
+              <li><strong>Bad URL:</strong> Empty or invalid URL. The link must start with https:// and be copied from the Share button.</li>
+              <li><strong>Engine Warming Up:</strong> Free hosting may enter sleep mode. Click Wake Engine, wait 8 to 10 seconds, and a green dot indicates readiness.</li>
+              <li><strong>No File Returned:</strong> The content may be a livestream, DRM protected, or an expired story. Please try 720p.</li>
+              <li><strong>Timeout:</strong> A network interruption occurred. Click Refresh Page to Fix Issues, which resolves the problem in most cases.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-q" data-qa="9">Why does Refresh Page to Fix Issues work <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-9">At the top of the page, we run a complete hard reset on every refresh or revisit. It clears localStorage, sessionStorage, cookies for this site, Cache API, IndexedDB, service workers, scroll restoration, and timeouts. Most issues are caused by outdated stored state. The refresh button performs the same hard reset and then reloads with a cache bust parameter _r equal to the current timestamp to ensure you receive a fresh copy.</div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-q" data-qa="10">Is my link safe and private <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-10">Yes. Your link is sent only to your own Cobalt URL configured in the base setting, not to any third party, except when checking file size through a proxy for size detection only. We do not store links. Preview streams directly from the CDN URL returned by the engine. No watermark is added. Custom filenames are processed locally.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="refresh-area">
+      <button id="refreshBtn" class="refresh-main">Refresh Page to Fix Issues</button>
+      <div class="refresh-note">If you encounter any issues, please refresh the page. This process clears all cache and temporary data completely and then reloads a fresh copy.</div>
+    </div>
+
+    <div class="fun"><b>Quick Fact:</b> <span id="ft"></span></div>
+
+    <div class="error-bible">
+      <div class="error-bible-head"><span>Error Guide</span> <span class="pill">Read this before you worry</span></div>
+      <p class="error-bible-sub">Quick reference, also explained in the FAQ above.</p>
+      <div class="error-grid">
+        <div class="err-item"><b><code>Link Not Supported</code> - Incorrect website</b><p>Please use a public link from Instagram, TikTok, YouTube, X, or Reddit.</p></div>
+        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>If it cannot be viewed in incognito mode, the engine cannot access it either. Make the post public.</p></div>
+        <div class="err-item"><b><code>Age Restricted</code> - Age verification required</b><p>Login is required, the engine does not bypass restrictions.</p></div>
+        <div class="err-item"><b><code>Bad URL</code> - Input error</b><p>The link must start with https:// and be copied from the Share button.</p></div>
+        <div class="err-item"><b><code>Engine Warming Up</code> - Engine is in sleep mode</b><p>Click Wake Engine and wait 8 to 10 seconds.</p></div>
+        <div class="err-item"><b><code>No File Returned</code> - No content found</b><p>This may be a livestream, DRM protected content, or an expired file. Try 720p.</p></div>
+        <div class="err-item"><b><code>Timeout</code> - Network interruption</b><p>Click Refresh Page to Fix Issues to clear all stored data.</p></div>
+      </div>
+    </div>
+
+    <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app - If not responding, click Wake Engine</div>
+  </div>
+
+  <div id="previewModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-head"><b id="previewTitle" style="font-size:14px; word-break:break-all;">Preview</b><button id="closePreview" class="btn ghost">Close</button></div>
+      <div id="previewBody" class="modal-body"></div>
+      <div class="modal-note">This is preview only. No download occurs here. If the preview does not play, the file may require forced download, please use Open in New Tab instead.</div>
+    </div>
+  </div>
+
+<script>
+    const BASE = "https://cobalt-production-2c27.up.railway.app";
+    const ENDPOINT = BASE + "/";
+    const FACTS = ["Octopuses have three hearts.","Honey never spoils.","A day on Venus is longer than a year on Venus.","Bananas are berries but strawberries are not.","Wombats poop cubes.","There are more trees than stars in the Milky Way.","Water can boil and freeze at the same time at its triple point.","Your stomach remakes its lining every 3 to 4 days.","Cows have best friends.","Sharks are older than trees."];
+    let state = { fmt: "mp4", isExpert: false, online: false, factPool: [...FACTS].sort(() => Math.random() - 0.5) };
+    const $ = s => document.querySelector(s);
+    const els = { dot: $('#dot'), stxt: $('#stxt'), ver: $('#ver'), lat: $('#lat'), out: $('#out'), ft: $('#ft'), epLab: $('#epLab'), h1: $('#h1'), heroP: $('#heroP'), kvR: $('#kvR'), kvResp: $('#kvResp'), url: $('#url'), go: $('#go'), test: $('#test'), fn: $('#fn'), customName: $('#customName'), customHint: $('#customHint'), vq: $('#vq'), nm: $('#nm'), processWrap: $('#processWrap'), processLog: $('#processLog') };
+
+    function nowTime(){ const d=new Date(); return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}); }
+    function clearLog(){ els.processLog.innerHTML=''; els.processWrap.style.display='none'; }
+    function initLog(){ els.processLog.innerHTML=''; els.processWrap.style.display='block'; }
+    function addLog(id, text, status){
+      let row = document.getElementById('log-'+id);
+      if(!row){
+        row = document.createElement('div'); row.id='log-'+id; row.className='log-entry '+(status||'');
+        row.innerHTML='<div style="min-width:62px;font-family:var(--mono);font-size:10.5px;color:#6d6d9a;">'+nowTime()+'</div><div style="flex:1">'+text+'</div>';
+        els.processLog.appendChild(row);
+      } else {
+        row.className='log-entry '+(status||'');
+        row.lastChild.textContent=text;
+        row.firstChild.textContent=nowTime();
+      }
+      els.processLog.scrollTop = els.processLog.scrollHeight;
+      return row;
+    }
+    function updateLog(id, text, status){
+      let row=document.getElementById('log-'+id);
+      if(!row) return addLog(id,text,status);
+      row.className='log-entry '+(status||'');
+      if(text) row.lastChild.textContent=text;
+      row.firstChild.textContent=nowTime();
+      els.processLog.scrollTop = els.processLog.scrollHeight;
+    }
+
+    function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(()=>Math.random()-0.5); return state.factPool.pop(); }
+    function isValidUrl(s){ try{ const u=new URL(s.trim()); if(!['http:','https:'].includes(u.protocol)) return false; return true; }catch{ return false; } }
+    function sanitize(n){ return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,200); }
+    function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes || isNaN(bytes)) return null; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]; }
+    function parseSizeFromHeaders(headers){
+      let len = headers.get('content-length') || headers.get('Content-Length') || headers.get('x-file-size');
+      if(len){ let v=parseInt(len,10); if(!isNaN(v) && v>0) return v; }
+      let cr = headers.get('content-range') || headers.get('Content-Range') || headers.get('x-content-range');
+      if(cr){ let m = cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10); let m2 = cr.match(/\/(\d+)/); if(m2) return parseInt(m2[1],10); }
+      return null;
+    }
+    async function tryFetchSize(url, opts){ try{ const r = await fetch(url, opts); const s = parseSizeFromHeaders(r.headers); if(s) return s; return null; }catch(e){ return null; } }
+    async function fetchMP4Size(originalUrl){
+      let size = await tryFetchSize(originalUrl, {method:'HEAD', mode:'cors', cache:'no-store'});
+      if(size) return size;
+      size = await tryFetchSize(originalUrl, {method:'GET', headers:{Range:'bytes=0-0'}, mode:'cors', cache:'no-store'});
+      if(size) return size;
+      const proxyBuilders = [function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }, function(u){ return 'https://corsproxy.io/?' + encodeURIComponent(u); }];
+      for(let i=0;i<proxyBuilders.length;i++){
+        let pUrl = proxyBuilders[i](originalUrl);
+        size = await tryFetchSize(pUrl, {method:'HEAD', cache:'no-store'}); if(size) return size;
+        size = await tryFetchSize(pUrl, {method:'GET', headers:{Range:'bytes=0-0'}, cache:'no-store'}); if(size) return size;
+      }
+      return null;
+    }
+    async function updateFileSizes(){
+      const nodes = document.querySelectorAll('[data-size-url]');
+      for(const el of nodes){
+        const u = el.getAttribute('data-size-url');
+        el.textContent = 'Detecting MP4 size...'; el.className='size-badge wait';
+        let bytes = await fetchMP4Size(u);
+        if(bytes){ el.textContent = formatBytes(bytes) + ' MP4'; el.className='size-badge ok'; }
+        else { el.textContent = 'Size hidden by host, use Preview to stream'; el.className='size-badge wait'; }
+      }
+    }
+    function toPrettyName(raw){
+      if(!raw) return 'Video';
+      let ext = ''; let dot = raw.lastIndexOf('.'); if(dot>0){ ext = raw.slice(dot); raw = raw.slice(0,dot); }
+      try{ raw = decodeURIComponent(raw); }catch(e){}
+      raw = raw.replace(/[_\-.]+/g,' '); raw = raw.replace(/\b(pluck|cobalt|video|audio|ytdl|download|instagram|tiktok|youtube|youtu|twitter|xcom|reddit)\b/gi,'');
+      raw = raw.replace(/\s+/g,' ').trim(); if(!raw) raw='Video';
+      raw = raw.split(' ').map(function(w){ return w? w.charAt(0).toUpperCase()+w.slice(1).toLowerCase():''; }).join(' ').trim();
+      return raw + ext;
+    }
+    function applyFilenameStyle(original, style, quality, index, type, custom){
+      let ext = '.mp4'; if(type==='photo') ext='.jpg'; else if(type==='gif') ext='.gif';
+      let dot = original.lastIndexOf('.'); if(dot>-1){ ext = original.slice(dot).toLowerCase(); original = original.slice(0,dot); }
+      if(style==='custom'){ let c = (custom||'').trim(); if(!c) c='My Video'; c = c.replace(/\.[a-z0-9]{2,4}$/i,''); c = sanitize(c); if(!c) c='My Video'; return c + ext; }
+      if(style==='pretty'){ let base = toPrettyName(original); if(quality && quality!=='max'){ base+=' '+quality+'p'; } else if(quality==='max'){ base+=' Original Quality'; } return sanitize(base+ext); }
+      if(style==='basic'){ return sanitize('video'+(index>0?'-'+(index+1):'')+ext); }
+      if(style==='nerdy'){ return sanitize(original+'_'+quality+'_'+Date.now().toString().slice(-5)+ext); }
+      return sanitize(original+ext);
+    }
+    function mapErrorCode(c){
+      const K={
+        'error.api.link.unsupported':"This link is not supported. Please use a direct public link from Instagram, TikTok, YouTube, X, or Reddit.",
+        'error.api.content.video.unavailable':"This video is private, deleted, or region locked. If it cannot be viewed in incognito mode, it cannot be accessed.",
+        'error.api.content.video.age':"This video is age restricted and requires login for verification. The engine does not bypass age restrictions."
+      };
+      return (c&&K[c])||'The engine could not process this link. Please check the guide below for troubleshooting.';
+    }
+    function extractItems(result, fallbackLabel, style, quality, custom){
+      if(!result) throw new Error('Empty response from engine. Please wake the engine and try again.');
+      if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code));
+      if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){
+        return result.picker.map(function(it,i){
+          let extType = it.type||'video';
+          let rawName = 'pluck-' + (i+1);
+          let finalName = applyFilenameStyle(rawName, style, quality, i, extType, custom);
+          return {url:it.url,filename:finalName,label:it.type?it.type.toUpperCase():fallbackLabel};
+        });
+      }
+      if(result.url){
+        let raw = result.filename||'pluck-media.mp4';
+        let finalName = applyFilenameStyle(raw, style, quality, 0, 'video', custom);
+        return [{url:result.url,filename:finalName,label:fallbackLabel||'File'}];
+      }
+      throw new Error('No file was returned. This is usually due to a livestream, DRM protection, or an expired story.');
+    }
+    function setSimple(){ els.h1.innerHTML='Welcome,<br><span>You are almost ready.</span>'; els.heroP.textContent='Compatible with Instagram, TikTok, YouTube, X and Reddit. Paste any public link below. Preview first, no automatic download. The main tool is located right here.'; els.stxt.textContent=state.online?'Engine is online and ready':'Checking the engine...'; }
+    function setExpert(){ els.h1.innerHTML='Pro Mode<br><span>Enabled for advanced users</span>'; els.heroP.textContent='Technical details, custom filenames, and the live process log are now visible. The main tool remains at the top, the guide is below and collapsible.'; }
+    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Quick fact: ${getFact()}</div></div>`; setTimeout(updateFileSizes, 200); }
+    function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
+
+    window.blobDownload=async function(url,name){
+      try{
+        const r=await fetch(url,{mode:'cors'});
+        const b=await r.blob();
+        const u=URL.createObjectURL(b);
+        const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click();
+        setTimeout(function(){URL.revokeObjectURL(u);a.remove();},60000);
+      }catch{
+        const a=document.createElement('a'); a.href=url; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove();
+      }
+    };
+    window.directDownload=function(url,name){
+      try{
+        const a=document.createElement('a');
+        a.href=url; a.download=name||'video.mp4'; a.rel='noopener'; a.style.display='none';
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){a.remove();},1200);
+      }catch(e){ window.open(url,'_blank'); }
+    };
+    window.filePickerSave=async function(url,name){
+      try{
+        if(!window.showSaveFilePicker) throw new Error('no picker');
+        const handle = await window.showSaveFilePicker({suggestedName:name||'video.mp4'});
+        const writable = await handle.createWritable();
+        const res = await fetch(url,{mode:'cors'});
+        const blob = await res.blob();
+        await writable.write(blob); await writable.close();
+        alert('Saved successfully. Please check the folder you selected.');
+      }catch(e){ directDownload(url,name); }
+    };
+    window.copyLink=async function(url){ try{ await navigator.clipboard.writeText(url); alert('Link copied'); }catch{ prompt('Copy link:',url); } };
+    window.shareFile=async function(url,name){ if(navigator.share){ try{ await navigator.share({title:name,url:url}); }catch{} } else copyLink(url); };
+
+    window.openPreview=function(url,name,label){
+      const modal=document.getElementById('previewModal'); const body=document.getElementById('previewBody'); const ttl=document.getElementById('previewTitle');
+      ttl.textContent=name||'Preview'; body.innerHTML='';
+      const isImage = /\.(jpg|jpeg|png|webp|gif)$/i.test(url) || (label && label.toLowerCase().indexOf('photo')>-1);
+      if(isImage){ const img=document.createElement('img'); img.src=url; img.style.width='100%'; img.style.borderRadius='12px'; img.alt=name; body.appendChild(img); }
+      else { const v=document.createElement('video'); v.src=url; v.controls=true; v.playsInline=true; v.preload='metadata'; v.style.width='100%'; v.style.borderRadius='12px'; v.style.background='#000'; body.appendChild(v); }
+      modal.style.display='flex'; document.body.style.overflow='hidden';
+    };
+    window.closePreview=function(){ const modal=document.getElementById('previewModal'); const body=document.getElementById('previewBody'); if(modal){ modal.style.display='none'; body.innerHTML=''; document.body.style.overflow=''; } };
+
+    function buildButtons(url,fn,label){
+      const n=sanitize(fn); const su=String(url).replace(/'/g,"%27"); const sn=String(n).replace(/'/g,"\\'"); const lbl=String(label||'File').replace(/'/g,"\\'");
+      return `<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="openPreview('${su}','${sn}','${lbl}')">Preview - No Download<br><small>Stream only, safe to verify the video before saving</small></button>`
+      + `<div class="dl-grid">`
+      + `<button class="btn primary" onclick="directDownload('${su}','${sn}')">Direct Download - Android and Desktop<br><small>Recommended for Android, saves directly to Downloads</small></button>`
+      + `<button class="btn ghost" onclick="blobDownload('${su}','${sn}')">Blob Save - Optimized for iPhone<br><small>Forces save on iPhone where standard download may fail</small></button>`
+      + `<button class="btn ghost" onclick="filePickerSave('${su}','${sn}')">File Picker Save - Modern Desktop<br><small>Choose a folder using the system dialog</small></button>`
+      + `<a href="${su}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open in New Tab - Fallback<br><small>Long press the video to save manually</small></a>`
+      + `<button class="btn ghost" onclick="shareFile('${su}','${sn}')">Share</button>`
+      + `<button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button>`
+      + `</div>`;
+    }
+    function buildItemsBlock(items){
+      return items.map(function(it){
+        return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}">Detecting MP4 size...</span><small style="color:#8c8cb6;font-size:11px;">${it.label}</small></div>${buildButtons(it.url,it.filename,it.label)}</div>`;
+      }).join('');
+    }
+
+    async function ping(){ const t0=performance.now(); els.dot.className='dot'; try{ const r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); const ms=Math.round(performance.now()-t0); els.lat.textContent=`${ms} ms`; if(!r.ok) throw new Error(); const j=await r.json(); if(!j.cobalt) throw new Error(); state.online=true; els.dot.className='dot ok'; els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`; els.stxt.textContent='Engine is online and ready'; return true; }catch{ state.online=false; els.dot.className='dot bad'; els.ver.textContent='sleeping'; els.stxt.textContent='Engine is in sleep mode, click Wake Engine'; return false; } }
+    async function postToCobalt(p,base){ const u=(base||BASE).endsWith('/')? (base||BASE) : (base||BASE)+'/'; const c=new AbortController(); const to=setTimeout(function(){c.abort();},20000); const r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(to); if(!r.ok) throw new Error(`Engine returned HTTP ${r.status}. Tip: Click Wake Engine and try again.`); return await r.json(); }
+
+    async function go(){
+      const raw=els.url.value.trim(); if(!raw) return showError('Input required','Please paste a link first. Copy the full link from the Share button.');
+      if(!isValidUrl(raw)) return showError('Invalid URL','This URL is not valid. It must start with https:// and be a complete video link. Compatible with Instagram and TikTok.');
+      els.go.disabled=true; els.go.textContent='Processing...';
+      initLog();
+      try{
+        addLog('validate','Step 1: Validating link format and protocol','active');
+        await new Promise(function(r){ setTimeout(r, 120); });
+        updateLog('validate','Step 1: Link format is valid and starts with https','done');
+        addLog('engine','Step 2: Checking if engine is active at '+BASE,'active');
+        if(!state.online){ updateLog('engine','Step 2: Engine was in sleep mode, attempting to wake','active'); await ping(); }
+        updateLog('engine','Step 2: Engine status is '+(state.online?'online and ready':'still waking, will try again'),'done');
+        const style=els.fn.value; const quality=els.vq.value; const customName=els.customName.value.trim();
+        addLog('request','Step 3: Building request, quality='+quality+', filename mode='+style,'active');
+        await new Promise(function(r){ setTimeout(r, 100); });
+        updateLog('request','Step 3: Request created. Details: { url, videoQuality: '+quality+', filenameStyle: '+style+' } - Engine transaction unchanged','done');
+        addLog('send','Step 4: Sending POST request to Cobalt URL','active');
+        const base={ url: raw, filenameStyle: style==='custom'?'classic':style, disableMetadata: els.nm.checked };
+        updateLog('send','Step 4: Request sent, waiting 3 to 8 seconds','active');
+        const result=await postToCobalt({...base, downloadMode:'auto', videoQuality: quality, audioFormat:'best' }, BASE);
+        updateLog('send','Step 4: Response received, status='+(result.status||'unknown'),'done');
+        addLog('parse','Step 5: Parsing server response','active');
+        await new Promise(function(r){ setTimeout(r, 80); });
+        const items=extractItems(result,'Full Video with Audio', style, quality, customName);
+        updateLog('parse','Step 5: Found '+items.length+' file(s)','done');
+        addLog('filename','Step 6: Generating final filename with pretty formatting and custom name support','active');
+        items.forEach(function(it,i){ addLog('file-'+i,'File '+(i+1)+': '+it.filename,'done'); });
+        updateLog('filename','Step 6: Filenames ready','done');
+        addLog('size','Step 7: Detecting MP4 size using HEAD and Range requests','active');
+        updateLog('size','Step 7: Size detection started, file size will appear shortly','active');
+        addLog('ready','Step 8: Building preview player, no automatic download','done');
+        addLog('done','Step 9: Process complete, scroll to preview or select a download method for your device','done');
+        showOutput('ok','Success, your video is ready - Instagram and TikTok supported',buildItemsBlock(items),result);
+        updateLog('size','Step 7: Size detection running in background','done');
+      }catch(e){
+        addLog('error','An error occurred: '+e.message,'error');
+        showError('Request failed',e.message);
+      }finally{ els.go.disabled=false; els.go.textContent='Download'; }
+    }
+
+    els.go.addEventListener('click',go); els.url.addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
+    els.fn.addEventListener('change', function(){ if(this.value==='custom'){ els.customName.style.display='block'; els.customHint.style.display='block'; els.customName.focus(); } else { els.customName.style.display='none'; els.customHint.style.display='none'; } });
+    $('#bS').addEventListener('click',function(){ state.isExpert=false; $('#bS').classList.add('on'); $('#bE').classList.remove('on'); $('#ex').classList.remove('show'); setSimple(); });
+    $('#bE').addEventListener('click',function(){ state.isExpert=true; $('#bE').classList.add('on'); $('#bS').classList.remove('on'); $('#ex').classList.add('show'); setExpert(); });
+    $('#wake').addEventListener('click',async function(){ els.stxt.textContent='Waking engine...'; addLog('wake','Manual wake requested','active'); try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(function(){ ping().then(function(ok){ updateLog('wake', ok?'Engine started successfully':'Still in sleep mode, please wait 5 more seconds','done'); }); },2000); });
+    $('#clear').addEventListener('click',function(){ els.url.value=''; els.out.classList.remove('show'); els.out.innerHTML=''; clearLog(); });
+
+    document.getElementById('closePreview').addEventListener('click', closePreview);
+    document.getElementById('previewModal').addEventListener('click', function(e){ if(e.target===this) closePreview(); });
+    window.addEventListener('keydown', function(e){ if(e.key==='Escape') closePreview(); });
+
+    (function(){
+      const head = document.getElementById('guideHead');
+      const body = document.getElementById('guideBody');
+      const btn = document.getElementById('guideToggleBtn');
+      function toggleGuide(){
+        const isOpen = body.classList.contains('open');
+        if(isOpen){ body.classList.remove('open'); btn.textContent='Open Guide'; }
+        else { body.classList.add('open'); btn.textContent='Close Guide'; }
+      }
+      head.addEventListener('click', toggleGuide);
+      btn.addEventListener('click', function(e){ e.stopPropagation(); toggleGuide(); });
+      document.querySelectorAll('.qa-q').forEach(function(q){
+        q.addEventListener('click', function(){
+          const id = q.getAttribute('data-qa');
+          const ans = document.getElementById('qa-'+id);
+          const icon = q.querySelector('.icon');
+          const isOpen = ans.classList.contains('open');
+          if(isOpen){ ans.classList.remove('open'); icon.textContent='+'; }
+          else { ans.classList.add('open'); icon.textContent='-'; }
+        });
+      });
+    })();
+
+    els.test.href=BASE; els.ft.textContent=getFact(); setSimple(); ping();
+
+    (function(){
+      var rb = document.getElementById('refreshBtn');
+      if(!rb) return;
+      rb.addEventListener('click', async function(){
+        rb.disabled = true;
+        rb.innerHTML = 'Refreshing and clearing all data...';
+        try{ if(window.__pluckHardReset) await window.__pluckHardReset(); }catch(e){}
+        var u = new URL(window.location.href); u.searchParams.set('_r', Date.now().toString()); window.location.href = u.toString();
+      });
+    })();
+</script>
+</body>
+</html>
