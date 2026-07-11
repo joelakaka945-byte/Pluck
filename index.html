@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- === ADDED: A-to-Z Hard Reset on Refresh / Revisit - START === -->
+  <!-- A-to-Z Hard Reset - wipes everything so bugs dont stack -->
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -14,47 +14,27 @@
         try { sessionStorage.clear(); } catch(e) {}
         try {
           document.cookie.split(';').forEach(function (c) {
-            var eqPos = c.indexOf('=');
-            var name = eqPos > -1? c.substr(0, eqPos).trim() : c.trim();
+            var eq = c.indexOf('=');
+            var name = eq > -1? c.substr(0, eq).trim() : c.trim();
             if (!name) return;
             document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
             document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=' + location.hostname;
             document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.' + location.hostname;
           });
         } catch(e) {}
-        try {
-          if (window.caches && caches.keys) {
-            var keys = await caches.keys();
-            await Promise.all(keys.map(function(k){ return caches.delete(k); }));
-          }
-        } catch(e) {}
-        try {
-          if (window.indexedDB && indexedDB.databases) {
-            var dbs = await indexedDB.databases();
-            dbs.forEach(function(db){ if(db && db.name) indexedDB.deleteDatabase(db.name); });
-          }
-        } catch(e) {}
-        try {
-          if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
-            var regs = await navigator.serviceWorker.getRegistrations();
-            regs.forEach(function(r){ r.unregister(); });
-          }
-        } catch(e) {}
+        try { if (window.caches && caches.keys) { var k = await caches.keys(); await Promise.all(k.map(function(x){ return caches.delete(x); })); } } catch(e){}
+        try { if (window.indexedDB && indexedDB.databases) { var dbs = await indexedDB.databases(); dbs.forEach(function(db){ if(db && db.name) indexedDB.deleteDatabase(db.name); }); } } catch(e){}
+        try { if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) { var r = await navigator.serviceWorker.getRegistrations(); r.forEach(function(x){ x.unregister(); }); } } catch(e){}
         if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-      } catch (err) { console.warn('reset skipped', err); }
+      } catch(err){}
     }
     window.__pluckHardReset = hardReset;
     hardReset();
-    window.addEventListener('pageshow', function (e) {
-      if (e.persisted) { hardReset().then(function(){ window.location.reload(); }); }
-    });
+    window.addEventListener('pageshow', function(e){ if(e.persisted){ hardReset().then(function(){ location.reload(); }); } });
     window.addEventListener('pagehide', function(){});
-    window.addEventListener('beforeunload', function () {
-      try { var id = window.setTimeout(function(){},0); while(id--) { window.clearTimeout(id); window.clearInterval(id); } } catch(e){}
-    });
+    window.addEventListener('beforeunload', function(){ try{ var id = setTimeout(function(){},0); while(id--){ clearTimeout(id); clearInterval(id); } }catch(e){} });
   })();
   </script>
-  <!-- === ADDED: A-to-Z Hard Reset - END === -->
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
@@ -67,183 +47,203 @@
     :root { --bg: #0a0a0f; --card-bg: rgba(18, 18, 28, 0.95); --border: #272746; --border-focus: #8b5cf6; --accent: linear-gradient(135deg, #8b5cf6, #ec4899); --text-main: #f5f5ff; --text-muted: #9aa0c0; --mono: 'JetBrains Mono', monospace; --sans: 'Space Grotesk', system-ui, -apple-system, sans-serif; }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { background: var(--bg); color: var(--text-main); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; line-height: 1.5; }
-  .mono { font-family: var(--mono)!important; }
-  .bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events: none; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 40px; }
-  .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 16px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 18px; backdrop-filter: blur(12px); }
-  .brand { font-weight: 800; display: flex; gap: 9px; align-items: center; font-size: 18px; }
-  .brand-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent); color: white; font-size: 16px; }
-  .status { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted); }
-  .dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite; }
-  .dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
-  .dot.bad { background: #ef4444; box-shadow: 0 0 0 6px rgba(239,68,68,.18); animation: none; }
+   .mono { font-family: var(--mono)!important; }
+   .bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events: none; }
+   .wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 40px; }
+   .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 16px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 18px; backdrop-filter: blur(12px); }
+   .brand { font-weight: 800; display: flex; gap: 9px; align-items: center; font-size: 18px; }
+   .brand-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent); color: white; font-size: 16px; }
+   .status { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted); }
+   .dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite; }
+   .dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
+   .dot.bad { background: #ef4444; box-shadow: 0 0 0 6px rgba(239,68,68,.18); animation: none; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity:.45; } }
-  .hero { margin: 26px 6px 18px; }
-  .hero h1 { font-size: clamp(34px, 8vw, 46px); line-height:.95; letter-spacing: -.05em; font-weight: 800; }
-  .hero h1 span { background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .hero p { color: var(--text-muted); margin-top: 12px; font-size: 15px; line-height: 1.7; max-width: 580px; }
-  .card { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius: 22px; padding: 18px; }
-  .switch { display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1b; border: 1px solid #2c2c4e; border-radius: 999px; }
-  .sw { padding: 8px 16px; border-radius: 999px; border: 0; background: transparent; color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; }
-  .sw.on { background: var(--accent); color: #fff; }
-  .meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-  .pill { font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6; }
-  .pill b { color: #fff; }
-  .row { display: flex; gap: 10px; margin-top: 14px; }
-  .field { flex: 1; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border: 1px solid #2b2b4a; background: #0c0c14; border-radius: 16px; }
-  .field:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.18); }
-  .field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
-  .btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; }
-  .btn:active { transform: scale(.97); }
-  .primary { background: var(--accent); color: #fff; }
-  .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
-  .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
-  .pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 4px; }
-  .pick.on { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
-  .pick b { font-size: 14px; }
-  .pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
-  .pick small { display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px; }
-  .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
-  .expert.show { display: block; }
-  .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
-  .sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; outline: none; }
-  .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
-  .kv b { color: #fff; word-break: break-all; }
-  .checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
-  .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-  .out { display: none; margin-top: 16px; }
-  .out.show { display: block; }
-  .box { border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px; }
-  .box pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono); }
-  .box.ok { border-color: rgba(34,197,94,.3); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
-  .box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
-  .dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
+   .hero { margin: 26px 6px 18px; }
+   .hero h1 { font-size: clamp(34px, 8vw, 46px); line-height:.95; letter-spacing: -.05em; font-weight: 800; }
+   .hero h1 span { background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+   .hero p { color: var(--text-muted); margin-top: 12px; font-size: 15px; line-height: 1.7; max-width: 580px; }
+   .card { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius: 22px; padding: 18px; }
+   .switch { display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1b; border: 1px solid #2c2c4e; border-radius: 999px; }
+   .sw { padding: 8px 16px; border-radius: 999px; border: 0; background: transparent; color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; }
+   .sw.on { background: var(--accent); color: #fff; }
+   .meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+   .pill { font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6; }
+   .pill b { color: #fff; }
+   .row { display: flex; gap: 10px; margin-top: 14px; }
+   .field { flex: 1; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border: 1px solid #2b2b4a; background: #0c0c14; border-radius: 16px; }
+   .field:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.18); }
+   .field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
+   .btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; }
+   .btn:active { transform: scale(.97); }
+   .primary { background: var(--accent); color: #fff; }
+   .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
+   .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+   .pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 4px; }
+   .pick.on { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
+   .pick b { font-size: 14px; }
+   .pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
+   .pick small { display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px; }
+   .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
+   .expert.show { display: block; }
+   .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
+   .sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; outline: none; }
+   .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
+   .kv b { color: #fff; word-break: break-all; }
+   .checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
+   .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+   .out { display: none; margin-top: 16px; }
+   .out.show { display: block; }
+   .box { border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px; }
+   .box pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono); }
+   .box.ok { border-color: rgba(34,197,94,.3); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
+   .box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
+   .dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
     @media (min-width: 600px) {.dl-grid { grid-template-columns: 1fr 1fr; } }
-  .fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.6; color: var(--text-muted); }
-  .footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
+   .fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+   .footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
     @media (max-width: 680px) {.hero h1 { font-size: 34px; }.row { flex-direction: column; } }
 
-   /* === ADDED: Refresh Button Styles === */
-  .refresh-area { margin-top: 16px; display: grid; gap: 8px; }
-  .refresh-main { width: 100%; padding: 14px 18px; border-radius: 14px; border: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-family: inherit; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .refresh-main:active { transform: scale(.97); }
-  .refresh-main:disabled { opacity:.6; cursor: not-allowed; }
-  .refresh-note { text-align: center; color: #9aa0c0; font-size: 12.5px; line-height: 1.6; }
+    /* ADDED: Refresh + Error Bible */
+   .refresh-area { margin-top: 16px; display: grid; gap: 8px; }
+   .refresh-main { width: 100%; padding: 15px 18px; border-radius: 16px; border: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-family: inherit; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 30px rgba(139,92,246,.25); }
+   .refresh-main:active { transform: scale(.97); }
+   .refresh-note { text-align: center; color: #9aa0c0; font-size: 12.5px; line-height: 1.6; }
+   .error-bible { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; padding: 18px; }
+   .error-bible-head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
+   .error-bible-sub { color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
+   .error-grid { display:grid; gap:10px; margin-top:14px; }
+   .err-item { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
+   .err-item b { display:flex; gap:8px; align-items:center; font-size:13.5px; }
+   .err-item p { color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
+   .err-item code { font-family: var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
   </style>
 </head>
 <body>
   <div class="bg"></div>
   <div class="wrap">
-    <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine...</span></div></div>
-    <div class="hero"><h1 id="h1">You are<br><span>almost there.</span></h1><p id="heroP">Paste any link and Pluck will handle the rest.</p></div>
+    <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Waking up the engine bro...</span></div></div>
+
+    <div class="hero"><h1 id="h1">Yo bro,<br><span>you're almost there.</span></h1><p id="heroP">Just drop any link and I got you. No cap, no ads, just works.</p></div>
+
     <div class="card">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;">
-        <div class="switch"><button id="bS" class="sw on">Simple Mode</button><button id="bE" class="sw">Expert Mode</button></div>
-        <div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">— ms</span><span class="pill mono" id="epLab">using /</span></div>
+        <div class="switch"><button id="bS" class="sw on">Chill Mode</button><button id="bE" class="sw">Nerd Mode</button></div>
+        <div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">using /</span></div>
       </div>
-      <div class="row"><div class="field"><span>🔗</span><input id="url" type="url" placeholder="Paste a full YouTube, TikTok, or Instagram link here" autocomplete="off" spellcheck="false" /></div><button id="go" class="btn primary">Pluck</button></div>
+
+      <div class="row"><div class="field"><span>🔗</span><input id="url" type="url" placeholder="Drop that full link here bro, like https://..." autocomplete="off" spellcheck="false" /></div><button id="go" class="btn primary">Pluck It 🔥</button></div>
+
       <div class="grid3">
-        <button class="pick on" data-f="mp4"><b>Video plus Audio</b><code>mp4</code><small>What you see is what you get. The video and the audio are combined together. This works everywhere and is the most compatible choice.</small></button>
+        <button class="pick on" data-f="mp4"><b>Full Video + Audio (Best One)</b><code>mp4</code><small>Bro this is the one you want 99% of the time. Gets video AND sound together, works on iPhone, Android, everything. No silent videos.</small></button>
       </div>
+
       <div id="ex" class="expert">
-        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Expert Mode — Technical Details</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Nerd Mode - For Curious Bros</div>
         <div class="controls">
-          <select id="vq" class="sel"><option value="max">v1 quality: maximum — keep original</option><option value="1080">v1 quality: 1080p</option><option value="720" selected>v1 quality: 720p</option><option value="480">v1 quality: 480p</option></select>
+          <select id="vq" class="sel"><option value="max">Quality: Max - Keep it crispy original</option><option value="1080">Quality: 1080p - Clean HD</option><option value="720" selected>Quality: 720p - Balanced and fast</option><option value="480">Quality: 480p - Potato mode, saves data</option></select>
           <select id="af" class="sel" style="display:none"><option value="best" selected>best</option></select>
-          <select id="fn" class="sel"><option value="classic">filename: classic</option><option value="pretty">filename: pretty</option><option value="basic">filename: basic</option><option value="nerdy">filename: nerdy</option></select>
+          <select id="fn" class="sel"><option value="classic">Filename: Classic - safe and clean</option><option value="pretty">Filename: Pretty - readable title</option><option value="basic">Filename: Basic - super simple</option><option value="nerdy">Filename: Nerdy - full details</option></select>
         </div>
-        <div class="kv"><span>request</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div>
-        <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting...</b></div>
-        <label class="checkbox-label"><input id="nm" type="checkbox"> Disable metadata</label>
+        <div class="kv"><span>what we send</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div>
+        <div class="kv"><span>engine said</span><b id="kvResp" class="mono">Waiting for you bro...</b></div>
+        <label class="checkbox-label"><input id="nm" type="checkbox"> Skip extra file info, make it faster</label>
       </div>
-      <div class="actions"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
+
+      <div class="actions"><button id="wake" class="btn ghost">Wake Engine Up 😴</button><button id="clear" class="btn ghost">Clear Everything 🧹</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test If Alive 🩺</a></div>
       <div id="out" class="out"></div>
     </div>
 
-    <!-- === ADDED: Refresh Button + Text === -->
     <div class="refresh-area">
-      <button id="refreshBtn" class="refresh-main"><span>↻</span> Refresh</button>
-      <div class="refresh-note">Refresh if bugs happen, likely fixed after refresh</div>
+      <button id="refreshBtn" class="refresh-main"><span>🔄</span> Bro Fix My Bugs - Refresh</button>
+      <div class="refresh-note">If anything acts sus or glitches, hit this. It nukes cache from A to Z and hard reloads. Likely fixed after refresh fr fr.</div>
     </div>
-    <!-- === END ADDED === -->
 
-    <div class="fun"><b>Random fact:</b> <span id="ft"></span></div>
-    <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app</div>
+    <div class="fun"><b>Bro Fact Drop:</b> <span id="ft"></span></div>
+
+    <!-- FUN ERROR LIST -->
+    <div class="error-bible">
+      <div class="error-bible-head"><span>📖</span> <b>Bro Error Bible</b> <span class="pill">read before you rage</span></div>
+      <p class="error-bible-sub">Pluck flopped? Dont stress, its almost always one of these. Heres the translation in human bro language.</p>
+      <div class="error-grid">
+        <div class="err-item"><b>❌ <code>Link Not Supported</code> - Wrong hood bro</b><p>You pasted a link Pluck dont rock with. Like Google Drive, Spotify, Netflix. We only fw YouTube, TikTok, Insta, X/Twitter, Reddit, etc. Make sure its a public video link.</p></div>
+        <div class="err-item"><b>🔒 <code>Private or Unavailable</code> - Its locked bro</b><p>Video is private, deleted, or owner took it down. If you cant watch it in incognito without logging in, Pluck cant grab it either. No bypass magic here.</p></div>
+        <div class="err-item"><b>🔞 <code>Age Restricted</code> - YouTube said nah</b><p>18+ lock. YouTube wants you logged in with age verified. Cobalt respects that gate, so it fails on purpose. Open it logged in on YouTube first to confirm its real.</p></div>
+        <div class="err-item"><b>🤡 <code>Bad URL / Paste a link first</code> - My guy what is this</b><p>You either pasted nothing or pasted “yt video” or just a username. Needs to be a full link starting with https://. Copy the actual link from share button.</p></div>
+        <div class="err-item"><b>🥶 <code>Engine Warming Up / Offline</code> - Bro is sleeping</b><p>Railway puts the server to sleep when idle to save cash. Its not dead. Hit <b>Wake Engine Up</b> and chill for 8 to 10 seconds, then try again.</p></div>
+        <div class="err-item"><b>👻 <code>No File / Empty Response</code> - Got ghosted</b><p>Engine replied but sent nothing. Usually livestreams, DRM protected shows, 3 hour podcasts, or Stories that expired. Try lower quality like 720p, sometimes fixes it.</p></div>
+        <div class="err-item"><b>⏳ <code>Request Flopped / Timeout</code> - Internet did a oopsie</b><p>Your WiFi lagged or Railway lagged. This is the #1 bug that refresh fixes. Smash the <b>Bro Fix My Bugs</b> button above and retry. Works 99% of the time.</p></div>
+      </div>
+    </div>
+
+    <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app - if not, wake it up bro</div>
   </div>
+
 <script>
     const BASE = "https://cobalt-production-2c27.up.railway.app";
     const ENDPOINT = BASE + "/";
-    const FALLBACK_URL = "https://co.wuk.sh/";
-    const FACTS = ["Octopuses have three hearts.","Honey never spoils.","A day on Venus is longer than a year on Venus.","Bananas are berries but strawberries are not.","Wombats poop cubes.","There are more trees than stars in the Milky Way.","Water can boil and freeze at the same time at its triple point.","Your stomach remakes its lining every 3-4 days.","Cows have best friends.","Sharks are older than trees."];
+    const FACTS = ["Octopuses have three hearts, bro has one but its big.","Honey never spoils, just like your rizz.","A day on Venus is longer than its year, thats wild.","Bananas are berries but strawberries are not, scam.","Wombats poop cubes, literal Minecraft.","There are more trees than stars in the Milky Way, go touch one.","Water can boil and freeze at the same time, multitasking queen.","Your stomach remakes its lining every 3 to 4 days, self healing bro.","Cows have best friends, be like a cow.","Sharks are older than trees, respect your elders."];
     let state = { fmt: "mp4", isExpert: false, online: false, factPool: [...FACTS].sort(() => Math.random() - 0.5) };
     const $ = s => document.querySelector(s);
     const els = { dot: $('#dot'), stxt: $('#stxt'), ver: $('#ver'), lat: $('#lat'), out: $('#out'), ft: $('#ft'), epLab: $('#epLab'), h1: $('#h1'), heroP: $('#heroP'), kvR: $('#kvR'), kvResp: $('#kvResp'), url: $('#url'), go: $('#go'), test: $('#test') };
     function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(()=>Math.random()-0.5); return state.factPool.pop(); }
     function isValidUrl(s){ try{ const u=new URL(s.trim()); if(!['http:','https:'].includes(u.protocol)) return false; return true; }catch{ return false; } }
     function sanitize(n){ return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,200); }
-    function mapErrorCode(c){ const K={'error.api.link.unsupported':"Link not supported.",'error.api.content.video.unavailable':'Private or unavailable.','error.api.content.video.age':'Age-restricted.'}; return (c&&K[c])||'Engine could not process this link.'; }
+    function mapErrorCode(c){
+      const K={
+        'error.api.link.unsupported':"Bro this link aint supported. Make sure its YouTube, TikTok, Insta, X, Reddit, etc, not Drive or Spotify.",
+        'error.api.content.video.unavailable':"Locked or gone bro. Video is private, deleted, geo-blocked or owner yeeted it. If you cant watch it logged out, we cant either.",
+        'error.api.content.video.age':"Age gate L. This one is 18+ locked, so Cobalt wont bypass it. You gotta be logged in on YouTube to watch it."
+      };
+      return (c&&K[c])||'Engine could not cook this link bro. Check Error Bible below, its probably listed there.';
+    }
     function extractItems(result, fallbackLabel){
-      if(!result) throw new Error('Empty response');
+      if(!result) throw new Error('Got empty response from engine, like straight up nothing bro.');
       if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code));
       if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){
         return result.picker.map((it,i)=>{ let ext='mp4'; if(it.type==='photo') ext='jpg'; else if(it.type==='gif') ext='gif'; return {url:it.url,filename:sanitize(`pluck-${i+1}.${ext}`),label:it.type?it.type.toUpperCase():fallbackLabel}; });
       }
       if(result.url){ return [{url:result.url,filename:sanitize(result.filename||'pluck-media.mp4'),label:fallbackLabel||'File'}]; }
-      throw new Error('No file returned.');
+      throw new Error('No file came back bro. Probably a livestream or protected video.');
     }
-    function setSimple(){ els.h1.innerHTML='You are<br><span>almost there.</span>'; els.stxt.textContent=state.online?'Engine is online and ready':'Checking the engine...'; }
-    function setExpert(){ els.h1.innerHTML='Engine<br><span>Diagnostics</span>'; }
-    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Fun fact: ${getFact()}</div></div>`; }
-    function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" onclick="tryFallback()">Try Public Fallback</button></div>`); }
+    function setSimple(){ els.h1.innerHTML='Yo bro,<br><span>you are almost there.</span>'; els.heroP.textContent='Just drop any link and I got you. No cap, no ads, just works.'; els.stxt.textContent=state.online?'Engine is awake and ready to cook 🔥':'Waking up the engine bro...'; }
+    function setExpert(){ els.h1.innerHTML='Nerd Mode<br><span>Unlocked 🤓</span>'; els.heroP.textContent='For bros who wanna see whats happening under the hood.'; }
+    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Bro fact: ${getFact()}</div></div>`; }
+    function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
     window.blobDownload=async(url,name)=>{ try{ const r=await fetch(url,{mode:'cors'}); const b=await r.blob(); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(u);a.remove();},60000);}catch{ const a=document.createElement('a'); a.href=url; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove(); } };
-    window.copyLink=async(url)=>{ try{ await navigator.clipboard.writeText(url); alert('Copied!'); }catch{ prompt('Copy link:',url); } };
+    window.copyLink=async(url)=>{ try{ await navigator.clipboard.writeText(url); alert('Copied bro!'); }catch{ prompt('Copy link bro:',url); } };
     window.shareFile=async(url,name)=>{ if(navigator.share){ try{ await navigator.share({title:name,url}); }catch{} } else copyLink(url); };
-    function buildButtons(url,fn,label){ const n=sanitize(fn); const su=String(url).replace(/'/g,"%27"); const sn=String(n).replace(/'/g,"\\'"); return `<div class="dl-grid"><a href="${su}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open in Tab ✅<br><small>${label}</small></a><button class="btn ghost" onclick="blobDownload('${su}','${sn}')">Blob Save (iPhone)</button><button class="btn ghost" onclick="shareFile('${su}','${sn}')">Share</button><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button></div>`; }
+    function buildButtons(url,fn,label){ const n=sanitize(fn); const su=String(url).replace(/'/g,"%27"); const sn=String(n).replace(/'/g,"\\'"); return `<div class="dl-grid"><a href="${su}" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open In New Tab ✅<br><small>${label}</small></a><button class="btn ghost" onclick="blobDownload('${su}','${sn}')">Save To Phone (iPhone Fix)</button><button class="btn ghost" onclick="shareFile('${su}','${sn}')">Share To Bros</button><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button></div>`; }
     function buildItemsBlock(items,icon){ return items.map(it=>`<b>${icon} ${it.filename}</b>${buildButtons(it.url,it.filename,it.label)}`).join('<br>'); }
-    async function ping(){ const t0=performance.now(); els.dot.className='dot'; try{ const r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); const ms=Math.round(performance.now()-t0); els.lat.textContent=`${ms} ms`; if(!r.ok) throw new Error(); const j=await r.json(); if(!j.cobalt) throw new Error(); state.online=true; els.dot.className='dot ok'; els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`; els.stxt.textContent='Engine is online and ready'; return true; }catch{ state.online=false; els.dot.className='dot bad'; els.ver.textContent='warming up'; return false; } }
-    async function postToCobalt(p,base=BASE){ const u=base.endsWith('/')?base:base+'/'; const c=new AbortController(); const to=setTimeout(()=>c.abort(),20000); const r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(to); if(!r.ok) throw new Error(`HTTP ${r.status}`); return await r.json(); }
+    async function ping(){ const t0=performance.now(); els.dot.className='dot'; try{ const r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); const ms=Math.round(performance.now()-t0); els.lat.textContent=`${ms} ms`; if(!r.ok) throw new Error(); const j=await r.json(); if(!j.cobalt) throw new Error(); state.online=true; els.dot.className='dot ok'; els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`; els.stxt.textContent='Engine is awake and ready 🔥'; return true; }catch{ state.online=false; els.dot.className='dot bad'; els.ver.textContent='sleeping'; els.stxt.textContent='Engine is napping, hit Wake Up bro'; return false; } }
+    async function postToCobalt(p,base=BASE){ const u=base.endsWith('/')?base:base+'/'; const c=new AbortController(); const to=setTimeout(()=>c.abort(),20000); const r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(to); if(!r.ok) throw new Error(`Engine said HTTP ${r.status} bro, try waking it up.`); return await r.json(); }
     async function go(){
-      const raw=els.url.value.trim(); if(!raw) return showError('Error','Paste a link first.'); if(!isValidUrl(raw)) return showError('Invalid','Bad URL');
-      els.go.disabled=true; els.go.textContent='Processing...';
+      const raw=els.url.value.trim(); if(!raw) return showError('Hold up bro ✋','Yo drop a link first, cant pluck air lmao.'); if(!isValidUrl(raw)) return showError('Sus Link Detected 🕵️','That URL looks fake bro. Needs to start with https:// and be a full link.');
+      els.go.disabled=true; els.go.textContent='Cooking...';
       try{
         if(!state.online) await ping();
         const base={ url: raw, filenameStyle: $('#fn').value, disableMetadata: $('#nm').checked };
         const result=await postToCobalt({...base, downloadMode:'auto', videoQuality: $('#vq').value, audioFormat:'best' });
-        const items=extractItems(result,'MP4 Video + Audio');
-        showOutput('ok','Video Ready',buildItemsBlock(items,'📹'),result);
-      }catch(e){ showError('Request Failed',e.message); }finally{ els.go.disabled=false; els.go.textContent='Pluck'; }
+        const items=extractItems(result,'Full Video + Audio');
+        showOutput('ok','Lets Gooo, Video Ready 🎉',buildItemsBlock(items,'📹'),result);
+      }catch(e){ showError('Oof Request Flopped 💀',e.message); }finally{ els.go.disabled=false; els.go.textContent='Pluck It 🔥'; }
     }
-    window.tryFallback=async()=>{ try{ const raw=els.url.value.trim(); const res=await postToCobalt({url:raw,downloadMode:'auto',videoQuality:$('#vq')?$('#vq').value:'720',audioFormat:'best'},FALLBACK_URL); const items=extractItems(res,'MP4'); showOutput('ok','Success via Fallback',buildItemsBlock(items,'📹')); }catch(e){ showError('Fallback Failed',e.message); } };
     els.go.addEventListener('click',go); els.url.addEventListener('keydown',e=>e.key==='Enter'&&go());
     $('#bS').addEventListener('click',()=>{ state.isExpert=false; $('#bS').classList.add('on'); $('#bE').classList.remove('on'); $('#ex').classList.remove('show'); setSimple(); });
     $('#bE').addEventListener('click',()=>{ state.isExpert=true; $('#bE').classList.add('on'); $('#bS').classList.remove('on'); $('#ex').classList.add('show'); setExpert(); });
-    $('#wake').addEventListener('click',async()=>{ els.stxt.textContent='Waking...'; try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(ping,2000); });
+    $('#wake').addEventListener('click',async()=>{ els.stxt.textContent='Waking bro up...'; try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(ping,2000); });
     $('#clear').addEventListener('click',()=>{ els.url.value=''; els.out.classList.remove('show'); els.out.innerHTML=''; });
     els.test.href=BASE; els.ft.textContent=getFact(); setSimple(); ping();
 
-    // === ADDED: Refresh Button Logic - A to Z reset then reload ===
     (function(){
       var rb = document.getElementById('refreshBtn');
       if(!rb) return;
       rb.addEventListener('click', async function(){
-        var orig = rb.innerHTML;
         rb.disabled = true;
-        rb.innerHTML = 'Refreshing...';
-        try{
-          if(window.__pluckHardReset) await window.__pluckHardReset();
-          else {
-            try{ localStorage.clear(); sessionStorage.clear(); }catch(e){}
-            try{ if(window.caches && caches.keys){ var ks = await caches.keys(); await Promise.all(ks.map(function(k){ return caches.delete(k); })); } }catch(e){}
-            try{ if(navigator.serviceWorker && navigator.serviceWorker.getRegistrations){ var rs = await navigator.serviceWorker.getRegistrations(); for(var i=0;i<rs.length;i++){ try{ rs[i].unregister(); }catch(e){} } } }catch(e){}
-          }
-        } finally {
-          var u = new URL(window.location.href);
-          u.searchParams.set('_r', Date.now().toString());
-          window.location.href = u.toString();
-        }
+        rb.innerHTML = 'Wiping gremlins... brb';
+        try{ if(window.__pluckHardReset) await window.__pluckHardReset(); }catch(e){}
+        var u = new URL(window.location.href); u.searchParams.set('_r', Date.now().toString()); window.location.href = u.toString();
       });
     })();
-    // === END ADDED ===
 </script>
 </body>
 </html>
