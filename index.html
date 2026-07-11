@@ -46,96 +46,98 @@
     :root { --bg: #0a0a0f; --card-bg: rgba(18, 18, 28, 0.95); --border: #272746; --border-focus: #8b5cf6; --accent: linear-gradient(135deg, #8b5cf6, #ec4899); --text-main: #f5f5ff; --text-muted: #9aa0c0; --mono: 'JetBrains Mono', monospace; --sans: 'Space Grotesk', system-ui, -apple-system, sans-serif; }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { background: var(--bg); color: var(--text-main); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; line-height: 1.5; }
- .mono { font-family: var(--mono)!important; }
- .bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events: none; }
- .wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 40px; }
- .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 16px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 18px; backdrop-filter: blur(12px); }
- .brand { font-weight: 800; display: flex; gap: 9px; align-items: center; font-size: 18px; }
- .brand-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent); color: white; font-size: 16px; }
- .status { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted); }
- .dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite; }
- .dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
- .dot.bad { background: #ef4444; box-shadow: 0 0 0 6px rgba(239,68,68,.18); animation: none; }
+.mono { font-family: var(--mono)!important; }
+.bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events: none; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 40px; }
+.top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 16px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 18px; backdrop-filter: blur(12px); }
+.brand { font-weight: 800; display: flex; gap: 9px; align-items: center; font-size: 18px; }
+.brand-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent); color: white; font-size: 16px; }
+.status { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite; }
+.dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
+.dot.bad { background: #ef4444; box-shadow: 0 0 0 6px rgba(239,68,68,.18); animation: none; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity:.45; } }
- .hero { margin: 26px 6px 18px; }
- .hero h1 { font-size: clamp(34px, 8vw, 46px); line-height:.95; letter-spacing: -.05em; font-weight: 800; }
- .hero h1 span { background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
- .hero p { color: var(--text-muted); margin-top: 12px; font-size: 15px; line-height: 1.7; max-width: 580px; }
- .card { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius: 22px; padding: 18px; }
- .switch { display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1b; border: 1px solid #2c2c4e; border-radius: 999px; }
- .sw { padding: 8px 16px; border-radius: 999px; border: 0; background: transparent; color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; }
- .sw.on { background: var(--accent); color: #fff; }
- .meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
- .pill { font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6; }
- .pill b { color: #fff; }
- .row { display: flex; gap: 10px; margin-top: 14px; }
- .field { flex: 1; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border: 1px solid #2b2b4a; background: #0c0c14; border-radius: 16px; }
- .field:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.18); }
- .field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
- .btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; }
- .btn:active { transform: scale(.97); }
- .primary { background: var(--accent); color: #fff; }
- .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
- .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
- .pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 4px; }
- .pick.on { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
- .pick b { font-size: 14px; }
- .pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
- .pick small { display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px; }
- .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
- .expert.show { display: block; }
- .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
- .sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; outline: none; }
- .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
- .kv b { color: #fff; word-break: break-all; }
- .checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
- .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
- .out { display: none; margin-top: 16px; }
- .out.show { display: block; }
- .box { border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px; }
- .box pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono); }
- .box.ok { border-color: rgba(34,197,94,.3); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
- .box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
- .dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
+.hero { margin: 26px 6px 18px; }
+.hero h1 { font-size: clamp(34px, 8vw, 46px); line-height:.95; letter-spacing: -.05em; font-weight: 800; }
+.hero h1 span { background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { color: var(--text-muted); margin-top: 12px; font-size: 15px; line-height: 1.7; max-width: 580px; }
+.card { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius: 22px; padding: 18px; }
+.switch { display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1b; border: 1px solid #2c2c4e; border-radius: 999px; }
+.sw { padding: 8px 16px; border-radius: 999px; border: 0; background: transparent; color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; }
+.sw.on { background: var(--accent); color: #fff; }
+.meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6; }
+.pill b { color: #fff; }
+.row { display: flex; gap: 10px; margin-top: 14px; }
+.field { flex: 1; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border: 1px solid #2b2b4a; background: #0c0c14; border-radius: 16px; }
+.field:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.18); }
+.field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
+.btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; }
+.btn:active { transform: scale(.97); }
+.primary { background: var(--accent); color: #fff; }
+.ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
+.grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+.pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 4px; }
+.pick.on { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
+.pick b { font-size: 14px; }
+.pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
+.pick small { display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px; }
+.expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
+.expert.show { display: block; }
+.controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; outline: none; }
+.kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
+.kv b { color: #fff; word-break: break-all; }
+.checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
+.actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.out { display: none; margin-top: 16px; }
+.out.show { display: block; }
+.box { border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px; }
+.box pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono); }
+.box.ok { border-color: rgba(34,197,94,.3); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
+.box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
+.dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
     @media (min-width: 600px) {.dl-grid { grid-template-columns: 1fr 1fr; } }
- .fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.6; color: var(--text-muted); }
- .footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
+.fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+.footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
     @media (max-width: 680px) {.hero h1 { font-size: 34px; }.row { flex-direction: column; } }
- .refresh-area { margin-top: 16px; display: grid; gap: 8px; }
- .refresh-main { width: 100%; padding: 15px 18px; border-radius: 16px; border: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-family: inherit; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 30px rgba(139,92,246,.25); }
- .refresh-main:active { transform: scale(.97); }
- .refresh-note { text-align: center; color: #9aa0c0; font-size: 12.5px; line-height: 1.6; }
- .error-bible { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; padding: 18px; }
- .error-bible-head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
- .error-bible-sub { color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
- .error-grid { display:grid; gap:10px; margin-top:14px; }
- .err-item { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
- .err-item b { display:block; font-size:13.5px; }
- .err-item p { color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
- .err-item code { font-family: var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
- .file-row { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px; margin-top:10px; }
- .file-info { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
- .file-info b { font-size:13.5px; flex:1 1 100%; word-break:break-all; }
- .size-badge { font-size:11px; padding:4px 8px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family: var(--mono); }
- .size-badge.ok { border-color: rgba(34,197,94,.35); color:#86efac; }
- .size-badge.wait { opacity:.85; }
- .modal-backdrop { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.75); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:16px; }
- .modal-card { width:100%; max-width:720px; max-height:90vh; overflow:auto; background:linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border:1px solid #31315a; border-radius:18px; padding:16px; }
- .modal-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
- .modal-body { background:#0c0c14; border:1px solid #2b2b4e; border-radius:12px; padding:10px; min-height:120px; }
- .modal-note { margin-top:10px; font-size:12px; color:#8c8cb6; line-height:1.5; text-align:center; }
- .process-wrap { margin-top:16px; border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; display:none; }
- .process-head { font-size:13px; font-weight:800; margin-bottom:10px; letter-spacing:.02em; }
- .process-log { display:grid; gap:8px; max-height:320px; overflow:auto; padding-right:4px; }
- .log-entry { display:flex; gap:10px; align-items:flex-start; font-size:12px; line-height:1.5; padding:8px 10px; border-radius:10px; border:1px solid #23233f; background:#0c0c14; color:#9aa0c0; }
- .log-entry.time { font-family:var(--mono); font-size:10.5px; color:#6d6d9a; min-width:62px; }
- .log-entry.dot-sm { width:7px; height:7px; border-radius:50%; margin-top:5px; background:#3a3a5c; flex-shrink:0; }
- .log-entry.active { border-color: rgba(139,92,246,.45); background: linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8d8ff; }
- .log-entry.active.dot-sm { background:#8b5cf6; box-shadow:0 0 0 4px rgba(139,92,246,.18); }
- .log-entry.done { border-color: rgba(34,197,94,.25); color:#cbd5ff; }
- .log-entry.done.dot-sm { background:#22c55e; }
- .log-entry.error { border-color: rgba(239,68,68,.35); color:#ffd4d4; background: linear-gradient(180deg, rgba(239,68,68,.10), #0c0c14); }
- .log-entry.error.dot-sm { background:#ef4444; }
+.highlights { margin: 14px 2px 0; display: grid; gap: 10px; }
+.hl-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.hl-badge { font-size: 11.5px; padding: 7px 11px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; line-height: 1.3; }
+.hl-badge strong { color: #fff; font-weight: 800; }
+.how-it-works { font-size: 12.5px; color: #9aa0c0; line-height: 1.6; background: #0f0f1a; border: 1px solid #2b2b4e; border-radius: 14px; padding: 12px 14px; }
+.how-it-works strong { color: #fff; }
+.refresh-area { margin-top: 16px; display: grid; gap: 8px; }
+.refresh-main { width: 100%; padding: 15px 18px; border-radius: 16px; border: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-family: inherit; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 30px rgba(139,92,246,.25); }
+.refresh-main:active { transform: scale(.97); }
+.refresh-note { text-align: center; color: #9aa0c0; font-size: 12.5px; line-height: 1.6; }
+.error-bible { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; padding: 18px; }
+.error-bible-head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
+.error-bible-sub { color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
+.error-grid { display:grid; gap:10px; margin-top:14px; }
+.err-item { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
+.err-item b { display:block; font-size:13.5px; }
+.err-item p { color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
+.err-item code { font-family: var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
+.file-row { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px; margin-top:10px; }
+.file-info { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.file-info b { font-size:13.5px; flex:1 1 100%; word-break:break-all; }
+.size-badge { font-size:11px; padding:4px 8px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family: var(--mono); }
+.size-badge.ok { border-color: rgba(34,197,94,.35); color:#86efac; }
+.size-badge.wait { opacity:.85; }
+.modal-backdrop { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.75); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:16px; }
+.modal-card { width:100%; max-width:720px; max-height:90vh; overflow:auto; background:linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border:1px solid #31315a; border-radius:18px; padding:16px; }
+.modal-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
+.modal-body { background:#0c0c14; border:1px solid #2b2b4e; border-radius:12px; padding:10px; min-height:120px; }
+.modal-note { margin-top:10px; font-size:12px; color:#8c8cb6; line-height:1.5; text-align:center; }
+.process-wrap { margin-top:16px; border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; display:none; }
+.process-head { font-size:13px; font-weight:800; margin-bottom:10px; }
+.process-log { display:grid; gap:8px; max-height:320px; overflow:auto; padding-right:4px; }
+.log-entry { display:flex; gap:10px; align-items:flex-start; font-size:12px; line-height:1.5; padding:8px 10px; border-radius:10px; border:1px solid #23233f; background:#0c0c14; color:#9aa0c0; }
+.log-entry.time { font-family:var(--mono); font-size:10.5px; color:#6d6d9a; min-width:62px; }
+.log-entry.active { border-color: rgba(139,92,246,.45); background: linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8d8ff; }
+.log-entry.done { border-color: rgba(34,197,94,.25); color:#cbd5ff; }
+.log-entry.error { border-color: rgba(239,68,68,.35); color:#ffd4d4; background: linear-gradient(180deg, rgba(239,68,68,.10), #0c0c14); }
   </style>
 </head>
 <body>
@@ -143,7 +145,22 @@
   <div class="wrap">
     <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine...</span></div></div>
 
-    <div class="hero"><h1 id="h1">Hey bro,<br><span>you are almost there.</span></h1><p id="heroP">Just paste your link below. Pluck will handle the rest quickly and cleanly.</p></div>
+    <div class="hero">
+      <h1 id="h1">Hey twin,<br><span>you are almost there.</span></h1>
+      <p id="heroP">Paste any Instagram, TikTok, YouTube, X or Reddit link below. Pluck gives you clean MP4 with sound. Preview first, no auto download.</p>
+
+      <div class="highlights">
+        <div class="hl-row">
+          <span class="hl-badge"><strong>Works on Instagram</strong> - Reels, Stories, Posts</span>
+          <span class="hl-badge"><strong>Works on TikTok</strong> - Full videos, no watermark hassle</span>
+          <span class="hl-badge"><strong>Works on YouTube</strong> - With audio included</span>
+          <span class="hl-badge">Real MP4 size shown</span>
+          <span class="hl-badge">Custom file name</span>
+          <span class="hl-badge">Preview before you save</span>
+        </div>
+        <div class="how-it-works"><strong>How it works, super clear twin:</strong> 1 Paste your Instagram or TikTok link 2 Click Pluck Now 3 Watch live process log 4 Preview the video without downloading 5 Save with your own name. If anything glitches, hit Refresh Page to Fix Bugs, it wipes cache from A to Z.</div>
+      </div>
+    </div>
 
     <div class="card">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;">
@@ -151,14 +168,14 @@
         <div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">using /</span></div>
       </div>
 
-      <div class="row"><div class="field"><input id="url" type="url" placeholder="Paste full YouTube, TikTok, or Instagram link here" autocomplete="off" spellcheck="false" /></div><button id="go" class="btn primary">Pluck Now</button></div>
+      <div class="row"><div class="field"><input id="url" type="url" placeholder="Paste Instagram or TikTok link here twin, must start with https://" autocomplete="off" spellcheck="false" /></div><button id="go" class="btn primary">Pluck Now</button></div>
 
       <div class="grid3">
-        <button class="pick on" data-f="mp4"><b>Full Video plus Audio - Recommended</b><code>mp4</code><small>Best choice for most people. Video and audio together in one file. No silent videos, works on every phone and desktop.</small></button>
+        <button class="pick on" data-f="mp4"><b>Full Video plus Audio - Recommended</b><code>mp4</code><small>Best choice for most people twin. Video and audio together in one file. No silent videos, works on every phone and desktop. Highlight: perfect for Instagram and TikTok saves.</small></button>
       </div>
 
       <div id="ex" class="expert">
-        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Pro Mode - Advanced Controls</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Pro Mode - Advanced Controls for Twins Who Want Control</div>
         <div class="controls">
           <select id="vq" class="sel"><option value="max">Quality: Maximum - Keep original quality</option><option value="1080">Quality: 1080p - Sharp full HD</option><option value="720" selected>Quality: 720p - Balanced quality and speed</option><option value="480">Quality: 480p - Smaller file, saves data</option></select>
           <select id="af" class="sel" style="display:none"><option value="best" selected>best</option></select>
@@ -169,11 +186,11 @@
             <option value="nerdy">Filename: Detailed - with quality and ID</option>
             <option value="custom">Filename: Custom - you type your own name</option>
           </select>
-          <input id="customName" class="sel" type="text" placeholder="Type your custom name here bro, example My Vacation Video" style="display:none; margin-top:8px;" maxlength="120" />
-          <div id="customHint" style="display:none; font-size:11px; color:#8c8cb6; margin-top:6px; line-height:1.5;">Pro tip bro, just type name without.mp4, we add extension automatically. Keep it clean, we remove bad characters for you.</div>
+          <input id="customName" class="sel" type="text" placeholder="Type your custom name here twin, example My Instagram Save" style="display:none; margin-top:8px;" maxlength="120" />
+          <div id="customHint" style="display:none; font-size:11px; color:#8c8cb6; margin-top:6px; line-height:1.5;">Pro tip twin, just type name without.mp4, we add extension automatically. Keep it clean, we remove bad characters for you.</div>
         </div>
         <div class="kv"><span>request preview</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div>
-        <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting for your link bro...</b></div>
+        <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting for your link twin...</b></div>
         <label class="checkbox-label"><input id="nm" type="checkbox"> Disable extra metadata to make it a bit faster</label>
       </div>
 
@@ -189,33 +206,33 @@
 
     <div class="refresh-area">
       <button id="refreshBtn" class="refresh-main">Refresh Page to Fix Bugs</button>
-      <div class="refresh-note">Refresh if bugs happen, likely fixed after refresh. This clears everything from A to Z including cache and temporary data, then reloads a fresh copy.</div>
+      <div class="refresh-note">Refresh if bugs happen, likely fixed after refresh twin. This clears everything from A to Z including cache and temporary data, then reloads a fresh copy.</div>
     </div>
 
-    <div class="fun"><b>Quick Fact:</b> <span id="ft"></span></div>
+    <div class="fun"><b>Quick Fact for Twins:</b> <span id="ft"></span></div>
 
     <div class="error-bible">
-      <div class="error-bible-head"><span>Error Guide</span> <span class="pill">read this before you stress</span></div>
-      <p class="error-bible-sub">If Pluck does not work, it is almost always one of these. Here is what they mean in plain bro plus pro language.</p>
+      <div class="error-bible-head"><span>Error Guide for Twins</span> <span class="pill">read this before you stress</span></div>
+      <p class="error-bible-sub">If Pluck does not work, it is almost always one of these. Here is what they mean in plain twin plus pro language, with highlights on what to do.</p>
       <div class="error-grid">
-        <div class="err-item"><b><code>Link Not Supported</code> - Wrong website bro</b><p>Pro reason: domain not in supported extractor list. Use YouTube, TikTok, Instagram, X, Reddit direct link.</p></div>
-        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>Pro reason: private, deleted, members only, or region blocked. If incognito cannot see it, Pluck cannot either.</p></div>
-        <div class="err-item"><b><code>Age Restricted</code> - 18 plus wall</b><p>Pro reason: needs age verification. Cobalt does not bypass it by design.</p></div>
-        <div class="err-item"><b><code>Bad URL</code> - Input error</b><p>Pro reason: input empty or not URL. Solution: copy full link starting with https://</p></div>
-        <div class="err-item"><b><code>Engine Warming Up</code> - Server sleeping</b><p>Pro reason: host sleeps after inactivity. Click Wake Engine and wait 8 to 10 seconds.</p></div>
-        <div class="err-item"><b><code>No File Returned</code> - Empty response</b><p>Pro reason: API gave no URL. Usually livestream, DRM, or expired story. Try 720p.</p></div>
-        <div class="err-item"><b><code>Timeout</code> - Network hiccup</b><p>Pro reason: fetch timed out. Hit Refresh Page to Fix Bugs, works 99 percent of time.</p></div>
+        <div class="err-item"><b><code>Link Not Supported</code> - Wrong website twin</b><p><strong>Highlight:</strong> Works on Instagram, TikTok, YouTube, X, Reddit. Pro reason: domain not in supported list. Fix: use a direct public post link from those apps.</p></div>
+        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked twin</b><p><strong>Highlight:</strong> If incognito cannot see it, Pluck cannot either. Pro reason: private, deleted, members only, or region blocked. Make sure the Instagram or TikTok is public.</p></div>
+        <div class="err-item"><b><code>Age Restricted</code> - 18 plus wall twin</b><p>Pro reason: needs age verification. Cobalt does not bypass age gates by design. Open it logged in to confirm.</p></div>
+        <div class="err-item"><b><code>Bad URL</code> - Input error twin</b><p>Pro reason: input empty or not URL. Fix: copy full link starting with https:// from Share button on Instagram or TikTok.</p></div>
+        <div class="err-item"><b><code>Engine Warming Up</code> - Server sleeping twin</b><p><strong>Highlight:</strong> Free hosts sleep. Click Wake Engine and wait 8 to 10 seconds, dot turns green when ready.</p></div>
+        <div class="err-item"><b><code>No File Returned</code> - Empty response twin</b><p>Pro reason: API gave no URL. Usually livestream, DRM, or expired story. Try 720p instead of Maximum.</p></div>
+        <div class="err-item"><b><code>Timeout</code> - Network hiccup twin</b><p><strong>Highlight:</strong> Most common fix. Hit Refresh Page to Fix Bugs, it wipes stacked state from A to Z and works 99 percent of time.</p></div>
       </div>
     </div>
 
-    <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app - if not, click Wake Engine</div>
+    <div class="footer-note mono">Engine must respond at https://cobalt-production-2c27.up.railway.app - if not, click Wake Engine twin</div>
   </div>
 
   <div id="previewModal" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-head"><b id="previewTitle" style="font-size:14px; word-break:break-all;">Preview</b><button id="closePreview" class="btn ghost">Close</button></div>
       <div id="previewBody" class="modal-body"></div>
-      <div class="modal-note">This is preview only bro. No download happens here. If preview does not play, file forces attachment, use Open in New Tab instead.</div>
+      <div class="modal-note">This is preview only twin. No download happens here. Pro tip: if preview does not play, file forces attachment, use Open in New Tab instead. Save to actually keep file.</div>
     </div>
   </div>
 
@@ -234,12 +251,13 @@
       let row = document.getElementById('log-'+id);
       if(!row){
         row = document.createElement('div'); row.id='log-'+id; row.className='log-entry '+(status||'');
-        row.innerHTML='<div class="dot-sm"></div><div class="time">'+nowTime()+'</div><div class="msg" style="flex:1"></div>';
+        row.innerHTML='<div style="min-width:62px;font-family:var(--mono);font-size:10.5px;color:#6d6d9a;">'+nowTime()+'</div><div style="flex:1">'+text+'</div>';
         els.processLog.appendChild(row);
+      } else {
+        row.className='log-entry '+(status||'');
+        row.lastChild.textContent=text;
+        row.firstChild.textContent=nowTime();
       }
-      row.className='log-entry '+(status||'');
-      row.querySelector('.msg').textContent=text;
-      row.querySelector('.time').textContent=nowTime();
       els.processLog.scrollTop = els.processLog.scrollHeight;
       return row;
     }
@@ -247,8 +265,8 @@
       let row=document.getElementById('log-'+id);
       if(!row) return addLog(id,text,status);
       row.className='log-entry '+(status||'');
-      if(text) row.querySelector('.msg').textContent=text;
-      row.querySelector('.time').textContent=nowTime();
+      if(text) row.lastChild.textContent=text;
+      row.firstChild.textContent=nowTime();
       els.processLog.scrollTop = els.processLog.scrollHeight;
     }
 
@@ -263,9 +281,7 @@
       if(cr){ let m = cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10); let m2 = cr.match(/\/(\d+)/); if(m2) return parseInt(m2[1],10); }
       return null;
     }
-    async function tryFetchSize(url, opts){
-      try{ const r = await fetch(url, opts); const s = parseSizeFromHeaders(r.headers); if(s) return s; return null; }catch(e){ return null; }
-    }
+    async function tryFetchSize(url, opts){ try{ const r = await fetch(url, opts); const s = parseSizeFromHeaders(r.headers); if(s) return s; return null; }catch(e){ return null; } }
     async function fetchMP4Size(originalUrl){
       let size = await tryFetchSize(originalUrl, {method:'HEAD', mode:'cors', cache:'no-store'});
       if(size) return size;
@@ -301,11 +317,7 @@
     function applyFilenameStyle(original, style, quality, index, type, custom){
       let ext = '.mp4'; if(type==='photo') ext='.jpg'; else if(type==='gif') ext='.gif';
       let dot = original.lastIndexOf('.'); if(dot>-1){ ext = original.slice(dot).toLowerCase(); original = original.slice(0,dot); }
-      if(style==='custom'){
-        let c = (custom||'').trim(); if(!c) c='My Video';
-        c = c.replace(/\.[a-z0-9]{2,4}$/i,''); c = sanitize(c); if(!c) c='My Video';
-        return c + ext;
-      }
+      if(style==='custom'){ let c = (custom||'').trim(); if(!c) c='My Video'; c = c.replace(/\.[a-z0-9]{2,4}$/i,''); c = sanitize(c); if(!c) c='My Video'; return c + ext; }
       if(style==='pretty'){ let base = toPrettyName(original); if(quality && quality!=='max'){ base+=' '+quality+'p'; } else if(quality==='max'){ base+=' Original Quality'; } return sanitize(base+ext); }
       if(style==='basic'){ return sanitize('video'+(index>0?'-'+(index+1):'')+ext); }
       if(style==='nerdy'){ return sanitize(original+'_'+quality+'_'+Date.now().toString().slice(-5)+ext); }
@@ -313,14 +325,14 @@
     }
     function mapErrorCode(c){
       const K={
-        'error.api.link.unsupported':"Bro this link is not supported. Use YouTube, TikTok, Instagram, X, Reddit direct link.",
-        'error.api.content.video.unavailable':"Video is private, deleted, or region locked bro. If incognito cannot see it, we cannot either.",
-        'error.api.content.video.age':"Age restricted bro. Needs login for age check. Cobalt does not bypass age gates."
+        'error.api.link.unsupported':"Twin this link is not supported. Pro reason: domain not in supported list. Use Instagram, TikTok, YouTube, X, Reddit direct link.",
+        'error.api.content.video.unavailable':"Video is private, deleted, or region locked twin. If incognito cannot see it, we cannot either.",
+        'error.api.content.video.age':"Age restricted twin. Needs login for age check. Cobalt does not bypass age gates."
       };
-      return (c&&K[c])||'Engine could not process this link bro. Check Error Guide below.';
+      return (c&&K[c])||'Engine could not process this link twin. Check Error Guide below.';
     }
     function extractItems(result, fallbackLabel, style, quality, custom){
-      if(!result) throw new Error('Empty response from engine bro. Wake engine and retry.');
+      if(!result) throw new Error('Empty response from engine twin. Wake engine and retry.');
       if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code));
       if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){
         return result.picker.map(function(it,i){
@@ -335,15 +347,15 @@
         let finalName = applyFilenameStyle(raw, style, quality, 0, 'video', custom);
         return [{url:result.url,filename:finalName,label:fallbackLabel||'File'}];
       }
-      throw new Error('No file came back bro. Usually livestream, DRM, or expired.');
+      throw new Error('No file came back twin. Usually livestream, DRM, or expired.');
     }
-    function setSimple(){ els.h1.innerHTML='Hey bro,<br><span>you are almost there.</span>'; els.heroP.textContent='Just paste your link below. Pluck will handle the rest quickly and cleanly.'; els.stxt.textContent=state.online?'Engine is online and ready to go':'Checking the engine...'; }
-    function setExpert(){ els.h1.innerHTML='Pro Mode<br><span>Enabled for power users</span>'; els.heroP.textContent='You now see technical details, custom filename, and live process log. Use only if you want more control.'; }
+    function setSimple(){ els.h1.innerHTML='Hey twin,<br><span>you are almost there.</span>'; els.heroP.textContent='Paste any Instagram, TikTok, YouTube, X or Reddit link below. Pluck gives you clean MP4 with sound. Preview first, no auto download.'; els.stxt.textContent=state.online?'Engine is online and ready to go':'Checking the engine...'; }
+    function setExpert(){ els.h1.innerHTML='Pro Mode<br><span>Enabled for power users</span>'; els.heroP.textContent='You now see technical details, custom file name, and live process log twin. Use this if you want full control, works great for Instagram and TikTok.'; }
     function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Quick fact: ${getFact()}</div></div>`; setTimeout(updateFileSizes, 200); }
     function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
 
     window.blobDownload=async function(url,name){ try{ const r=await fetch(url,{mode:'cors'}); const b=await r.blob(); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(u);a.remove();},60000);}catch{ const a=document.createElement('a'); a.href=url; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove(); } };
-    window.copyLink=async function(url){ try{ await navigator.clipboard.writeText(url); alert('Link copied bro'); }catch{ prompt('Copy link:',url); } };
+    window.copyLink=async function(url){ try{ await navigator.clipboard.writeText(url); alert('Link copied twin'); }catch{ prompt('Copy link twin:',url); } };
     window.shareFile=async function(url,name){ if(navigator.share){ try{ await navigator.share({title:name,url}); }catch{} } else copyLink(url); };
 
     window.openPreview=function(url,name,label){
@@ -358,7 +370,7 @@
 
     function buildButtons(url,fn,label){
       const n=sanitize(fn); const su=String(url).replace(/'/g,"%27"); const sn=String(n).replace(/'/g,"\\'"); const lbl=String(label||'File').replace(/'/g,"\\'");
-      return `<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="openPreview('${su}','${sn}','${lbl}')">Preview - No Download<br><small>Streams only, does not save yet</small></button><div class="dl-grid"><button class="btn ghost" onclick="blobDownload('${su}','${sn}')">Save to Phone - iPhone Fix</button><a href="${su}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open in New Tab</a><button class="btn ghost" onclick="shareFile('${su}','${sn}')">Share</button><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button></div>`;
+      return `<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="openPreview('${su}','${sn}','${lbl}')">Preview - No Download<br><small>Streams only, does not save yet - Highlight: safe to check Instagram and TikTok first</small></button><div class="dl-grid"><button class="btn ghost" onclick="blobDownload('${su}','${sn}')">Save to Phone - iPhone Fix</button><a href="${su}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open in New Tab</a><button class="btn ghost" onclick="shareFile('${su}','${sn}')">Share</button><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button></div>`;
     }
     function buildItemsBlock(items){
       return items.map(function(it){
@@ -366,65 +378,62 @@
       }).join('');
     }
 
-    async function ping(){ const t0=performance.now(); els.dot.className='dot'; try{ const r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); const ms=Math.round(performance.now()-t0); els.lat.textContent=`${ms} ms`; if(!r.ok) throw new Error(); const j=await r.json(); if(!j.cobalt) throw new Error(); state.online=true; els.dot.className='dot ok'; els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`; els.stxt.textContent='Engine is online and ready to go'; return true; }catch{ state.online=false; els.dot.className='dot bad'; els.ver.textContent='sleeping'; els.stxt.textContent='Engine is sleeping, click Wake Engine bro'; return false; } }
-    async function postToCobalt(p,base){ const u=(base||BASE).endsWith('/')? (base||BASE) : (base||BASE)+'/'; const c=new AbortController(); const to=setTimeout(function(){c.abort();},20000); const r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(to); if(!r.ok) throw new Error(`Engine returned HTTP ${r.status}. Pro tip: click Wake Engine and retry.`); return await r.json(); }
+    async function ping(){ const t0=performance.now(); els.dot.className='dot'; try{ const r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); const ms=Math.round(performance.now()-t0); els.lat.textContent=`${ms} ms`; if(!r.ok) throw new Error(); const j=await r.json(); if(!j.cobalt) throw new Error(); state.online=true; els.dot.className='dot ok'; els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`; els.stxt.textContent='Engine is online and ready to go'; return true; }catch{ state.online=false; els.dot.className='dot bad'; els.ver.textContent='sleeping'; els.stxt.textContent='Engine is sleeping, click Wake Engine twin'; return false; } }
+    async function postToCobalt(p,base){ const u=(base||BASE).endsWith('/')? (base||BASE) : (base||BASE)+'/'; const c=new AbortController(); const to=setTimeout(function(){c.abort();},20000); const r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(to); if(!r.ok) throw new Error(`Engine returned HTTP ${r.status}. Pro tip twin: click Wake Engine and retry.`); return await r.json(); }
 
     async function go(){
-      const raw=els.url.value.trim(); if(!raw) return showError('Hold up bro','Please paste a link first bro. Copy full link from Share button.');
-      if(!isValidUrl(raw)) return showError('That link looks wrong bro','This URL is not valid. Must start with https:// and be full video link.');
+      const raw=els.url.value.trim(); if(!raw) return showError('Hold up twin','Please paste a link first twin. Copy full Instagram or TikTok link from Share button.');
+      if(!isValidUrl(raw)) return showError('That link looks wrong twin','This URL is not valid twin. Must start with https:// and be full video link. Works on Instagram and TikTok too.');
       els.go.disabled=true; els.go.textContent='Working...';
       initLog();
       try{
         addLog('validate','Step 1: Validating your link format and protocol','active');
-        await new Promise(function(r){ setTimeout(r, 180); });
-        updateLog('validate','Step 1: Link looks valid, starts with https, good to go bro','done');
+        await new Promise(function(r){ setTimeout(r, 160); });
+        updateLog('validate','Step 1: Link looks valid twin, starts with https, good to go','done');
 
         addLog('engine','Step 2: Checking if engine is awake and responding at '+BASE,'active');
-        if(!state.online){ updateLog('engine','Step 2: Engine was sleeping, trying to wake it up','active'); await ping(); }
-        updateLog('engine','Step 2: Engine status is '+(state.online?'online and ready':'still waking, will try anyway'),'done');
+        if(!state.online){ updateLog('engine','Step 2: Engine was sleeping twin, trying to wake it up','active'); await ping(); }
+        updateLog('engine','Step 2: Engine status is '+(state.online?'online and ready twin':'still waking, will try anyway twin'),'done');
 
         const style=els.fn.value; const quality=els.vq.value; const customName=els.customName.value.trim();
-        addLog('request','Step 3: Building request, quality='+quality+', filename mode='+style+(style==='custom' && customName? ', custom name='+customName : ''),'active');
-        await new Promise(function(r){ setTimeout(r, 150); });
-        updateLog('request','Step 3: Request built, bro. Pro detail: { url, videoQuality: '+quality+', filenameStyle: '+style+', disableMetadata: '+els.nm.checked+' }','done');
+        addLog('request','Step 3: Building request, quality='+quality+', filename mode='+style+(style==='custom' && customName? ', custom name='+customName : '') + ' - Highlight Instagram and TikTok supported','active');
+        await new Promise(function(r){ setTimeout(r, 120); });
+        updateLog('request','Step 3: Request built twin. Pro detail: { url, videoQuality: '+quality+', filenameStyle: '+style+' }','done');
 
-        addLog('send','Step 4: Sending POST to Cobalt engine, this is the backend that extracts the real MP4','active');
+        addLog('send','Step 4: Sending POST to Cobalt engine, backend that extracts real MP4','active');
         const base={ url: raw, filenameStyle: style==='custom'?'classic':style, disableMetadata: els.nm.checked };
-        updateLog('send','Step 4: Request sent, waiting for response, usually 3 to 8 seconds','active');
+        updateLog('send','Step 4: Request sent twin, waiting 3 to 8 seconds for Instagram or TikTok processing','active');
         const result=await postToCobalt({...base, downloadMode:'auto', videoQuality: quality, audioFormat:'best' }, BASE);
-        updateLog('send','Step 4: Got response from engine, status='+ (result.status||'unknown'),'done');
+        updateLog('send','Step 4: Got response from engine twin, status='+(result.status||'unknown'),'done');
 
         addLog('parse','Step 5: Parsing response and extracting direct media URLs','active');
-        await new Promise(function(r){ setTimeout(r, 120); });
+        await new Promise(function(r){ setTimeout(r, 100); });
         const items=extractItems(result,'Full Video plus Audio', style, quality, customName);
-        updateLog('parse','Step 5: Found '+items.length+' file(s) to show you bro','done');
+        updateLog('parse','Step 5: Found '+items.length+' file(s) to show you twin, all with audio if available','done');
 
-        addLog('filename','Step 6: Generating final filename, pretty mode fixed, custom mode uses your text','active');
+        addLog('filename','Step 6: Generating final filename, pretty mode fixed, custom mode uses your text twin','active');
         items.forEach(function(it,i){ addLog('file-'+i,'File '+(i+1)+': '+it.filename+' - label '+it.label,'done'); });
-        updateLog('filename','Step 6: Filenames ready, extension auto added, bad characters removed for safety','done');
+        updateLog('filename','Step 6: Filenames ready twin, extension auto added, bad characters removed for safety','done');
 
-        addLog('size','Step 7: Detecting MP4 size via HEAD and Range bytes=0-0, with CORS proxy fallback','active');
-        updateLog('size','Step 7: Size detection started, you will see MB or GB appear under each file shortly','active');
+        addLog('size','Step 7: Detecting MP4 size via HEAD and Range bytes=0-0, with proxy fallback for Instagram and TikTok CDNs','active');
+        updateLog('size','Step 7: Size detection started twin, MB or GB will appear under each file shortly','active');
 
-        addLog('ready','Step 8: Building preview player that streams only, no auto download','done');
-        addLog('done','Step 9: All done bro, scroll down to preview or save. If anything looks sus, hit Refresh Page to Fix Bugs','done');
+        addLog('ready','Step 8: Building preview player that streams only, no auto download twin','done');
+        addLog('done','Step 9: All done twin, scroll down to preview or save. Highlight: Instagram and TikTok work the same flow. If glitch, hit Refresh Page to Fix Bugs','done');
 
-        showOutput('ok','Nice bro, your video is ready',buildItemsBlock(items),result);
-        updateLog('size','Step 7: Size detection running in background, using Content-Length and Content-Range headers','done');
+        showOutput('ok','Nice twin, your video is ready - Works on Instagram and TikTok',buildItemsBlock(items),result);
+        updateLog('size','Step 7: Size detection running in background twin, using Content-Length and Content-Range','done');
       }catch(e){
-        addLog('error','Error happened bro: '+e.message,'error');
-        showError('Request failed bro',e.message);
+        addLog('error','Error happened twin: '+e.message,'error');
+        showError('Request failed twin',e.message);
       }finally{ els.go.disabled=false; els.go.textContent='Pluck Now'; }
     }
 
     els.go.addEventListener('click',go); els.url.addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
-    els.fn.addEventListener('change', function(){
-      if(this.value==='custom'){ els.customName.style.display='block'; els.customHint.style.display='block'; els.customName.focus(); }
-      else { els.customName.style.display='none'; els.customHint.style.display='none'; }
-    });
+    els.fn.addEventListener('change', function(){ if(this.value==='custom'){ els.customName.style.display='block'; els.customHint.style.display='block'; els.customName.focus(); } else { els.customName.style.display='none'; els.customHint.style.display='none'; } });
     $('#bS').addEventListener('click',function(){ state.isExpert=false; $('#bS').classList.add('on'); $('#bE').classList.remove('on'); $('#ex').classList.remove('show'); setSimple(); });
     $('#bE').addEventListener('click',function(){ state.isExpert=true; $('#bE').classList.add('on'); $('#bS').classList.remove('on'); $('#ex').classList.add('show'); setExpert(); });
-    $('#wake').addEventListener('click',async function(){ els.stxt.textContent='Waking engine...'; addLog('wake','Manual wake triggered by you bro, pinging engine','active'); try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(function(){ ping().then(function(ok){ updateLog('wake', ok?'Engine woke up successfully bro':'Still sleeping, give it 5 more seconds','done'); }); },2000); });
+    $('#wake').addEventListener('click',async function(){ els.stxt.textContent='Waking engine...'; addLog('wake','Manual wake triggered by you twin, pinging engine','active'); try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(function(){ ping().then(function(ok){ updateLog('wake', ok?'Engine woke up successfully twin':'Still sleeping twin, give it 5 more seconds','done'); }); },2000); });
     $('#clear').addEventListener('click',function(){ els.url.value=''; els.out.classList.remove('show'); els.out.innerHTML=''; clearLog(); });
     document.getElementById('closePreview').addEventListener('click', closePreview);
     document.getElementById('previewModal').addEventListener('click', function(e){ if(e.target===this) closePreview(); });
@@ -436,7 +445,7 @@
       if(!rb) return;
       rb.addEventListener('click', async function(){
         rb.disabled = true;
-        rb.innerHTML = 'Refreshing and clearing everything...';
+        rb.innerHTML = 'Refreshing and clearing everything twin...';
         try{ if(window.__pluckHardReset) await window.__pluckHardReset(); }catch(e){}
         var u = new URL(window.location.href); u.searchParams.set('_r', Date.now().toString()); window.location.href = u.toString();
       });
