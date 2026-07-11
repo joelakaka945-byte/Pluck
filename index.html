@@ -34,7 +34,6 @@
     window.addEventListener('beforeunload', function(){ try{ var id = setTimeout(function(){},0); while(id--){ clearTimeout(id); clearInterval(id); } }catch(e){} });
   })();
   </script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>Pluck Universal Engine</title>
@@ -74,6 +73,7 @@
 .field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
 .btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; }
 .btn:active { transform: scale(.97); }
+.btn:disabled { opacity:.55; cursor:not-allowed; }
 .primary { background: var(--accent); color: #fff; }
 .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
 .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
@@ -149,6 +149,27 @@
 .log-entry.active { border-color: rgba(139,92,246,.45); background: linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8d8ff; }
 .log-entry.done { border-color: rgba(34,197,94,.25); color:#cbd5ff; }
 .log-entry.error { border-color: rgba(239,68,68,.35); color:#ffd4d4; background: linear-gradient(180deg, rgba(239,68,68,.10), #0c0c14); }
+    /* === Trim Feature Styles === */
+   .trim-wrap { margin: 14px 0; border: 1px solid rgba(139,92,246,.45); background: linear-gradient(180deg, rgba(139,92,246,.18), rgba(24,24,40,.98)); border-radius: 20px; padding: 14px; box-shadow: 0 0 0 4px rgba(139,92,246,.14), 0 14px 36px rgba(139,92,246,.20); position: relative; overflow: hidden; }
+   .trim-wrap::before { content:''; position:absolute; inset:0; background: radial-gradient(500px 200px at 0% 0%, rgba(236,72,153,.18), transparent 70%); pointer-events:none; }
+   .trim-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; position:relative; z-index:1; }
+   .trim-video-box { margin-top:12px; border-radius:14px; overflow:hidden; background:#000; border:1px solid #2b2b4e; position:relative; z-index:1; }
+   .trim-video-box video { width:100%; max-height:340px; display:block; background:#000; }
+   .trim-timeline { position:relative; height:52px; margin-top:14px; background:#0c0c14; border:1px solid #2f2f55; border-radius:14px; z-index:1; user-select:none; touch-action:none; }
+   .trim-track { position:absolute; left:14px; right:14px; top:50%; height:8px; transform:translateY(-50%); background:#1e1e36; border-radius:999px; }
+   .trim-range-fill { position:absolute; top:50%; height:8px; transform:translateY(-50%); background: var(--accent); border-radius:999px; left:0%; width:100%; box-shadow: 0 0 12px rgba(139,92,246,.45); }
+   .handle { position:absolute; top:50%; width:20px; height:32px; background:#fff; border:2px solid #8b5cf6; border-radius:9px; transform:translate(-50%, -50%); cursor:ew-resize; box-shadow:0 6px 18px rgba(0,0,0,.45); z-index:3; touch-action:none; display:grid; place-items:center; }
+   .handle::after { content:''; width:2px; height:14px; background:#8b5cf6; border-radius:2px; opacity:.9; }
+   .handle.left { background: linear-gradient(180deg,#fff,#e9e6ff); }
+   .handle.right { background: linear-gradient(180deg,#fff,#ffe6f3); border-color:#ec4899; }
+   .handle.right::after { background:#ec4899; }
+   .trim-time-row { display:flex; justify-content:space-between; gap:8px; margin-top:10px; font-size:11.5px; color:#9aa0c0; position:relative; z-index:1; flex-wrap:wrap; }
+   .trim-time-row.time { padding:4px 8px; background:#12121f; border:1px solid #2b2b4e; border-radius:999px; }
+   .trim-time-row.duration { color:#cbb8ff; border-color:#3a2f6b; background:#1a1630; }
+   .trim-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; position:relative; z-index:1; }
+   .trim-status { transition: all.2s ease; }
+   .trim-status.ready { background: rgba(34,197,94,.14); border-color: rgba(34,197,94,.38); color:#86efac; }
+   .trim-download-area { margin-top:12px; padding:12px; border-radius:16px; background: linear-gradient(180deg, rgba(139,92,246,.14), rgba(18,18,28,.92)); border:1px solid rgba(139,92,246,.32); display:grid; gap:8px; position:relative; z-index:1; }
   </style>
 </head>
 <body>
@@ -158,7 +179,7 @@
 
     <div class="hero">
       <h1 id="h1">Welcome,<br><span>You are almost ready.</span></h1>
-      <p id="heroP">Compatible with Instagram, TikTok, YouTube, X and Reddit. Paste any public link below. Preview first, no automatic download. The main tool is located directly below for easy access.</p>
+      <p id="heroP">Compatible with Instagram, TikTok, YouTube, X and Reddit. Paste any public link below. Preview first, no automatic download. Includes a built in trim editor with drag handles.</p>
     </div>
 
     <div class="card" id="mainTool">
@@ -205,6 +226,7 @@
 
     <div class="highlights">
       <div class="hl-row">
+        <span class="hl-badge"><strong>New: Built in Trimmer</strong> - Drag handles to trim, no numbers needed</span>
         <span class="hl-badge"><strong>Works on Instagram</strong> - Reels, Stories, Posts</span>
         <span class="hl-badge"><strong>Works on TikTok</strong> - Full videos, no watermark issues</span>
         <span class="hl-badge"><strong>Works on YouTube</strong> - With audio included</span>
@@ -212,6 +234,7 @@
         <span class="hl-badge">Accurate MP4 file size detection</span>
         <span class="hl-badge">Custom filename support</span>
         <span class="hl-badge">Preview before saving</span>
+        <span class="hl-badge">Download trimmed or original untrimmed</span>
         <span class="hl-badge">No watermark added</span>
         <span class="hl-badge">Fast engine response</span>
         <span class="hl-badge">Private processing, no link storage</span>
@@ -230,82 +253,41 @@
       <div class="guide-body" id="guideBody">
         <div class="qa-item">
           <button class="qa-q" data-qa="1">What is Pluck and how does it use the Cobalt URL <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-1"><strong>Answer:</strong> Pluck is a clean user interface. You paste a link, we create a JSON object containing url, videoQuality, filenameStyle, disableMetadata, downloadMode auto, and audioFormat best, and send a POST request to your base URL, which is https://cobalt-production-2c27.up.railway.app/. The engine then locates the direct MP4 file. We do not modify the base URL or the request structure, so the transaction remains secure. We only process the returned url and filename to display the preview and download options.</div>
+          <div class="qa-a" id="qa-1"><strong>Answer:</strong> Pluck is a clean user interface. You paste a link, we create a JSON object containing url, videoQuality, filenameStyle, disableMetadata, downloadMode auto, and audioFormat best, and send a POST request to your base URL. The engine then locates the direct MP4 file. We only process the returned url and filename to display the preview, trim editor, and download options.</div>
         </div>
-
         <div class="qa-item">
-          <button class="qa-q" data-qa="2">Does it work with Instagram and TikTok <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-2"><strong>Yes, supported platforms include:</strong> Instagram Reels, Posts, and Stories if they are public. TikTok standard videos, usually without watermark if the engine provides it. If the account is private, followers only, or requires login, the engine cannot access it. This is a platform restriction, not a bug. Public links provide the best results. The same process applies to YouTube, X, and Reddit.</div>
+          <button class="qa-q" data-qa="2">How does the new trim feature work <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-2"><strong>Trim without typing numbers:</strong> After the video loads, a highlighted Trim Editor appears above the download buttons. Drag the left handle to set the start and the right handle to set the end. Use Preview Selection to watch only the selected part. Click Confirm Trim, then click Download Trimmed Video. You can still download the original untrimmed video using the button below. The trim is processed in your browser.</div>
         </div>
-
         <div class="qa-item">
           <button class="qa-q" data-qa="3">How do I use it step by step <span class="icon">+</span></button>
           <div class="qa-a" id="qa-3">
             <ul>
-              <li><strong>1 Paste:</strong> Copy the full link using the Share button on Instagram or TikTok. The link must start with https://</li>
-              <li><strong>2 Click Download:</strong> The main tool is at the top of the page and is visible immediately without scrolling.</li>
-              <li><strong>3 View the live log:</strong> Displays validation, engine status check, request creation, waiting time, response parsing, filename generation, and size detection.</li>
-              <li><strong>4 Preview:</strong> The video will stream only, no file is saved yet. This allows you to verify the correct video.</li>
-              <li><strong>5 Select the download method for your device:</strong> Please refer to the next question to choose the appropriate button.</li>
-              <li><strong>6 If an issue occurs:</strong> Click Refresh Page to Fix Issues. This will clear the cache completely.</li>
+              <li><strong>1 Paste:</strong> Copy the full link using the Share button. The link must start with https://</li>
+              <li><strong>2 Click Download:</strong> The main tool is at the top of the page.</li>
+              <li><strong>3 Wait for ready:</strong> The file appears with a Trim Editor highlighted at the top.</li>
+              <li><strong>4 Drag to trim:</strong> Move the two handles on the timeline. No numbers needed.</li>
+              <li><strong>5 Preview and Confirm:</strong> Click Preview Selection, then Confirm Trim.</li>
+              <li><strong>6 Download:</strong> Click Download Trimmed Video, or Download Original Untrimmed Video to keep the full file.</li>
             </ul>
           </div>
         </div>
-
         <div class="qa-item">
-          <button class="qa-q" data-qa="4">Which download button should I use for Android, iPhone, or PC <span class="icon">+</span></button>
+          <button class="qa-q" data-qa="4">Which download button should I use <span class="icon">+</span></button>
           <div class="qa-a" id="qa-4">
             <ul>
-              <li><strong>Preview No Download:</strong> Works on all devices, streaming only, no storage used. Safe for verifying Instagram and TikTok videos first.</li>
-              <li><strong>Direct Download - Best for Android and Desktop:</strong> Uses an anchor tag with the download attribute. On Android Chrome, Firefox, Edge and on Windows, Mac, and Linux, it saves directly to the Downloads folder with your custom or formatted name.</li>
-              <li><strong>Blob Save - Best for iPhone:</strong> iPhone Safari does not support the download attribute and opens the video instead. This method fetches the file as a blob, creates an object URL, and forces the save dialog.</li>
-              <li><strong>File Picker Save - Modern Desktop Browsers:</strong> If your browser supports showSaveFilePicker, a system dialog will appear to let you choose the destination folder. If not supported, it falls back to Direct Download.</li>
-              <li><strong>Open in New Tab:</strong> Fallback option. Opens the raw MP4 URL in a new tab. You can long press the video and select Save Video if other methods are blocked.</li>
-              <li><strong>Share and Copy Link:</strong> Share opens the system share sheet on mobile devices, Copy places the direct link in your clipboard for use in Telegram or Notes.</li>
+              <li><strong>Download Trimmed Video:</strong> Highlighted primary button inside the Trim Editor, appears after you confirm. Downloads only the selected portion.</li>
+              <li><strong>Download Original Untrimmed Video:</strong> Keeps the full length, same as the normal direct download.</li>
+              <li><strong>Direct Download:</strong> Best for Android and Desktop, saves to Downloads folder.</li>
+              <li><strong>Blob Save:</strong> Optimized for iPhone where the download attribute is ignored.</li>
+              <li><strong>File Picker Save:</strong> Opens a system dialog to choose a folder on modern desktop browsers.</li>
             </ul>
           </div>
         </div>
-
         <div class="qa-item">
-          <button class="qa-q" data-qa="5">How do custom and pretty filenames work <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-5"><strong>Classic</strong> uses the safe name provided by the engine. <strong>Pretty</strong> cleans unnecessary parts like youtube underscores, decodes the URI, removes common words such as pluck, cobalt, and video, then converts to title case and appends the quality such as 720p or Original Quality. <strong>Basic</strong> is simply video.mp4. <strong>Detailed</strong> adds quality and a unique ID. <strong>Custom</strong> allows you to enter a name such as My Instagram Save. Any.mp4 extension you type is removed, invalid characters are replaced with underscores, and the correct extension.mp4 or.jpg for photos is added. If the custom field is left empty, My Video will be used.</div>
+          <button class="qa-q" data-qa="5">Is my link safe and private <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-5">Yes. Your link is sent only to your own Cobalt URL. Trimming is done locally in your browser using MediaRecorder and Blob URLs. We do not store links. Preview streams directly from the CDN URL returned by the engine.</div>
         </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="6">How is the MP4 file size detected <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-6">We first attempt a HEAD request and read the Content-Length header. If the host blocks HEAD requests or CORS, we attempt a GET request with Range bytes 0-0 and read the total size from the Content-Range header, for example bytes 0-0 / 12345678. If the host blocks CORS headers, we retry the same requests through a proxy such as https://api.allorigins.win/raw and corsproxy.io which add Access-Control-Allow-Origin so the headers can be read. This is why the size can be displayed as 24.73 MB MP4 instead of unknown. If the host hides the size even through a proxy, we display Size hidden by host, use Preview to stream.</div>
-        </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="7">What does the live process log display <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-7">Nine detailed steps with timestamps. Step 1 is validation, Step 2 is engine check and wake, Step 3 is request building with quality and filename mode, Step 4 is POST to your Cobalt URL, Step 5 is waiting for 3 to 10 seconds, Step 6 is parsing and extracting URLs, Step 7 is filename generation, Step 8 is size detection, Step 9 is completion. If it stops at Step 4, the engine is in sleep mode. If an error occurs at Step 5, the link is private or unsupported.</div>
-        </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="8">What do the error messages mean and how to fix them <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-8">
-            <ul>
-              <li><strong>Link Not Supported:</strong> The domain is not in the engine list. Please use a public link from Instagram, TikTok, YouTube, X, or Reddit.</li>
-              <li><strong>Private or Unavailable:</strong> The post is private, deleted, or region locked. If it cannot be viewed in incognito mode, Pluck cannot access it either.</li>
-              <li><strong>Age Restricted:</strong> Requires login for age verification. The engine does not bypass age restrictions by design.</li>
-              <li><strong>Bad URL:</strong> Empty or invalid URL. The link must start with https:// and be copied from the Share button.</li>
-              <li><strong>Engine Warming Up:</strong> Free hosting may enter sleep mode. Click Wake Engine, wait 8 to 10 seconds, and a green dot indicates readiness.</li>
-              <li><strong>No File Returned:</strong> The content may be a livestream, DRM protected, or an expired story. Please try 720p.</li>
-              <li><strong>Timeout:</strong> A network interruption occurred. Click Refresh Page to Fix Issues, which resolves the problem in most cases.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="9">Why does Refresh Page to Fix Issues work <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-9">At the top of the page, we run a complete hard reset on every refresh or revisit. It clears localStorage, sessionStorage, cookies for this site, Cache API, IndexedDB, service workers, scroll restoration, and timeouts. Most issues are caused by outdated stored state. The refresh button performs the same hard reset and then reloads with a cache bust parameter _r equal to the current timestamp to ensure you receive a fresh copy.</div>
-        </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="10">Is my link safe and private <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-10">Yes. Your link is sent only to your own Cobalt URL configured in the base setting, not to any third party, except when checking file size through a proxy for size detection only. We do not store links. Preview streams directly from the CDN URL returned by the engine. No watermark is added. Custom filenames are processed locally.</div>
-        </div>
-
       </div>
     </div>
 
@@ -321,7 +303,7 @@
       <p class="error-bible-sub">Quick reference, also explained in the FAQ above.</p>
       <div class="error-grid">
         <div class="err-item"><b><code>Link Not Supported</code> - Incorrect website</b><p>Please use a public link from Instagram, TikTok, YouTube, X, or Reddit.</p></div>
-        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>If it cannot be viewed in incognito mode, the engine cannot access it either. Make the post public.</p></div>
+        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>If it cannot be viewed in incognito mode, the engine cannot access it either.</p></div>
         <div class="err-item"><b><code>Age Restricted</code> - Age verification required</b><p>Login is required, the engine does not bypass restrictions.</p></div>
         <div class="err-item"><b><code>Bad URL</code> - Input error</b><p>The link must start with https:// and be copied from the Share button.</p></div>
         <div class="err-item"><b><code>Engine Warming Up</code> - Engine is in sleep mode</b><p>Click Wake Engine and wait 8 to 10 seconds.</p></div>
@@ -374,7 +356,6 @@
       row.firstChild.textContent=nowTime();
       els.processLog.scrollTop = els.processLog.scrollHeight;
     }
-
     function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(()=>Math.random()-0.5); return state.factPool.pop(); }
     function isValidUrl(s){ try{ const u=new URL(s.trim()); if(!['http:','https:'].includes(u.protocol)) return false; return true; }catch{ return false; } }
     function sanitize(n){ return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,200); }
@@ -454,9 +435,9 @@
       }
       throw new Error('No file was returned. This is usually due to a livestream, DRM protection, or an expired story.');
     }
-    function setSimple(){ els.h1.innerHTML='Welcome,<br><span>You are almost ready.</span>'; els.heroP.textContent='Compatible with Instagram, TikTok, YouTube, X and Reddit. Paste any public link below. Preview first, no automatic download. The main tool is located right here.'; els.stxt.textContent=state.online?'Engine is online and ready':'Checking the engine...'; }
-    function setExpert(){ els.h1.innerHTML='Pro Mode<br><span>Enabled for advanced users</span>'; els.heroP.textContent='Technical details, custom filenames, and the live process log are now visible. The main tool remains at the top, the guide is below and collapsible.'; }
-    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Quick fact: ${getFact()}</div></div>`; setTimeout(updateFileSizes, 200); }
+    function setSimple(){ els.h1.innerHTML='Welcome,<br><span>You are almost ready.</span>'; els.heroP.textContent='Compatible with Instagram, TikTok, YouTube, X and Reddit. Paste any public link below. Preview first, no automatic download. Includes built in trim editor.'; els.stxt.textContent=state.online?'Engine is online and ready':'Checking the engine...'; }
+    function setExpert(){ els.h1.innerHTML='Pro Mode<br><span>Enabled for advanced users</span>'; els.heroP.textContent='Technical details, custom filenames, live process log, and trim editor are visible. The main tool remains at the top.'; }
+    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Quick fact: ${getFact()}</div></div>`; setTimeout(function(){ updateFileSizes(); initTrimEditors(); }, 250); }
     function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
 
     window.blobDownload=async function(url,name){
@@ -514,9 +495,226 @@
       + `<button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button>`
       + `</div>`;
     }
+
+    /* === New Trim Logic === */
+    function formatTimeDisplay(sec){
+      if(!isFinite(sec) || sec < 0) sec = 0;
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return (m<10?'0'+m:m) + ':' + (s<10?'0'+s:s);
+    }
+    async function fetchVideoBlobForTrim(originalUrl){
+      try{ const r = await fetch(originalUrl, {mode:'cors', cache:'no-store'}); if(r.ok) return await r.blob(); }catch(e){}
+      const proxies = [function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }, function(u){ return 'https://corsproxy.io/?' + encodeURIComponent(u); }];
+      for(let i=0;i<proxies.length;i++){ try{ const p = proxies[i](originalUrl); const r = await fetch(p, {cache:'no-store'}); if(r.ok) return await r.blob(); }catch(e){} }
+      return null;
+    }
+    async function downloadTrimmedFile(originalUrl, originalFilename, startSec, endSec, trimId){
+      const btn = document.getElementById('dl-trim-' + trimId);
+      if(btn){ btn.disabled = true; btn.textContent = 'Processing trim... Please wait'; }
+      try{
+        let blob = await fetchVideoBlobForTrim(originalUrl);
+        let srcUrl;
+        let revokeSrc = false;
+        if(blob){ srcUrl = URL.createObjectURL(blob); revokeSrc = true; } else { srcUrl = originalUrl; }
+        const v = document.createElement('video');
+        v.src = srcUrl;
+        v.crossOrigin = 'anonymous';
+        v.muted = true;
+        v.playsInline = true;
+        v.preload = 'auto';
+        await new Promise(function(res, rej){
+          v.onloadedmetadata = res;
+          v.onerror = function(){ rej(new Error('Failed to load video for trimming')); };
+          setTimeout(function(){ rej(new Error('Video load timeout')); }, 15000);
+        });
+        v.currentTime = startSec;
+        await new Promise(function(r){ v.onseeked = r; setTimeout(r, 700); });
+        let stream;
+        try{ stream = v.captureStream? v.captureStream() : (v.mozCaptureStream? v.mozCaptureStream() : null); }catch(e){ stream = null; }
+        if(!stream){ throw new Error('Your browser does not support in browser trimming.'); }
+        const mime = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1.42E01E')? 'video/mp4;codecs=avc1.42E01E' : (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')? 'video/webm;codecs=vp9' : 'video/webm');
+        const recorder = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 2800000 });
+        const chunks = [];
+        recorder.ondataavailable = function(e){ if(e.data && e.data.size) chunks.push(e.data); };
+        const stopped = new Promise(function(r){ recorder.onstop = r; });
+        recorder.start(120);
+        try{ const p = v.play(); if(p) await p.catch(function(){}); }catch(e){}
+        await new Promise(function(resolve){
+          const iv = setInterval(function(){
+            if(v.currentTime >= endSec || v.ended){
+              clearInterval(iv);
+              try{ v.pause(); }catch(e){}
+              try{ recorder.stop(); }catch(e){}
+              try{ stream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){}
+              resolve();
+            }
+          }, 70);
+          setTimeout(function(){ clearInterval(iv); try{ recorder.stop(); }catch(e){} resolve(); }, (endSec - startSec + 3)*1000 + 4000);
+        });
+        await stopped;
+        if(revokeSrc) URL.revokeObjectURL(srcUrl);
+        if(!chunks.length) throw new Error('No data recorded');
+        const outBlob = new Blob(chunks, {type: mime});
+        const outUrl = URL.createObjectURL(outBlob);
+        const a = document.createElement('a');
+        const base = originalFilename.replace(/\.[a-z0-9]+$/i,'');
+        const ext = mime.indexOf('mp4')!== -1? '.mp4' : '.webm';
+        a.href = outUrl;
+        a.download = base + '_trimmed_' + Math.round(startSec) + '-' + Math.round(endSec) + ext;
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){ URL.revokeObjectURL(outUrl); a.remove(); }, 6000);
+        if(btn){ btn.textContent = 'Trimmed download complete'; setTimeout(function(){ btn.textContent = 'Download Trimmed Video'; btn.disabled = false; }, 2200); }
+      }catch(err){
+        if(btn){ btn.textContent = 'Download Trimmed Video'; btn.disabled = false; }
+        alert('Trim could not be completed: ' + err.message + '. The original file will be downloaded instead. For best results use Chrome on desktop.');
+        try{ directDownload(originalUrl, originalFilename); }catch(e){}
+      }
+    }
+    function attachTrimLogic(wrap){
+      const trimId = wrap.dataset.trimId;
+      const timeline = wrap.querySelector('.trim-timeline');
+      const left = wrap.querySelector('.handle.left');
+      const right = wrap.querySelector('.handle.right');
+      const fill = wrap.querySelector('.trim-range-fill');
+      const video = wrap.querySelector('video');
+      const startEl = wrap.querySelector('[data-role="start"]');
+      const endEl = wrap.querySelector('[data-role="end"]');
+      const durEl = wrap.querySelector('[data-role="duration"]');
+      const statusEl = document.getElementById('status-' + trimId);
+      const previewBtn = wrap.querySelector('[data-action="preview"]');
+      const doneBtn = wrap.querySelector('[data-action="done"]');
+      const clearBtn = wrap.querySelector('[data-action="clear"]');
+      const dlBtn = document.getElementById('dl-trim-' + trimId);
+      let duration = 0;
+      let startPct = 0;
+      let endPct = 100;
+      let active = null;
+      function pctToTime(p){ return (p/100)*duration; }
+      function updateUI(){
+        left.style.left = startPct + '%';
+        right.style.left = endPct + '%';
+        fill.style.left = startPct + '%';
+        fill.style.width = (endPct - startPct) + '%';
+        if(startEl) startEl.textContent = formatTimeDisplay(pctToTime(startPct));
+        if(endEl) endEl.textContent = formatTimeDisplay(pctToTime(endPct));
+        if(durEl && duration){ durEl.textContent = 'Selected: ' + formatTimeDisplay(pctToTime(endPct)-pctToTime(startPct)) + ' / Total: ' + formatTimeDisplay(duration); }
+      }
+      function getPct(clientX){
+        const r = timeline.getBoundingClientRect();
+        let x = clientX - r.left;
+        let pct = (x / r.width) * 100;
+        if(pct < 0) pct = 0; if(pct > 100) pct = 100;
+        return pct;
+      }
+      function onMove(e){
+        if(!active) return;
+        const clientX = e.touches? e.touches[0].clientX : e.clientX;
+        let pct = getPct(clientX);
+        if(active === 'left'){ if(pct >= endPct - 1.5) pct = endPct - 1.5; startPct = pct; }
+        else { if(pct <= startPct + 1.5) pct = startPct + 1.5; endPct = pct; }
+        updateUI();
+      }
+      function stopDrag(){ active = null; document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', stopDrag); document.removeEventListener('touchmove', onMove); document.removeEventListener('touchend', stopDrag); }
+      left.addEventListener('pointerdown', function(e){ active='left'; e.preventDefault(); document.addEventListener('pointermove', onMove); document.addEventListener('pointerup', stopDrag); });
+      right.addEventListener('pointerdown', function(e){ active='right'; e.preventDefault(); document.addEventListener('pointermove', onMove); document.addEventListener('pointerup', stopDrag); });
+      left.addEventListener('touchstart', function(e){ active='left'; document.addEventListener('touchmove', onMove, {passive:false}); document.addEventListener('touchend', stopDrag); }, {passive:false});
+      right.addEventListener('touchstart', function(e){ active='right'; document.addEventListener('touchmove', onMove, {passive:false}); document.addEventListener('touchend', stopDrag); }, {passive:false});
+      timeline.addEventListener('click', function(e){ if(e.target === left || e.target === right) return; });
+      if(video){
+        video.addEventListener('loadedmetadata', function(){ duration = video.duration || 0; updateUI(); if(durEl) durEl.textContent = 'Drag handles to select, then preview'; });
+        video.addEventListener('error', function(){ if(durEl) durEl.textContent = 'Could not load preview, trimming still works on download'; });
+      }
+      if(previewBtn){
+        previewBtn.addEventListener('click', function(){
+          if(!duration){ alert('Video is still loading. Please wait a moment.'); return; }
+          const s = pctToTime(startPct); const eT = pctToTime(endPct);
+          video.currentTime = s; video.play();
+          const onTime = function(){ if(video.currentTime >= eT){ video.pause(); video.removeEventListener('timeupdate', onTime); } };
+          video.addEventListener('timeupdate', onTime);
+        });
+      }
+      if(clearBtn){
+        clearBtn.addEventListener('click', function(){
+          startPct = 0; endPct = 100; updateUI();
+          wrap.classList.remove('trim-ready'); wrap.removeAttribute('data-start'); wrap.removeAttribute('data-end');
+          if(statusEl){ statusEl.textContent='Not trimmed'; statusEl.classList.remove('ready'); }
+          if(dlBtn){ dlBtn.disabled = true; dlBtn.style.opacity='.6'; }
+          if(video){ video.pause(); }
+        });
+      }
+      if(doneBtn){
+        doneBtn.addEventListener('click', function(){
+          if(!duration){ alert('Video metadata not loaded yet. Please wait.'); return; }
+          const s = pctToTime(startPct); const eT = pctToTime(endPct);
+          if(eT - s < 0.4){ alert('Please select at least 0.5 seconds.'); return; }
+          wrap.dataset.start = s; wrap.dataset.end = eT;
+          wrap.classList.add('trim-ready');
+          if(statusEl){ statusEl.textContent='Ready to download'; statusEl.classList.add('ready'); }
+          if(dlBtn){ dlBtn.disabled = false; dlBtn.style.opacity='1'; }
+          if(durEl){ durEl.textContent = 'Trim confirmed: ' + formatTimeDisplay(s) + ' to ' + formatTimeDisplay(eT); }
+        });
+      }
+      if(dlBtn){
+        dlBtn.addEventListener('click', function(){
+          const s = parseFloat(wrap.dataset.start || '0');
+          const eT = parseFloat(wrap.dataset.end || String(duration));
+          const url = wrap.dataset.url;
+          const fname = wrap.dataset.filename;
+          if(isNaN(s) || isNaN(eT)){ alert('Please confirm your trim selection first.'); return; }
+          downloadTrimmedFile(url, fname, s, eT, trimId);
+        });
+      }
+      updateUI();
+    }
+    function initTrimEditors(){
+      document.querySelectorAll('.trim-wrap').forEach(function(wrap){
+        if(wrap.dataset.initialized) return;
+        wrap.dataset.initialized = '1';
+        attachTrimLogic(wrap);
+      });
+    }
+
     function buildItemsBlock(items){
-      return items.map(function(it){
-        return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}">Detecting MP4 size...</span><small style="color:#8c8cb6;font-size:11px;">${it.label}</small></div>${buildButtons(it.url,it.filename,it.label)}</div>`;
+      return items.map(function(it, idx){
+        const trimId = 't' + Date.now() + '_' + idx + '_' + Math.floor(Math.random()*10000);
+        const safeUrl = String(it.url).replace(/'/g, "%27");
+        const safeName = sanitize(it.filename).replace(/'/g, "\\'");
+        const trimBlock = `
+          <div class="trim-wrap" data-trim-id="${trimId}" data-url="${it.url}" data-filename="${it.filename}">
+            <div class="trim-head">
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <b style="font-size:14px;">✂️ Trim Editor - Featured</b>
+                <span style="font-size:12px; color:#9aa0c0; line-height:1.5;">Drag the two handles to choose the part you want to keep. No need to enter numbers. Preview, confirm, then download.</span>
+              </div>
+              <span class="pill trim-status" id="status-${trimId}">Not trimmed</span>
+            </div>
+            <div class="trim-video-box">
+              <video id="tv-${trimId}" preload="metadata" playsinline controls crossorigin="anonymous"></video>
+            </div>
+            <div class="trim-timeline" id="tl-${trimId}">
+              <div class="trim-track"></div>
+              <div class="trim-range-fill" id="range-${trimId}" style="left:0%; width:100%;"></div>
+              <div class="handle left" id="hl-${trimId}" style="left:0%"></div>
+              <div class="handle right" id="hr-${trimId}" style="left:100%"></div>
+            </div>
+            <div class="trim-time-row">
+              <span class="time mono" data-role="start" id="ts-${trimId}">00:00</span>
+              <span class="time mono duration" data-role="duration" id="td-${trimId}">Loading video...</span>
+              <span class="time mono" data-role="end" id="te-${trimId}">00:00</span>
+            </div>
+            <div class="trim-actions">
+              <button class="btn ghost" data-action="preview" data-id="${trimId}">Preview Selection</button>
+              <button class="btn primary" data-action="done" data-id="${trimId}">Confirm Trim</button>
+              <button class="btn ghost" data-action="clear" data-id="${trimId}">Reset</button>
+            </div>
+            <div class="trim-download-area">
+              <button class="btn primary trim-download-btn" id="dl-trim-${trimId}" disabled style="opacity:.6;">Download Trimmed Video</button>
+              <div style="font-size:11px; color:#8c8cb6; text-align:center; line-height:1.5;">This button downloads only the portion you selected. The original file is still available below.</div>
+            </div>
+          </div>`;
+        const originalButtons = buildButtons(it.url, it.filename, it.label);
+        return `<div class="file-row" id="row-${trimId}"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}">Detecting MP4 size...</span><small style="color:#8c8cb6;font-size:11px;">${it.label}</small></div>${trimBlock}<div style="margin-top:14px; font-weight:800; font-size:13px;">Download Options</div>${originalButtons}<div style="margin-top:10px; display:grid; gap:8px;"><button class="btn ghost" style="width:100%;" onclick="directDownload('${safeUrl}','${safeName}')">Download Original Untrimmed Video - Full Length</button></div></div>`;
       }).join('');
     }
 
@@ -538,7 +736,7 @@
         const style=els.fn.value; const quality=els.vq.value; const customName=els.customName.value.trim();
         addLog('request','Step 3: Building request, quality='+quality+', filename mode='+style,'active');
         await new Promise(function(r){ setTimeout(r, 100); });
-        updateLog('request','Step 3: Request created. Details: { url, videoQuality: '+quality+', filenameStyle: '+style+' } - Engine transaction unchanged','done');
+        updateLog('request','Step 3: Request created. Details: { url, videoQuality: '+quality+', filenameStyle: '+style+' }','done');
         addLog('send','Step 4: Sending POST request to Cobalt URL','active');
         const base={ url: raw, filenameStyle: style==='custom'?'classic':style, disableMetadata: els.nm.checked };
         updateLog('send','Step 4: Request sent, waiting 3 to 8 seconds','active');
@@ -553,9 +751,9 @@
         updateLog('filename','Step 6: Filenames ready','done');
         addLog('size','Step 7: Detecting MP4 size using HEAD and Range requests','active');
         updateLog('size','Step 7: Size detection started, file size will appear shortly','active');
-        addLog('ready','Step 8: Building preview player, no automatic download','done');
-        addLog('done','Step 9: Process complete, scroll to preview or select a download method for your device','done');
-        showOutput('ok','Success, your video is ready - Instagram and TikTok supported',buildItemsBlock(items),result);
+        addLog('ready','Step 8: Building preview and trim editor, no automatic download','done');
+        addLog('done','Step 9: Process complete, use trim handles above downloads, then choose download type','done');
+        showOutput('ok','Success, your video is ready with trim editor',buildItemsBlock(items),result);
         updateLog('size','Step 7: Size detection running in background','done');
       }catch(e){
         addLog('error','An error occurred: '+e.message,'error');
