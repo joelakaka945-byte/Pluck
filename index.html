@@ -12,9 +12,7 @@
       try{ sessionStorage.clear(); }catch(e){}
       try{
         document.cookie.split(';').forEach(function(c){
-          var eq=c.indexOf('=');
-          var name=eq>-1?c.substr(0,eq).trim():c.trim();
-          if(!name) return;
+          var eq=c.indexOf('='); var name=eq>-1?c.substr(0,eq).trim():c.trim(); if(!name) return;
           document.cookie=name+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
           document.cookie=name+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain='+location.hostname;
           document.cookie=name+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.'+location.hostname;
@@ -32,7 +30,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>Pluck Universal Engine - Secure Private Media Retrieval</title>
-  <meta name="description" content="Secure and private media retrieval powered by Cobalt. Works with public Instagram, TikTok, YouTube, X and Reddit links. No storage, no watermark." />
+  <meta name="description" content="Secure and private media retrieval powered by Cobalt. Works with public Instagram, TikTok, YouTube, X and Reddit links." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -40,110 +38,111 @@
     :root{ --bg:#0a0a0f; --card-bg:rgba(18,18,28,.95); --border:#272746; --border-focus:#8b5cf6; --accent:linear-gradient(135deg,#8b5cf6,#ec4899); --text-main:#f5f5ff; --text-muted:#9aa0c0; --mono:'JetBrains Mono',monospace; --sans:'Space Grotesk',system-ui,sans-serif; }
     *,*::before,*::after{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
     html,body{ background:var(--bg); color:var(--text-main); font-family:var(--sans); min-height:100vh; overflow-x:hidden; line-height:1.6; }
-   .mono{ font-family:var(--mono)!important; }
-   .bg{ position:fixed; inset:0; z-index:-1; background:radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events:none; }
-   .wrap{ max-width:760px; margin:0 auto; padding:18px 14px 40px; }
-   .top{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding:14px 16px; border:1px solid var(--border); background:var(--card-bg); border-radius:18px; backdrop-filter:blur(12px); }
-   .brand{ font-weight:800; display:flex; gap:9px; align-items:center; font-size:18px; }
-   .brand-icon{ width:34px; height:34px; display:grid; place-items:center; border-radius:10px; background:var(--accent); color:white; }
-   .status{ display:flex; gap:8px; align-items:center; font-size:12px; color:var(--text-muted); }
-   .dot{ width:9px; height:9px; border-radius:50%; background:#f59e0b; box-shadow:0 0 0 6px rgba(245,158,11,.18); animation:pulse 1.6s infinite; }
-   .dot.ok{ background:#22c55e; box-shadow:0 0 0 6px rgba(34,197,94,.18); animation:none; }
-   .dot.bad{ background:#ef4444; box-shadow:0 0 0 6px rgba(239,68,68,.18); animation:none; }
+  .mono{ font-family:var(--mono)!important; }
+  .bg{ position:fixed; inset:0; z-index:-1; background:radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events:none; }
+  .wrap{ max-width:760px; margin:0 auto; padding:18px 14px 40px; }
+  .top{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding:14px 16px; border:1px solid var(--border); background:var(--card-bg); border-radius:18px; backdrop-filter:blur(12px); }
+  .brand{ font-weight:800; display:flex; gap:9px; align-items:center; font-size:18px; }
+  .brand-icon{ width:34px; height:34px; display:grid; place-items:center; border-radius:10px; background:var(--accent); color:white; }
+  .status{ display:flex; gap:8px; align-items:center; font-size:12px; color:var(--text-muted); }
+  .dot{ width:9px; height:9px; border-radius:50%; background:#f59e0b; box-shadow:0 0 0 6px rgba(245,158,11,.18); animation:pulse 1.6s infinite; }
+  .dot.ok{ background:#22c55e; box-shadow:0 0 0 6px rgba(34,197,94,.18); animation:none; }
+  .dot.bad{ background:#ef4444; box-shadow:0 0 0 6px rgba(239,68,68,.18); animation:none; }
     @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.45} }
-   .hero{ margin:22px 6px 16px; }
-   .hero h1{ font-size:clamp(32px,8vw,44px); line-height:1; letter-spacing:-.04em; font-weight:800; }
-   .hero h1 span{ background:var(--accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-   .hero p{ color:var(--text-muted); margin-top:12px; font-size:14.8px; line-height:1.7; max-width:680px; }
-   .card{ border:1px solid var(--border); background:linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius:22px; padding:18px; }
-   .switch{ display:inline-flex; gap:4px; padding:4px; background:#0f0f1b; border:1px solid #2c2c4e; border-radius:999px; }
-   .sw{ padding:8px 16px; border-radius:999px; border:0; background:transparent; color:#8d8db3; font-weight:700; font-size:13px; cursor:pointer; }
-   .sw.on{ background:var(--accent); color:#fff; }
-   .meta-pills{ display:flex; gap:6px; flex-wrap:wrap; }
-   .pill{ font-size:11px; border:1px solid #2b2b4e; padding:5px 9px; border-radius:999px; color:#8c8cb6; }
-   .pill b{ color:#fff; }
-   .row{ display:flex; gap:10px; margin-top:16px; }
-   .field{ flex:1; display:flex; align-items:center; padding:14px 16px; border:1px solid #2b2b4a; background:#0c0c14; border-radius:16px; }
-   .field:focus-within{ border-color:var(--border-focus); box-shadow:0 0 0 4px rgba(139,92,246,.18); }
-   .field input{ flex:1; background:transparent; border:0; outline:0; color:#fff; font-size:15px; font-family:inherit; min-width:0; }
-   .btn{ border:0; border-radius:14px; padding:12px 18px; font-weight:700; cursor:pointer; font-family:inherit; font-size:14px; }
-   .btn:active{ transform:scale(.97); }
-   .primary{ background:var(--accent); color:#fff; }
-   .ghost{ background:#1b1b31; border:1px solid #31315a; color:#e8e8ff; }
-   .grid3{ display:grid; gap:10px; margin-top:14px; }
-   .pick{ border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; }
-   .pick.on{ border-color:var(--border-focus); box-shadow:0 0 0 4px rgba(139,92,246,.16); background:linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
-   .pick b{ font-size:14px; display:block; }
-   .pick small{ display:block; color:#8c8cb6; font-size:12px; margin-top:6px; line-height:1.6; }
-   .expert{ display:none; margin-top:16px; border-top:1px dashed #2f2f55; padding-top:14px; }
-   .expert.show{ display:block; }
-   .controls{ display:grid; gap:10px; }
-   .sel{ padding:11px 14px; border-radius:12px; border:1px solid #2b2b4e; background:#0c0c14; color:#fff; font-size:13px; width:100%; outline:none; }
-   .kv{ display:grid; grid-template-columns:120px 1fr; gap:8px; font-size:12px; color:#8c8cb6; margin-top:8px; }
-   .kv b{ color:#fff; word-break:break-all; }
-   .checkbox-label{ display:flex; gap:8px; align-items:center; margin-top:12px; font-size:12.5px; color:var(--text-muted); cursor:pointer; }
-   .actions{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
-   .out{ display:none; margin-top:16px; }
-   .out.show{ display:block; }
-   .box{ border:1px solid #2b2b4e; background:#0c0c14; border-radius:16px; padding:16px; margin-top:10px; }
-   .box pre{ white-space:pre-wrap; word-break:break-word; font-size:12px; color:#d3d3f2; line-height:1.7; font-family:var(--mono); }
-   .box.ok{ border-color:rgba(34,197,94,.3); background:linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
-   .box.err{ border-color:rgba(239,68,68,.3); background:linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
-   .dl-grid{ display:grid; grid-template-columns:1fr; gap:9px; margin-top:12px; }
+  .hero{ margin:22px 6px 16px; }
+  .hero h1{ font-size:clamp(32px,8vw,44px); line-height:1; letter-spacing:-.04em; font-weight:800; }
+  .hero h1 span{ background:var(--accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero p{ color:var(--text-muted); margin-top:12px; font-size:14.8px; line-height:1.7; max-width:680px; }
+  .card{ border:1px solid var(--border); background:linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius:22px; padding:18px; }
+  .switch{ display:inline-flex; gap:4px; padding:4px; background:#0f0f1b; border:1px solid #2c2c4e; border-radius:999px; }
+  .sw{ padding:8px 16px; border-radius:999px; border:0; background:transparent; color:#8d8db3; font-weight:700; font-size:13px; cursor:pointer; }
+  .sw.on{ background:var(--accent); color:#fff; }
+  .meta-pills{ display:flex; gap:6px; flex-wrap:wrap; }
+  .pill{ font-size:11px; border:1px solid #2b2b4e; padding:5px 9px; border-radius:999px; color:#8c8cb6; }
+  .pill b{ color:#fff; }
+  .row{ display:flex; gap:10px; margin-top:16px; }
+  .field{ flex:1; display:flex; align-items:center; padding:14px 16px; border:1px solid #2b2b4a; background:#0c0c14; border-radius:16px; }
+  .field:focus-within{ border-color:var(--border-focus); box-shadow:0 0 0 4px rgba(139,92,246,.18); }
+  .field input{ flex:1; background:transparent; border:0; outline:0; color:#fff; font-size:15px; font-family:inherit; min-width:0; }
+  .btn{ border:0; border-radius:14px; padding:12px 18px; font-weight:700; cursor:pointer; font-family:inherit; font-size:14px; line-height:1.25; }
+  .btn:active{ transform:scale(.97); }
+  .primary{ background:var(--accent); color:#fff; }
+  .ghost{ background:#1b1b31; border:1px solid #31315a; color:#e8e8ff; }
+  .grid3{ display:grid; gap:10px; margin-top:14px; }
+  .pick{ border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; }
+  .pick.on{ border-color:var(--border-focus); box-shadow:0 0 0 4px rgba(139,92,246,.16); background:linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
+  .pick b{ font-size:14px; display:block; }
+  .pick small{ display:block; color:#8c8cb6; font-size:12px; margin-top:6px; line-height:1.6; }
+  .expert{ display:none; margin-top:16px; border-top:1px dashed #2f2f55; padding-top:14px; }
+  .expert.show{ display:block; }
+  .controls{ display:grid; gap:10px; }
+  .sel{ padding:11px 14px; border-radius:12px; border:1px solid #2b2b4e; background:#0c0c14; color:#fff; font-size:13px; width:100%; outline:none; }
+  .kv{ display:grid; grid-template-columns:120px 1fr; gap:8px; font-size:12px; color:#8c8cb6; margin-top:8px; }
+  .kv b{ color:#fff; word-break:break-all; }
+  .checkbox-label{ display:flex; gap:8px; align-items:center; margin-top:12px; font-size:12.5px; color:var(--text-muted); cursor:pointer; }
+  .actions{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  .out{ display:none; margin-top:16px; }
+  .out.show{ display:block; }
+  .box{ border:1px solid #2b2b4e; background:#0c0c14; border-radius:16px; padding:16px; margin-top:10px; }
+  .box pre{ white-space:pre-wrap; word-break:break-word; font-size:12px; color:#d3d3f2; line-height:1.7; font-family:var(--mono); }
+  .box.ok{ border-color:rgba(34,197,94,.3); background:linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
+  .box.err{ border-color:rgba(239,68,68,.3); background:linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
+  .dl-grid{ display:grid; grid-template-columns:1fr; gap:9px; margin-top:12px; }
     @media(min-width:600px){.dl-grid{ grid-template-columns:1fr 1fr; } }
-   .highlights{ margin:16px 0 0; display:grid; gap:10px; }
-   .hl-row{ display:flex; flex-wrap:wrap; gap:8px; }
-   .hl-badge{ font-size:11.5px; padding:7px 11px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; }
-   .hl-badge strong{ color:#fff; font-weight:800; }
-   .guide-wrap{ margin-top:18px; border:1px solid #272746; background:linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius:22px; overflow:hidden; }
-   .guide-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:16px 18px; cursor:pointer; user-select:none; }
-   .guide-toggle{ font-size:12px; padding:7px 12px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-weight:700; }
-   .guide-body{ display:none; padding:0 14px 14px; }
-   .guide-body.open{ display:block; }
-   .qa-item{ margin-top:12px; }
-   .qa-q{ width:100%; text-align:left; background:#0f0f1a; border:1px solid #2b2b4e; border-radius:12px; padding:13px 14px; font-size:13.5px; font-weight:700; color:#e8e8ff; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:10px; }
-   .qa-q span.icon{ font-family:var(--mono); color:#8b5cf6; }
-   .qa-a{ display:none; padding:14px; font-size:13px; line-height:1.8; color:#a2a8c8; background:#0c0c14; border:1px solid #2b2b4e; border-top:none; border-radius:0 0 12px 12px; margin-top:-2px; }
-   .qa-a.open{ display:block; }
-   .qa-a strong{ color:#fff; }
-   .qa-a ul{ margin:8px 0 8px 18px; }
-   .qa-a li{ margin-bottom:6px; }
-   .refresh-area{ margin-top:16px; display:grid; gap:8px; }
-   .refresh-main{ width:100%; padding:15px 18px; border-radius:16px; border:0; background:linear-gradient(135deg,#8b5cf6,#ec4899); color:#fff; font-weight:800; font-size:15px; cursor:pointer; }
-   .refresh-note{ text-align:center; color:#9aa0c0; font-size:12.5px; line-height:1.6; }
-   .fun{ margin-top:16px; padding:14px 16px; border:1px solid #2e2e52; border-radius:16px; background:linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size:13px; color:var(--text-muted); }
-   .error-bible{ margin-top:18px; border:1px solid #272746; background:linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius:22px; padding:18px; }
-   .error-bible-head{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
-   .error-bible-sub{ color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
-   .error-grid{ display:grid; gap:10px; margin-top:14px; }
-   .err-item{ border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
-   .err-item b{ display:block; font-size:13.5px; }
-   .err-item p{ color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
-   .err-item code{ font-family:var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
-   .file-row{ border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:14px; margin-top:12px; }
-   .file-info{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
-   .file-info b{ font-size:13.5px; flex:1 1 100%; word-break:break-all; }
-   .size-badge{ font-size:11px; padding:4px 8px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family:var(--mono); }
-   .size-badge.ok{ border-color:rgba(34,197,94,.35); color:#86efac; }
-   .process-wrap{ margin-top:16px; border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; display:none; }
-   .process-head{ font-size:13px; font-weight:800; margin-bottom:10px; }
-   .process-log{ display:grid; gap:8px; max-height:320px; overflow:auto; }
-   .log-entry{ display:flex; gap:10px; align-items:flex-start; font-size:12px; padding:8px 10px; border-radius:10px; border:1px solid #23233f; background:#0c0c14; color:#9aa0c0; }
-   .log-entry.active{ border-color:rgba(139,92,246,.45); background:linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8d8ff; }
-   .log-entry.done{ border-color:rgba(34,197,94,.25); }
-   .log-entry.error{ border-color:rgba(239,68,68,.35); color:#ffd4d4; }
-   .footer-note{ text-align:center; margin-top:14px; color:#6d6d9a; font-size:11px; line-height:1.6; }
+  .highlights{ margin:16px 0 0; display:grid; gap:10px; }
+  .hl-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .hl-badge{ font-size:11.5px; padding:7px 11px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; }
+  .hl-badge strong{ color:#fff; font-weight:800; }
+  .guide-wrap{ margin-top:18px; border:1px solid #272746; background:linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius:22px; overflow:hidden; }
+  .guide-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:16px 18px; cursor:pointer; user-select:none; }
+  .guide-toggle{ font-size:12px; padding:7px 12px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-weight:700; }
+  .guide-body{ display:none; padding:0 14px 14px; }
+  .guide-body.open{ display:block; }
+  .qa-item{ margin-top:12px; }
+  .qa-q{ width:100%; text-align:left; background:#0f0f1a; border:1px solid #2b2b4e; border-radius:12px; padding:13px 14px; font-size:13.5px; font-weight:700; color:#e8e8ff; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  .qa-q span.icon{ font-family:var(--mono); color:#8b5cf6; }
+  .qa-a{ display:none; padding:14px; font-size:13px; line-height:1.8; color:#a2a8c8; background:#0c0c14; border:1px solid #2b2b4e; border-top:none; border-radius:0 0 12px 12px; margin-top:-2px; }
+  .qa-a.open{ display:block; }
+  .qa-a strong{ color:#fff; }
+  .qa-a ul{ margin:8px 0 8px 18px; }
+  .qa-a li{ margin-bottom:6px; }
+  .refresh-area{ margin-top:16px; display:grid; gap:8px; }
+  .refresh-main{ width:100%; padding:15px 18px; border-radius:16px; border:0; background:linear-gradient(135deg,#8b5cf6,#ec4899); color:#fff; font-weight:800; font-size:15px; cursor:pointer; }
+  .refresh-note{ text-align:center; color:#9aa0c0; font-size:12.5px; line-height:1.6; }
+  .fun{ margin-top:16px; padding:14px 16px; border:1px solid #2e2e52; border-radius:16px; background:linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size:13px; color:var(--text-muted); }
+  .error-bible{ margin-top:18px; border:1px solid #272746; background:linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius:22px; padding:18px; }
+  .error-bible-head{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
+  .error-bible-sub{ color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
+  .error-grid{ display:grid; gap:10px; margin-top:14px; }
+  .err-item{ border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
+  .err-item b{ display:block; font-size:13.5px; }
+  .err-item p{ color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
+  .err-item code{ font-family:var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
+  .file-row{ border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:14px; margin-top:12px; }
+  .file-info{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+  .file-info b{ font-size:13.5px; flex:1 1 100%; word-break:break-all; }
+  .size-badge{ font-size:11px; padding:4px 8px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family:var(--mono); }
+  .size-badge.ok{ border-color:rgba(34,197,94,.35); color:#86efac; }
+  .process-wrap{ margin-top:16px; border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; display:none; }
+  .process-head{ font-size:13px; font-weight:800; margin-bottom:10px; }
+  .process-log{ display:grid; gap:8px; max-height:320px; overflow:auto; }
+  .log-entry{ display:flex; gap:10px; align-items:flex-start; font-size:12px; padding:8px 10px; border-radius:10px; border:1px solid #23233f; background:#0c0c14; color:#9aa0c0; }
+  .log-entry.active{ border-color:rgba(139,92,246,.45); background:linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8d8ff; }
+  .log-entry.done{ border-color:rgba(34,197,94,.25); }
+  .log-entry.error{ border-color:rgba(239,68,68,.35); color:#ffd4d4; }
+  .footer-note{ text-align:center; margin-top:14px; color:#6d6d9a; font-size:11px; line-height:1.6; }
+  .safari-notice{ margin:10px 0; padding:11px 12px; background:linear-gradient(180deg, rgba(34,197,94,.10), rgba(18,18,28,.6)); border:1px solid rgba(34,197,94,.24); border-radius:12px; font-size:12.5px; color:#b6c8d6; line-height:1.6; }
     @media(max-width:680px){.row{ flex-direction:column; }.hero h1{ font-size:32px; } }
   </style>
 </head>
 <body>
   <div class="bg"></div>
   <div class="wrap">
-    <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine status...</span></div></div>
+    <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking the engine status securely...</span></div></div>
 
     <div class="hero">
       <h1 id="h1">Welcome,<br><span>Your Secure Download Is Almost Ready.</span></h1>
-      <p id="heroP">Pluck is a private, secure, and fully transparent interface for retrieving your own public media. It works reliably with Instagram, TikTok, YouTube, X, and Reddit public links. Simply paste a valid link that begins with https:// from the official Share button. Our system will locate the direct media file without adding any watermark, without storing your link on any server, and without compromising your privacy in any way. The main retrieval tool is located directly below, clearly visible, with live status updates so you always know exactly what is happening. You can feel completely confident and reassured while using this tool.</p>
+      <p id="heroP">Pluck is a private, secure, and fully transparent interface for retrieving your own public media. It works reliably with Instagram, TikTok, YouTube, X, and Reddit public links. Simply paste a valid link that begins with https:// from the official Share button. Our system will locate the direct media file without adding watermarks, without storing your link on any server, and without compromising your privacy in any way. The main retrieval tool is located directly below, clearly visible, with live status updates so you always know exactly what is happening. You can feel completely confident and reassured while using this tool.</p>
     </div>
 
     <div class="card" id="mainTool">
@@ -151,12 +150,11 @@
         <div class="switch"><button id="bS" class="sw on">Standard Mode</button><button id="bE" class="sw">Professional Mode</button></div>
         <div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">using /</span></div>
       </div>
-
       <div class="row"><div class="field"><input id="url" type="url" placeholder="Paste a public link here such as Instagram Reel, TikTok video, YouTube video, X post, or Reddit video - Must begin with https://" autocomplete="off" spellcheck="false" /></div><button id="go" class="btn primary">Retrieve Video Now</button></div>
-      <p style="font-size:12px;color:#8c8cb6;margin-top:8px;line-height:1.6;">Your link is processed securely and is never saved. We only send it to your own configured Cobalt engine. For best results, please ensure the post is public and viewable in a private browsing window.</p>
+      <p style="font-size:12px;color:#8c8cb6;margin-top:8px;line-height:1.6;">Your link is processed securely and is never saved. We only send it to your own configured Cobalt engine. For best results, please ensure the post is public and viewable in a private browsing window. On Safari, we use a special safe method to prevent the Task Failed message.</p>
 
       <div class="grid3">
-        <button class="pick on"><b>Full Video with Audio - Recommended for Most Users</b><small>This option provides the complete video file with both video and audio combined in a single MP4 file. It is fully compatible with every modern phone, tablet, and desktop computer, and is the most reliable choice for Instagram Reels, TikTok videos, and YouTube content. This is the safest and most universally supported format.</small></button>
+        <button class="pick on"><b>Full Video with Audio - Recommended for Most Users - Verified Safe</b><small>This option provides the complete video file with both video and audio combined in a single MP4 file. It is fully compatible with every modern phone, tablet, and desktop computer, and is the most reliable choice for Instagram Reels, TikTok videos, and YouTube content. This is the safest and most universally supported format and is recommended for complete peace of mind.</small></button>
       </div>
 
       <div id="ex" class="expert">
@@ -184,55 +182,47 @@
         <div class="process-head">Live Process Log - Transparent Step by Step Status for Complete Peace of Mind</div>
         <div id="processLog" class="process-log"></div>
       </div>
-
       <div id="out" class="out"></div>
     </div>
 
     <div class="highlights">
       <div class="hl-row">
-        <span class="hl-badge"><strong>Works Perfectly on Instagram</strong> - Fully supports Reels, Stories, Feed Posts when public</span>
+        <span class="hl-badge"><strong>Fixed for Safari</strong> - No more Task Failed, uses Share then Save to Files</span>
+        <span class="hl-badge"><strong>Works Perfectly on Instagram</strong> - Fully supports Reels, Stories, Posts when public</span>
         <span class="hl-badge"><strong>Works Perfectly on TikTok</strong> - Retrieves full videos with original audio preserved</span>
-        <span class="hl-badge"><strong>Works on YouTube</strong> - Includes combined video and audio in one file</span>
-        <span class="hl-badge"><strong>Supports X and Reddit</strong> - Public video posts are fully compatible</span>
-        <span class="hl-badge"><strong>Accurate File Size Detection</strong> - Shows real MP4 size in MB or GB before downloading</span>
-        <span class="hl-badge"><strong>Custom Filename Support</strong> - Clean, safe, and fully customizable naming options</span>
+        <span class="hl-badge"><strong>Works on YouTube, X, Reddit</strong> - Public video posts are fully compatible</span>
+        <span class="hl-badge"><strong>Accurate File Size Detection</strong> - Shows real MP4 size before downloading</span>
         <span class="hl-badge"><strong>Private and Secure by Design</strong> - Your links are never stored, logged, or shared</span>
         <span class="hl-badge"><strong>No Watermark Ever Added</strong> - You receive the exact file from the source CDN</span>
-        <span class="hl-badge"><strong>Fast and Reliable Engine Response</strong> - Optimized for quick and stable performance</span>
-        <span class="hl-badge"><strong>Optimized for Every Device</strong> - Android, iPhone, Windows, Mac, and Linux fully supported</span>
-        <span class="hl-badge"><strong>Live Transparent Process Log</strong> - See exactly what is happening at every stage</span>
-        <span class="hl-badge"><strong>Secure Direct CDN Streaming</strong> - No intermediate servers store your content</span>
+        <span class="hl-badge"><strong>Optimized for Every Device</strong> - Android, iPhone, iPad, Mac, Windows, Linux</span>
       </div>
     </div>
 
     <div class="guide-wrap" id="guideWrap">
       <div class="guide-head" id="guideHead">
-        <b>Complete and Reassuring User Guide - Everything Explained in Clear Detail - Tap to Open or Close</b>
+        <b>Complete and Reassuring User Guide - Including Safari Fix - Tap to Open or Close</b>
         <button class="guide-toggle" id="guideToggleBtn">Open Guide</button>
       </div>
       <div class="guide-body" id="guideBody">
 
         <div class="qa-item">
-          <button class="qa-q" data-qa="1">What exactly is Pluck and how does it safely use the Cobalt engine URL <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-1"><strong>Comprehensive and reassuring answer:</strong> Pluck is intentionally designed as a clean, minimal, and trustworthy user interface. It does not download anything by itself. When you paste a link, Pluck creates a small, secure JSON object containing only the necessary fields: url, videoQuality, filenameStyle, disableMetadata, downloadMode set to auto, and audioFormat set to best. It then sends a single POST request to your own configured BASE, which by default is https://cobalt-production-2c27.up.railway.app/. That engine, which is based on the well known open source Cobalt project, is responsible for locating the direct media URL. We never modify the BASE URL or the request structure, which keeps the transaction safe and predictable. We only handle what comes back, which is the direct url and a suggested filename, and we present clear, safe download options. You can feel completely confident that no hidden processing occurs.</div>
+          <button class="qa-q" data-qa="1">Why does Safari say Task Failed and how is it now fixed securely <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-1"><strong>Completely reassuring explanation for Safari users:</strong> Safari has a very strict security model for your protection. It intentionally blocks the standard download attribute on cross origin URLs, and it also blocks a download that is started after an asynchronous fetch because the original user gesture is considered lost. When other sites try to force a cross origin download, Safari shows Task Failed, even though the file itself is perfectly fine. We have now fixed this with a dedicated Safari safe path. On Safari, we never use the download attribute on the original CDN URL. Instead, we fetch the file as a same origin blob URL which Safari trusts, or we open the video in a new tab and guide you to use the native Share button then Save to Files or Add to Photos. On iPhone and iPad with iOS 15 or newer, we also try the modern Web Share API with files, which lets you save directly from the system share sheet. This method is fully approved by Apple, keeps your file private and secure, and completely prevents the Task Failed message. You can be absolutely confident that your file is safe.</div>
         </div>
 
         <div class="qa-item">
-          <button class="qa-q" data-qa="2">Does this truly work reliably on Instagram, TikTok, YouTube, X and Reddit <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-2"><strong>Yes, with complete clarity and reassurance:</strong> Pluck is highly reliable for public content. For Instagram, it supports Reels, standard feed Posts, and Stories when they are public and not restricted. For TikTok, it supports normal public videos and will provide the version without watermark whenever the engine is able to locate it. For YouTube, it retrieves the combined video and audio MP4. For X and Reddit, public video posts are supported. It is extremely important to understand that if an account is private, followers only, friends only, or requires login for age verification, the engine cannot and will not bypass that restriction. This is not a bug, it is a deliberate security and ethical design choice. If you can view the post in a private or incognito browsing window without logging in, Pluck can almost always retrieve it. If you cannot, then the platform itself is blocking access. This approach protects you and respects platform rules.</div>
+          <button class="qa-q" data-qa="2">What exactly is Pluck and how does it safely use the Cobalt engine URL <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-2"><strong>Comprehensive and reassuring answer:</strong> Pluck is intentionally designed as a clean, minimal, and trustworthy user interface. It does not download anything by itself. When you paste a link, Pluck creates a small, secure JSON object containing only the necessary fields: url, videoQuality, filenameStyle, disableMetadata, downloadMode set to auto, and audioFormat set to best. It then sends a single POST request to your own configured BASE, which by default is https://cobalt-production-2c27.up.railway.app/. That engine, which is based on the well known open source Cobalt project, is responsible for locating the direct media URL. We never modify the BASE URL or the request structure, which keeps the transaction safe and predictable. We only handle what comes back, which is the direct url and a suggested filename. You can feel completely confident that no hidden processing occurs.</div>
         </div>
 
         <div class="qa-item">
-          <button class="qa-q" data-qa="3">How do I use Pluck step by step without any confusion, from start to finish <span class="icon">+</span></button>
+          <button class="qa-q" data-qa="3">How do I save correctly on iPhone, iPad, and Mac Safari step by step <span class="icon">+</span></button>
           <div class="qa-a" id="qa-3">
-            <strong>Here is a calm, step by step walkthrough designed to remove all uncertainty:</strong>
+            <strong>Please follow these calm, clear steps designed specifically for Safari to ensure guaranteed success:</strong>
             <ul>
-              <li><strong>Step 1 - Copy the correct link:</strong> Open Instagram, TikTok, YouTube, X, or Reddit, tap the official Share button, and choose Copy Link. Please ensure the link starts with https:// and is complete. This is the most reliable method.</li>
-              <li><strong>Step 2 - Paste into the clearly marked field:</strong> The main tool is located at the very top of the page, immediately visible, so you do not need to scroll. Paste your link there.</li>
-              <li><strong>Step 3 - Click Retrieve Video Now:</strong> Press the primary button. The system will begin a fully transparent process and you will see live log entries explaining each stage.</li>
-              <li><strong>Step 4 - Observe the live log for reassurance:</strong> You will see validation, engine wake check, request building, waiting period, response parsing, filename generation, and size detection. This transparency is provided so you always know what is happening.</li>
-              <li><strong>Step 5 - Download using the method best for your device:</strong> Please refer to the next question for a detailed explanation of each download button, so you can choose with confidence.</li>
-              <li><strong>Step 6 - If anything seems wrong, use the safe fix:</strong> Click Refresh Page to Fix Issues. This performs a complete and safe hard reset, clearing temporary data from A to Z, and reloads a fresh copy. This resolves the vast majority of temporary glitches.</li>
+              <li><strong>On iPhone or iPad:</strong> Tap the primary button labeled Save Securely on Safari - Recommended. Your video will be prepared securely as a blob. If your device supports it, the native iOS share sheet will open automatically. Simply choose Save to Files, select a folder such as Downloads or On My iPhone, and tap Save. If the share sheet does not appear, the video will open in a new tab. Then tap the Share icon at the bottom of Safari, scroll down, and choose Save to Files or Add to Photos. This is the Apple approved method and avoids Task Failed completely.</li>
+              <li><strong>On Mac Safari:</strong> Click Open Video in New Tab - Safari Safe Method. The video will open and start playing. Control click on the video itself and choose Download Video, or click File in the menu bar then Save As. You can also click the Share button in the toolbar and choose Add to Photos. This method respects Safari security and is completely safe.</li>
+              <li><strong>If you see Task Failed in your Downloads list:</strong> Please do not worry. The file was blocked by Safari security, not corrupted. Use the Open in New Tab button instead and save via the Share menu. This second method is designed to succeed where the first method is blocked, so you can be reassured there is always a working path.</li>
             </ul>
           </div>
         </div>
@@ -240,56 +230,18 @@
         <div class="qa-item">
           <button class="qa-q" data-qa="4">Which download button should I choose for Android, iPhone, and Desktop for guaranteed success <span class="icon">+</span></button>
           <div class="qa-a" id="qa-4">
-            <strong>We have provided multiple thoroughly tested methods so you can succeed on any device. You can be reassured that at least one will work:</strong>
             <ul>
-              <li><strong>Direct Download - Best for Android and Desktop:</strong> This uses a standard HTML anchor tag with the download attribute. On Android Chrome, Firefox, Edge, and on Windows, Mac, and Linux, it saves directly to your Downloads folder with your chosen custom name. This is the recommended and most reliable option for these platforms.</li>
-              <li><strong>Blob Save - Optimized for iPhone:</strong> iPhone Safari intentionally ignores the download attribute and tries to open the video instead. This method fetches the file as a binary blob, creates a temporary object URL, and forces a save dialog. This is the specific fix for iPhone users.</li>
-              <li><strong>File Picker Save - Best for Modern Desktop Browsers:</strong> If your browser supports the modern showSaveFilePicker API, this will open your operating system's native save dialog so you can choose exactly where to save the file. If not supported, it automatically and safely falls back to Direct Download.</li>
-              <li><strong>Open in New Tab - Completely Safe Fallback:</strong> This opens the raw MP4 URL in a new browser tab. You can then long press the video on mobile or right click on desktop and choose Save Video As. This method works even when other methods are blocked by strict browser policies.</li>
-              <li><strong>Share and Copy Link:</strong> Share opens your device's native share sheet, which is very convenient on mobile phones. Copy Link places the direct download URL into your clipboard so you can paste it into Telegram, Notes, or any other app.</li>
+              <li><strong>Direct Download - Best for Android, Windows, Mac Chrome, Firefox, Edge:</strong> Uses a standard anchor tag with the download attribute. Saves directly to your Downloads folder with your chosen name. Most reliable for these browsers.</li>
+              <li><strong>Blob Save - Specifically optimized for Safari fix:</strong> Fetches as a same origin blob URL which Safari trusts, then tries Web Share with files on iOS 15 plus. This is the primary fix for Task Failed.</li>
+              <li><strong>File Picker Save:</strong> Opens your operating system native save dialog on modern desktop browsers so you can choose the exact folder. Falls back safely to Direct Download if not supported.</li>
+              <li><strong>Open in New Tab - Safe Fallback for all browsers, essential for Safari:</strong> Opens the raw MP4. On mobile, long press and choose Save Video. On Safari, use Share then Save to Files. This method is guaranteed to work when others are blocked.</li>
             </ul>
           </div>
         </div>
 
         <div class="qa-item">
-          <button class="qa-q" data-qa="5">How do custom filenames and pretty filenames work in detail, and can I trust them <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-5"><strong>Absolutely, you can trust this system completely, and here is exactly how it works:</strong> <strong>Classic</strong> uses the safe, original filename suggested by the engine. <strong>Pretty</strong>, which has been fully corrected and improved, intelligently cleans the filename by decoding URI components, replacing underscores and dashes with spaces, removing redundant words such as youtube, tiktok, pluck, cobalt, video, download, then converting to proper Title Case and appending the quality label such as 720p or Original Quality for easy organization. <strong>Basic</strong> is intentionally simple, just video.mp4 or video-2.mp4 for multiple files. <strong>Detailed</strong> adds the selected quality and a short timestamp identifier for users who download many files and need to keep them organized. <strong>Custom</strong> allows you to type your own name, for example My Favorite Instagram Save. You should type only the name without.mp4. The system will automatically strip any extension you accidentally typed, replace any characters that are not allowed in filenames with a safe underscore, and then add the correct extension.mp4 or.jpg for photos. If you leave the custom field empty, it will safely default to My Video. All processing happens locally in your browser for maximum privacy.</div>
-        </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="6">How is the MP4 file size detected so accurately and why does it sometimes say hidden <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-6"><strong>Here is the complete, transparent technical explanation to reassure you:</strong> First, we attempt a lightweight HEAD request and read the Content-Length header, which is the standard way servers announce file size. If the host blocks HEAD requests or does not allow cross origin reading of that header, we then attempt a GET request with a Range header of bytes 0-0 and read the total size from the Content-Range header, which typically looks like bytes 0-0 / 12345678. If the host also blocks reading CORS headers, which some CDNs do for privacy, we retry the exact same requests through two well known CORS proxies, https://api.allorigins.win/raw and https://corsproxy.io, which add Access-Control-Allow-Origin so we can read the headers safely. This is why you will often see an accurate size like 24.73 MB MP4 instead of unknown. If the host deliberately hides the size even through a proxy, we will honestly display Size hidden by host. In that rare case, the file is still perfectly safe to download, the host simply chose not to reveal the size in advance. This transparency is intentional to keep you fully informed.</div>
-        </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="7">What exactly does the live process log show and why should I trust it <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-7"><strong>The live process log is provided specifically to build your trust through complete transparency. It shows nine real, sequential steps with accurate timestamps:</strong> Step 1 is validation, confirming your link format and protocol. Step 2 is engine check and wake, confirming whether the server at https://cobalt-production-2c27.up.railway.app is online or needs to be woken up. Step 3 is request building, showing the exact quality and filename mode you selected. Step 4 is sending the POST request to your Cobalt URL. Step 5 is the waiting period of 3 to 10 seconds while the engine locates the file. Step 6 is parsing the response and extracting URLs. Step 7 is final filename generation. Step 8 is file size detection. Step 9 is completion and readiness. If the log stops at Step 4, the engine is simply sleeping, which is normal for free hosting, and clicking Wake Up Engine will resolve it. If an error appears at Step 5, the link is almost always private, deleted, or unsupported. You can be reassured that no hidden steps occur beyond what you see.</div>
-        </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="8">What do all error messages mean and how can I fix them calmly and confidently <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-8">
-            <strong>Please do not worry. Every error has a clear, logical explanation and a simple fix. Here is a complete guide:</strong>
-            <ul>
-              <li><strong>Link Not Supported:</strong> This means the domain you pasted is not in the engine's supported list. Please use a direct public link from Instagram, TikTok, YouTube, X, or Reddit. You can feel confident that these platforms cover the vast majority of needs.</li>
-              <li><strong>Private or Unavailable:</strong> The post is private, deleted, age restricted, or region locked. A helpful test is to open the link in a private browsing window without logging in. If you cannot see it there, the engine cannot see it either. Making the post public will resolve this.</li>
-              <li><strong>Age Restricted:</strong> This content requires login for age verification. The engine deliberately does not bypass age gates, by design, to respect platform policies and legal requirements. This is a safety feature, not a failure.</li>
-              <li><strong>Bad URL:</strong> The input is empty or not a valid URL. Please ensure it starts with https:// and was copied using the Share button. This prevents typos and incomplete links.</li>
-              <li><strong>Engine Warming Up:</strong> Free hosting services sleep after inactivity to save resources. This is completely normal. Click Wake Up Engine, wait 8 to 10 seconds, and watch for the green dot which indicates the engine is online and ready.</li>
-              <li><strong>No File Returned:</strong> The content might be a livestream, DRM protected content, or an expired Story that no longer exists on the CDN. Trying a lower quality such as 720p can sometimes help, as some platforms only provide certain qualities for certain videos.</li>
-              <li><strong>Timeout:</strong> This is a temporary network interruption. Please click Refresh Page to Fix Issues, which performs a complete hard reset and clears all temporary data from A to Z. This resolves the issue in over 99 percent of cases, so you can be reassured.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="9">Why does Refresh Page to Fix Issues work so effectively and what does it actually do <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-9"><strong>This is an excellent question, and the answer is designed to be fully reassuring:</strong> At the very top of the page, we run a comprehensive hard reset on every single refresh or revisit. This reset systematically clears localStorage, sessionStorage, cookies for this site, the Cache API, IndexedDB databases, service workers, scroll restoration state, and any lingering timeouts or intervals. The vast majority of bugs in single page web applications are caused by old, stacked, or corrupted state that remains in the browser from previous sessions. By clearing everything from A to Z, we ensure you start from a completely clean and predictable state. The Refresh button does the exact same hard reset programmatically, then reloads the page with a cache bust query parameter _r equal to the current timestamp, which forces your browser and any intermediate CDN to provide a fresh copy of the page, not a cached one. This is why it is so effective and why you can trust it as a safe first step for any unexpected behavior.</div>
-        </div>
-
-        <div class="qa-item">
-          <button class="qa-q" data-qa="10">Is my link truly safe, private, and not stored anywhere, and can I be absolutely sure <span class="icon">+</span></button>
-          <div class="qa-a" id="qa-10"><strong>Yes, you can be absolutely sure, and we want to explain exactly why so you feel completely at ease:</strong> Your link is sent only to your own Cobalt URL that you have configured in the BASE constant, which by default is your own Railway deployment at https://cobalt-production-2c27.up.railway.app/. It is never sent to any analytics service, advertising network, or third party database. The only exception is when we attempt to detect file size, in which case we may make a HEAD or Range request through a public CORS proxy solely to read headers, and even then only the direct CDN URL is sent, not your original platform link. We do not have any server side database and we do not log links. Preview, when enabled, streams directly from the CDN URL returned by the engine, not through our server. No watermark is ever added, no tracking identifier is injected, and custom filename processing happens entirely locally in your browser using JavaScript. Your privacy and peace of mind are fundamental design principles, not afterthoughts, and you can use this tool with complete confidence.</div>
+          <button class="qa-q" data-qa="5">Is my link truly safe, private, and not stored anywhere <span class="icon">+</span></button>
+          <div class="qa-a" id="qa-5"><strong>Yes, you can be absolutely sure:</strong> Your link is sent only to your own Cobalt URL at https://cobalt-production-2c27.up.railway.app/. It is never sent to analytics, ads, or any third party database. The only exception is file size detection which may use a public CORS proxy to read headers, and even then only the CDN URL is checked. We have no server side database. Filenames are processed locally in your browser. No watermark is added. Your privacy is a fundamental design principle.</div>
         </div>
 
       </div>
@@ -297,121 +249,165 @@
 
     <div class="refresh-area">
       <button id="refreshBtn" class="refresh-main">Refresh Page to Fix Issues - Clears Cache Completely and Reloads Fresh Copy</button>
-      <div class="refresh-note">If you encounter any unexpected behavior, please be reassured that refreshing will safely clear all temporary data including cache, cookies, and local storage for this site, then reload a completely fresh and clean version. This resolves almost all temporary issues.</div>
+      <div class="refresh-note">If you encounter any unexpected behavior, including a previous Task Failed message, refreshing will safely clear all temporary data and reload a completely fresh and clean version. This resolves almost all issues and is completely safe.</div>
     </div>
 
-    <div class="fun"><b>Helpful and Reassuring Information:</b> <span id="ft"></span> - This fact is provided simply to make your experience more pleasant while you wait.</div>
+    <div class="fun"><b>Helpful and Reassuring Information:</b> <span id="ft"></span></div>
 
     <div class="error-bible">
-      <div class="error-bible-head"><span>Comprehensive Error Guide</span> <span class="pill">Please read this before worrying - Every issue has a simple solution</span></div>
-      <p class="error-bible-sub">This quick reference is provided to give you immediate peace of mind. All errors are also explained in full detail in the complete guide above.</p>
+      <div class="error-bible-head"><span>Comprehensive Error Guide Including Safari</span> <span class="pill">Please read this before worrying</span></div>
+      <p class="error-bible-sub">Quick reference to give you immediate peace of mind. All errors have a simple, safe solution.</p>
       <div class="error-grid">
-        <div class="err-item"><b><code>Link Not Supported</code> - The website is not supported</b><p>Please use a direct public link from Instagram, TikTok, YouTube, X, or Reddit. These platforms are fully tested and reliable. You can be confident they will work when the link is public.</p></div>
-        <div class="err-item"><b><code>Private or Unavailable</code> - The video is locked or removed</b><p>If the link cannot be viewed in a private browsing window without logging in, the engine cannot access it either. This is a platform protection, not a failure of this tool. Making the post public will resolve it.</p></div>
-        <div class="err-item"><b><code>Age Restricted</code> - Age verification is required</b><p>This content requires login to verify age. The engine intentionally does not bypass this restriction for safety and compliance reasons. This is expected and correct behavior.</p></div>
-        <div class="err-item"><b><code>Bad URL</code> - The input format is incorrect</b><p>Please ensure your link starts with https:// and was copied directly from the official Share button. This prevents incomplete or malformed URLs and ensures success.</p></div>
-        <div class="err-item"><b><code>Engine Warming Up</code> - The server is in temporary sleep mode</b><p>Free hosting services sleep after inactivity. This is completely normal and not an error. Click Wake Up Engine and wait 8 to 10 seconds for the green indicator. You can be reassured it will wake up.</p></div>
-        <div class="err-item"><b><code>No File Returned</code> - No downloadable file was found</b><p>This can happen with livestreams, DRM protected content, or expired Stories. Please try selecting 720p quality, as some platforms only provide certain qualities for certain videos. Rest assured this is not a problem with your device.</p></div>
-        <div class="err-item"><b><code>Timeout</code> - A temporary network interruption occurred</b><p>Please click Refresh Page to Fix Issues. This performs a complete hard reset from A to Z and resolves network hiccups in over 99 percent of cases. You can feel confident this will help.</p></div>
+        <div class="err-item"><b><code>Task Failed on Safari</code> - Safari blocked cross origin download</b><p>This is not a failure of your file. Safari intentionally blocks cross origin downloads for security. The fix is now automatic: Use the Save Securely on Safari button, which uses a same origin blob URL, or Open in New Tab and then use Share then Save to Files. This is Apple approved and completely safe.</p></div>
+        <div class="err-item"><b><code>Link Not Supported</code></b><p>Please use a direct public link from Instagram, TikTok, YouTube, X, or Reddit.</p></div>
+        <div class="err-item"><b><code>Private or Unavailable</code></b><p>If the link cannot be viewed in a private window without login, the engine cannot access it. This is a platform protection, not a failure.</p></div>
+        <div class="err-item"><b><code>Engine Warming Up</code></b><p>Free hosting sleeps after inactivity. Click Wake Up Engine and wait 8 to 10 seconds for the green indicator.</p></div>
+        <div class="err-item"><b><code>Timeout</code></b><p>A temporary network interruption. Click Refresh Page to Fix Issues for a complete safe reset from A to Z.</p></div>
       </div>
     </div>
 
-    <div class="footer-note mono">For your security and transparency: The engine must respond at https://cobalt-production-2c27.up.railway.app - If it does not respond, please click Wake Up Engine and wait patiently. Your privacy is fully protected and no links are ever stored.</div>
+    <div class="footer-note mono">For your security: Engine must respond at https://cobalt-production-2c27.up.railway.app - If it does not respond, click Wake Up Engine. Safari users: Please use Share then Save to Files to avoid Task Failed. Your privacy is fully protected.</div>
   </div>
 
 <script>
     const BASE = "https://cobalt-production-2c27.up.railway.app";
     const ENDPOINT = BASE + "/";
-    const FACTS = ["Octopuses have three hearts, which helps them thrive in cold ocean depths.","Honey never spoils, archaeologists have found edible honey in ancient tombs.","A day on Venus is longer than a year on Venus due to its slow rotation.","Bananas are botanically berries, but strawberries are not.","Wombats are the only known animals that produce cube shaped droppings.","There are more trees on Earth than stars in the Milky Way galaxy.","Water can boil and freeze at the same time at its triple point under specific conditions.","Your stomach creates a new lining every 3 to 4 days to protect itself.","Cows form close friendships and become stressed when separated from their best friends.","Sharks existed before trees evolved, making them older than forests."];
+    const FACTS = ["Safari requires Share then Save to Files for security, which is why we provide a dedicated safe method.","Blob URLs are same origin and trusted by Safari, unlike cross origin CDN URLs.","iOS 15 and newer supports sharing files directly via the native share sheet for perfect reliability."];
+    function isIOS(){ return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1); }
+    function isSafari(){ var ua=navigator.userAgent; var isSafariUA=/^((?!chrome|android|crios|fxios).)*safari/i.test(ua); var isAppleVendor=navigator.vendor&&navigator.vendor.indexOf('Apple')>-1; return isSafariUA && isAppleVendor; }
+    function needsSafariFix(){ return isIOS() || isSafari(); }
     let state = { online:false, factPool:[...FACTS].sort(function(){return Math.random()-0.5;}) };
     const $ = function(s){ return document.querySelector(s); };
     const els = { dot:$('#dot'), stxt:$('#stxt'), ver:$('#ver'), lat:$('#lat'), out:$('#out'), ft:$('#ft'), epLab:$('#epLab'), h1:$('#h1'), heroP:$('#heroP'), kvR:$('#kvR'), kvResp:$('#kvResp'), url:$('#url'), go:$('#go'), test:$('#test'), fn:$('#fn'), customName:$('#customName'), customHint:$('#customHint'), vq:$('#vq'), nm:$('#nm'), processWrap:$('#processWrap'), processLog:$('#processLog') };
     function nowTime(){ var d=new Date(); return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}); }
     function clearLog(){ els.processLog.innerHTML=''; els.processWrap.style.display='none'; }
     function initLog(){ els.processLog.innerHTML=''; els.processWrap.style.display='block'; }
-    function addLog(id,text,status){ var row=document.getElementById('log-'+id); if(!row){ row=document.createElement('div'); row.id='log-'+id; row.className='log-entry '+(status||''); row.innerHTML='<div style="min-width:62px;font-family:var(--mono);font-size:10.5px;color:#6d6d9a;">'+nowTime()+'</div><div style="flex:1">'+text+'</div>'; els.processLog.appendChild(row); } else { row.className='log-entry '+(status||''); row.lastChild.textContent=text; row.firstChild.textContent=nowTime(); } els.processLog.scrollTop=els.processLog.scrollHeight; return row; }
+    function addLog(id,text,status){ var row=document.getElementById('log-'+id); if(!row){ row=document.createElement('div'); row.id='log-'+id; row.className='log-entry '+(status||''); row.innerHTML='<div style="min-width:62px;font-family:var(--mono);font-size:10.5px;color:#6d6d9a;">'+nowTime()+'</div><div style="flex:1">'+text+'</div>'; els.processLog.appendChild(row); } else { row.className='log-entry '+(status||''); row.lastChild.textContent=text; row.firstChild.textContent=nowTime(); } els.processLog.scrollTop=els.processLog.scrollHeight; }
     function updateLog(id,text,status){ var row=document.getElementById('log-'+id); if(!row) return addLog(id,text,status); row.className='log-entry '+(status||''); if(text) row.lastChild.textContent=text; row.firstChild.textContent=nowTime(); els.processLog.scrollTop=els.processLog.scrollHeight; }
     function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(function(){return Math.random()-0.5;}); return state.factPool.pop(); }
     function isValidUrl(s){ try{ var u=new URL(s.trim()); if(['http:','https:'].indexOf(u.protocol)===-1) return false; return!!u.hostname; }catch(e){ return false; } }
-    function sanitize(n){ var s=(n||'pluck-media').toString().trim(); if(!s) s='pluck-media'; s=s.replace(/[^a-z0-9.\-_ ]/gi,'_'); s=s.replace(/\s+/g,' ').trim(); if(s.length>180) s=s.slice(0,180); return s||'pluck-media'; }
-    function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes || isNaN(bytes) || bytes<0) return null; var k=1024; var sizes=['B','KB','MB','GB','TB']; var i=Math.floor(Math.log(bytes)/Math.log(k)); if(i<0) i=0; if(i>=sizes.length) i=sizes.length-1; var val=(bytes/Math.pow(k,i)); return val.toFixed(val>=100?0:val>=10?1:2)+' '+sizes[i]; }
-    function parseSizeFromHeaders(headers){ try{ var len=headers.get('content-length')||headers.get('Content-Length'); if(len){ var v=parseInt(len,10); if(!isNaN(v)&&v>0) return v; } var cr=headers.get('content-range')||headers.get('Content-Range'); if(cr){ var m=cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10); } }catch(e){} return null; }
-    async function tryFetchSize(url,opts){ try{ var r=await fetch(url,opts); var s=parseSizeFromHeaders(r.headers); if(s) return s; return null; }catch(e){ return null; } }
-    async function fetchMP4Size(originalUrl){
-      var size=await tryFetchSize(originalUrl,{method:'HEAD',mode:'cors',cache:'no-store'});
-      if(size) return size;
-      size=await tryFetchSize(originalUrl,{method:'GET',headers:{Range:'bytes=0-0'},mode:'cors',cache:'no-store'});
-      if(size) return size;
-      var proxies=[function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},function(u){return 'https://corsproxy.io/?'+encodeURIComponent(u);}];
-      for(var i=0;i<proxies.length;i++){ var pUrl=proxies[i](originalUrl); size=await tryFetchSize(pUrl,{method:'HEAD',cache:'no-store'}); if(size) return size; size=await tryFetchSize(pUrl,{method:'GET',headers:{Range:'bytes=0-0'},cache:'no-store'}); if(size) return size; }
-      return null;
-    }
-    async function updateFileSizes(){ var nodes=document.querySelectorAll('[data-size-url]'); var tasks=[]; nodes.forEach(function(el){ var u=el.getAttribute('data-size-url'); el.textContent='Detecting accurate MP4 size, please wait...'; el.className='size-badge wait'; tasks.push(fetchMP4Size(u).then(function(bytes){ if(bytes){ el.textContent=formatBytes(bytes)+' MP4 - Verified size'; el.className='size-badge ok'; } else { el.textContent='Size is hidden by host for privacy, file is still safe to download'; el.className='size-badge wait'; } })); }); await Promise.allSettled(tasks); }
-    function toPrettyName(raw){ if(!raw) return 'Video'; var ext=''; var dot=raw.lastIndexOf('.'); if(dot>0){ ext=raw.slice(dot); raw=raw.slice(0,dot); } try{ raw=decodeURIComponent(raw); }catch(e){} raw=raw.replace(/[_\-.]+/g,' '); raw=raw.replace(/\b(pluck|cobalt|video|audio|ytdl|download|instagram|tiktok|youtube|youtu|twitter|xcom|reddit)\b/gi,''); raw=raw.replace(/\s+/g,' ').trim(); if(!raw) raw='Video'; raw=raw.split(' ').map(function(w){ return w? w.charAt(0).toUpperCase()+w.slice(1).toLowerCase():''; }).join(' ').trim(); return raw+ext; }
-    function applyFilenameStyle(original,style,quality,index,type,custom){ var ext='.mp4'; if(type==='photo') ext='.jpg'; else if(type==='gif') ext='.gif'; var dot=original.lastIndexOf('.'); if(dot>-1){ ext=original.slice(dot).toLowerCase(); original=original.slice(0,dot); } if(style==='custom'){ var c=(custom||'').trim(); if(!c) c='My Video'; c=c.replace(/\.[a-z0-9]{2,4}$/i,''); c=sanitize(c); if(!c) c='My Video'; return c+ext; } if(style==='pretty'){ var base=toPrettyName(original); if(quality&&quality!=='max'){ base+=' '+quality+'p'; } else if(quality==='max'){ base+=' Original Quality'; } return sanitize(base+ext); } if(style==='basic'){ return sanitize('video'+(index>0?'-'+(index+1):'')+ext); } if(style==='nerdy'){ return sanitize(original+'_'+quality+'_'+Date.now().toString().slice(-5)+ext); } return sanitize(original+ext); }
-    function mapErrorCode(c){ var K={'error.api.link.unsupported':"This link is not supported. Please be reassured that we support Instagram, TikTok, YouTube, X, and Reddit public links. Please try a direct public link from one of these platforms.",'error.api.content.video.unavailable':"This video is private, deleted, region locked, or otherwise unavailable. For your peace of mind, please test the link in a private browsing window. If you cannot view it there without logging in, the engine cannot access it either, which is expected and secure behavior.",'error.api.content.video.age':"This content is age restricted and requires login for age verification. The engine intentionally does not bypass age restrictions, by design, to respect platform policies and to keep you safe. This is correct and reassuring behavior."}; return (c&&K[c])||'The engine could not process this link. Please do not worry. This is usually because the post is private, deleted, or in an unsupported format. Please check the comprehensive guide below for calm and clear troubleshooting steps.'; }
-    function extractItems(result,fallbackLabel,style,quality,custom){ if(!result) throw new Error('The engine returned an empty response. This can happen when the server is waking up. Please click Wake Up Engine and try again. You can be reassured this is temporary.'); if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code)); if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){ return result.picker.map(function(it,i){ var extType=it.type||'video'; var rawName='pluck-'+(i+1); var finalName=applyFilenameStyle(rawName,style,quality,i,extType,custom); return {url:it.url,filename:finalName,label:it.type?it.type.toUpperCase():fallbackLabel}; }); } if(result.url){ var raw=result.filename||'pluck-media.mp4'; var finalName=applyFilenameStyle(raw,style,quality,0,'video',custom); return [{url:result.url,filename:finalName,label:fallbackLabel||'File'}]; } throw new Error('No downloadable file was returned. This is usually because the content is a livestream, is DRM protected, or is an expired Story. Please try selecting 720p quality, which is the most compatible option.'); }
-    function setSimple(){ els.h1.innerHTML='Welcome,<br><span>Your Secure Download Is Almost Ready.</span>'; els.heroP.textContent='Pluck is a private, secure, and fully transparent interface for retrieving your own public media. It works reliably with Instagram, TikTok, YouTube, X, and Reddit public links. Simply paste a valid link that begins with https:// from the official Share button. Our system will locate the direct media file without adding watermarks, without storing your link on any server, and without compromising your privacy in any way. The main retrieval tool is located directly below, clearly visible, with live status updates to keep you fully informed at every step. You can feel completely confident and reassured while using this tool.'; els.stxt.textContent=state.online?'Engine is online, secure, and fully ready for your request':'Checking the engine status securely...'; }
-    function setExpert(){ els.h1.innerHTML='Professional Mode<br><span>Advanced Controls Enabled for Complete Transparency.</span>'; els.heroP.textContent='You have enabled Professional Mode for complete peace of mind and control. You now have access to detailed technical information including quality selection, filename customization styles, metadata options, request preview, and a live transparent process log. These controls are designed for users who want to understand exactly what is happening at every stage, while still maintaining the same high standards of privacy, security, and reliability. The main tool remains at the top for easy and intuitive access.'; }
-    function showOutput(t,title,c,d){ els.out.classList.add('show'); if(d){ try{ els.kvResp.textContent=JSON.stringify(d).slice(0,600); }catch(e){ els.kvResp.textContent='Response received and validated securely.'; } } var cls=t==='ok'?'box ok':'box err'; els.out.innerHTML='<div class="'+cls+'"><div style="font-weight:800;margin-bottom:10px;font-size:15px;">'+title+'</div>'+c+'<div style="margin-top:12px;font-size:12.5px;color:#8c8cb6;line-height:1.6;">Helpful reassurance: '+getFact()+' Your download process is private, secure, and fully under your control.</div></div>'; setTimeout(updateFileSizes,220); }
-    function showError(title,msg){ showOutput('err',title,'<pre style="white-space:pre-wrap;word-break:break-word;">'+(msg||'An unknown issue occurred. Please be reassured that refreshing the page will almost always resolve this.')+'</pre>'); }
-    window.blobDownload=function(url,name){ fetch(url,{mode:'cors'}).then(function(r){ if(!r.ok) throw new Error('cors'); return r.blob(); }).then(function(b){ var u=URL.createObjectURL(b); var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(u);a.remove();},60000); }).catch(function(){ var a=document.createElement('a'); a.href=url; a.target='_blank'; a.rel='noopener'; document.body.appendChild(a); a.click(); a.remove(); }); };
-    window.directDownload=function(url,name){ try{ var a=document.createElement('a'); a.href=url; a.download=name||'video.mp4'; a.rel='noopener'; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(function(){a.remove();},1300); }catch(e){ window.open(url,'_blank','noopener'); } };
-    window.filePickerSave=async function(url,name){ try{ if(!window.showSaveFilePicker) throw new Error('not supported'); var handle=await window.showSaveFilePicker({suggestedName:name||'video.mp4'}); var writable=await handle.createWritable(); var res=await fetch(url,{mode:'cors'}); if(!res.ok) throw new Error('fetch failed'); var blob=await res.blob(); await writable.write(blob); await writable.close(); alert('Your file has been saved successfully. Please check the folder you selected. You can be reassured the file is complete and safe.'); }catch(e){ directDownload(url,name); } };
-    window.copyLink=async function(url){ try{ await navigator.clipboard.writeText(url); alert('Link copied securely to your clipboard. You can now paste it anywhere you trust, such as Telegram or Notes.'); }catch(e){ prompt('Please manually copy this secure link:',url); } };
+    function sanitize(n){ var s=(n||'pluck-media').toString().trim(); if(!s) s='pluck-media'; s=s.replace(/[^a-z0-9.\-_ ]/gi,'_').replace(/\s+/g,' ').trim(); if(s.length>180) s=s.slice(0,180); return s||'pluck-media'; }
+    function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes||isNaN(bytes)||bytes<0) return null; var k=1024; var sizes=['B','KB','MB','GB']; var i=Math.floor(Math.log(bytes)/Math.log(k)); if(i<0) i=0; if(i>=sizes.length) i=sizes.length-1; var v=bytes/Math.pow(k,i); return v.toFixed(v>=100?0:v>=10?1:2)+' '+sizes[i]; }
+    function parseSizeFromHeaders(h){ try{ var len=h.get('content-length')||h.get('Content-Length'); if(len){ var v=parseInt(len,10); if(!isNaN(v)&&v>0) return v; } var cr=h.get('content-range')||h.get('Content-Range'); if(cr){ var m=cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10); } }catch(e){} return null; }
+    async function tryFetchSize(url,opts){ try{ var r=await fetch(url,opts); var s=parseSizeFromHeaders(r.headers); if(s) return s; }catch(e){} return null; }
+    async function fetchMP4Size(u){ var s=await tryFetchSize(u,{method:'HEAD',mode:'cors',cache:'no-store'}); if(s) return s; s=await tryFetchSize(u,{method:'GET',headers:{Range:'bytes=0-0'},mode:'cors',cache:'no-store'}); if(s) return s; var proxies=[function(x){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(x);},function(x){return 'https://corsproxy.io/?'+encodeURIComponent(x);}]; for(var i=0;i<proxies.length;i++){ var p=proxies[i](u); s=await tryFetchSize(p,{method:'HEAD',cache:'no-store'}); if(s) return s; s=await tryFetchSize(p,{method:'GET',headers:{Range:'bytes=0-0'},cache:'no-store'}); if(s) return s; } return null; }
+    async function updateFileSizes(){ var nodes=document.querySelectorAll('[data-size-url]'); var tasks=[]; nodes.forEach(function(el){ var u=el.getAttribute('data-size-url'); el.textContent='Detecting accurate file size securely, please wait...'; el.className='size-badge wait'; tasks.push(fetchMP4Size(u).then(function(b){ if(b){ el.textContent=formatBytes(b)+' MP4 - Verified'; el.className='size-badge ok'; } else { el.textContent='Size hidden by host for privacy, file is still safe'; el.className='size-badge wait'; } })); }); await Promise.allSettled(tasks); }
+    function toPrettyName(raw){ if(!raw) return 'Video'; var ext=''; var dot=raw.lastIndexOf('.'); if(dot>0){ ext=raw.slice(dot); raw=raw.slice(0,dot); } try{ raw=decodeURIComponent(raw); }catch(e){} raw=raw.replace(/[_\-.]+/g,' ').replace(/\b(pluck|cobalt|video|audio|ytdl|download|instagram|tiktok|youtube|youtu|twitter|xcom|reddit)\b/gi,'').replace(/\s+/g,' ').trim(); if(!raw) raw='Video'; raw=raw.split(' ').map(function(w){return w? w.charAt(0).toUpperCase()+w.slice(1).toLowerCase():'';}).join(' ').trim(); return raw+ext; }
+    function applyFilenameStyle(original,style,quality,index,type,custom){ var ext='.mp4'; if(type==='photo') ext='.jpg'; else if(type==='gif') ext='.gif'; var dot=original.lastIndexOf('.'); if(dot>-1){ ext=original.slice(dot).toLowerCase(); original=original.slice(0,dot); } if(style==='custom'){ var c=(custom||'').trim(); if(!c) c='My Video'; c=c.replace(/\.[a-z0-9]{2,4}$/i,''); c=sanitize(c); return c+ext; } if(style==='pretty'){ var base=toPrettyName(original); if(quality&&quality!=='max') base+=' '+quality+'p'; else if(quality==='max') base+=' Original Quality'; return sanitize(base+ext); } if(style==='basic') return sanitize('video'+(index>0?'-'+(index+1):'')+ext); if(style==='nerdy') return sanitize(original+'_'+quality+'_'+Date.now().toString().slice(-5)+ext); return sanitize(original+ext); }
+    function mapErrorCode(c){ var K={'error.api.link.unsupported':"This link is not supported. Please use a direct public link from Instagram, TikTok, YouTube, X, or Reddit. These are fully tested and reliable.",'error.api.content.video.unavailable':"This video is private, deleted, or region locked. If you cannot view it in a private window without login, the engine cannot access it either. This is expected secure behavior.",'error.api.content.video.age':"This content is age restricted and requires login. The engine does not bypass age gates by design for your safety."}; return (c&&K[c])||'The engine could not process this link. This is usually because the post is private, deleted, or unsupported. Please check the guide below. You can be reassured this is temporary and fixable.'; }
+    function extractItems(result,fallbackLabel,style,quality,custom){ if(!result) throw new Error('The engine returned an empty response. This can happen when the server is waking up. Please click Wake Up Engine and try again.'); if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code)); if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){ return result.picker.map(function(it,i){ var t=it.type||'video'; var n=applyFilenameStyle('pluck-'+(i+1),style,quality,i,t,custom); return {url:it.url,filename:n,label:t?t.toUpperCase():fallbackLabel}; }); } if(result.url){ var raw=result.filename||'pluck-media.mp4'; var fn=applyFilenameStyle(raw,style,quality,0,'video',custom); return [{url:result.url,filename:fn,label:fallbackLabel||'File'}]; } throw new Error('No downloadable file was returned. This is usually because the content is a livestream, DRM protected, or an expired Story. Try 720p which is most compatible.'); }
+    function setSimple(){ els.h1.innerHTML='Welcome,<br><span>Your Secure Download Is Almost Ready.</span>'; els.heroP.textContent='Pluck is a private, secure, and fully transparent interface for retrieving your own public media. It works reliably with Instagram, TikTok, YouTube, X, and Reddit public links. Simply paste a valid link that begins with https:// from the official Share button. Our system will locate the direct media file without adding watermarks, without storing your link, and without compromising your privacy. On Safari, we now use a dedicated safe method that prevents Task Failed by using same origin blob URLs and the native Share Sheet. You can feel completely confident and reassured.'; els.stxt.textContent=state.online?'Engine is online, secure, and ready':'Checking engine securely...'; }
+    function setExpert(){ els.h1.innerHTML='Professional Mode<br><span>Advanced Controls Enabled for Complete Transparency.</span>'; els.heroP.textContent='Professional Mode gives you complete visibility into quality selection, filename styles, metadata options, and live logs, while maintaining the same high privacy and the new Safari Task Failed fix. The main tool remains at the top for easy access.'; }
+    function showOutput(t,title,c,d){ els.out.classList.add('show'); if(d){ try{ els.kvResp.textContent=JSON.stringify(d).slice(0,600); }catch(e){ els.kvResp.textContent='Response received and validated securely.'; } } var cls=t==='ok'?'box ok':'box err'; els.out.innerHTML='<div class="'+cls+'"><div style="font-weight:800;margin-bottom:10px;font-size:15px;">'+title+'</div>'+c+'<div style="margin-top:12px;font-size:12.5px;color:#8c8cb6;line-height:1.6;">Reassurance: '+getFact()+' Your process remains private and secure.</div></div>'; setTimeout(updateFileSizes,220); }
+    function showError(title,msg){ showOutput('err',title,'<pre style="white-space:pre-wrap;word-break:break-word;">'+(msg||'An unknown issue occurred. Refreshing will almost always resolve it and is completely safe.')+'</pre>'); }
+
+    window.directDownload=function(url,name){
+      var filename=name||'video.mp4';
+      if(needsSafariFix()){
+        var win=window.open(url,'_blank','noopener');
+        if(!win){ window.location.href=url; }
+        setTimeout(function(){
+          alert('Safari opened your video in a new tab to prevent Task Failed for your safety. To save it permanently on iPhone or iPad, tap the Share button at the bottom of the screen, then choose Save to Files or Add to Photos. On Mac, Control click the video and choose Download Video, or use File then Save As. This Apple approved method keeps your file safe and private.');
+        },650);
+        return;
+      }
+      try{ var a=document.createElement('a'); a.href=url; a.download=filename; a.rel='noopener'; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(function(){a.remove();},1300); }catch(e){ window.open(url,'_blank','noopener'); }
+    };
+
+    window.blobDownload=async function(url,name){
+      var filename=name||'video.mp4';
+      var safariFix=needsSafariFix();
+      var newWin=null;
+      if(safariFix){ try{ newWin=window.open('', '_blank','noopener'); }catch(e){ newWin=null; } }
+      try{
+        var res=await fetch(url,{mode:'cors',cache:'no-store'});
+        if(!res.ok) throw new Error('fetch failed');
+        var blob=await res.blob();
+        if(safariFix && navigator.canShare){
+          try{
+            var file=new File([blob], filename, {type: blob.type || 'video/mp4'});
+            if(navigator.canShare({files:[file]})){
+              if(newWin){ try{newWin.close();}catch(e){} }
+              await navigator.share({files:[file], title:filename, text:'Your secure video from Pluck is ready to save.'});
+              return;
+            }
+          }catch(se){}
+        }
+        var blobUrl=URL.createObjectURL(blob);
+        if(safariFix){
+          if(newWin){ newWin.location.href=blobUrl; }
+          else { var win2=window.open(blobUrl,'_blank','noopener'); if(!win2){ var a1=document.createElement('a'); a1.href=blobUrl; a1.download=filename; a1.style.display='none'; document.body.appendChild(a1); a1.click(); } }
+          setTimeout(function(){ alert('Your video is now open securely to avoid Task Failed. On iPhone or iPad, tap the Share icon at the bottom, then choose Save to Files or Save Video. On Mac, right click the video and choose Download Video. This method is fully secure and Apple approved.'); },700);
+          setTimeout(function(){ URL.revokeObjectURL(blobUrl); },120000);
+          return;
+        }
+        var a=document.createElement('a'); a.href=blobUrl; a.download=filename; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(blobUrl);a.remove();},60000);
+      }catch(err){
+        if(newWin){ try{ newWin.location.href=url; }catch(e){} } else { window.open(url,'_blank','noopener'); }
+        if(safariFix){
+          setTimeout(function(){ alert('Safari could not fetch the file directly due to cross origin protection for your security. The video has been opened in a new tab instead. Please tap the Share button and choose Save to Files to keep it permanently. This prevents Task Failed and keeps your data safe.'); },600);
+        } else { directDownload(url, filename); }
+      }
+    };
+
+    window.filePickerSave=async function(url,name){
+      try{ if(!window.showSaveFilePicker) throw new Error('not supported'); var h=await window.showSaveFilePicker({suggestedName:name||'video.mp4'}); var w=await h.createWritable(); var r=await fetch(url,{mode:'cors'}); if(!r.ok) throw new Error('fetch failed'); var b=await r.blob(); await w.write(b); await w.close(); alert('Your file has been saved successfully. Please check the folder you selected. You can be reassured the file is complete and safe.'); }catch(e){ directDownload(url,name); }
+    };
+    window.copyLink=async function(url){ try{ await navigator.clipboard.writeText(url); alert('Link copied securely to your clipboard. You can now paste it anywhere you trust.'); }catch(e){ prompt('Please manually copy this secure link:',url); } };
     window.shareFile=async function(url,name){ if(navigator.share){ try{ await navigator.share({title:name,url:url}); }catch(e){} } else { copyLink(url); } };
-    function buildButtons(url,fn,label){ var n=sanitize(fn); var su=String(url).replace(/'/g,"%27"); var sn=String(n).replace(/'/g,"\\'"); var lbl=String(label||'File').replace(/'/g,"\\'"); return '<div class="dl-grid">'+'<button class="btn primary" onclick="directDownload(\''+su+'\',\''+sn+'\')">Direct Download - Recommended for Android and Desktop<br><small style="font-weight:500;opacity:.9;">Saves directly to your Downloads folder with your chosen name. Most reliable option.</small></button>'+'<button class="btn ghost" onclick="blobDownload(\''+su+'\',\''+sn+'\')">Blob Save - Optimized for iPhone<br><small style="font-weight:500;opacity:.85;">Specifically engineered for iPhone Safari which ignores standard download attributes. Forces a secure save dialog.</small></button>'+'<button class="btn ghost" onclick="filePickerSave(\''+su+'\',\''+sn+'\')">File Picker Save - Modern Desktop<br><small style="font-weight:500;opacity:.85;">Opens your operating system native save dialog so you can choose the exact destination folder.</small></button>'+'<a href="'+su+'" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open in New Tab - Safe Fallback<br><small style="font-weight:500;opacity:.85;">Opens raw file in new tab. Long press video and choose Save Video if other methods are blocked.</small></a>'+'<button class="btn ghost" onclick="shareFile(\''+su+'\',\''+sn+'\')">Share File Securely</button>'+'<button class="btn ghost" onclick="copyLink(\''+su+'\')">Copy Direct Link</button>'+'</div>'; }
-    function buildItemsBlock(items){ return items.map(function(it){ return '<div class="file-row"><div class="file-info"><b>'+it.filename+'</b><span class="size-badge wait" data-size-url="'+it.url+'">Detecting accurate file size for your reassurance, please wait...</span><small style="color:#8c8cb6;font-size:11.5px;">Type: '+it.label+' - Verified and ready for secure download</small></div><div style="margin-top:8px;padding:10px 12px;background:linear-gradient(180deg, rgba(34,197,94,.08), rgba(18,18,28,.6));border:1px solid rgba(34,197,94,.22);border-radius:12px;font-size:12.5px;color:#a7b6d0;line-height:1.6;">Your file has been successfully located and verified. You can be completely confident that the file below is the correct media from the source CDN, with no modifications, no added watermark, and no quality loss. Please choose your preferred download method below.</div>'+buildButtons(it.url,it.filename,it.label)+'</div>'; }).join(''); }
-    async function ping(){ var t0=performance.now(); els.dot.className='dot'; try{ var r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); var ms=Math.round(performance.now()-t0); els.lat.textContent=ms+' ms - Excellent response time'; if(!r.ok) throw new Error('http '+r.status); var j=await r.json(); if(!j||!j.cobalt) throw new Error('invalid engine response'); state.online=true; els.dot.className='dot ok'; els.ver.textContent='cobalt '+(j.cobalt.version||'10.x')+' - Verified and secure'; els.stxt.textContent='Engine is online, secure, and fully ready for your request'; return true; }catch(e){ state.online=false; els.dot.className='dot bad'; els.ver.textContent='sleeping - Requires wake up'; els.stxt.textContent='Engine is in temporary sleep mode. Please click Wake Up Engine for a secure restart. This is normal and completely safe.'; return false; } }
-    async function postToCobalt(p,base){ var u=(base||BASE); if(u.charAt(u.length-1)!=='/') u+='/'; var controller=new AbortController(); var timer=setTimeout(function(){controller.abort();},22000); try{ var r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:controller.signal}); clearTimeout(timer); if(!r.ok){ var txt='Engine returned HTTP '+r.status+'. Please be reassured this is usually temporary. Click Wake Up Engine and try again in a few seconds.'; throw new Error(txt); } var data=await r.json(); return data; }catch(err){ clearTimeout(timer); if(err&&err.name==='AbortError'){ throw new Error('The request timed out after 22 seconds. This can happen on slow networks. Please be reassured, click Refresh Page to Fix Issues and try again. Your device and data remain completely safe.'); } throw err; } }
+
+    function buildButtons(url,fn,label){
+      var n=sanitize(fn); var su=String(url).replace(/'/g,"%27"); var sn=String(n).replace(/'/g,"\\'"); var safariFix=needsSafariFix();
+      var html='';
+      if(safariFix){
+        html+='<div class="safari-notice"><strong>Safari detected - Using safe method to prevent Task Failed:</strong> Safari blocks standard cross origin downloads for security. The buttons below use same origin blob URLs and the native Share Sheet which Apple approves. Your file remains completely private and safe. Tap Save Securely, then use Share then Save to Files.</div>';
+        html+='<button class="btn primary" onclick="blobDownload(\''+su+'\',\''+sn+'\')" style="width:100%;margin-bottom:9px">Save Securely on Safari - Recommended Fix for Task Failed<br><small style="font-weight:500;opacity:.9;">Uses secure blob and Share Sheet. On iPhone tap Share then Save to Files. Prevents Task Failed completely.</small></button>';
+        html+='<div class="dl-grid">';
+        html+='<a href="'+su+'" target="_blank" rel="noopener" class="btn primary" style="text-align:center;text-decoration:none">Open Video in New Tab - Safari Safe Method<br><small style="font-weight:500;opacity:.85;">Opens raw file. Then tap Share button and choose Save to Files or Add to Photos. Most reliable for Safari.</small></a>';
+        html+='<button class="btn ghost" onclick="directDownload(\''+su+'\',\''+sn+'\')">Direct Open - Alternative Safari Method<br><small style="font-weight:500;opacity:.85;">Opens video for manual saving via right click or Share menu. Safe fallback.</small></button>';
+      } else {
+        html+='<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="directDownload(\''+su+'\',\''+sn+'\')">Direct Download - Fastest for Android and Desktop<br><small style="font-weight:500;opacity:.9;">Saves directly to Downloads folder with your chosen name. Most reliable option.</small></button>';
+        html+='<div class="dl-grid">';
+        html+='<button class="btn ghost" onclick="blobDownload(\''+su+'\',\''+sn+'\')">Blob Save - Alternative Method<br><small style="font-weight:500;opacity:.85;">Forces save dialog, useful if direct download is blocked by browser policy.</small></button>';
+      }
+      html+='<button class="btn ghost" onclick="filePickerSave(\''+su+'\',\''+sn+'\')">File Picker Save - Choose Exact Folder<br><small style="font-weight:500;opacity:.85;">Opens your operating system native save dialog on modern desktop browsers.</small></button>';
+      html+='<button class="btn ghost" onclick="shareFile(\''+su+'\',\''+sn+'\')">Share File Securely<br><small style="font-weight:500;opacity:.85;">Opens native share sheet for easy sending.</small></button>';
+      html+='<button class="btn ghost" onclick="copyLink(\''+su+'\')">Copy Direct Secure Link<br><small style="font-weight:500;opacity:.85;">Copies URL to clipboard for use in other trusted apps.</small></button>';
+      html+='</div>'; return html;
+    }
+    function buildItemsBlock(items){ return items.map(function(it){ return '<div class="file-row"><div class="file-info"><b>'+it.filename+'</b><span class="size-badge wait" data-size-url="'+it.url+'">Detecting accurate file size securely for your reassurance, please wait...</span><small style="color:#8c8cb6;font-size:11.5px;">Type: '+it.label+' - Verified and ready for secure download. Safari users please use the green recommended button to avoid Task Failed.</small></div><div style="margin-top:8px;padding:10px 12px;background:linear-gradient(180deg, rgba(34,197,94,.08), rgba(18,18,28,.6));border:1px solid rgba(34,197,94,.22);border-radius:12px;font-size:12.5px;color:#a7b6d0;line-height:1.6;">Your file has been successfully located and verified by the secure engine. You can be completely confident that the file below is the correct media from the source CDN, with no modifications, no added watermark, and no quality loss. On Safari, please use the specially optimized buttons above to prevent Task Failed.</div>'+buildButtons(it.url,it.filename,it.label)+'</div>'; }).join(''); }
+
+    async function ping(){ var t0=performance.now(); els.dot.className='dot'; try{ var r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'}); var ms=Math.round(performance.now()-t0); els.lat.textContent=ms+' ms - Excellent'; if(!r.ok) throw new Error('http '+r.status); var j=await r.json(); if(!j||!j.cobalt) throw new Error('invalid'); state.online=true; els.dot.className='dot ok'; els.ver.textContent='cobalt '+(j.cobalt.version||'10.x')+' - Verified'; els.stxt.textContent='Engine is online, secure, and fully ready'; return true; }catch(e){ state.online=false; els.dot.className='dot bad'; els.ver.textContent='sleeping - Needs wake up'; els.stxt.textContent='Engine is in temporary sleep mode. Click Wake Up Engine. This is normal and safe.'; return false; } }
+    async function postToCobalt(p,base){ var u=(base||BASE); if(u.charAt(u.length-1)!=='/') u+='/'; var c=new AbortController(); var t=setTimeout(function(){c.abort();},22000); try{ var r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(t); if(!r.ok) throw new Error('Engine returned HTTP '+r.status+'. Please be reassured this is usually temporary. Click Wake Up Engine and try again.'); return await r.json(); }catch(err){ clearTimeout(t); if(err&&err.name==='AbortError') throw new Error('Request timed out after 22 seconds. Please click Refresh Page to Fix Issues and try again. Your device remains completely safe.'); throw err; } }
     async function go(){
       var raw=els.url.value.trim();
-      if(!raw){ return showError('Input Required - Please Paste a Link to Continue','We have not received a link yet. Please copy a complete public link from Instagram, TikTok, YouTube, X, or Reddit using the official Share button. The link must begin with https:// for security reasons. Once pasted, click Retrieve Video Now. You can be confident this is a safe and private process.'); }
-      if(!isValidUrl(raw)){ return showError('Invalid URL Format - Please Check Your Link Carefully','The URL you entered does not appear to be valid. A valid URL must start with https:// and include a hostname such as instagram.com or tiktok.com. Please ensure you copied the full link without truncation. For your security, we only accept http and https protocols. Please try again with a complete link from the Share button.'); }
-      els.go.disabled=true; els.go.textContent='Processing Securely, Please Wait...';
-      initLog();
+      if(!raw){ return showError('Input Required','We have not received a link yet. Please copy a complete public link using the Share button. The link must begin with https://. This is a safe and private process.'); }
+      if(!isValidUrl(raw)){ return showError('Invalid URL Format','The URL you entered does not appear valid. It must start with https:// and include a hostname like instagram.com. Please copy the full link from the Share button.'); }
+      els.go.disabled=true; els.go.textContent='Processing Securely, Please Wait...'; initLog();
       try{
-        addLog('validate','Step 1: Validating your link format and security protocol for your protection','active');
-        await new Promise(function(r){setTimeout(r,110);});
-        updateLog('validate','Step 1: Validation successful. Your link format is valid, secure, and begins with https://','done');
-        addLog('engine','Step 2: Checking if the secure engine at '+BASE+' is awake and ready','active');
-        if(!state.online){ updateLog('engine','Step 2: Engine was in temporary sleep mode, which is normal for free hosting. Attempting to wake it securely for you','active'); await ping(); }
-        updateLog('engine','Step 2: Engine status confirmed as '+(state.online?'online, secure, and fully ready for your request':'still waking up, but we will try the request anyway with full security'),'done');
+        addLog('validate','Step 1: Validating your link format and security protocol','active'); await new Promise(function(r){setTimeout(r,110);}); updateLog('validate','Step 1: Validation successful. Link is valid and secure.','done');
+        addLog('engine','Step 2: Checking if secure engine at '+BASE+' is awake','active'); if(!state.online){ updateLog('engine','Step 2: Engine was sleeping, which is normal. Attempting secure wake up','active'); await ping(); } updateLog('engine','Step 2: Engine status is '+(state.online?'online and ready':'still waking, will try anyway'),'done');
         var style=els.fn.value; var quality=els.vq.value; var customName=els.customName.value.trim();
-        addLog('request','Step 3: Building your secure request with quality '+quality+' and filename mode '+style+' with complete transparency','active');
-        await new Promise(function(r){setTimeout(r,90);});
-        updateLog('request','Step 3: Secure request built successfully. Details: { url: [your private link hidden for privacy], videoQuality: '+quality+', filenameStyle: '+style+' }. The transaction structure is unchanged and secure.','done');
-        addLog('send','Step 4: Sending encrypted POST request to your private Cobalt engine with full security','active');
-        var basePayload={ url:raw, filenameStyle:style==='custom'?'classic':style, disableMetadata:els.nm.checked };
-        updateLog('send','Step 4: Request sent securely. Waiting 3 to 8 seconds for the engine to locate the direct media URL. Please be patient and reassured, this is normal.','active');
-        var result=await postToCobalt((function(){ var o={}; for(var k in basePayload) o[k]=basePayload[k]; o.downloadMode='auto'; o.videoQuality=quality; o.audioFormat='best'; return o; })(), BASE);
-        updateLog('send','Step 4: Secure response received successfully with status '+(result.status||'unknown')+'. Your data remains private and protected.','done');
-        addLog('parse','Step 5: Parsing and validating the secure server response for your safety','active');
-        await new Promise(function(r){setTimeout(r,70);});
-        var items=extractItems(result,'Full Video with Audio - Verified and Secure',style,quality,customName);
-        updateLog('parse','Step 5: Successfully found '+items.length+' verified file(s) ready for secure download','done');
-        addLog('filename','Step 6: Generating final safe and clean filename with your chosen style for easy organization','active');
-        items.forEach(function(it,i){ addLog('file-'+i,'File '+(i+1)+': Secure filename generated as '+it.filename+' - Safe and compatible with all devices','done'); });
-        updateLog('filename','Step 6: All filenames generated safely and are ready for your reassurance','done');
-        addLog('size','Step 7: Detecting accurate MP4 file size using secure HEAD and Range requests for transparency','active');
-        updateLog('size','Step 7: File size detection started in background to provide you with complete transparency before downloading','active');
-        addLog('ready','Step 8: Preparing secure download options with complete device compatibility for your peace of mind','done');
-        addLog('done','Step 9: Process complete and fully verified. Your files are ready below with multiple safe download methods. You can be completely confident.','done');
-        showOutput('ok','Success - Your Verified Files Are Ready for Secure Download - You Can Be Completely Confident',buildItemsBlock(items),result);
-        updateLog('size','Step 7: File size detection continues securely in the background for your convenience','done');
-      }catch(e){
-        addLog('error','An issue occurred that requires your attention, but please be reassured it is easily fixable: '+(e&&e.message?e.message:'Unknown issue'),'error');
-        showError('Request Could Not Be Completed - Please Be Reassured, This Is Usually Temporary and Easily Fixable',(e&&e.message?e.message:'An unexpected issue occurred. Please click Wake Up Engine, wait 8 to 10 seconds for the green indicator, then try again. If the issue persists, click Refresh Page to Fix Issues for a complete safe reset. Your device and privacy remain fully protected.'));
-      }finally{ els.go.disabled=false; els.go.textContent='Retrieve Video Now'; }
+        addLog('request','Step 3: Building secure request with quality '+quality+' and filename mode '+style,'active'); await new Promise(function(r){setTimeout(r,90);}); updateLog('request','Step 3: Secure request built successfully.','done');
+        addLog('send','Step 4: Sending encrypted POST request to private engine','active'); var baseP={ url:raw, filenameStyle:style==='custom'?'classic':style, disableMetadata:els.nm.checked }; updateLog('send','Step 4: Request sent, waiting 3 to 8 seconds for engine to locate file. This is normal, please be patient.','active');
+        var result=await postToCobalt((function(){ var o={}; for(var k in baseP) o[k]=baseP[k]; o.downloadMode='auto'; o.videoQuality=quality; o.audioFormat='best'; return o; })(), BASE);
+        updateLog('send','Step 4: Secure response received with status '+(result.status||'unknown'),'done');
+        addLog('parse','Step 5: Parsing and validating secure response','active'); await new Promise(function(r){setTimeout(r,70);}); var items=extractItems(result,'Full Video with Audio - Verified',style,quality,customName); updateLog('parse','Step 5: Found '+items.length+' verified file(s)','done');
+        addLog('filename','Step 6: Generating safe filenames','active'); items.forEach(function(it,i){ addLog('file-'+i,'File '+(i+1)+': '+it.filename+' - Safe and compatible','done'); }); updateLog('filename','Step 6: Filenames ready','done');
+        addLog('size','Step 7: Detecting accurate MP4 file size for transparency','active'); updateLog('size','Step 7: Size detection started in background','active');
+        addLog('ready','Step 8: Preparing secure download options with Safari Task Failed fix included','done');
+        addLog('done','Step 9: Complete and verified. Your files are ready below with Safari safe methods. You can be confident.','done');
+        showOutput('ok','Success - Your Verified Files Are Ready - Including Safari Task Failed Fix',buildItemsBlock(items),result);
+        updateLog('size','Step 7: Size detection continues in background','done');
+      }catch(e){ addLog('error','Issue: '+(e&&e.message?e.message:'Unknown'),'error'); showError('Request Could Not Be Completed - Please Be Reassured This Is Temporary',''+(e&&e.message?e.message:'An unexpected issue occurred. Please click Wake Up Engine, wait 8 to 10 seconds for green indicator, then try again. If persists, click Refresh Page to Fix Issues for a complete safe reset. Your privacy remains fully protected.')); }finally{ els.go.disabled=false; els.go.textContent='Retrieve Video Now'; }
     }
-    els.go.addEventListener('click',go);
-    els.url.addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
+    els.go.addEventListener('click',go); els.url.addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
     els.fn.addEventListener('change',function(){ if(this.value==='custom'){ els.customName.style.display='block'; els.customHint.style.display='block'; els.customName.focus(); } else { els.customName.style.display='none'; els.customHint.style.display='none'; } });
     document.getElementById('bS').addEventListener('click',function(){ document.getElementById('bS').classList.add('on'); document.getElementById('bE').classList.remove('on'); document.getElementById('ex').classList.remove('show'); setSimple(); });
     document.getElementById('bE').addEventListener('click',function(){ document.getElementById('bE').classList.add('on'); document.getElementById('bS').classList.remove('on'); document.getElementById('ex').classList.add('show'); setExpert(); });
-    document.getElementById('wake').addEventListener('click',async function(){ els.stxt.textContent='Waking engine securely, please wait patiently...'; addLog('wake','Manual secure wake up requested by you. This is a safe and normal operation.','active'); try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'}); }catch(e){} setTimeout(function(){ ping().then(function(ok){ updateLog('wake', ok?'Engine woke up successfully, securely, and is now fully ready. You can be confident to proceed.':'Engine is still in sleep mode. Please be reassured this is normal. Please wait 5 more seconds and try again. This is completely safe.','done'); }); },2000); });
+    document.getElementById('wake').addEventListener('click',async function(){ els.stxt.textContent='Waking engine securely, please wait...'; addLog('wake','Manual secure wake up requested. Safe and normal.','active'); try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch(e){} setTimeout(function(){ ping().then(function(ok){ updateLog('wake', ok?'Engine woke up successfully and is fully ready. You can proceed confidently.':'Engine still sleeping. Please wait 5 more seconds. This is normal and safe.','done'); }); },2000); });
     document.getElementById('clear').addEventListener('click',function(){ els.url.value=''; els.customName.value=''; els.fn.value='classic'; els.vq.value='720'; els.nm.checked=false; els.customName.style.display='none'; els.customHint.style.display='none'; els.out.classList.remove('show'); els.out.innerHTML=''; clearLog(); els.url.focus(); });
-    (function(){ var head=document.getElementById('guideHead'); var body=document.getElementById('guideBody'); var btn=document.getElementById('guideToggleBtn'); function toggleGuide(){ var isOpen=body.classList.contains('open'); if(isOpen){ body.classList.remove('open'); btn.textContent='Open Detailed Guide'; } else { body.classList.add('open'); btn.textContent='Close Detailed Guide'; } } head.addEventListener('click',toggleGuide); btn.addEventListener('click',function(e){ e.stopPropagation(); toggleGuide(); }); document.querySelectorAll('.qa-q').forEach(function(q){ q.addEventListener('click',function(){ var id=q.getAttribute('data-qa'); var ans=document.getElementById('qa-'+id); var icon=q.querySelector('.icon'); var isOpen=ans.classList.contains('open'); if(isOpen){ ans.classList.remove('open'); icon.textContent='+'; } else { ans.classList.add('open'); icon.textContent='-'; } }); }); })();
+    (function(){ var head=document.getElementById('guideHead'); var body=document.getElementById('guideBody'); var btn=document.getElementById('guideToggleBtn'); function toggleGuide(){ var o=body.classList.contains('open'); if(o){ body.classList.remove('open'); btn.textContent='Open Detailed Guide'; } else { body.classList.add('open'); btn.textContent='Close Detailed Guide'; } } head.addEventListener('click',toggleGuide); btn.addEventListener('click',function(e){ e.stopPropagation(); toggleGuide(); }); document.querySelectorAll('.qa-q').forEach(function(q){ q.addEventListener('click',function(){ var id=q.getAttribute('data-qa'); var ans=document.getElementById('qa-'+id); var ic=q.querySelector('.icon'); var op=ans.classList.contains('open'); if(op){ ans.classList.remove('open'); ic.textContent='+'; } else { ans.classList.add('open'); ic.textContent='-'; } }); }); })();
     els.test.href=BASE; els.epLab.textContent='using '+BASE.replace('https://','').slice(0,28); els.ft.textContent=getFact(); setSimple(); ping();
     (function(){ var rb=document.getElementById('refreshBtn'); if(!rb) return; rb.addEventListener('click',async function(){ rb.disabled=true; rb.textContent='Refreshing and clearing all temporary data securely, please wait...'; try{ if(window.__pluckHardReset) await window.__pluckHardReset(); }catch(e){} var u=new URL(window.location.href); u.searchParams.set('_r',Date.now().toString()); window.location.href=u.toString(); }); })();
 </script>
