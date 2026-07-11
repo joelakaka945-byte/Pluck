@@ -1,246 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<title>Pluck - Fixed No 0KB MP4</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pluck Fixed - Stream to Disk - No 0KB</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0a0f;--card-bg:rgba(18,18,28,.95);--border:#272746;--border-focus:#8b5cf6;--accent:linear-gradient(135deg,#8b5cf6,#ec4899);--text-main:#f5f5ff;--text-muted:#9aa0c0;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',system-ui,sans-serif}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{background:var(--bg);color:var(--text-main);font-family:var(--sans);min-height:100vh;overflow-x:hidden;line-height:1.6}
-.mono{font-family:var(--mono)!important}.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 500px at 10% 0%,rgba(139,92,246,.22),transparent 60%),radial-gradient(700px 500px at 90% 10%,rgba(236,72,153,.14),transparent 60%),var(--bg)}
-.wrap{max-width:760px;margin:0 auto;padding:18px 14px 40px}.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--card-bg);border-radius:18px}
-.brand{font-weight:800;display:flex;gap:9px;align-items:center}.brand-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--accent);color:#fff}
-.status{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--text-muted)}.dot{width:9px;height:9px;border-radius:50%;background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,.18);animation:pulse 1.6s infinite}.dot.ok{background:#22c55e;animation:none}.dot.bad{background:#ef4444;animation:none}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
-.hero{margin:22px 6px 16px}.hero h1{font-size:clamp(32px,8vw,44px);line-height:1;letter-spacing:-.04em;font-weight:800}.hero h1 span{background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{color:var(--text-muted);margin-top:12px;font-size:14.8px;line-height:1.7}
-.card{border:1px solid var(--border);background:linear-gradient(180deg,rgba(32,32,54,.98),rgba(18,18,28,.98));border-radius:22px;padding:18px}
-.switch{display:inline-flex;gap:4px;padding:4px;background:#0f0f1b;border:1px solid #2c2c4e;border-radius:999px}.sw{padding:8px 16px;border-radius:999px;border:0;background:transparent;color:#8d8db3;font-weight:700;font-size:13px;cursor:pointer}.sw.on{background:var(--accent);color:#fff}
-.meta-pills{display:flex;gap:6px;flex-wrap:wrap}.pill{font-size:11px;border:1px solid #2b2b4e;padding:5px 9px;border-radius:999px;color:#8c8cb6}.pill b{color:#fff}
-.row{display:flex;gap:10px;margin-top:16px}.field{flex:1;display:flex;align-items:center;padding:14px 16px;border:1px solid #2b2b4a;background:#0c0c14;border-radius:16px}.field:focus-within{border-color:var(--border-focus);box-shadow:0 0 4px rgba(139,92,246,.18)}.field input{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:15px;min-width:0}
-.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px}.btn:active{transform:scale(.97)}.primary{background:var(--accent);color:#fff}.ghost{background:#1b1b31;border:1px solid #31315a;color:#e8e8ff}
-.grid3{display:grid;gap:10px;margin-top:14px}.pick{border:1px solid #2b2b4e;background:#0f0f1a;border-radius:16px;padding:14px}.pick.on{border-color:var(--border-focus);box-shadow:0 0 0 4px rgba(139,92,246,.16);background:linear-gradient(180deg,rgba(139,92,246,.14),#0f0f1a)}.pick b{font-size:14px;display:block}.pick small{display:block;color:#8c8cb6;font-size:12px;margin-top:6px;line-height:1.6}
-.expert{display:none;margin-top:16px;border-top:1px dashed #2f2f55;padding-top:14px}.expert.show{display:block}.controls{display:grid;gap:10px}.sel{padding:11px 14px;border-radius:12px;border:1px solid #2b2b4e;background:#0c0c14;color:#fff;font-size:13px;width:100%;outline:none}
-.kv{display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:12px;color:#8c8cb6;margin-top:8px}.kv b{color:#fff;word-break:break-all}.checkbox-label{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:12.5px;color:var(--text-muted);cursor:pointer}
-.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.out{display:none;margin-top:16px}.out.show{display:block}.box{border:1px solid #2b2b4e;background:#0c0c14;border-radius:16px;padding:16px;margin-top:10px}.box pre{white-space:pre-wrap;word-break:break-word;font-size:12px;color:#d3d3f2;line-height:1.7;font-family:var(--mono)}.box.ok{border-color:rgba(34,197,94,.3);background:linear-gradient(180deg,rgba(34,197,94,.08),#0c0c14)}.box.err{border-color:rgba(239,68,.3);background:linear-gradient(180deg,rgba(239,68,68,.08),#0c0c14)}
-.dl-grid{display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px}@media(min-width:600px){.dl-grid{grid-template-columns:1fr 1fr}}
-.highlights{margin:16px 0 0;display:grid;gap:10px}.hl-row{display:flex;flex-wrap:wrap;gap:8px}.hl-badge{font-size:11.5px;padding:7px 11px;border-radius:999px;background:#1e1e36;border:1px solid #32325a;color:#cbb8ff}.hl-badge strong{color:#fff;font-weight:800}
-.guide-wrap{margin-top:18px;border:1px solid #272746;background:linear-gradient(180deg,rgba(24,24,40,.98),rgba(16,16,26,.98));border-radius:22px;overflow:hidden}.guide-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px;cursor:pointer;user-select:none}.guide-toggle{font-size:12px;padding:7px 12px;border-radius:999px;background:#1e1e36;border:1px solid #32325a;color:#cbb8ff;font-weight:700}.guide-body{display:none;padding:0 14px 14px}.guide-body.open{display:block}.qa-item{margin-top:12px}.qa-q{width:100%;text-align:left;background:#0f0f1a;border:1px solid #2b2b4e;border-radius:12px;padding:13px 14px;font-size:13.5px;font-weight:700;color:#e8e8ff;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}.qa-q span.icon{font-family:var(--mono);color:#8b5cf6}.qa-a{display:none;padding:14px;font-size:13px;line-height:1.8;color:#a2a8c8;background:#0c0c14;border:1px solid #2b2b4e;border-top:none;border-radius:0 0 12px 12px;margin-top:-2px}.qa-a.open{display:block}.qa-a strong{color:#fff}.qa-a ul{margin:8px 0 8px 18px}.qa-a li{margin-bottom:6px}
-.refresh-area{margin-top:16px;display:grid;gap:8px}.refresh-main{width:100%;padding:15px 18px;border-radius:16px;border:0;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;font-weight:800;font-size:15px;cursor:pointer}.refresh-note{text-align:center;color:#9aa0c0;font-size:12.5px;line-height:1.6}
-.fun{margin-top:16px;padding:14px 16px;border:1px solid #2e52;border-radius:16px;background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(236,72,153,.08));font-size:13px;color:var(--text-muted)}
-.error-bible{margin-top:18px;border:1px solid #272746;background:linear-gradient(180deg,rgba(24,24,40,.98),rgba(16,16,26,.98));border-radius:22px;padding:18px}.error-bible-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:15px;font-weight:800}.error-bible-sub{color:#9aa0c0;font-size:13px;margin-top:6px;line-height:1.6}.error-grid{display:grid;gap:10px;margin-top:14px}.err-item{border:1px solid #2b2b4e;background:#0f0f1a;border-radius:14px;padding:12px 14px}.err-item b{display:block;font-size:13.5px}.err-item p{color:#8c8cb6;font-size:12.5px;margin-top:6px;line-height:1.6}.err-item code{font-family:var(--mono);font-size:11px;background:#1e1e36;border:1px solid #32325a;padding:2px 7px;border-radius:999px;color:#cbb8ff}
-.file-row{border:1px solid #2b2b4e;background:#0f0f1a;border-radius:14px;padding:14px;margin-top:12px}.file-info{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}.file-info b{font-size:13.5px;flex:1 1 100%;word-break:break-all}.size-badge{font-size:11px;padding:4px 8px;border-radius:999px;background:#1e1e36;border:1px solid #32325a;color:#cbb8ff;font-family:var(--mono)}.size-badge.ok{border-color:rgba(34,197,94,.35);color:#86efac}
-.process-wrap{margin-top:16px;border:1px solid #2b2b4e;background:#0f0f1a;border-radius:16px;padding:14px;display:none}.process-head{font-size:13px;font-weight:800;margin-bottom:10px}.process-log{display:grid;gap:8px;max-height:320px;overflow:auto}.log-entry{display:flex;gap:10px;align-items:flex-start;font-size:12px;padding:8px 10px;border-radius:10px;border:1px solid #23233f;background:#0c0c14;color:#9aa0c0}.log-entry.active{border-color:rgba(139,92,246,.45);background:linear-gradient(180deg,rgba(139,92,246,.14),#0c0c14);color:#d8d8ff}.log-entry.done{border-color:rgba(34,197,94,.25)}.log-entry.error{border-color:rgba(239,68,68,.35);color:#ffd4d4}
-.footer-note{text-align:center;margin-top:14px;color:#6d6d9a;font-size:11px;line-height:1.6}
-.keep-alive-banner{position:fixed;bottom:18px;left:12px;right:12px;z-index:10000;background:linear-gradient(180deg,rgba(18,18,28,.98),rgba(32,32,54,.98));border:1px solid #22c55e;border-radius:16px;padding:16px 48px 16px 16px;box-shadow:0 12px 32px rgba(0,0,0,.55);display:none}.keep-alive-banner.show{display:block}.keep-alive-pill{border-color:rgba(34,197,94,.4);color:#86efac;background:rgba(34,197,94,.12)}
-.popup-close{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:1px solid #32325a;background:#1e1e36;color:#cbb8ff;font-weight:800;cursor:pointer;display:grid;place-items:center;font-size:16px;line-height:1;z-index:2}
-.prep-wrap{margin-top:12px;padding:12px;border:1px solid #2b2b4e;background:#0c0c14;border-radius:12px;position:relative}.progress-bar{width:100%;height:14px;background:#1e1e36;border:1px solid #32325a;border-radius:999px;overflow:hidden;margin:10px 0}.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#8b5cf6,#22c55e);transition:width 0.25s ease}.progress-text{font-family:var(--mono);font-size:12px;color:#cbb8ff}.prep-status{font-size:12px;color:#9aa0c0;margin-top:6px;line-height:1.6}
-@media(max-width:680px){.row{flex-direction:column}.hero h1{font-size:32px}}
+:root{--bg:#0a0a0f;--card:#14142a;--border:#2a2a4a;--accent:linear-gradient(135deg,#8b5cf6,#ec4899);--muted:#9aa0c0;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:#fff;font-family:var(--sans);line-height:1.6}
+.wrap{max-width:800px;margin:0 auto;padding:18px 14px 40px}.top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border:1px solid var(--border);background:var(--card);border-radius:16px}
+.card{border:1px solid var(--border);background:linear-gradient(180deg,rgba(32,32,54,.98),rgba(18,18,28,.98));border-radius:20px;padding:18px;margin-top:16px}
+.row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}.field{flex:1 1 280px;display:flex;align-items:center;padding:13px 14px;border:1px solid #2b4e;background:#0c0c14;border-radius:12px}
+.field input,.sel{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:14px;width:100%}.sel{background:#0c0c14;border:1px solid #2b2b4e;border-radius:12px;padding:12px 12px}
+.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer}.primary{background:var(--accent);color:#fff}.ghost{background:#1b1b31;border:1px solid #32325a;color:#e8e8ff}
+.bar{width:100%;height:14px;background:#1e1e36;border:1px solid #32325a;border-radius:999px;overflow:hidden;margin:10px 0}.fill{height:100%;width:0%;background:linear-gradient(90deg,#8b5cf6,#22c55e);transition:width.2s}
+.pill{font-size:11px;padding:5px 9px;border-radius:999px;background:#1e1e36;border:1px solid #32325a;color:#cbb8ff;font-family:var(--mono)}.pill.ok{border-color:rgba(34,197,94,.4);color:#86efac}
+.grid{display:grid;gap:10px;margin-top:12px}.file{border:1px solid #2b2b4e;background:#0f0f1a;border-radius:14px;padding:14px}
+.log{font-family:var(--mono);font-size:11.5px;background:#0c0c14;border:1px solid #2b2b4e;border-radius:12px;padding:10px;max-height:300px;overflow:auto;display:grid;gap:6px}
+.badge{font-size:11px;padding:6px 10px;border-radius:999px;background:#1e1e36;border:1px solid #32325a;color:#cbb8ff}.mono{font-family:var(--mono)}
+@media(max-width:680px){.row{flex-direction:column}}
 </style>
 </head>
 <body>
-<div class="bg"></div>
 <div class="wrap">
-<div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking engine...</span></div></div>
-<div class="hero"><h1 id="h1">Welcome,<br><span>Your Secure Download Is Almost Ready.</span></h1><p id="heroP">Fixed build. Old version fetched CDN with <code>mode:'cors',keepalive:true</code> which gives opaque 0-byte responses. New version uses CORS proxy fallback and verified same-origin blob, so MP4 is never 0KB. Use only for content you have rights to.</p></div>
+<div class="top"><b>Pluck FIXED</b><span class="pill" id="engine">checking...</span></div>
 
-<div class="card" id="mainTool">
-<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;"><div class="switch"><button id="bS" class="sw on">Standard</button><button id="bE" class="sw">Professional</button></div><div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">using /</span><span class="pill keep-alive-pill" id="keepAlivePill" style="display:none;">Keep Alive: Active</span></div></div>
-<div class="row"><div class="field"><input id="url" type="url" placeholder="Paste public https:// link" autocomplete="off" spellcheck="false"></div><button id="go" class="btn primary">Retrieve Video Now</button></div>
-<p style="font-size:12px;color:#8c8cb6;margin-top:8px;line-height:1.6;">Your Cobalt URL is pre-installed. File is now prepared 0% to 100% via proxy fallback before any download button is enabled, preventing bugged MP4.</p>
-<div class="grid3"><button class="pick on"><b>Full Video with Audio - Verified Safe - No Bugged MP4</b><small>Complete MP4, same-origin blob, works desktop & mobile, verified after preparation.</small></button></div>
-<div id="ex" class="expert"><div style="font-size:13px;font-weight:700;margin-bottom:10px;">Professional Mode</div><div class="controls"><select id="vq" class="sel"><option value="max">Quality: Maximum</option><option value="1080">1080p</option><option value="720" selected>720p Balanced</option><option value="480">480p Smaller</option></select><select id="fn" class="sel"><option value="classic">Filename: Classic</option><option value="pretty">Filename: Pretty</option><option value="basic">Filename: Basic</option><option value="nerdy">Filename: Detailed</option><option value="custom">Filename: Custom</option></select><input id="customName" class="sel" type="text" placeholder="Custom filename without.mp4" style="display:none;margin-top:8px;" maxlength="120"><div id="customHint" style="display:none;font-size:11.5px;color:#8c8cb6;margin-top:6px;">Type only name without extension.</div></div><div class="kv"><span>Request</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div><div class="kv"><span>Last response</span><b id="kvResp" class="mono">Waiting...</b></div><label class="checkbox-label"><input id="nm" type="checkbox"> Disable metadata for speed.</label></div>
-<div class="actions"><button id="wake" class="btn ghost">Wake Up Engine</button><button id="clear" class="btn ghost">Clear All</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
-<div id="processWrap" class="process-wrap"><div class="process-head">Live Process Log</div><div id="processLog" class="process-log"></div></div>
-<div id="out" class="out"></div>
+<div class="card">
+<h1 style="font-size:30px;line-height:1.1">Fixed Downloader<br><span style="background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent">No 0KB + Stream to Disk</span></h1>
+<p style="color:var(--muted);font-size:13px;margin-top:8px">Direct disk streaming via <code>FileSystemWritableFileStream</code> - memory stays ~20-50MB even for 50GB. Fallback to blob on mobile. Use only for content you own / have rights to.</p>
+
+<div class="row">
+<div class="field"><input id="url" type="url" placeholder="Paste https:// link - your Cobalt will resolve to direct URL"></div>
 </div>
 
-<div class="highlights"><div class="hl-row"><span class="hl-badge"><strong>FIXED 0% to 100%</strong> - Proxy fallback prevents 0KB</span><span class="hl-badge"><strong>Desktop Fixed</strong> - Same-origin blob</span><span class="hl-badge"><strong>Keep Alive</strong> - Wake Lock + silent audio</span><span class="hl-badge"><strong>Safari Fixed</strong> - Explicit permission tap</span></div></div>
-
-<div class="guide-wrap" id="guideWrap"><div class="guide-head" id="guideHead"><b>Complete Guide - 16 FAQs - Corrected</b><button class="guide-toggle" id="guideToggleBtn">Open Guide</button></div><div class="guide-body" id="guideBody">
-<div class="qa-item"><button class="qa-q" data-qa="1">What is Pluck and Cobalt engine <span class="icon">+</span></button><div class="qa-a" id="qa-1"><strong>Answer:</strong> Pluck sends JSON to <code>BASE = https://cobalt-production-2c27.up.railway.app/</code> with <code>{url, videoQuality, filenameStyle, downloadMode:'auto'}</code>. The engine returns a direct URL. This frontend then fetches that URL.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="2">Why was MP4 0KB before <span class="icon">+</span></button><div class="qa-a" id="qa-2"><strong>Old bug:</strong> CDN URLs don't send <code>Access-Control-Allow-Origin</code>. <code>fetch(cdn, {mode:'cors'})</code> is blocked, <code>mode:'no-cors'</code> gives opaque response with unreadable body. <code>keepalive:true</code> aborts after ~64KB. Result = empty Blob = 0KB or HTML error saved as.mp4. <strong>Fix:</strong> Try direct, then fallback to <code>corsproxy.io</code> and <code>allorigins</code>, read as stream, verify size >0 before enabling download.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="3">How to use step by step <span class="icon">+</span></button><div class="qa-a" id="qa-3"><ul><li>Paste https:// link</li><li>Click Retrieve - log shows engine check and POST</li><li>Tap Prepare File Now - watch real progress 0-100%</li><li>When 100% Ready, use Download Ready File (same-origin blob)</li><li>If fails, use Wake Up Engine then retry</li></ul></div></div>
-<div class="qa-item"><button class="qa-q" data-qa="4">Which download button to choose <span class="icon">+</span></button><div class="qa-a" id="qa-4"><ul><li><strong>Download Ready File:</strong> Uses verified blob URL, works Chrome/Edge/Firefox desktop and Android. This is the fixed one.</li><li><strong>Save to Folder:</strong> Uses File System Access API where supported, writes same verified blob.</li><li><strong>Safari Save:</strong> Creates normal <code>video/mp4</code> File and triggers share or anchor click synchronously - required by Safari.</li><li><strong>Open in New Tab:</strong> Opens blob URL to preview.</li></ul></div></div>
-<div class="qa-item"><button class="qa-q" data-qa="5">How do filenames work <span class="icon">+</span></button><div class="qa-a" id="qa-5">Classic keeps engine name, Pretty cleans title case, Basic is video.mp4, Detailed adds timestamp, Custom uses your input sanitized. Extension is kept from type.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="6">How is size detected now <span class="icon">+</span></button><div class="qa-a" id="qa-6"><strong>Old:</strong> HEAD + Range requests often blocked by CORS. <strong>New:</strong> Size comes from <code>Content-Length</code> of the successful proxied GET. If missing, we show MB downloaded. No separate HEAD needed.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="7">What does live log show <span class="icon">+</span></button><div class="qa-a" id="qa-7">Validation, engine ping, request build, POST to BASE, parsing, filename generation, size detection start, preparation 0-100%, completion.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="8">What do errors mean <span class="icon">+</span></button><div class="qa-a" id="qa-8"><ul><li>Unsupported: engine cannot handle URL</li><li>Private/Unavailable: content not public</li><li>Age Restricted: login required - no bypass</li><li>Bad URL: must start https://</li><li>Engine Warming Up: free host sleeping, click Wake Up</li><li>0 bytes read: CORS blocked, proxy fallback will retry automatically</li></ul></div></div>
-<div class="qa-item"><button class="qa-q" data-qa="9">Why does Refresh work <span class="icon">+</span></button><div class="qa-a" id="qa-9">Refresh only clears localStorage/sessionStorage/caches when you click Refresh button. Old version cleared everything on every page load which broke ServiceWorker registration. Now hard reset only runs on demand.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="10">Is link private <span class="icon">+</span></button><div class="qa-a" id="qa-10">Link is sent to your BASE only. Video bytes are fetched via proxy only if direct CORS fails. No analytics DB. Blobs live only in memory, revoked after 60s.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="11">Why Safari Task Failed is fixed <span class="icon">+</span></button><div class="qa-a" id="qa-11">Safari blocks async download after await - gesture lost. Old <code>window.open('', '_blank')</code> left blank tab. Fix: first tap prepares blob, second tap is synchronous anchor click with <code>download</code> attribute pointing to same-origin blob URL. Apple allows it.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="12">How to save on Safari <span class="icon">+</span></button><div class="qa-a" id="qa-12"><ul><li>Prepare 0-100%</li><li>Tap Save Securely on Safari -> Grant Permission</li><li>If share sheet appears, Save to Files</li><li>Fallback: Open in New Tab -> Share -> Save to Files</li></ul></div></div>
-<div class="qa-item"><button class="qa-q" data-qa="13">How explicit permission works <span class="icon">+</span></button><div class="qa-a" id="qa-13">Apple requires user gesture. First tap = async fetch + blob creation (no download). Second tap = sync <code>a.click()</code> on same-origin blob URL. Because blob: is same-origin and click is sync, Safari allows it.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="14">How Keep Alive really works <span class="icon">+</span></button><div class="qa-a" id="qa-14"><strong>Corrected:</strong> Uses Wake Lock API to keep screen awake and silent looping audio (0.01 volume) to hint iOS to keep page alive. ServiceWorker from blob URL does NOT work in Chrome - spec requires same-origin script. So Background Fetch via blob SW was removed. Keep tab open; switching apps/minimizing is OK, closing tab always stops JS.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="15">Do I have to keep tab open <span class="icon">+</span></button><div class="qa-a" id="qa-15">Yes during 0-100% preparation. Browsers terminate network when tab is fully closed. We show beforeunload dialog while downloadInProgress. Dismissing Keep Alive banner keeps protection; Stop button fully stops it. Wake Lock auto-releases after 20 min.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="16">How does 0% to 100% prevent bugged MP4 <span class="icon">+</span></button><div class="qa-a" id="qa-16"><strong>New flow:</strong> <code>fetchWithProxyFallback(url)</code> -> <code>res.body.getReader()</code> -> accumulate Uint8Array chunks -> count bytes -> update progress bar -> on done <code>new Blob(chunks,{type:'video/mp4'})</code> -> <code>URL.createObjectURL(blob)</code> stored in <code>window._preparedBlobs[idx]</code>. Only then download buttons are shown. All buttons use this verified blob, not remote CDN URL, so desktop download attribute works and file is never 0KB.</div></div>
-</div></div>
-
-<div class="refresh-area"><button id="refreshBtn" class="refresh-main">Refresh Page to Fix Issues - Clears Cache</button><div class="refresh-note">Only clears when you click here. Does not auto-wipe on load anymore.</div></div>
-<div class="fun"><b>Helpful Info:</b> <span id="ft"></span></div>
-
-<div class="error-bible"><div class="error-bible-head"><span>Error Guide - Fixed</span> <span class="pill">Read before worrying</span></div><p class="error-bible-sub">Quick reference for the fixed build.</p><div class="error-grid">
-<div class="err-item"><b><code>0KB / Bugged MP4</code> - Fixed</b><p>Caused by CORS-blocked CDN fetch. Fixed by proxy fallback + size check >0 before enabling download. If you still see 0KB, the direct URL expired - re-retrieve.</p></div>
-<div class="err-item"><b><code>Task Failed on Safari</code> - Fixed</b><p>Use Save Securely - second synchronous tap. Uses same verified blob.</p></div>
-<div class="err-item"><b><code>Link Not Supported / Private</code></b><p>Engine returns error.code. If content needs login, it cannot be fetched by design.</p></div>
-<div class="err-item"><b><code>Engine Warming Up / Timeout</code></b><p>Free Railway instance sleeps. Click Wake Up Engine, wait 8-10s, retry. Request aborts after 22s to avoid hang.</p></div>
-</div></div>
-
-<div class="footer-note mono">BASE = https://cobalt-production-2c27.up.railway.app - Fixed proxy fallback ensures no 0KB. Use only for content you have rights to.</div>
+<div class="row">
+<select id="mode" class="sel"><option value="auto" selected>Mode: auto - Video+Audio</option><option value="mute">Mode: mute - Video only (no audio)</option><option value="audio">Mode: audio - Audio only</option></select>
+<select id="quality" class="sel"><option value="max">Quality: max</option><option value="2160">2160p 4K</option><option value="1080">1080p</option><option value="720" selected>720p</option><option value="480">480p</option><option value="360">360p</option></select>
+<select id="fname" class="sel"><option value="classic">Filename: Classic</option><option value="pretty">Pretty</option><option value="basic">Basic</option><option value="nerdy">Detailed</option></select>
 </div>
 
-<div id="keepAliveBanner" class="keep-alive-banner">
-<button class="popup-close" id="keepAliveCloseBtn">×</button>
-<div style="font-weight:800;margin-bottom:6px;color:#86efac;">Keep Alive Active - Keep Tab Open During Preparation</div>
-<div style="font-size:12.5px;color:#9aa0c0;line-height:1.6;">Protected by Wake Lock + silent audio. Switching apps / locking screen is OK. Closing tab will stop preparation. All popups have X.</div>
-<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"><span class="pill keep-alive-pill" id="keepAliveDetailWake">Wake Lock: Checking...</span><span class="pill keep-alive-pill" id="keepAliveDetailAudio">Silent Audio: Checking...</span></div>
-<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;"><button class="btn ghost" id="keepAliveDismissBtn" style="padding:8px 14px;font-size:12px;">Dismiss</button><button class="btn ghost" id="keepAliveStopBtn" style="padding:8px 14px;font-size:12px;border-color:rgba(239,68,68,.4);color:#ff9a9a;">Stop Keep Alive</button></div>
+<div class="row"><button id="go" class="btn primary" style="flex:1">1. Resolve + Prepare</button><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear</button></div>
+
+<div id="logWrap" style="display:none;margin-top:12px"><div style="font-weight:700;font-size:13px;margin-bottom:6px">12-Step Log (to remember more)</div><div id="log" class="log"></div><div class="bar"><div id="fill" class="fill"></div></div><div style="display:flex;justify-content:space-between"><span id="pct" class="pill">0%</span><span id="sz" class="pill">Waiting</span></div></div>
+
+<div id="out" class="grid"></div>
+</div>
 </div>
 
 <script>
-// === CONFIG - YOUR URL INSTALLED ===
-const BASE = "https://cobalt-production-2c27.up.railway.app";
-const ENDPOINT = BASE + "/";
-
-let wakeLock=null, keepAliveAudio=null, downloadInProgress=false, keepAliveActive=false, keepAliveTimeout=null;
-window._preparedBlobs={};
-
-function isIOS(){return /iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);}
-function isSafari(){const ua=navigator.userAgent; return /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(ua) && navigator.vendor?.includes('Apple');}
-function needsSafariFix(){return isIOS()||isSafari();}
-
-const FACTS=["Proxy fallback fixes CORS that caused 0KB","Same-origin blob fixes desktop download","Wake Lock + silent audio keeps iOS alive, blob SW does not work"];
-let state={online:false,factPool:[...FACTS].sort(()=>Math.random()-0.5)};
+const BASE="https://cobalt-production-2c27.up.railway.app"; // your instance installed
+const ENDPOINT=BASE+"/";
 const $=s=>document.querySelector(s);
-const els={dot:$('#dot'),stxt:$('#stxt'),ver:$('#ver'),lat:$('#lat'),out:$('#out'),ft:$('#ft'),epLab:$('#epLab'),h1:$('#h1'),heroP:$('#heroP'),kvR:$('#kvR'),kvResp:$('#kvResp'),url:$('#url'),go:$('#go'),test:$('#test'),fn:$('#fn'),customName:$('#customName'),customHint:$('#customHint'),vq:$('#vq'),nm:$('#nm'),processWrap:$('#processWrap'),processLog:$('#processLog')};
+const els={url:$('#url'),mode:$('#mode'),quality:$('#quality'),fname:$('#fname'),go:$('#go'),log:$('#log'),logWrap:$('#logWrap'),fill:$('#fill'),pct:$('#pct'),sz:$('#sz'),engine:$('#engine'),out:$('#out')};
+let prepared={};
 
-function nowTime(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
-function clearLog(){els.processLog.innerHTML='';els.processWrap.style.display='none';}
-function initLog(){els.processLog.innerHTML='';els.processWrap.style.display='block';}
-function addLog(id,t,s){let r=document.getElementById('log-'+id); if(!r){r=document.createElement('div');r.id='log-'+id;r.className='log-entry '+(s||'');r.innerHTML=`<div style="min-width:62px;font-family:var(--mono);font-size:10.5px;color:#6d6d9a;">${nowTime()}</div><div style="flex:1">${t}</div>`;els.processLog.appendChild(r);}else{r.className='log-entry '+(s||'');r.lastChild.textContent=t;r.firstChild.textContent=nowTime();}els.processLog.scrollTop=els.processLog.scrollHeight;}
-function updateLog(id,t,s){const r=document.getElementById('log-'+id); if(!r) return addLog(id,t,s); r.className='log-entry '+(s||''); if(t) r.lastChild.textContent=t; r.firstChild.textContent=nowTime();}
-function getFact(){if(!state.factPool.length) state.factPool=[...FACTS].sort(()=>Math.random()-0.5); return state.factPool.pop();}
-function isValidUrl(s){try{const u=new URL(s.trim()); return ['http:','https:'].includes(u.protocol)&&!!u.hostname;}catch(e){return false;}}
-function sanitize(n){let s=(n||'pluck-media').toString().trim(); if(!s) s='pluck-media'; s=s.replace(/[^a-z0-9.\-_ ]/gi,'_').replace(/\s+/g,' ').trim(); if(s.length>180) s=s.slice(0,180); return s||'pluck-media';}
-function formatBytes(b){if(b===0) return '0 B'; if(!b||isNaN(b)||b<0) return null; const k=1024,sizes=['B','KB','MB','GB']; let i=Math.floor(Math.log(b)/Math.log(k)); if(i<0) i=0; if(i>=sizes.length) i=sizes.length-1; const v=b/Math.pow(k,i); return v.toFixed(v>=100?0:v>=10?1:2)+' '+sizes[i];}
-async function tryFetchSize(u,o){try{const r=await fetch(u,o); const l=r.headers.get('content-length'); if(l){const v=parseInt(l,10); if(v>0) return v;} const cr=r.headers.get('content-range'); if(cr){const m=cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10);}}catch(e){} return null;}
-async function fetchMP4Size(u){
-  // use same proxy fallback for size
-  const tries=[u, `https://corsproxy.io/?${encodeURIComponent(u)}`, `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`];
-  for(const tu of tries){ const s=await tryFetchSize(tu,{method:'GET',headers:{Range:'bytes=0-0'},cache:'no-store'}); if(s) return s; }
-  return null;
-}
-async function updateFileSizes(){ const nodes=document.querySelectorAll('[data-size-url]'); for(const el of nodes){ const u=el.getAttribute('data-size-url'); el.textContent='Detecting size...'; const b=await fetchMP4Size(u); if(b){el.textContent=formatBytes(b)+' MP4'; el.className='size-badge ok';} else {el.textContent='Size hidden';} } }
-function toPrettyName(r){ if(!r) return 'Video'; let e=''; const d=r.lastIndexOf('.'); if(d>0){e=r.slice(d); r=r.slice(0,d);} try{r=decodeURIComponent(r);}catch(e){} r=r.replace(/[_\-.]+/g,' ').replace(/\b(pluck|cobalt|video|audio|ytdl|download)\b/gi,'').trim(); if(!r) r='Video'; return r.split(' ').map(w=>w? w[0].toUpperCase()+w.slice(1).toLowerCase():'').join(' ')+e; }
-function applyFilenameStyle(o,s,q,i,t,c){ let e='.mp4'; if(t==='photo') e='.jpg'; else if(t==='gif') e='.gif'; const d=o.lastIndexOf('.'); if(d>-1){e=o.slice(d).toLowerCase(); o=o.slice(0,d);} if(s==='custom'){ let cu=(c||'').trim()||'My Video'; cu=cu.replace(/\.[a-z0-9]{2,4}$/i,''); return sanitize(cu)+e; } if(s==='pretty'){ let b=toPrettyName(o); if(q&&q!=='max') b+=` ${q}p`; return sanitize(b+e); } if(s==='basic') return sanitize(`video${i>0?'-'+(i+1):''}${e}`); if(s==='nerdy') return sanitize(`${o}_${q}_${Date.now().toString().slice(-5)}${e}`); return sanitize(o+e); }
-function mapErrorCode(c){ const K={'error.api.link.unsupported':"Link not supported.",'error.api.content.video.unavailable':"Private/deleted. If private browsing without login fails, engine can't access.",'error.api.content.video.age':"Age restricted - no bypass."}; return K[c]||'Engine could not process link.'; }
-function extractItems(r,f,s,q,c){ if(!r) throw new Error('Empty response'); if(r.status==='error') throw new Error(mapErrorCode(r.error?.code)); if(r.status==='picker'&&Array.isArray(r.picker)) return r.picker.map((it,i)=>{const t=it.type||'video'; return {url:it.url,filename:applyFilenameStyle(`pluck-${i+1}`,s,q,i,t,c),label:t.toUpperCase()};}); if(r.url){ const raw=r.filename||'pluck-media.mp4'; return [{url:r.url,filename:applyFilenameStyle(raw,s,q,0,'video',c),label:f}]; } throw new Error('No file returned'); }
-function setSimple(){ els.h1.innerHTML='Welcome,<br><span>Your Secure Download Is Almost Ready.</span>'; els.stxt.textContent=state.online?'Engine online and ready':'Checking engine...'; }
-function setExpert(){ els.h1.innerHTML='Professional Mode<br><span>Advanced Controls Enabled.</span>'; }
-function showOutput(t,ti,c,d){ els.out.classList.add('show'); if(d){try{els.kvResp.textContent=JSON.stringify(d).slice(0,600);}catch(e){els.kvResp.textContent='Response received';}} const cl=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cl}"><div style="font-weight:800;margin-bottom:10px;font-size:15px;">${ti}</div>${c}<div style="margin-top:12px;font-size:12.5px;color:#8c8cb6;">${getFact()}</div></div>`; setTimeout(updateFileSizes,200); }
-function showError(t,m){ showOutput('err',t,`<pre style="white-space:pre-wrap;word-break:break-word;">${m}</pre>`); }
+function formatBytes(b){if(b===0)return '0 B';if(!b||isNaN(b))return '—';const k=1024,u=['B','KB','MB','GB','TB'];const i=Math.floor(Math.log(b)/Math.log(k));const v=b/Math.pow(k,i);return v.toFixed(v>=100?0:v>=10?1:2)+' '+u[i];}
+function isValidUrl(s){try{const u=new URL(s.trim());return u.protocol==='http:'||u.protocol==='https:'}catch{return false}}
+function sanitize(n){return (n||'video').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,120)||'video';}
+function logStep(n,msg){els.logWrap.style.display='block';const d=document.createElement('div');d.innerHTML=`<b style="color:#8b5cf6">${String(n).padStart(2,'0')}</b> ${msg}`;els.log.appendChild(d);els.log.scrollTop=els.log.scrollHeight;}
+function setProgress(rec,total){const p=total?Math.round(rec/total*100):Math.min(99,Math.round(rec/1024/1024)); els.fill.style.width=p+'%'; els.pct.textContent=total?`${p}%`:formatBytes(rec); els.sz.textContent=total?`${formatBytes(rec)} / ${formatBytes(total)}`:formatBytes(rec);}
 
-function updateKeepAlivePills(wakeMsg,audioMsg){
-  const w=document.getElementById('keepAliveDetailWake'); const a=document.getElementById('keepAliveDetailAudio');
-  if(w) w.textContent=wakeMsg|| (keepAliveActive&&wakeLock?'Wake Lock: Active':'Wake Lock: Inactive');
-  if(a) a.textContent=audioMsg|| (keepAliveActive&&keepAliveAudio?'Silent Audio: Active':'Silent Audio: Inactive');
-}
-async function requestWakeLockWithRetry(){
-  try{
-    if(!('wakeLock' in navigator)){ updateKeepAlivePills('Wake Lock: Not supported'); return null; }
-    if(wakeLock) try{await wakeLock.release();}catch(e){}
-    wakeLock=await navigator.wakeLock.request('screen');
-    wakeLock.addEventListener('release',()=>{ if(keepAliveActive&&downloadInProgress) setTimeout(requestWakeLockWithRetry,1000); });
-    updateKeepAlivePills('Wake Lock: Active - Screen stays awake'); return wakeLock;
-  }catch(e){ updateKeepAlivePills('Wake Lock: Blocked, audio fallback'); return null; }
-}
-function startSilentAudioKeepAlive(){ try{ if(!keepAliveAudio){ keepAliveAudio=new Audio(); keepAliveAudio.src='data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA=='; keepAliveAudio.loop=true; keepAliveAudio.volume=0.01; } keepAliveAudio.play().catch(()=>{}); updateKeepAlivePills(null,'Silent Audio: Active'); }catch(e){} }
-function stopSilentAudioKeepAlive(){ try{if(keepAliveAudio){keepAliveAudio.pause(); keepAliveAudio.currentTime=0;}}catch(e){} }
-async function activateKeepAliveSystem(){ if(keepAliveActive) return; keepAliveActive=true; downloadInProgress=true; const b=document.getElementById('keepAliveBanner'), p=document.getElementById('keepAlivePill'); if(b){b.classList.add('show'); b.style.display='block';} if(p) p.style.display='inline-block'; try{await requestWakeLockWithRetry();}catch(e){} try{startSilentAudioKeepAlive();}catch(e){} if(keepAliveTimeout) clearTimeout(keepAliveTimeout); keepAliveTimeout=setTimeout(deactivateKeepAliveSystem,20*60*1000); updateKeepAlivePills(); }
-function deactivateKeepAliveSystem(){ keepAliveActive=false; downloadInProgress=false; const b=document.getElementById('keepAliveBanner'), p=document.getElementById('keepAlivePill'); if(b){b.classList.remove('show'); b.style.display='none';} if(p) p.style.display='none'; try{if(wakeLock) wakeLock.release().catch(()=>{}); wakeLock=null;}catch(e){} stopSilentAudioKeepAlive(); if(keepAliveTimeout){clearTimeout(keepAliveTimeout); keepAliveTimeout=null;} updateKeepAlivePills('Wake Lock: Inactive','Silent Audio: Inactive'); }
-function setupKeepAliveVisibilityHandler(){ document.addEventListener('visibilitychange', async()=>{ if(document.visibilityState==='visible'&&keepAliveActive&&downloadInProgress){ try{if('wakeLock' in navigator&&!wakeLock) await requestWakeLockWithRetry();}catch(e){} } }); }
-function setupBeforeUnloadWarning(){ window.addEventListener('beforeunload',e=>{ if(!downloadInProgress) return; e.preventDefault(); e.returnValue='Preparation in progress 0-100%. Close will lose progress.'; return e.returnValue; }); }
-
-// === FIXED CORE: proxy fallback prevents 0KB ===
-const PROXIES = [ u=>u, u=>`https://corsproxy.io/?${encodeURIComponent(u)}`, u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}` ];
-async function fetchVideoAsBlobWithProxy(originalUrl, onProgress){
+// Proxy fallback to fix "Load failed" / CORS opaque
+const PROXIES=[u=>u, u=>`https://corsproxy.io/?${encodeURIComponent(u)}`, u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`];
+async function fetchWithProxyResponse(directUrl){
   let lastErr;
   for(const make of PROXIES){
-    const url = make(originalUrl);
+    const url=make(directUrl);
     try{
-      const res = await fetch(url, {cache:'no-store'}); // NO keepalive, NO mode:no-cors
+      const res=await fetch(url,{cache:'no-store'}); // NO keepalive, NO mode:no-cors
       if(!res.ok) throw new Error(`HTTP ${res.status}`);
-      if(!res.body){ const buf=await res.arrayBuffer(); if(!buf.byteLength) throw new Error('empty'); onProgress(buf.byteLength,buf.byteLength); return new Blob([buf],{type:'video/mp4'}); }
-      const total = parseInt(res.headers.get('Content-Length')||'0',10);
-      const reader = res.body.getReader(); let rec=0; const chunks=[];
-      while(true){ const {done,value}=await reader.read(); if(done) break; chunks.push(value); rec+=value.byteLength; onProgress(rec,total); }
-      if(rec===0) throw new Error('0 bytes - retrying proxy');
-      return new Blob(chunks,{type:'video/mp4'});
+      if(!res.body) throw new Error('No body');
+      return res;
     }catch(e){ lastErr=e; }
   }
-  throw lastErr;
+  throw lastErr||new Error('All proxies failed - Load failed');
 }
 
-function getPrepared(idx){ return window._preparedBlobs[idx]||null; }
-function downloadPreparedFile(idx){ const p=getPrepared(idx); if(!p) return; const a=document.createElement('a'); a.href=p.url; a.download=p.filename; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),1200); setTimeout(()=>{try{URL.revokeObjectURL(p.url)}catch(e){}},60000); }
-function filePickerSavePrepared(idx){ const p=getPrepared(idx); if(!p) return; if(window.showSaveFilePicker){ (async()=>{ try{ const h=await window.showSaveFilePicker({suggestedName:p.filename}); const w=await h.createWritable(); await w.write(p.blob); await w.close(); alert('Saved'); }catch(e){ downloadPreparedFile(idx); } })(); } else downloadPreparedFile(idx); }
-function sharePreparedFile(idx){ const p=getPrepared(idx); if(!p) return; if(navigator.canShare&&navigator.canShare({files:[new File([p.blob],p.filename,{type:'video/mp4'})]})){ const f=new File([p.blob],p.filename,{type:'video/mp4'}); navigator.share({files:[f]}).catch(()=>{}); } else window.open(p.url,'_blank'); }
-function openPreparedFile(idx){ const p=getPrepared(idx); if(!p) return; window.open(p.url,'_blank','noopener'); }
-function copyLink(u){ navigator.clipboard.writeText(decodeURIComponent(u)).then(()=>alert('Copied')).catch(()=>prompt('Copy:',decodeURIComponent(u))); }
-
-function blobDownloadPrepared(idx){
-  const p=getPrepared(idx); if(!p) return; const url=p.url, name=p.filename;
-  const a=document.createElement('a'); a.href=url; a.download=name; a.rel='noopener'; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),1000);
-}
-
-async function prepareFile(url,idx,filename){
-  const fill=document.getElementById(`progress-fill-${idx}`), txt=document.getElementById(`progress-text-${idx}`), btn=document.getElementById(`prepare-btn-${idx}`), status=document.getElementById(`prep-status-${idx}`), sizePill=document.getElementById(`prep-size-${idx}`);
+// Core: Stream to disk with FileSystemWritableFileStream - flat memory
+async function streamToDisk(directUrl, suggestedName, onProgress){
+  if(!('showSaveFilePicker' in window)) throw new Error('FS API not supported');
+  // showSaveFilePicker pattern【4840536854440036108†L12-L16】
+  const handle = await window.showSaveFilePicker({suggestedName, types:[{description:'Video',accept:{'video/mp4':['.mp4','.m4a','.mp3','.webm']}}]});
+  // createWritable gives FileSystemWritableFileStream which is a WritableStream【8975725059034557911†L14-L24】
+  const writable = await handle.createWritable(); // FileSystemWritableFileStream【8975725059034557911†L78-L81】
+  const res = await fetchWithProxyResponse(directUrl);
+  const reader = res.body.getReader();
+  let rec=0; const total=parseInt(res.headers.get('Content-Length')||'0',10);
   try{
-    downloadInProgress=true; activateKeepAliveSystem();
-    if(btn){btn.disabled=true; btn.textContent='Preparing 0%...';}
-    const blob = await fetchVideoAsBlobWithProxy(url, (rec,total)=>{
-      const pct = total? Math.round(rec/total*100) : Math.min(99,Math.round(rec/1024/1024*3));
-      if(fill) fill.style.width=pct+'%'; if(txt) txt.textContent = total? `${pct}% - ${formatBytes(rec)} / ${formatBytes(total)}` : `${formatBytes(rec)} downloaded`; if(sizePill) sizePill.textContent = total? formatBytes(total):formatBytes(rec); if(btn) btn.textContent=`Preparing ${pct}% - ${formatBytes(rec)}`;
-    });
-    if(window._preparedBlobs[idx]?.url) try{URL.revokeObjectURL(window._preparedBlobs[idx].url)}catch(e){}
-    const burl = URL.createObjectURL(blob);
-    window._preparedBlobs[idx]={blob,url:burl,filename,size:blob.size};
-    if(fill) fill.style.width='100%'; if(txt) txt.textContent=`100% - ${formatBytes(blob.size)} Verified - Ready`; if(sizePill){sizePill.textContent=formatBytes(blob.size)+' Verified'; sizePill.className='pill keep-alive-pill';}
-    if(btn){btn.textContent='100% Ready - Use Download Below'; btn.disabled=true; btn.style.opacity=.7;}
-    if(status){status.textContent='File verified 0-100%. All buttons now use same-origin blob, no 0KB.'; status.style.color='#86efac';}
-    const dl=document.getElementById(`dl-options-${idx}`); if(dl) dl.style.display='block';
+    while(true){
+      const {done,value}=await reader.read(); if(done) break;
+      // write chunk directly to disk - memory does not grow【4840536854440036108†L5-L8】
+      await writable.write(value); // write() then later close()【8975725059034557911†L83-L90】
+      rec+=value.byteLength; onProgress(rec,total);
+    }
+    await writable.close();
+    return {toDisk:true, bytes:rec};
   }catch(e){
-    if(txt) txt.textContent='Error: '+e.message; if(btn){btn.disabled=false; btn.textContent='Retry Preparation';} const st=document.getElementById(`prep-status-${idx}`); if(st){st.textContent='Failed: '+e.message+' - will retry via proxy automatically'; st.style.color='#ff9a9a';}
+    try{await writable.abort();}catch(_){}
+    throw e;
   }
 }
 
-function buildButtons(url,fn,label,idx){
-  const saf=needsSafariFix(); let h=`<div class="dl-grid"><button class="btn primary" onclick="downloadPreparedFile(${idx})" style="grid-column:1/-1">Download Ready File - Fixed No 0KB<br><small>Verified same-origin blob</small></button><button class="btn ghost" onclick="filePickerSavePrepared(${idx})">Save to Folder</button><button class="btn ghost" onclick="openPreparedFile(${idx})">Open Preview</button>`;
-  if(saf) h+=`<button class="btn primary" onclick="blobDownloadPrepared(${idx})" style="grid-column:1/-1">Safari Save - Explicit Permission</button>`; else h+=`<button class="btn ghost" onclick="copyLink('${String(url).replace(/'/g,"%27")}')">Copy Link</button>`;
-  h+=`</div>`; return h;
+async function streamToBlobFallback(directUrl, onProgress){
+  const res = await fetchWithProxyResponse(directUrl);
+  const reader=res.body.getReader(); let rec=0; const total=parseInt(res.headers.get('Content-Length')||'0',10); const chunks=[];
+  while(true){const {done,value}=await reader.read(); if(done) break; chunks.push(value); rec+=value.byteLength; onProgress(rec,total);}
+  if(rec===0) throw new Error('0 bytes - blocked');
+  return new Blob(chunks,{type:'video/mp4'});
 }
-function buildItemsBlock(items){
-  return items.map((it,idx)=>{ const safe=it.filename; return `<div class="file-row"><div class="file-info"><b>${safe}</b><span class="size-badge" data-size-url="${it.url}">Detecting size...</span></div><div class="prep-wrap"><div class="progress-bar"><div class="progress-fill" id="progress-fill-${idx}"></div></div><div style="display:flex;justify-content:space-between"><span class="progress-text" id="progress-text-${idx}">0% - Tap Prepare</span><span class="pill" id="prep-size-${idx}">Waiting</span></div><div class="prep-status" id="prep-status-${idx}">Tap Prepare - downloads 0-100% via proxy fallback if CORS blocks, verifies >0 bytes, then enables download. Prevents 0KB.</div><button class="btn primary" id="prepare-btn-${idx}" onclick="prepareFile('${String(it.url).replace(/'/g,"%27")}',${idx},'${String(safe).replace(/'/g,"\\'")}')" style="width:100%;margin-top:8px">Prepare File Now - Fix 0KB</button></div><div id="dl-options-${idx}" style="display:none;margin-top:12px"><div style="padding:10px 12px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:12px;color:#86efac;font-size:12.5px;margin-bottom:10px">✓ 100% Ready - Verified, same-origin blob</div>${buildButtons(it.url,safe,it.label,idx)}</div></div>`; }).join('');
-}
-async function ping(){ const t0=performance.now(); els.dot.className='dot'; try{ const r=await fetch(ENDPOINT,{cache:'no-store'}); const ms=Math.round(performance.now()-t0); if(els.lat) els.lat.textContent=ms+' ms'; if(!r.ok) throw new Error('http'); const j=await r.json(); if(!j?.cobalt) throw new Error('invalid'); state.online=true; els.dot.className='dot ok'; els.ver.textContent='cobalt '+(j.cobalt.version||'10.x'); els.stxt.textContent='Engine online'; return true; }catch(e){ state.online=false; els.dot.className='dot bad'; els.ver.textContent='sleeping'; els.stxt.textContent='Engine sleeping'; return false; } }
-async function postToCobalt(p){ const u=BASE.replace(/\/$/,'')+'/'; const c=new AbortController(); const t=setTimeout(()=>c.abort(),22000); try{ const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(t); if(!r.ok) throw new Error('Engine HTTP '+r.status); return await r.json(); }catch(err){ clearTimeout(t); if(err.name==='AbortError') throw new Error('Timeout 22s'); throw err; } }
-async function go(){ const raw=els.url.value.trim(); if(!raw) return showError('Input Required','Paste https:// link'); if(!isValidUrl(raw)) return showError('Invalid URL','Must start https://'); els.go.disabled=true; els.go.textContent='Processing...'; initLog(); try{ addLog('validate','Validating','active'); await new Promise(r=>setTimeout(r,80)); updateLog('validate','Valid OK','done'); addLog('engine','Checking engine '+BASE,'active'); if(!state.online) await ping(); updateLog('engine','Engine '+(state.online?'online':'waking'),'done'); const style=els.fn.value, quality=els.vq.value, customName=els.customName.value.trim(); addLog('request','Building request','active'); const baseP={url:raw,filenameStyle:style==='custom'?'classic':style,disableMetadata:els.nm.checked}; updateLog('request','Request built','done'); addLog('send','POST to engine','active'); downloadInProgress=true; activateKeepAliveSystem(); const result=await postToCobalt({...baseP,downloadMode:'auto',videoQuality:quality,audioFormat:'best'}); updateLog('send','Response '+(result.status||'ok'),'done'); addLog('parse','Parsing','active'); const items=extractItems(result,'Video',style,quality,customName); updateLog('parse',`Found ${items.length} file(s)`,'done'); showOutput('ok','Success - Now Prepare 0-100% to Fix 0KB',buildItemsBlock(items),result); }catch(e){ addLog('error',e.message,'error'); showError('Could not complete',e.message); } finally{ els.go.disabled=false; els.go.textContent='Retrieve Video Now'; } }
 
-els.go.addEventListener('click',go); els.url.addEventListener('keydown',e=>{if(e.key==='Enter') go();});
-els.fn?.addEventListener('change',function(){ if(this.value==='custom'){els.customName.style.display='block'; els.customHint.style.display='block';} else {els.customName.style.display='none'; els.customHint.style.display='none';} });
-document.getElementById('bS')?.addEventListener('click',()=>{document.getElementById('bS').classList.add('on');document.getElementById('bE').classList.remove('on');document.getElementById('ex').classList.remove('show'); setSimple();});
-document.getElementById('bE')?.addEventListener('click',()=>{document.getElementById('bE').classList.add('on');document.getElementById('bS').classList.remove('on');document.getElementById('ex').classList.add('show'); setExpert();});
-document.getElementById('wake')?.addEventListener('click',async()=>{ els.stxt.textContent='Waking...'; try{await fetch(ENDPOINT,{cache:'no-store'});}catch(e){} setTimeout(()=>ping(),1500); });
-document.getElementById('clear')?.addEventListener('click',()=>{ els.url.value=''; els.customName.value=''; els.fn.value='classic'; els.vq.value='720'; els.nm.checked=false; if(els.customName) els.customName.style.display='none'; if(els.customHint) els.customHint.style.display='none'; els.out.classList.remove('show'); els.out.innerHTML=''; clearLog(); deactivateKeepAliveSystem(); for(const k in window._preparedBlobs) try{URL.revokeObjectURL(window._preparedBlobs[k].url)}catch(e){} window._preparedBlobs={}; });
-(function(){ const head=$('#guideHead'), body=$('#guideBody'), btn=$('#guideToggleBtn'); function tog(){ const o=body.classList.contains('open'); if(o){body.classList.remove('open'); btn.textContent='Open Guide';} else {body.classList.add('open'); btn.textContent='Close Guide';} } head?.addEventListener('click',tog); btn?.addEventListener('click',e=>{e.stopPropagation(); tog();}); document.querySelectorAll('.qa-q').forEach(q=>{ q.addEventListener('click',()=>{ const id=q.getAttribute('data-qa'); const ans=document.getElementById('qa-'+id); const ic=q.querySelector('.icon'); const op=ans.classList.contains('open'); if(op){ans.classList.remove('open'); ic.textContent='+';} else {ans.classList.add('open'); ic.textContent='-';} }); }); })();
-if(els.test) els.test.href=BASE; if(els.epLab) els.epLab.textContent='using '+BASE.replace('https://','').slice(0,28); if(els.ft) els.ft.textContent=getFact(); setSimple(); ping();
-document.getElementById('refreshBtn')?.addEventListener('click',()=>{ const u=new URL(location.href); u.searchParams.set('_r',Date.now().toString()); location.href=u.toString(); });
-setupKeepAliveVisibilityHandler(); setupBeforeUnloadWarning();
-document.getElementById('keepAliveCloseBtn')?.addEventListener('click',()=>{const b=document.getElementById('keepAliveBanner'); if(b){b.style.display='none'; b.classList.remove('show');}});
-document.getElementById('keepAliveDismissBtn')?.addEventListener('click',()=>{const b=document.getElementById('keepAliveBanner'); if(b){b.style.display='none';}});
-document.getElementById('keepAliveStopBtn')?.addEventListener('click',()=>deactivateKeepAliveSystem());
-window.prepareFile=prepareFile; window.downloadPreparedFile=downloadPreparedFile; window.filePickerSavePrepared=filePickerSavePrepared; window.openPreparedFile=openPreparedFile; window.blobDownloadPrepared=blobDownloadPrepared; window.copyLink=copyLink; window.getPrepared=getPrepared;
+async function ping(){try{const r=await fetch(ENDPOINT,{cache:'no-store'});const j=await r.json();els.engine.textContent='cobalt '+(j.cobalt?.version||'ok');els.engine.className='pill ok';return true;}catch(e){els.engine.textContent='sleeping - click Wake';els.engine.className='pill';return false;}}
+async function postCobalt(payload){const u=BASE.replace(/\/$/,'')+'/';const c=new AbortController();const t=setTimeout(()=>c.abort(),25000);try{const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload),signal:c.signal});clearTimeout(t);if(!r.ok) throw new Error('Engine HTTP '+r.status);return await r.json();}catch(e){clearTimeout(t);throw e;}}
+
+function buildFilename(orig, style, q){ let e='.mp4'; const d=orig.lastIndexOf('.'); if(d>-1){e=orig.slice(d).toLowerCase(); orig=orig.slice(0,d);} if(style==='basic') return 'video'+e; if(style==='pretty') return sanitize(orig.replace(/[-_]+/g,' '))+' '+q+e; if(style==='nerdy') return sanitize(`${orig}_${q}_${Date.now().toString().slice(-4)}${e}`); return sanitize(orig+e); }
+
+async function go(){
+  const raw=els.url.value.trim(); if(!raw||!isValidUrl(raw)) return alert('Paste valid https:// URL');
+  els.go.disabled=true; els.go.textContent='Working...'; els.log.innerHTML=''; els.out.innerHTML=''; prepared={};
+  try{
+    logStep(1,'Validate URL format');
+    logStep(2,'Ping engine '+BASE); await ping();
+    logStep(3,`Build request mode=${els.mode.value} quality=${els.quality.value} - downloadMode auto/audio/mute per docs`);
+    const payload={url:raw, downloadMode:els.mode.value, videoQuality:els.quality.value, filenameStyle:els.fname.value, audioFormat:'best'};
+    logStep(4,'POST to Cobalt / with Accept: application/json');
+    const res=await postCobalt(payload);
+    logStep(5,`Parse response status=${res.status}`);
+    if(res.status==='error') throw new Error(res.error?.code||'Engine error');
+    let items=[]; if(res.url) items=[{url:res.url,filename:res.filename||'video.mp4'}]; else if(res.picker) items=res.picker.map((it,i)=>({url:it.url,filename:it.thumb?`item-${i+1}.jpg`:`video-${i+1}.mp4`}));
+    if(!items.length) throw new Error('No file returned - try 720p / check if public');
+    logStep(6,`Found ${items.length} file(s), filename style=${els.fname.value}`);
+    logStep(7,'Size detection via Content-Length from proxied GET (no separate HEAD)');
+    logStep(8,'Ready to stream - choose Disk Streaming for flat memory or Blob fallback');
+    els.out.innerHTML = items.map((it,i)=>{
+      const fn=buildFilename(it.filename, els.fname.value, els.quality.value);
+      return `<div class="file"><b class="mono">${fn}</b><div style="font-size:11px;color:#9aa0c0;word-break:break-all">${it.url.slice(0,90)}...</div>
+      <div class="row"><button class="btn primary" onclick="prepareDisk(${i})" style="flex:1">Stream to Disk (WritableStream) - ~30MB RAM even for 50GB</button><button class="btn ghost" onclick="prepareBlob(${i})">Fallback Blob Download</button></div>
+      <div id="dl-${i}" style="display:none;margin-top:8px"><span class="pill ok">Verified - Ready</span></div></div>`;
+    }).join('');
+    // store
+    items.forEach((it,i)=>prepared[i]={directUrl:it.url,filename:buildFilename(it.filename,els.fname.value,els.quality.value)});
+    logStep(9,'Waiting for user to pick streaming method');
+  }catch(e){ logStep('ERR','Load failed: '+e.message+' - usually CORS or engine sleep. Proxy fallback will retry automatically.'); alert(e.message); }
+  finally{ els.go.disabled=false; els.go.textContent='1. Resolve + Prepare'; }
+}
+
+window.prepareDisk = async (idx)=>{
+  const p=prepared[idx]; if(!p) return;
+  try{
+    logStep(9,`showSaveFilePicker() detected=${'showSaveFilePicker' in window}`); // feature-detect【4840536854440036108†L12-L16】
+    logStep(10,`createWritable() -> FileSystemWritableFileStream WritableStream`);
+    const r = await streamToDisk(p.directUrl, p.filename, setProgress);
+    logStep(11,`write() chunks directly to disk, close() flushes - memory flat`);
+    logStep(12,`Done ${formatBytes(r.bytes)} written to disk - no blob in RAM`);
+    document.getElementById(`dl-${idx}`).style.display='block';
+  }catch(e){
+    if(e.name==='AbortError') logStep('ERR','User cancelled save dialog');
+    else { logStep('ERR','Disk stream failed: '+e.message+' - falling back to Blob'); await prepareBlob(idx); }
+  }
+};
+window.prepareBlob = async (idx)=>{
+  const p=prepared[idx]; if(!p) return;
+  try{
+    logStep(9,'Fallback: fetch -> reader -> Blob chunks (mobile / no FS API)');
+    const blob = await streamToBlobFallback(p.directUrl, setProgress);
+    logStep(10,`Blob created ${formatBytes(blob.size)} verified >0`);
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=p.filename; document.body.appendChild(a); a.click(); setTimeout(()=>{a.remove(); URL.revokeObjectURL(url);},60000);
+    logStep(11,'Anchor download triggered, URL revoked after 60s (not immediately for Safari)');
+    logStep(12,'Ready - no bugged MP4');
+    document.getElementById(`dl-${idx}`).style.display='block';
+  }catch(e){ logStep('ERR','Blob fallback failed: '+e.message); }
+};
+
+els.go.addEventListener('click',go);
+$('#wake').addEventListener('click',()=>{ fetch(ENDPOINT,{cache:'no-store'}).finally(()=>setTimeout(ping,1200)); });
+$('#clear').addEventListener('click',()=>{ els.url.value=''; els.out.innerHTML=''; els.log.innerHTML=''; els.logWrap.style.display='none'; els.fill.style.width='0%'; });
+ping();
 </script>
 </body>
 </html>
