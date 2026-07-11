@@ -1,201 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<title>Pluck Universal - Fixed invalid_body + Stream to Disk</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Pluck Universal - Expert+ Streaming Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0a0f;--card-bg:rgba(18,18,28,.95);--border:#272746;--accent:linear-gradient(135deg,#8b5cf6,#ec4899);--text-main:#f5f5ff;--text-muted:#9aa0c0;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}html,body{background:var(--bg);color:var(--text-main);font-family:var(--sans);min-height:100vh;line-height:1.6}
-.mono{font-family:var(--mono)!important}.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 500px at 10% 0%,rgba(139,92,246,.22),transparent 60%),radial-gradient(700px 500px at 90% 10%,rgba(236,72,153,.14),transparent 60%),var(--bg)}
-.wrap{max-width:760px;margin:0 auto;padding:18px 14px 40px}.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--card-bg);border-radius:18px}
-.brand{font-weight:800;display:flex;gap:9px;align-items:center}.brand-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--accent);color:#fff}
-.status{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--text-muted)}.dot{width:9px;height:9px;border-radius:50%;background:#f59e0b;box-shadow:0 0 0 6px rgba(245,158,11,.18);animation:pulse 1.6s infinite}.dot.ok{background:#22c55e;animation:none}.dot.bad{background:#ef4444;animation:none}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
-.hero{margin:22px 6px 14px}.hero h1{font-size:clamp(34px,8vw,46px);line-height:.95;font-weight:800}.hero h1 span{background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{color:var(--text-muted);margin-top:10px;font-size:14px}
-.card{border:1px solid var(--border);background:linear-gradient(180deg,rgba(32,32,54,.98),rgba(18,18,28,.98));border-radius:22px;padding:18px}
-.switch{display:inline-flex;gap:4px;padding:4px;background:#0f1b;border:1px solid #2c2c4e;border-radius:999px}.sw{padding:8px 16px;border-radius:999px;border:0;background:transparent;color:#8d8db3;font-weight:700;font-size:13px;cursor:pointer}.sw.on{background:var(--accent);color:#fff}
-.meta-pills{display:flex;gap:6px;flex-wrap:wrap}.pill{font-size:11px;border:1px solid #2b2b4e;padding:5px 9px;border-radius:999px;color:#8c8cb6}.pill b{color:#fff}
-.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.field{flex:1 260px;display:flex;align-items:center;padding:14px 16px;border:1px solid #2b2b4a;background:#0c0c14;border-radius:16px}.field:focus-within{border-color:#8b5cf6;box-shadow:0 0 0 4px rgba(139,92,246,.18)}.field input{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:15px}
-.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer;font-family:inherit}.primary{background:var(--accent);color:#fff}.ghost{background:#1b1b31;border:1px solid #31315a;color:#e8e8ff}
-.sel{padding:11px 14px;border-radius:12px;border:1px solid #2b2b4e;background:#0c0c14;color:#fff;font-size:13px;width:100%;outline:none}
-.kv{display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:12px;color:#8c8cb6;margin-top:8px}.kv b{color:#fff;word-break:break-all}
-.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.out{display:none;margin-top:16px}.out.show{display:block}.box{border:1px solid #2b2b4e;background:#0c14;border-radius:16px;padding:16px;margin-top:10px}.box pre{white-space:pre-wrap;word-break:break-word;font-size:12px;color:#d3f2;font-family:var(--mono)}.box.ok{border-color:rgba(34,197,94,.3);background:linear-gradient(180deg,rgba(34,197,94,.08),#0c0c14)}.box.err{border-color:rgba(239,68,68,.3);background:linear-gradient(180deg,rgba(239,68,68,.08),#0c0c14)}
-.dl-grid{display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px}@media(min-width:600px){.dl-grid{grid-template-columns:1fr 1fr}}
-.highlights{margin:14px 0 0;display:grid;gap:10px}.hl-row{display:flex;flex-wrap:wrap;gap:8px}.hl-badge{font-size:11.5px;padding:7px 11px;border-radius:999px;background:#1e1e36;border:1px solid #32325a;color:#cbb8ff}
-.guide-wrap{margin-top:18px;border:1px solid #272746;background:linear-gradient(180deg,rgba(24,24,40,.98),rgba(16,16,26,.98));border-radius:22px;overflow:hidden}.guide-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px;cursor:pointer}.guide-toggle{font-size:12px;padding:7px 12px;border-radius:999px;background:#1e1e36;border:1px solid #32325a;color:#cbb8ff;font-weight:700}.guide-body{display:none;padding:0 14px 14px}.guide-body.open{display:block}.qa-item{margin-top:10px}.qa-q{width:100%;text-align:left;background:#0f0f1a;border:1px solid #2b2b4e;border-radius:12px;padding:12px 14px;font-size:13px;font-weight:700;color:#e8e8ff;cursor:pointer;display:flex;justify-content:space-between;align-items:center}.qa-q span.icon{font-family:var(--mono);color:#8b5cf6}.qa-a{display:none;padding:12px 14px;font-size:12.5px;line-height:1.7;color:#9aa0c0;background:#0c0c14;border:1px solid #2b2b4e;border-top:none;border-radius:0 0 12px 12px;margin-top:-2px}.qa-a.open{display:block}.qa-a strong{color:#fff}.qa-a ul{margin:6px 0 8px 18px}.refresh-area{margin-top:16px;display:grid;gap:8px}.refresh-main{width:100%;padding:15px 18px;border-radius:16px;border:0;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;font-weight:800;font-size:15px;cursor:pointer}.refresh-note{text-align:center;color:#9aa0c0;font-size:12.5px}
-.fun{margin-top:16px;padding:14px 16px;border:1px solid #2e2e52;border-radius:16px;background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(236,72,153,.08));font-size:13px;color:var(--text-muted)}
-.error-bible{margin-top:18px;border:1px solid #272746;background:linear-gradient(180deg,rgba(24,24,40,.98),rgba(16,16,26,.98));border-radius:22px;padding:18px}.error-bible-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:15px;font-weight:800}.error-bible-sub{color:#9aa0c0;font-size:13px;margin-top:6px}.error-grid{display:grid;gap:10px;margin-top:14px}.err-item{border:1px solid #2b2b4e;background:#0f1a;border-radius:14px;padding:12px 14px}.err-item b{display:block;font-size:13.5px}.err-item p{color:#8c8cb6;font-size:12.5px;margin-top:6px;line-height:1.6}.err-item code{font-family:var(--mono);font-size:11px;background:#1e1e36;border:1px solid #32325a;padding:2px 7px;border-radius:999px;color:#cbb8ff}
-.file-row{border:1px solid #2b2b4e;background:#0f0f1a;border-radius:14px;padding:12px;margin-top:10px}.file-info{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.file-info b{font-size:13.5px;flex:1 1 100%;word-break:break-all}.size-badge{font-size:11px;padding:4px 8px;border-radius:999px;background:#1e1e36;border:1px solid #32325a;color:#cbb8ff;font-family:var(--mono)}.size-badge.ok{border-color:rgba(34,197,94,.35);color:#86efac}
-.process-wrap{margin-top:16px;border:1px solid #2b2b4e;background:#0f1a;border-radius:16px;padding:14px;display:none}.process-head{font-size:13px;font-weight:800;margin-bottom:10px}.process-log{display:grid;gap:8px;max-height:320px;overflow:auto}.log-entry{display:flex;gap:10px;align-items:flex-start;font-size:12px;padding:8px 10px;border-radius:10px;border:1px solid #23233f;background:#0c0c14;color:#9aa0c0}.log-entry.active{border-color:rgba(139,92,246,.45);background:linear-gradient(180deg,rgba(139,92,246,.14),#0c0c14);color:#d8d8ff}.log-entry.done{border-color:rgba(34,197,94,.25)}.log-entry.error{border-color:rgba(239,68,68,.35);color:#ffd4d4}
-.modal-backdrop{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:16px}.modal-card{width:100%;max-width:720px;max-height:90vh;overflow:auto;background:linear-gradient(180deg,rgba(32,32,54,.98),rgba(18,18,28,.98));border:1px solid #31315a;border-radius:18px;padding:16px}.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.modal-body{background:#0c0c14;border:1px solid #2b2b4e;border-radius:12px;padding:10px;min-height:120px}
-.footer-note{text-align:center;margin-top:12px;color:#6d6d9a;font-size:11px}
+:root{
+--bg:#07080e;--bg2:#10112a;--card:rgba(20,20,38,.92);--card2:rgba(28,28,54,.96);--border:#22234a;--border2:#3d3a78;--focus:#8b5cf6;
+--accent:linear-gradient(135deg,#7c3aed 0%,#22d3ee 50%,#f472b6 100%);--violet:#8b5cf6;--cyan:#22d3ee;--pink:#f472b6;
+--text:#f5f5ff;--muted:#9aa0b8;--dim:#6c6c9a;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif
+}
+*{margin:0;padding:0;box-sizing:border-box}html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;line-height:1.6}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(800px 600px at 15% 0%,rgba(124,58,237,.28),transparent 60%),radial-gradient(700px 500px at 85% 10%,rgba(34,211,238,.18),transparent 60%),radial-gradient(600px 400px at 50% 100%,rgba(244,114,182,.12),transparent 70%),var(--bg)}
+.wrap{max-width:820px;margin:0 auto;padding:18px 14px 44px}.top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border:1px solid var(--border);background:var(--card);border-radius:18px;backdrop-filter:blur(12px)}
+.brand{font-weight:800;display:flex;gap:10px;align-items:center}.brand-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--accent);color:#fff}
+.status{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}.dot{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 6px rgba(245,158,11,.18);animation:pulse 1.6s infinite}.dot.ok{background:var(--ok);box-shadow:0 0 0 6px rgba(34,197,94,.18);animation:none}.dot.bad{background:var(--bad);animation:none}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.hero{margin:22px 6px 16px}.hero h1{font-size:clamp(36px,8vw,48px);line-height:.95;letter-spacing:-.05em;font-weight:800}.hero h1 span{background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{color:var(--muted);margin-top:10px;font-size:14.2px;max-width:640px}
+.card{border:1px solid var(--border);background:linear-gradient(180deg,var(--card2),var(--card));border-radius:22px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.switch{display:inline-flex;gap:4px;padding:4px;background:#0f0f1d;border:1px solid var(--border);border-radius:999px}.sw{padding:8px 16px;border-radius:999px;border:0;background:transparent;color:#8d8db8;font-weight:700;font-size:13px;cursor:pointer;transition:.2s}.sw.on{background:var(--accent);color:#fff;box-shadow:0 6px 20px rgba(139,92,246,.35)}
+.meta-pills{display:flex;gap:6px;flex-wrap:wrap}.pill{font-size:11px;border:1px solid var(--border);padding:5px 9px;border-radius:999px;color:var(--muted);background:rgba(255,255,255,.02)}.pill b{color:#fff}.pill.ok{border-color:rgba(34,197,94,.35);color:#86efac;background:rgba(34,197,94,.08)}
+.row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}.field{flex:1 280px;display:flex;align-items:center;padding:13px 14px;border:1px solid var(--border);background:#0c0c18;border-radius:14px;transition:.2s}.field:focus-within{border-color:var(--focus);box-shadow:0 0 0 4px rgba(139,92,246,.18)}.field input{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:15px}
+.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}.btn:active{transform:scale(.97)}.primary{background:var(--accent);color:#fff;box-shadow:0 10px 30px rgba(139,92,246,.28)}.ghost{background:#191932;border:1px solid var(--border2);color:#e8e8ff}.ghost:hover{border-color:var(--focus)}
+.sel{padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:#0c0c18;color:#fff;font-size:13px;width:100%;outline:none}.sel:focus{border-color:var(--focus)}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:8px;font-size:12px;color:var(--muted);margin-top:8px}.kv b{color:#fff;word-break:break-all;font-family:var(--mono);font-weight:400}
+.expert{display:none;margin-top:16px;border-top:1px dashed var(--border2);padding-top:16px}.expert.show{display:block}
+.expert-grid{display:grid;gap:12px}@media(min-width:700px){.expert-grid{grid-template-columns:1fr 1fr}}
+.expert-box{border:1px solid var(--border);background:rgba(12,12,24,.9);border-radius:14px;padding:12px}.expert-box h4{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+.check{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);cursor:pointer;margin-top:8px}.check input{accent-color:var(--violet)}
+.terminal{background:#080810;border:1px solid var(--border);border-radius:12px;padding:10px;font-family:var(--mono);font-size:11.5px;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow:auto;color:#cbd5ff}
+.process-wrap{margin-top:16px;border:1px solid var(--border);background:rgba(12,12,24,.9);border-radius:16px;padding:14px;display:none}.process-head{font-size:13px;font-weight:800;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}.process-log{display:grid;gap:7px;max-height:320px;overflow:auto}.log-entry{display:flex;gap:10px;font-size:11.5px;padding:8px 10px;border-radius:10px;border:1px solid #1f1f3a;background:#0a0a14;color:var(--muted)}.log-entry.active{border-color:rgba(139,92,246,.45);background:linear-gradient(180deg,rgba(139,92,246,.14),#0a0a14);color:#e8e8ff}.log-entry.done{border-color:rgba(34,197,94,.22)}.log-entry.error{border-color:rgba(239,68,68,.35);color:#ffd4d4}
+.out{display:none;margin-top:16px}.out.show{display:block}.box{border:1px solid var(--border);background:#0c0c18;border-radius:16px;padding:16px;margin-top:10px}.box.ok{border-color:rgba(34,197,94,.28);background:linear-gradient(180deg,rgba(34,197,94,.08),#0c0c18)}.box.err{border-color:rgba(239,68,68,.28);background:linear-gradient(180deg,rgba(239,68,68,.08),#0c0c18)}.box pre{white-space:pre-wrap;word-break:break-word;font-size:12px;color:#d3f2;font-family:var(--mono)}
+.dl-grid{display:grid;gap:9px;margin-top:12px}@media(min-width:600px){.dl-grid{grid-template-columns:1fr 1fr}}
+.file-row{border:1px solid var(--border);background:rgba(12,12,24,.9);border-radius:14px;padding:12px;margin-top:10px}.file-info{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.file-info b{flex:1 100%;font-size:13.5px;word-break:break-all}.size-badge{font-size:11px;padding:4px 8px;border-radius:999px;background:#1a1a32;border:1px solid var(--border);color:var(--muted);font-family:var(--mono)}.size-badge.ok{color:#86efac;border-color:rgba(34,197,94,.35)}
+.highlights{margin:14px 0 0;display:grid;gap:10px}.hl-row{display:flex;flex-wrap:wrap;gap:8px}.hl-badge{font-size:11.5px;padding:7px 11px;border-radius:999px;background:rgba(26,26,50,.9);border:1px solid var(--border);color:#cbb8ff}.hl-badge strong{color:#fff}
+.guide-wrap{margin-top:18px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(24,24,44,.96),rgba(16,16,30,.98));border-radius:22px;overflow:hidden}.guide-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;cursor:pointer}.guide-toggle{font-size:12px;padding:7px 12px;border-radius:999px;background:#1a1a32;border:1px solid var(--border);color:#cbb8ff;font-weight:700}.guide-body{display:none;padding:0 14px 14px}.guide-body.open{display:block}.qa-item{margin-top:10px}.qa-q{width:100%;text-align:left;background:#12122a;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:13px;font-weight:700;color:#e8e8ff;cursor:pointer;display:flex;justify-content:space-between;align-items:center}.qa-a{display:none;padding:12px 14px;font-size:12.5px;line-height:1.7;color:var(--muted);background:#0c0c18;border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;margin-top:-2px}.qa-a.open{display:block}.qa-a strong{color:#fff}
+.refresh-area{margin-top:16px;display:grid;gap:8px}.refresh-main{width:100%;padding:15px 18px;border-radius:16px;border:0;background:var(--accent);color:#fff;font-weight:800;font-size:15px;cursor:pointer}.refresh-note{text-align:center;color:var(--muted);font-size:12.5px}
+.error-bible{margin-top:18px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(24,24,44,.96),rgba(16,16,30,.98));border-radius:22px;padding:18px}.error-bible-head{font-size:15px;font-weight:800;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.error-grid{display:grid;gap:10px;margin-top:14px}.err-item{border:1px solid var(--border);background:rgba(12,12,24,.9);border-radius:14px;padding:12px 14px}.err-item b{display:block;font-size:13px}.err-item p{color:#8c8cb6;font-size:12.5px;margin-top:6px;line-height:1.6}.err-item code{font-family:var(--mono);font-size:11px;background:#1a1a32;border:1px solid var(--border);padding:2px 7px;border-radius:999px;color:#cbb8ff}
+.fun{margin-top:16px;padding:14px 16px;border:1px solid var(--border);border-radius:16px;background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(34,211,238,.08));font-size:13px;color:var(--muted)}
+.footer-note{text-align:center;margin-top:12px;color:#5d5d8a;font-size:11px}
+.modal-backdrop{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:16px}.modal-card{width:100%;max-width:760px;max-height:90vh;overflow:auto;background:linear-gradient(180deg,#1a1a36,#12122a);border:1px solid var(--border2);border-radius:18px;padding:16px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.modal-body{background:#080810;border:1px solid var(--border);border-radius:12px;padding:10px;min-height:120px}
+@media(max-width:680px){.row{flex-direction:column}}
 </style>
 </head>
 <body>
 <div class="bg"></div>
 <div class="wrap">
-<div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking engine...</span></div></div>
-<div class="hero"><h1 id="h1">Welcome,<br><span>You are almost ready.</span></h1><p id="heroP">Fixed build - no auto-wipe, proxy fallback for CORS, and direct disk streaming via FileSystemWritableFileStream for flat memory. Use only for content you have rights to.</p></div>
+<div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck Expert+</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking...</span></div></div>
+
+<div class="hero"><h1 id="h1">Welcome,<br><span>Expert streaming unlocked.</span></h1><p id="heroP">New palette, true expert controls, and flat-memory disk streaming. Use only for content you own. BASE is pre-installed.</p></div>
 
 <div class="card" id="mainTool">
-<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;"><div class="switch"><button id="bS" class="sw on">Standard</button><button id="bE" class="sw">Pro</button></div><div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">using /</span></div></div>
-<div class="row"><div class="field"><input id="url" type="url" placeholder="Paste https:// link - must start with https://" autocomplete="off" spellcheck="false"></div><button id="go" class="btn primary">Download</button></div>
+<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center"><div class="switch"><button id="bS" class="sw on">Standard</button><button id="bE" class="sw">Expert Mode</button></div><div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">using /</span><span class="pill ok" id="fsSupport">FS API checking</span></div></div>
+
+<div class="row"><div class="field"><input id="url" type="url" placeholder="Paste https:// link" autocomplete="off" spellcheck="false"></div><button id="go" class="btn primary">Resolve</button></div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
-<select id="mode" class="sel"><option value="auto" selected>Mode: auto - Video+Audio</option><option value="mute">Mode: mute - Video only</option><option value="audio">Mode: audio - Audio only</option></select>
-<select id="vq" class="sel"><option value="max">Quality: Maximum</option><option value="1080">1080p</option><option value="720" selected>720p - Balanced</option><option value="480">480p - Smaller</option></select>
+<select id="mode" class="sel"><option value="auto" selected>auto - Video+Audio</option><option value="mute">mute - Video only</option><option value="audio">audio - Audio only</option></select>
+<select id="vq" class="sel"><option value="max">max - Original</option><option value="4320">4320p 8K</option><option value="2160">2160p 4K</option><option value="1440">1440p</option><option value="1080">1080p</option><option value="720" selected>720p Balanced</option><option value="480">480p</option><option value="360">360p</option></select>
 </div>
 
-<div id="ex" class="expert"><div class="controls" style="margin-top:10px"><select id="fn" class="sel"><option value="classic">Filename: Classic</option><option value="pretty">Filename: Pretty - Fixed</option><option value="basic">Filename: Basic</option><option value="nerdy">Filename: Detailed</option><option value="custom">Filename: Custom</option></select><input id="customName" class="sel" type="text" placeholder="Custom name without.mp4" style="display:none;margin-top:8px" maxlength="120"><div id="customHint" style="display:none;font-size:11px;color:#8c8cb6;margin-top:6px">Extension added automatically.</div></div><div class="kv"><span>request</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div><div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting...</b></div><label style="display:flex;gap:8px;align-items:center;margin-top:10px;font-size:12px;color:var(--text-muted)"><input id="nm" type="checkbox"> Disable metadata</label></div>
+<div id="ex" class="expert">
+<div class="expert-grid">
+<div class="expert-box"><h4>Video</h4>
+<select id="vcodec" class="sel"><option value="h264" selected>Codec: h264 - most compatible</option><option value="av1">av1 - smaller, slower</option><option value="vp9">vp9</option></select>
+<select id="vcont" class="sel" style="margin-top:8px"><option value="auto" selected>Container: auto</option><option value="mp4">mp4</option><option value="webm">webm</option><option value="mkv">mkv</option></select>
+<label class="check"><input id="allowH265" type="checkbox"> allow H265 / HEVC</label>
+<label class="check"><input id="youtubeHLS" type="checkbox"> Prefer HLS for high quality</label>
+</div>
+<div class="expert-box"><h4>Audio</h4>
+<select id="af" class="sel"><option value="best" selected>best - keep original</option><option value="mp3">mp3</option><option value="ogg">ogg</option><option value="wav">wav</option><option value="opus">opus</option></select>
+<select id="abr" class="sel" style="margin-top:8px"><option value="320">320 kbps</option><option value="256">256 kbps</option><option value="128" selected>128 kbps</option><option value="96">96 kbps</option><option value="64">64 kbps</option></select>
+<label class="check"><input id="youtubeBetterAudio" type="checkbox"> Prefer better audio (YouTube)</label>
+<label class="check"><input id="tiktokFullAudio" type="checkbox"> Full audio (TikTok slideshow)</label>
+</div>
+<div class="expert-box"><h4>Processing & Output</h4>
+<select id="fn" class="sel"><option value="classic">Filename: Classic</option><option value="pretty">Filename: Pretty</option><option value="basic">Filename: Basic</option><option value="nerdy">Filename: Nerdy + ID</option><option value="custom">Custom</option></select>
+<input id="customName" class="sel" type="text" placeholder="Custom name without extension" style="display:none;margin-top:8px" maxlength="120">
+<select id="localProc" class="sel" style="margin-top:8px"><option value="disabled" selected>Local Processing: disabled</option><option value="preferred">preferred</option><option value="forced">forced</option></select>
+<label class="check"><input id="nm" type="checkbox"> disableMetadata - faster</label>
+<label class="check"><input id="alwaysProxy" type="checkbox"> alwaysProxy - tunnel everything</label>
+</div>
+<div class="expert-box"><h4>Advanced</h4>
+<input id="subLang" class="sel" type="text" placeholder="Subtitle lang: en, es, ja (ISO 639-1)">
+<input id="dubLang" class="sel" type="text" placeholder="Dub lang for YouTube: en, ja" style="margin-top:8px">
+<label class="check"><input id="convertGif" type="checkbox" checked> convert Twitter GIFs to real GIF</label>
+<label class="check"><input id="useProxy" type="checkbox" checked> Use proxy fallback for CORS / Load Failed</label>
+<label class="check"><input id="useStream" type="checkbox" checked> Prefer FileSystemWritableFileStream for 50GB+ (flat RAM)</label>
+</div>
+</div>
+<div style="margin-top:12px;display:grid;gap:8px">
+<div class="kv"><span>validated payload</span><b id="kvR">{}</b></div>
+<div class="kv"><span>cURL</span><b id="kvCurl" style="font-size:10.5px;opacity:.7">-</b></div>
+<div class="terminal" id="jsonPreview">{}</div>
+</div>
+<div class="kv"><span>last response</span><b id="kvResp">Waiting...</b></div>
+</div>
 
-<div class="actions"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear All</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
-<div id="processWrap" class="process-wrap"><div class="process-head">Live Process - 12 Steps</div><div id="processLog" class="process-log"></div></div>
+<div class="actions"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
+<div id="processWrap" class="process-wrap"><div class="process-head"><span>Live Process - 12 Steps</span><span class="pill" id="memPill">RAM flat mode ready</span></div><div id="processLog" class="process-log"></div><div style="margin-top:10px"><div style="height:10px;background:#151530;border:1px solid var(--border);border-radius:999px;overflow:hidden"><div id="fill" style="height:100%;width:0%;background:var(--accent);transition:width.2s"></div></div><div style="display:flex;justify-content:space-between;margin-top:6px"><span id="pct" class="pill">0%</span><span id="sz" class="pill">Waiting</span></div></div></div>
 <div id="out" class="out"></div>
 </div>
 
-<div class="highlights"><div class="hl-row"><span class="hl-badge"><strong>FIXED invalid_body</strong> - strict enum validation</span><span class="hl-badge"><strong>Stream to Disk</strong> - FileSystemWritableFileStream flat ~30MB</span><span class="hl-badge"><strong>No auto-wipe</strong> - hardReset only on Refresh</span><span class="hl-badge"><strong>Proxy fallback</strong> - fixes Load Failed / CORS 0KB</span></div></div>
+<div class="highlights"><div class="hl-row"><span class="hl-badge"><strong>New palette</strong> midnight + violet/cyan/pink</span><span class="hl-badge"><strong>Expert+</strong> codec, container, bitrate, subs, proxy</span><span class="hl-badge"><strong>invalid_body fixed</strong> strict enum validation</span><span class="hl-badge"><strong>Stream to Disk</strong> WritableStream flat RAM</span></div></div>
 
-<div class="guide-wrap" id="guideWrap"><div class="guide-head" id="guideHead"><b>Complete Guide - Tap to Open</b><button class="guide-toggle" id="guideToggleBtn">Open Guide</button></div><div class="guide-body" id="guideBody">
-<div class="qa-item"><button class="qa-q" data-qa="1">What is Pluck + Cobalt <span class="icon">+</span></button><div class="qa-a" id="qa-1"><strong>Answer:</strong> Pluck sends JSON to <code>https://cobalt-production-2c27.up.railway.app/</code>. Engine returns direct URL. Frontend then streams it.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="2">Why invalid_body happened <span class="icon">+</span></button><div class="qa-a" id="qa-2">You sent <code>filenameStyle: 'custom'</code> or empty <code>videoQuality</code>. Allowed styles are <code>classic / pretty / basic / nerdy</code>, qualities <code>max / 2160 / 1080 / 720 / 480 / 360</code>, modes <code>auto / audio / mute</code>, audioFormats <code>best / mp3 / ogg / wav / opus</code>. This build maps custom->classic and drops undefined keys before POST.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="3">How does Stream to Disk work <span class="icon">+</span></button><div class="qa-a" id="qa-3"><code>showSaveFilePicker()</code> returns handle, <code>createWritable()</code> gives <code>FileSystemWritableFileStream</code> which is a <code>WritableStream</code>. We <code>write(chunk)</code> each fetch chunk directly to disk, then <code>close()</code>. Memory stays flat, no Blob growth.</div></div>
+<div class="guide-wrap"><div class="guide-head" id="guideHead"><b>Guide + Error Bible - Tap to open</b><button class="guide-toggle" id="guideToggleBtn">Open</button></div><div class="guide-body" id="guideBody">
+<div class="qa-item"><button class="qa-q" data-qa="1">Why invalid_body? <span class="icon">+</span></button><div class="qa-a" id="qa-1">Allowed: <code>downloadMode auto/audio/mute</code>, <code>videoQuality max/4320/2160/1440/1080/720/480/360/240/144</code>, <code>filenameStyle classic/pretty/basic/nerdy</code>, <code>audioFormat best/mp3/ogg/wav/opus</code>, <code>audioBitrate 320/256/128/96/64/8</code>. This build maps <code>custom</code>-><code>classic</code> and drops undefined keys before POST.</div></div>
+<div class="qa-item"><button class="qa-q" data-qa="2">How does flat RAM streaming work? <span class="icon">+</span></button><div class="qa-a" id="qa-2"><code>showSaveFilePicker()</code> gives handle, <code>createWritable()</code> gives <code>FileSystemWritableFileStream</code> which is a <code>WritableStream</code>. We <code>write(chunk)</code> each network chunk directly to disk, then <code>close()</code>. No Blob growth. Fallback uses proxy + Blob for mobile.</div></div>
 </div></div>
 
-<div class="refresh-area"><button id="refreshBtn" class="refresh-main">Refresh Page to Fix Issues</button><div class="refresh-note">Hard reset now only runs when you click here, not on every load.</div></div>
-<div class="fun"><b>Quick Fact:</b> <span id="ft"></span></div>
-
-<div class="error-bible"><div class="error-bible-head"><span>Error Bible - 8 Cases</span> <span class="pill">Fixed version</span></div><p class="error-bible-sub">Added back as requested, corrected for this build.</p><div class="error-grid">
-<div class="err-item"><b><code>error.api.invalid_body</code> - Invalid payload</b><p>Cause: <code>filenameStyle: 'custom'</code> or empty enum. Fix: this build validates - allowed styles <code>classic / pretty / basic / nerdy</code>, modes <code>auto / audio / mute</code>, qualities <code>max / 1080 / 720 / 480</code>, audioFormats <code>best / mp3 / ogg / wav / opus</code>. Custom names are sanitized locally and sent as <code>classic</code>.</p></div>
-<div class="err-item"><b><code>error.api.link.unsupported</code> - Link Not Supported</b><p>Use a direct public https:// link that the engine supports. Private / login-only links fail by design.</p></div>
-<div class="err-item"><b><code>Private or Unavailable</code></b><p>If it fails in incognito without login, engine can't access it either. Make it public.</p></div>
-<div class="err-item"><b><code>Age Restricted</code></b><p>Requires login for age check - no bypass by design.</p></div>
-<div class="err-item"><b><code>Bad URL</code></b><p>Must start with https:// and be complete.</p></div>
-<div class="err-item"><b><code>Engine Warming Up</code></b><p>Free Railway sleeps. Click Wake Engine, wait 8-10s for green dot.</p></div>
-<div class="err-item"><b><code>No File Returned</code></b><p>Livestream / DRM / expired story. Try 720p or mute mode.</p></div>
-<div class="err-item"><b><code>Load Failed / 0KB Bugged MP4</code> - Fixed</b><p>Old bug: CDN blocks CORS -> opaque response -> empty Blob. Fixed: tries direct, then <code>corsproxy.io</code> and <code>allorigins</code> proxy, verifies size >0 before enabling download. For large files, Stream to Disk writes directly via <code>FileSystemWritableFileStream</code> for flat memory.</p></div>
+<div class="error-bible"><div class="error-bible-head"><span>Error Bible</span> <span class="pill ok">8 cases - corrected</span></div><div class="error-grid">
+<div class="err-item"><b><code>error.api.invalid_body</code></b><p>Invalid enum value. Fix: this build validates every key. Don't send <code>custom</code>, send <code>classic</code> and handle custom locally.</p></div>
+<div class="err-item"><b><code>error.api.link.unsupported</code></b><p>Domain not in engine list. Use public direct link the engine supports.</p></div>
+<div class="err-item"><b><code>Private / Unavailable / Age</code></b><p>If incognito without login fails, engine can't access. No bypass by design.</p></div>
+<div class="err-item"><b><code>Load Failed / 0KB</code></b><p>CORS blocked CDN -> opaque response. Fixed by proxy fallback + size>0 verification + same-origin blob. For huge files use Stream to Disk toggle.</p></div>
 </div></div>
 
-<div class="footer-note mono">Engine https://cobalt-production-2c27.up.railway.app - Fixed invalid_body validation</div>
+<div class="refresh-area"><button id="refreshBtn" class="refresh-main">Refresh - Hard reset only here</button><div class="refresh-note">Hard reset no longer runs on load. Only when you click Refresh.</div></div>
+<div class="fun"><b>Vibe:</b> <span id="ft"></span></div>
+<div class="footer-note mono">BASE https://cobalt-production-2c27.up.railway.app - Expert+ palette</div>
 </div>
 
 <div id="previewModal" class="modal-backdrop"><div class="modal-card"><div class="modal-head"><b id="previewTitle">Preview</b><button id="closePreview" class="btn ghost">Close</button></div><div id="previewBody" class="modal-body"></div></div></div>
 
 <script>
 const BASE="https://cobalt-production-2c27.up.railway.app";const ENDPOINT=BASE+"/";
-const FACTS=["Octopuses have three hearts.","Honey never spoils.","Bananas are berries."];
+const FACTS=["Expert mode now exposes real Cobalt enums.","Flat RAM = write chunk directly to FileSystemWritableFileStream.","invalid_body = custom enum value."];
 let state={isExpert:false,online:false,factPool:[...FACTS].sort(()=>Math.random()-0.5)};
 const $=s=>document.querySelector(s);
-const els={dot:$('#dot'),stxt:$('#stxt'),ver:$('#ver'),lat:$('#lat'),out:$('#out'),ft:$('#ft'),epLab:$('#epLab'),h1:$('#h1'),kvR:$('#kvR'),kvResp:$('#kvResp'),url:$('#url'),go:$('#go'),test:$('#test'),fn:$('#fn'),customName:$('#customName'),customHint:$('#customHint'),vq:$('#vq'),mode:$('#mode'),nm:$('#nm'),processWrap:$('#processWrap'),processLog:$('#processLog')};
+const els={dot:$('#dot'),stxt:$('#stxt'),ver:$('#ver'),lat:$('#lat'),out:$('#out'),ft:$('#ft'),epLab:$('#epLab'),h1:$('#h1'),kvR:$('#kvR'),kvCurl:$('#kvCurl'),kvResp:$('#kvResp'),url:$('#url'),go:$('#go'),test:$('#test'),fn:$('#fn'),customName:$('#customName'),vq:$('#vq'),mode:$('#mode'),nm:$('#nm'),processWrap:$('#processWrap'),processLog:$('#processLog'),fill:$('#fill'),pct:$('#pct'),sz:$('#sz'),fs:$('#fsSupport'),af:$('#af'),abr:$('#abr'),vcodec:$('#vcodec'),vcont:$('#vcont'),allowH265:$('#allowH265'),youtubeHLS:$('#youtubeHLS'),youtubeBetterAudio:$('#youtubeBetterAudio'),tiktokFullAudio:$('#tiktokFullAudio'),alwaysProxy:$('#alwaysProxy'),localProc:$('#localProc'),subLang:$('#subLang'),dubLang:$('#dubLang'),convertGif:$('#convertGif'),useProxy:$('#useProxy'),useStream:$('#useStream'),jsonPreview:$('#jsonPreview')};
 
 function nowTime(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
-function clearLog(){els.processLog.innerHTML='';els.processWrap.style.display='none'}
+function clearLog(){els.processLog.innerHTML='';els.processWrap.style.display='none';els.fill.style.width='0%';els.pct.textContent='0%';els.sz.textContent='Waiting'}
 function initLog(){els.processLog.innerHTML='';els.processWrap.style.display='block'}
-function addLog(id,t,s){let r=document.getElementById('log-'+id);if(!r){r=document.createElement('div');r.id='log-'+id;r.className='log-entry '+(s||'');r.innerHTML=`<div style="min-width:62px;font-family:var(--mono);font-size:10.5px;color:#6d6d9a">${nowTime()}</div><div style="flex:1">${t}</div>`;els.processLog.appendChild(r);}else{r.className='log-entry '+(s||'');r.lastChild.textContent=t;r.firstChild.textContent=nowTime();}els.processLog.scrollTop=els.processLog.scrollHeight}
-function updateLog(id,t,s){let r=document.getElementById('log-'+id);if(!r)return addLog(id,t,s);r.className='log-entry '+(s||'');if(t)r.lastChild.textContent=t;r.firstChild.textContent=nowTime();}
-function getFact(){if(!state.factPool.length)state.factPool=[...FACTS].sort(()=>Math.random()-0.5);return state.factPool.pop();}
+function addLog(id,t,s){let r=document.getElementById('log-'+id);if(!r){r=document.createElement('div');r.id='log-'+id;r.className='log-entry '+(s||'');r.innerHTML=`<div style="min-width:62px;font-family:var(--mono);font-size:10.5px;color:#6b9a">${nowTime()}</div><div style="flex:1">${t}</div>`;els.processLog.appendChild(r);}else{r.className='log-entry '+(s||'');r.lastChild.textContent=t;r.firstChild.textContent=nowTime();}els.processLog.scrollTop=els.processLog.scrollHeight}
+function updateLog(id,t,s){let r=document.getElementById('log-'+id);if(!r)return addLog(id,t,s);r.className='log-entry '+(s||'');if(t)r.lastChild.textContent=t;r.firstChild.textContent=nowTime()}
+function getFact(){if(!state.factPool.length)state.factPool=[...FACTS].sort(()=>Math.random()-0.5);return state.factPool.pop()}
 function isValidUrl(s){try{const u=new URL(s.trim());return ['http:','https:'].includes(u.protocol)}catch{return false}}
 function sanitize(n){return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,180)}
-function formatBytes(b){if(b===0)return '0 B';if(!b||isNaN(b))return null;const k=1024,s=['B','KB','MB','GB'];const i=Math.floor(Math.log(b)/Math.log(k));return parseFloat((b/Math.pow(k,i)).toFixed(2))+' '+s[i]}
+function formatBytes(b){if(b===0)return'0 B';if(!b||isNaN(b))return null;const k=1024,u=['B','KB','MB','GB','TB'];const i=Math.floor(Math.log(b)/Math.log(k));return (b/Math.pow(k,i)).toFixed(i?1:2)+' '+u[i])}
 function parseSize(h){let l=h.get('content-length');if(l){let v=parseInt(l,10);if(v>0)return v}let cr=h.get('content-range');if(cr){let m=cr.match(/\/(\d+)\s*$/);if(m)return parseInt(m[1],10)}return null}
-async function trySize(u,o){try{let r=await fetch(u,o);let s=parseSize(r.headers);if(s)return s}catch(e){}return null}
-async function fetchMP4Size(u){let s=await trySize(u,{method:'HEAD',mode:'cors',cache:'no-store'});if(s)return s;s=await trySize(u,{method:'GET',headers:{Range:'bytes=0-0'},mode:'cors',cache:'no-store'});if(s)return s;const px=[a=>`https://api.allorigins.win/raw?url=${encodeURIComponent(a)}`,a=>`https://corsproxy.io/?${encodeURIComponent(a)}`];for(let f of px){let pu=f(u);s=await trySize(pu,{method:'HEAD',cache:'no-store'});if(s)return s;s=await trySize(pu,{method:'GET',headers:{Range:'bytes=0-0'},cache:'no-store'});if(s)return s}return null}
-async function updateFileSizes(){for(let el of document.querySelectorAll('[data-size-url]')){let u=el.getAttribute('data-size-url');el.textContent='Detecting...';let b=await fetchMP4Size(u);el.textContent=b?formatBytes(b)+' MP4':'Size hidden';el.className=b?'size-badge ok':'size-badge wait'}}
-function toPrettyName(r){if(!r)return'Video';let e='';let d=r.lastIndexOf('.');if(d>0){e=r.slice(d);r=r.slice(0,d)}try{r=decodeURIComponent(r)}catch(e){}r=r.replace(/[_\-.]+/g,' ').replace(/\b(pluck|cobalt|video|audio|ytdl|download)\b/gi,'').trim();if(!r)r='Video';return r.split(' ').map(w=>w?w[0].toUpperCase()+w.slice(1).toLowerCase():'').join(' ')+e}
+function toPrettyName(r){if(!r)return'Video';let e='';let d=r.lastIndexOf('.');if(d>0){e=r.slice(d);r=r.slice(0,d)}try{r=decodeURIComponent(r)}catch{}r=r.replace(/[_\-.]+/g,' ').replace(/\b(pluck|cobalt|video|audio|ytdl|download)\b/gi,'').trim();if(!r)r='Video';return r.split(' ').map(w=>w?w[0].toUpperCase()+w.slice(1).toLowerCase():'').join(' ')+e}
 function applyFilenameStyle(o,s,q,i,t,c){let e='.mp4';if(t==='photo')e='.jpg';else if(t==='gif')e='.gif';let d=o.lastIndexOf('.');if(d>-1){e=o.slice(d).toLowerCase();o=o.slice(0,d)}if(s==='custom'){let cu=(c||'').trim()||'My Video';cu=cu.replace(/\.[a-z0-9]{2,4}$/i,'');return sanitize(cu)+e}if(s==='pretty'){let b=toPrettyName(o);if(q&&q!=='max')b+=' '+q+'p';return sanitize(b+e)}if(s==='basic')return sanitize('video'+(i>0?'-'+(i+1):'')+e);if(s==='nerdy')return sanitize(o+'_'+q+'_'+Date.now().toString().slice(-5)+e);return sanitize(o+e)}
-function mapError(c){const K={'error.api.link.unsupported':"Link not supported.",'error.api.content.video.unavailable':"Private/deleted/region locked.",'error.api.content.video.age':"Age restricted."};return K[c]||'Engine could not process link.'}
-function extractItems(r,f,s,q,c){if(!r)throw new Error('Empty response');if(r.status==='error')throw new Error(mapError(r.error&&r.error.code));if(r.status==='picker'&&Array.isArray(r.picker))return r.picker.map((it,i)=>{let t=it.type||'video';return{url:it.url,filename:applyFilenameStyle('pluck-'+(i+1),s,q,i,t,c),label:t.toUpperCase()}});if(r.url){let raw=r.filename||'pluck-media.mp4';return[{url:r.url,filename:applyFilenameStyle(raw,s,q,0,'video',c),label:f}]}throw new Error('No file returned')}
+function mapError(c){const K={'error.api.link.unsupported':"Link not supported.",'error.api.content.video.unavailable':"Private/deleted.",'error.api.content.video.age':"Age restricted."};return K[c]||'Engine could not process.'}
+function extractItems(r,f,s,q,c){if(!r)throw new Error('Empty response');if(r.status==='error')throw new Error(mapError(r.error&&r.error.code));if(r.status==='picker'&&Array.isArray(r.picker))return r.picker.map((it,i)=>{let t=it.type||'video';return{url:it.url,filename:applyFilenameStyle('pluck-'+(i+1),s,q,i,t,c),label:t.toUpperCase()}});if(r.url){let raw=r.filename||'pluck-media.mp4';return[{url:r.url,filename:applyFilenameStyle(raw,s,q,0,'video',c),label:f}]}throw new Error('No file')}
 
-// --- FIXED PAYLOAD BUILDER - prevents invalid_body ---
-function buildValidPayload(rawUrl, opts){
-  const url = String(rawUrl||'').trim();
-  const allowedModes=['auto','audio','mute'];
-  const allowedQ=['max','4320','2160','1440','1080','720','480','360','240','144'];
-  const allowedStyle=['classic','pretty','basic','nerdy'];
-  const allowedAudio=['best','mp3','ogg','wav','opus'];
-  let mode = allowedModes.includes(opts.mode)? opts.mode : 'auto';
-  let quality = allowedQ.includes(String(opts.quality))? String(opts.quality) : '720';
-  let style = allowedStyle.includes(opts.style)? opts.style : 'classic';
-  if(opts.style==='custom') style='classic';
-  let audioFormat = allowedAudio.includes(opts.audioFormat)? opts.audioFormat : 'best';
-  let body={url, downloadMode:mode, filenameStyle:style, disableMetadata:!!opts.disableMetadata};
-  if(mode!=='audio') body.videoQuality=quality;
-  if(mode!=='mute') body.audioFormat=audioFormat;
+// VALIDATED PAYLOAD - prevents invalid_body
+function buildValidPayload(rawUrl, o){
+  const url=String(rawUrl||'').trim();
+  const allowedModes=['auto','audio','mute'], allowedQ=['max','4320','2160','1440','1080','720','480','360','240','144'], allowedStyle=['classic','pretty','basic','nerdy'], allowedAudio=['best','mp3','ogg','wav','opus'], allowedCodec=['h264','av1','vp9'], allowedCont=['auto','mp4','webm','mkv'], allowedLocal=['disabled','preferred','forced'], allowedBit=['320','256','128','96','64','8'];
+  let body={url};
+  let mode=allowedModes.includes(o.mode)?o.mode:'auto'; body.downloadMode=mode;
+  let style=o.style==='custom'?'classic':(allowedStyle.includes(o.style)?o.style:'classic'); body.filenameStyle=style;
+  body.disableMetadata=!!o.disableMetadata;
+  if(mode!=='audio'){ let q=allowedQ.includes(String(o.quality))?String(o.quality):'720'; body.videoQuality=q; }
+  if(mode!=='mute'){ let af=allowedAudio.includes(o.audioFormat)?o.audioFormat:'best'; body.audioFormat=af; let br=allowedBit.includes(String(o.audioBitrate))?String(o.audioBitrate):'128'; body.audioBitrate=br; }
+  if(allowedCodec.includes(o.vcodec)) body.youtubeVideoCodec=o.vcodec;
+  if(allowedCont.includes(o.vcont)) body.youtubeVideoContainer=o.vcont;
+  if(o.allowH265) body.allowH265=true;
+  if(o.youtubeHLS) body.youtubeHLS=true;
+  if(o.youtubeBetterAudio) body.youtubeBetterAudio=true;
+  if(o.tiktokFullAudio) body.tiktokFullAudio=true;
+  if(o.alwaysProxy) body.alwaysProxy=true;
+  if(allowedLocal.includes(o.localProc)) body.localProcessing=o.localProc;
+  if(typeof o.subLang==='string'&&/^[a-z]{2}(-[A-Z]{2})?$/.test(o.subLang.trim())) body.subtitleLang=o.subLang.trim().toLowerCase();
+  if(typeof o.dubLang==='string'&&/^[a-z]{2}$/.test(o.dubLang.trim())) body.youtubeDubLang=o.dubLang.trim().toLowerCase();
+  if(o.convertGif===false) body.convertGif=false;
   return body;
 }
 
-function setSimple(){els.h1.innerHTML='Welcome,<br><span>You are almost ready.</span>';}
-function setExpert(){els.h1.innerHTML='Pro Mode<br><span>Enabled</span>';}
-function showOutput(t,ti,c,d){els.out.classList.add('show');if(d)try{els.kvResp.textContent=JSON.stringify(d).slice(0,500)}catch(e){}let cl=t==='ok'?'box ok':'box err';els.out.innerHTML=`<div class="${cl}"><div style="font-weight:800;margin-bottom:8px">${ti}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">${getFact()}</div></div>`;setTimeout(updateFileSizes,200)}
+function showOutput(t,ti,c,d){els.out.classList.add('show');if(d)try{els.kvResp.textContent=JSON.stringify(d).slice(0,600)}catch(e){}let cl=t==='ok'?'box ok':'box err';els.out.innerHTML=`<div class="${cl}"><div style="font-weight:800;margin-bottom:8px">${ti}</div>${c}<div style="margin-top:10px;font-size:12px;color:var(--muted)">${getFact()}</div></div>`}
 function showError(t,m){showOutput('err',t,`<pre>${m}</pre>`)}
 
 const PROXIES=[u=>u,u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`];
-async function fetchWithProxyResponse(directUrl){
-  let lastErr;
-  for(let make of PROXIES){
-    try{let res=await fetch(make(directUrl),{cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status);if(!res.body)throw new Error('No body');return res;}catch(e){lastErr=e}
-  }throw lastErr;
+async function fetchWithProxyResponse(url,useProxy=true){
+  let list=useProxy?PROXIES:[PROXIES[0]]; let last;
+  for(let make of list){try{let r=await fetch(make(url),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);if(!r.body)throw new Error('No body');return r}catch(e){last=e}}throw last;
 }
-
-window.blobDownload=async function(url,name){
-  try{
-    let res=await fetchWithProxyResponse(url);
-    let reader=res.body.getReader();let chunks=[];let rec=0;
-    while(true){let {done,value}=await reader.read();if(done)break;chunks.push(value);rec+=value.byteLength}
-    let blob=new Blob(chunks,{type:'video/mp4'});let u=URL.createObjectURL(blob);
-    let a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(u);a.remove()},60000);
-  }catch(e){let a=document.createElement('a');a.href=url;a.target='_blank';document.body.appendChild(a);a.click();a.remove()}
+window.blobDownload=async function(url,name,useProxy=true){
+  try{let res=await fetchWithProxyResponse(url,useProxy);let reader=res.body.getReader();let chunks=[];let rec=0,total=parseInt(res.headers.get('Content-Length')||'0',10);
+  while(true){let {done,value}=await reader.read();if(done)break;chunks.push(value);rec+=value.byteLength;els.fill.style.width=(total?Math.round(rec/total*100):Math.min(99,Math.round(rec/1024/1024)))+'%';els.pct.textContent=total?Math.round(rec/total*100)+'%':formatBytes(rec);els.sz.textContent=total?formatBytes(rec)+' / '+formatBytes(total):formatBytes(rec)}
+  let blob=new Blob(chunks,{type:'video/mp4'});let u=URL.createObjectURL(blob);let a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(u);a.remove()},60000)}catch(e){window.open(url,'_blank')}
 };
-window.directDownload=function(url,name){try{let a=document.createElement('a');a.href=url;a.download=name||'video.mp4';a.rel='noopener';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),1200)}catch(e){window.open(url,'_blank')}}
-window.filePickerSave=async function(url,name){
+window.directDownload=function(url,name){let a=document.createElement('a');a.href=url;a.download=name||'video.mp4';a.rel='noopener';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),1200)}
+window.filePickerSave=async function(url,name,useProxy=true){
   try{
     if(!window.showSaveFilePicker) throw new Error('no picker');
-    const handle=await window.showSaveFilePicker({suggestedName:name||'video.mp4'});
+    if(!els.useStream.checked) throw new Error('stream disabled');
+    const handle=await window.showSaveFilePicker({suggestedName:name||'video.mp4',types:[{description:'Video',accept:{'video/mp4':['.mp4','.webm','.mkv']}}]});
     const writable=await handle.createWritable();
-    let res=await fetchWithProxyResponse(url);
-    let reader=res.body.getReader();
-    while(true){let {done,value}=await reader.read();if(done)break;await writable.write(value);}
-    await writable.close();alert('Saved to disk - flat memory write complete');
-  }catch(e){window.directDownload(url,name)}
+    let res=await fetchWithProxyResponse(url,useProxy);
+    let reader=res.body.getReader();let rec=0,total=parseInt(res.headers.get('Content-Length')||'0',10);
+    while(true){let {done,value}=await reader.read();if(done)break;await writable.write(value);rec+=value.byteLength;els.fill.style.width=(total?Math.round(rec/total*100):Math.min(99,Math.round(rec/1024/1024)))+'%';els.pct.textContent=formatBytes(rec);els.sz.textContent=total?formatBytes(total):''}
+    await writable.close();alert('Saved to disk - flat RAM write done');
+  }catch(e){window.blobDownload(url,name,useProxy)}
 };
 window.copyLink=async function(u){try{await navigator.clipboard.writeText(u);alert('Copied')}catch{prompt('Copy:',u)}};
-window.shareFile=async function(u,n){if(navigator.share){try{await navigator.share({title:n,url:u})}catch{}}else copyLink(u)};
-window.openPreview=function(u,n,l){let m=$('#previewModal'),b=$('#previewBody'),t=$('#previewTitle');t.textContent=n||'Preview';b.innerHTML='';let isImg=/\.(jpg|jpeg|png|webp|gif)$/i.test(u)|| (l&&l.toLowerCase().includes('photo'));if(isImg){let i=document.createElement('img');i.src=u;i.style.width='100%';i.style.borderRadius='12px';b.appendChild(i)}else{let v=document.createElement('video');v.src=u;v.controls=true;v.playsInline=true;v.style.width='100%';v.style.borderRadius='12px';v.style.background='#000';b.appendChild(v)}m.style.display='flex';document.body.style.overflow='hidden'};
-window.closePreview=function(){let m=$('#previewModal'),b=$('#previewBody');if(m){m.style.display='none';b.innerHTML='';document.body.style.overflow=''}};
-function buildButtons(u,fn,lb){let n=sanitize(fn),su=String(u).replace(/'/g,"%27"),sn=String(n).replace(/'/g,"\\'"),lbl=String(lb||'File').replace(/'/g,"\\'");return `<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="openPreview('${su}','${sn}','${lbl}')">Preview</button><div class="dl-grid"><button class="btn primary" onclick="directDownload('${su}','${sn}')">Direct Download</button><button class="btn ghost" onclick="blobDownload('${su}','${sn}')">Blob Save (fixes 0KB)</button><button class="btn ghost" onclick="filePickerSave('${su}','${sn}')">Stream to Disk - WritableStream</button><a href="${su}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open in New Tab</a><button class="btn ghost" onclick="shareFile('${su}','${sn}')">Share</button><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button></div>`}
-function buildItemsBlock(items){return items.map(it=>`<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}">Detecting size...</span><small style="color:#8c8cb6;font-size:11px">${it.label}</small></div>${buildButtons(it.url,it.filename,it.label)}</div>`).join('')}
-async function ping(){let t0=performance.now();els.dot.className='dot';try{let r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'});let ms=Math.round(performance.now()-t0);if(els.lat)els.lat.textContent=ms+' ms';let j=await r.json();if(!j.cobalt)throw new Error();state.online=true;els.dot.className='dot ok';els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`;els.stxt.textContent='Engine online';return true}catch{state.online=false;els.dot.className='dot bad';els.ver.textContent='sleeping';els.stxt.textContent='Sleeping - click Wake';return false}}
+window.openPreview=function(u,n,l){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'),t=document.getElementById('previewTitle');t.textContent=n||'Preview';b.innerHTML='';let isImg=/\.(jpg|jpeg|png|webp|gif)$/i.test(u)|| (l&&l.toLowerCase().includes('photo'));if(isImg){let i=document.createElement('img');i.src=u;i.style.width='100%';i.style.borderRadius='12px';b.appendChild(i)}else{let v=document.createElement('video');v.src=u;v.controls=true;v.playsInline=true;v.style.width='100%';v.style.borderRadius='12px';v.style.background='#000';b.appendChild(v)}m.style.display='flex';document.body.style.overflow='hidden'};
+window.closePreview=function(){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody');if(m){m.style.display='none';b.innerHTML='';document.body.style.overflow=''}};
+function buildButtons(u,fn,lb){let n=sanitize(fn),su=String(u).replace(/'/g,"%27"),sn=String(n).replace(/'/g,"\\'"),lbl=String(lb||'File').replace(/'/g,"\\'");return `<button class="btn primary" style="width:100%;margin-bottom:9px" onclick="openPreview('${su}','${sn}','${lbl}')">Preview</button><div class="dl-grid"><button class="btn primary" onclick="filePickerSave('${su}','${sn}',document.getElementById('useProxy').checked)">Stream to Disk - WritableStream (flat RAM)</button><button class="btn ghost" onclick="blobDownload('${su}','${sn}',document.getElementById('useProxy').checked)">Blob Save - Proxy Fallback (fixes 0KB)</button><button class="btn ghost" onclick="directDownload('${su}','${sn}')">Direct Anchor</button><a href="${su}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Raw</a><button class="btn ghost" onclick="copyLink('${su}')">Copy Link</button></div>`}
+function buildItemsBlock(items){return items.map(it=>`<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}">Detecting...</span><small style="color:#6c6c9a;font-size:11px">${it.label}</small></div>${buildButtons(it.url,it.filename,it.label)}</div>`).join('')}
+async function ping(){let t0=performance.now();els.dot.className='dot';try{let r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors'});let ms=Math.round(performance.now()-t0);if(els.lat)els.lat.textContent=ms+' ms';let j=await r.json();if(!j.cobalt)throw new Error();state.online=true;els.dot.className='dot ok';els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`;els.stxt.textContent='Engine online';return true}catch{state.online=false;els.dot.className='dot bad';els.ver.textContent='sleeping';els.stxt.textContent='Sleeping';return false}}
 async function go(){
-  let raw=els.url.value.trim();if(!raw)return showError('Input required','Paste link');if(!isValidUrl(raw))return showError('Invalid URL','Must start https://');
+  let raw=els.url.value.trim();if(!raw)return showError('Input','Paste link');if(!isValidUrl(raw))return showError('Bad URL','Must start https://');
   els.go.disabled=true;els.go.textContent='Processing...';initLog();
   try{
-    addLog('validate','01 Validate URL','active');await new Promise(r=>setTimeout(r,80));updateLog('validate','01 URL ok','done');
-    addLog('engine','02 Check engine '+BASE,'active');if(!state.online)await ping();updateLog('engine','02 Engine '+(state.online?'online':'waking'),'done');
-    let style=els.fn.value,quality=els.vq.value,mode=els.mode.value,customName=els.customName.value.trim();
-    addLog('request','03 Build payload mode='+mode+' quality='+quality+' style='+style,'active');
-    let payload=buildValidPayload(raw,{mode,quality,style,custom:customName,audioFormat:'best',disableMetadata:els.nm.checked});
-    els.kvR.textContent='POST / '+JSON.stringify(payload);updateLog('request','03 Payload validated - no custom enum, no undefined','done');
-    addLog('send','04 POST to Cobalt','active');updateLog('send','04 Sending Accept: application/json Content-Type: application/json','active');
-    let c=new AbortController(),to=setTimeout(()=>c.abort(),20000);
-    let r=await fetch(BASE.replace(/\/$/,'')+'/',{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload),signal:c.signal});clearTimeout(to);
-    if(!r.ok){let t=await r.text().catch(()=> '');throw new Error('Engine HTTP '+r.status+' '+t.slice(0,200))}
-    let result=await r.json();updateLog('send','04 Response status='+result.status,'done');
-    addLog('parse','05 Parse response','active');let items=extractItems(result,'Full Video',style,quality,customName);updateLog('parse','05 Found '+items.length+' file(s)','done');
-    addLog('filename','06 Filenames','active');items.forEach((it,i)=>addLog('file-'+i,'File '+(i+1)+': '+it.filename,'done'));updateLog('filename','06 Filenames ready','done');
-    addLog('size','07 Size detection via proxy fallback','active');updateLog('size','07 Started','active');
-    addLog('ready','08 Build preview - no auto-download','done');addLog('done','09 Complete - choose Stream to Disk for flat memory','done');
-    showOutput('ok','Success',buildItemsBlock(items),result);
-  }catch(e){addLog('error','ERR '+e.message,'error');showError('Request failed',e.message+'<br><br>Tip: invalid_body is now fixed by mapping custom->classic and dropping undefined. If still fails, check Network tab payload.')}
-  finally{els.go.disabled=false;els.go.textContent='Download'}
+    addLog('01','Validate URL','active');await new Promise(r=>setTimeout(r,60));updateLog('01','URL ok','done');
+    addLog('02','Check engine '+BASE,'active');if(!state.online)await ping();updateLog('02','Engine '+(state.online?'online':'waking'),'done');
+    let opts={mode:els.mode.value,quality:els.vq.value,style:els.fn.value,audioFormat:els.af.value,audioBitrate:els.abr.value,vcodec:els.vcodec.value,vcont:els.vcont.value,allowH265:els.allowH265.checked,youtubeHLS:els.youtubeHLS.checked,youtubeBetterAudio:els.youtubeBetterAudio.checked,tiktokFullAudio:els.tiktokFullAudio.checked,alwaysProxy:els.alwaysProxy.checked,localProc:els.localProc.value,subLang:els.subLang.value,dubLang:els.dubLang.value,convertGif:els.convertGif.checked,disableMetadata:$('#nm').checked};
+    let payload=buildValidPayload(raw,opts);
+    els.kvR.textContent=JSON.stringify(payload);els.jsonPreview.textContent=JSON.stringify(payload,null,2);els.kvCurl.textContent=`curl -X POST ${BASE} -H "Content-Type: application/json" -d '${JSON.stringify(payload)}'`;
+    updateLog('03','Payload validated - no invalid_body','done');addLog('04','POST to Cobalt','active');
+    let r=await fetch(BASE.replace(/\/$/,'')+'/',{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});let result=await r.json();if(!r.ok||result.status==='error')throw new Error(result.error?.code||'Engine error');
+    updateLog('04','Response '+result.status,'done');addLog('05','Parse items','active');let items=extractItems(result,'Video',payload.filenameStyle,payload.videoQuality,els.customName.value.trim());updateLog('05',`Found ${items.length}`,'done');
+    addLog('06','Filenames + size detection','active');showOutput('ok','Success - Ready to stream',buildItemsBlock(items),result);updateLog('06','Ready - choose Stream to Disk for flat RAM','done');addLog('07','Awaiting user action','done');
+  }catch(e){addLog('err','ERR '+e.message,'error');showError('Failed',e.message)}finally{els.go.disabled=false;els.go.textContent='Resolve'}
 }
 els.go.addEventListener('click',go);els.url.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
-els.fn.addEventListener('change',function(){if(this.value==='custom'){els.customName.style.display='block';if(els.customHint)els.customHint.style.display='block'}else{els.customName.style.display='none';if(els.customHint)els.customHint.style.display='none'}});
-$('#bS').addEventListener('click',()=>{state.isExpert=false;$('#bS').classList.add('on');$('#bE').classList.remove('on');$('#ex').classList.remove('show')});
-$('#bE').addEventListener('click',()=>{state.isExpert=true;$('#bE').classList.add('on');$('#bS').classList.remove('on');$('#ex').classList.add('show')});
-$('#wake').addEventListener('click',async()=>{els.stxt.textContent='Waking...';try{await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'})}catch{}setTimeout(()=>ping(),1500)});
-$('#clear').addEventListener('click',()=>{els.url.value='';els.out.classList.remove('show');els.out.innerHTML='';clearLog()});
-$('#closePreview').addEventListener('click',closePreview);$('#previewModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closePreview()});
-(function(){let h=$('#guideHead'),b=$('#guideBody'),btn=$('#guideToggleBtn');function tog(){let o=b.classList.contains('open');if(o){b.classList.remove('open');btn.textContent='Open Guide'}else{b.classList.add('open');btn.textContent='Close Guide'}}h.addEventListener('click',tog);btn.addEventListener('click',e=>{e.stopPropagation();tog()});document.querySelectorAll('.qa-q').forEach(q=>{q.addEventListener('click',()=>{let id=q.getAttribute('data-qa'),a=document.getElementById('qa-'+id),ic=q.querySelector('.icon');let op=a.classList.contains('open');if(op){a.classList.remove('open');ic.textContent='+'}else{a.classList.add('open');ic.textContent='-'}})})})();
-els.test.href=BASE;if(els.epLab)els.epLab.textContent='using '+BASE.replace('https://','').slice(0,28);if(els.ft)els.ft.textContent=getFact();ping();
+els.fn.addEventListener('change',function(){let c=$('#customName');if(this.value==='custom'){c.style.display='block'}else{c.style.display='none'}});
+document.getElementById('bS').addEventListener('click',()=>{state.isExpert=false;document.getElementById('bS').classList.add('on');document.getElementById('bE').classList.remove('on');document.getElementById('ex').classList.remove('show')});
+document.getElementById('bE').addEventListener('click',()=>{state.isExpert=true;document.getElementById('bE').classList.add('on');document.getElementById('bS').classList.remove('on');document.getElementById('ex').classList.add('show')});
+document.getElementById('wake').addEventListener('click',async()=>{els.stxt.textContent='Waking...';try{await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'})}catch{}setTimeout(()=>ping(),1200)});
+document.getElementById('clear').addEventListener('click',()=>{els.url.value='';els.out.classList.remove('show');els.out.innerHTML='';clearLog()});
+document.getElementById('closePreview').addEventListener('click',closePreview);document.getElementById('previewModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closePreview()});
+(function(){let h=document.getElementById('guideHead'),b=document.getElementById('guideBody'),btn=document.getElementById('guideToggleBtn');function tog(){let o=b.classList.contains('open');if(o){b.classList.remove('open');btn.textContent='Open'}else{b.classList.add('open');btn.textContent='Close'}}h.addEventListener('click',tog);btn.addEventListener('click',e=>{e.stopPropagation();tog()});document.querySelectorAll('.qa-q').forEach(q=>{q.addEventListener('click',()=>{let id=q.getAttribute('data-qa'),a=document.getElementById('qa-'+id),ic=q.querySelector('.icon');let op=a.classList.contains('open');if(op){a.classList.remove('open');ic.textContent='+'}else{a.classList.add('open');ic.textContent='-'}})})})();
+els.test.href=BASE;if(els.epLab)els.epLab.textContent='using '+BASE.replace('https://','').slice(0,28);if(els.ft)els.ft.textContent=getFact();if(els.fs)els.fs.textContent='showSaveFilePicker' in window?'FS API: supported - flat RAM':'FS API: fallback - Blob';ping();
 document.getElementById('refreshBtn').addEventListener('click',async()=>{let rb=document.getElementById('refreshBtn');rb.disabled=true;rb.textContent='Refreshing...';try{if(window.__pluckHardReset)await window.__pluckHardReset()}catch(e){}let u=new URL(location.href);u.searchParams.set('_r',Date.now().toString());location.href=u.toString()});
 </script>
 </body>
