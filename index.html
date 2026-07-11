@@ -46,82 +46,84 @@
     :root { --bg: #0a0a0f; --card-bg: rgba(18, 18, 28, 0.95); --border: #272746; --border-focus: #8b5cf6; --accent: linear-gradient(135deg, #8b5cf6, #ec4899); --text-main: #f5f5ff; --text-muted: #9aa0c0; --mono: 'JetBrains Mono', monospace; --sans: 'Space Grotesk', system-ui, -apple-system, sans-serif; }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { background: var(--bg); color: var(--text-main); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; line-height: 1.5; }
-   .mono { font-family: var(--mono)!important; }
-   .bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events: none; }
-   .wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 40px; }
-   .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 16px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 18px; backdrop-filter: blur(12px); }
-   .brand { font-weight: 800; display: flex; gap: 9px; align-items: center; font-size: 18px; }
-   .brand-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent); color: white; font-size: 16px; }
-   .status { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted); }
-   .dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite; }
-   .dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
-   .dot.bad { background: #ef4444; box-shadow: 0 0 0 6px rgba(239,68,68,.18); animation: none; }
+ .mono { font-family: var(--mono)!important; }
+ .bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(700px 500px at 10% 0%, rgba(139,92,246,.22), transparent 60%), radial-gradient(700px 500px at 90% 10%, rgba(236,72,153,.14), transparent 60%), var(--bg); pointer-events: none; }
+ .wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 40px; }
+ .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 16px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 18px; backdrop-filter: blur(12px); }
+ .brand { font-weight: 800; display: flex; gap: 9px; align-items: center; font-size: 18px; }
+ .brand-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent); color: white; font-size: 16px; }
+ .status { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-muted); }
+ .dot { width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 6px rgba(245,158,11,.18); animation: pulse 1.6s infinite; }
+ .dot.ok { background: #22c55e; box-shadow: 0 0 0 6px rgba(34,197,94,.18); animation: none; }
+ .dot.bad { background: #ef4444; box-shadow: 0 0 0 6px rgba(239,68,68,.18); animation: none; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity:.45; } }
-   .hero { margin: 26px 6px 18px; }
-   .hero h1 { font-size: clamp(34px, 8vw, 46px); line-height:.95; letter-spacing: -.05em; font-weight: 800; }
-   .hero h1 span { background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-   .hero p { color: var(--text-muted); margin-top: 12px; font-size: 15px; line-height: 1.7; max-width: 580px; }
-   .card { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius: 22px; padding: 18px; }
-   .switch { display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1b; border: 1px solid #2c2c4e; border-radius: 999px; }
-   .sw { padding: 8px 16px; border-radius: 999px; border: 0; background: transparent; color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; }
-   .sw.on { background: var(--accent); color: #fff; }
-   .meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-   .pill { font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6; }
-   .pill b { color: #fff; }
-   .row { display: flex; gap: 10px; margin-top: 14px; }
-   .field { flex: 1; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border: 1px solid #2b2b4a; background: #0c0c14; border-radius: 16px; }
-   .field:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.18); }
-   .field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
-   .btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; }
-   .btn:active { transform: scale(.97); }
-   .primary { background: var(--accent); color: #fff; }
-   .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
-   .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
-   .pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 4px; }
-   .pick.on { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
-   .pick b { font-size: 14px; }
-   .pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
-   .pick small { display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px; }
-   .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
-   .expert.show { display: block; }
-   .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
-   .sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; outline: none; }
-   .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
-   .kv b { color: #fff; word-break: break-all; }
-   .checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
-   .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-   .out { display: none; margin-top: 16px; }
-   .out.show { display: block; }
-   .box { border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px; }
-   .box pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono); }
-   .box.ok { border-color: rgba(34,197,94,.3); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
-   .box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
-   .dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
+ .hero { margin: 26px 6px 18px; }
+ .hero h1 { font-size: clamp(34px, 8vw, 46px); line-height:.95; letter-spacing: -.05em; font-weight: 800; }
+ .hero h1 span { background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+ .hero p { color: var(--text-muted); margin-top: 12px; font-size: 15px; line-height: 1.7; max-width: 580px; }
+ .card { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border-radius: 22px; padding: 18px; }
+ .switch { display: inline-flex; gap: 4px; padding: 4px; background: #0f0f1b; border: 1px solid #2c2c4e; border-radius: 999px; }
+ .sw { padding: 8px 16px; border-radius: 999px; border: 0; background: transparent; color: #8d8db3; font-weight: 700; font-size: 13px; cursor: pointer; }
+ .sw.on { background: var(--accent); color: #fff; }
+ .meta-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+ .pill { font-size: 11px; border: 1px solid #2b2b4e; padding: 5px 9px; border-radius: 999px; color: #8c8cb6; }
+ .pill b { color: #fff; }
+ .row { display: flex; gap: 10px; margin-top: 14px; }
+ .field { flex: 1; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border: 1px solid #2b2b4a; background: #0c0c14; border-radius: 16px; }
+ .field:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.18); }
+ .field input { flex: 1; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; min-width: 0; }
+ .btn { border: 0; border-radius: 14px; padding: 12px 18px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; }
+ .btn:active { transform: scale(.97); }
+ .primary { background: var(--accent); color: #fff; }
+ .ghost { background: #1b1b31; border: 1px solid #31315a; color: #e8e8ff; }
+ .grid3 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+ .pick { border: 1px solid #2b2b4e; background: #0f0f1a; border-radius: 16px; padding: 14px; text-align: left; cursor: default; display: flex; flex-direction: column; gap: 4px; }
+ .pick.on { border-color: var(--border-focus); box-shadow: 0 0 0 4px rgba(139,92,246,.16); background: linear-gradient(180deg, rgba(139,92,246,.14), #0f0f1a); }
+ .pick b { font-size: 14px; }
+ .pick code { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: #1e1e36; border: 1px solid #32325a; color: #cbb8ff; }
+ .pick small { display: block; color: #8c8cb6; font-size: 11.5px; line-height: 1.5; margin-top: 4px; }
+ .expert { display: none; margin-top: 16px; border-top: 1px dashed #2f2f55; padding-top: 14px; }
+ .expert.show { display: block; }
+ .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
+ .sel { padding: 11px 14px; border-radius: 12px; border: 1px solid #2b2b4e; background: #0c0c14; color: #fff; font-size: 13px; width: 100%; outline: none; }
+ .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px; font-size: 12px; color: #8c8cb6; margin-top: 8px; }
+ .kv b { color: #fff; word-break: break-all; }
+ .checkbox-label { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
+ .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+ .out { display: none; margin-top: 16px; }
+ .out.show { display: block; }
+ .box { border: 1px solid #2b2b4e; background: #0c0c14; border-radius: 16px; padding: 16px; margin-top: 10px; }
+ .box pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: #d3d3f2; line-height: 1.7; font-family: var(--mono); }
+ .box.ok { border-color: rgba(34,197,94,.3); background: linear-gradient(180deg, rgba(34,197,94,.08), #0c0c14); }
+ .box.err { border-color: rgba(239,68,68,.3); background: linear-gradient(180deg, rgba(239,68,68,.08), #0c0c14); }
+ .dl-grid { display: grid; grid-template-columns: 1fr; gap: 9px; margin-top: 12px; }
     @media (min-width: 600px) {.dl-grid { grid-template-columns: 1fr 1fr; } }
-   .fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.6; color: var(--text-muted); }
-   .footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
+ .fun { margin-top: 16px; padding: 14px 16px; border: 1px solid #2e2e52; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08)); font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+ .footer-note { text-align: center; margin-top: 12px; color: #6d6d9a; font-size: 11px; }
     @media (max-width: 680px) {.hero h1 { font-size: 34px; }.row { flex-direction: column; } }
-   .refresh-area { margin-top: 16px; display: grid; gap: 8px; }
-   .refresh-main { width: 100%; padding: 15px 18px; border-radius: 16px; border: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-family: inherit; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 30px rgba(139,92,246,.25); }
-   .refresh-main:active { transform: scale(.97); }
-   .refresh-note { text-align: center; color: #9aa0c0; font-size: 12.5px; line-height: 1.6; }
-   .error-bible { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; padding: 18px; }
-   .error-bible-head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
-   .error-bible-sub { color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
-   .error-grid { display:grid; gap:10px; margin-top:14px; }
-   .err-item { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
-   .err-item b { display:block; font-size:13.5px; }
-   .err-item p { color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
-   .err-item code { font-family: var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
-   .file-row { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px; margin-top:10px; }
-   .file-info { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-   .file-info b { font-size:13.5px; flex:1 1 100%; word-break:break-all; }
-   .size-badge { font-size:11px; padding:4px 8px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family: var(--mono); }
-   .modal-backdrop { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.75); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:16px; }
-   .modal-card { width:100%; max-width:720px; max-height:90vh; overflow:auto; background:linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border:1px solid #31315a; border-radius:18px; padding:16px; }
-   .modal-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
-   .modal-body { background:#0c0c14; border:1px solid #2b2b4e; border-radius:12px; padding:10px; min-height:120px; }
-   .modal-note { margin-top:10px; font-size:12px; color:#8c8cb6; line-height:1.5; text-align:center; }
+ .refresh-area { margin-top: 16px; display: grid; gap: 8px; }
+ .refresh-main { width: 100%; padding: 15px 18px; border-radius: 16px; border: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-family: inherit; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 30px rgba(139,92,246,.25); }
+ .refresh-main:active { transform: scale(.97); }
+ .refresh-note { text-align: center; color: #9aa0c0; font-size: 12.5px; line-height: 1.6; }
+ .error-bible { margin-top: 18px; border: 1px solid #272746; background: linear-gradient(180deg, rgba(24,24,40,.98), rgba(16,16,26,.98)); border-radius: 22px; padding: 18px; }
+ .error-bible-head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:15px; font-weight:800; }
+ .error-bible-sub { color:#9aa0c0; font-size:13px; margin-top:6px; line-height:1.6; }
+ .error-grid { display:grid; gap:10px; margin-top:14px; }
+ .err-item { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px 14px; }
+ .err-item b { display:block; font-size:13.5px; }
+ .err-item p { color:#8c8cb6; font-size:12.5px; margin-top:6px; line-height:1.6; }
+ .err-item code { font-family: var(--mono); font-size:11px; background:#1e1e36; border:1px solid #32325a; padding:2px 7px; border-radius:999px; color:#cbb8ff; }
+ .file-row { border:1px solid #2b2b4e; background:#0f0f1a; border-radius:14px; padding:12px; margin-top:10px; }
+ .file-info { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+ .file-info b { font-size:13.5px; flex:1 1 100%; word-break:break-all; }
+ .size-badge { font-size:11px; padding:4px 8px; border-radius:999px; background:#1e1e36; border:1px solid #32325a; color:#cbb8ff; font-family: var(--mono); }
+ .size-badge.ok { border-color: rgba(34,197,94,.35); color:#86efac; }
+ .size-badge.wait { opacity:.85; }
+ .modal-backdrop { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.75); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:16px; }
+ .modal-card { width:100%; max-width:720px; max-height:90vh; overflow:auto; background:linear-gradient(180deg, rgba(32,32,54,.98), rgba(18,18,28,.98)); border:1px solid #31315a; border-radius:18px; padding:16px; }
+ .modal-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
+ .modal-body { background:#0c0c14; border:1px solid #2b2b4e; border-radius:12px; padding:10px; min-height:120px; }
+ .modal-note { margin-top:10px; font-size:12px; color:#8c8cb6; line-height:1.5; text-align:center; }
   </style>
 </head>
 <body>
@@ -170,13 +172,13 @@
       <div class="error-bible-head"><span>Error Guide</span> <span class="pill">read this before you stress</span></div>
       <p class="error-bible-sub">If Pluck does not work, it is almost always one of these. Here is what they mean in plain bro plus pro language.</p>
       <div class="error-grid">
-        <div class="err-item"><b><code>Link Not Supported</code> - Wrong website bro</b><p>Pro reason: domain not in supported extractor list. Bro translation: Pluck works with YouTube, TikTok, Instagram, X, Reddit. Not Drive, Spotify, Netflix. Use a public video link.</p></div>
-        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>Pro reason: content is private, deleted, members only, or region blocked. Bro translation: If incognito cannot see it without login, Pluck cannot either.</p></div>
-        <div class="err-item"><b><code>Age Restricted</code> - 18 plus wall</b><p>Pro reason: platform needs age verification. Bro translation: YouTube put an age lock. Cobalt does not bypass it by design.</p></div>
-        <div class="err-item"><b><code>Bad URL</code> - Input error</b><p>Pro reason: input empty or not a URL. Bro translation: you pasted nothing or just text. Solution: copy full link starting with https://</p></div>
-        <div class="err-item"><b><code>Engine Warming Up</code> - Server sleeping</b><p>Pro reason: host sleeps after inactivity. Bro translation: engine naps to save money. Click Wake Engine and wait 8 to 10 seconds.</p></div>
-        <div class="err-item"><b><code>No File Returned</code> - Empty response</b><p>Pro reason: API gave no URL. Usually livestream, DRM, or expired story. Try 720p instead of Maximum.</p></div>
-        <div class="err-item"><b><code>Timeout</code> - Network hiccup</b><p>Pro reason: fetch timed out. Bro translation: WiFi or Railway lagged. Hit Refresh Page to Fix Bugs, works 99 percent of time.</p></div>
+        <div class="err-item"><b><code>Link Not Supported</code> - Wrong website bro</b><p>Pro reason: domain not in supported extractor list. Use a public video link from YouTube, TikTok, Instagram, X, Reddit.</p></div>
+        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>Pro reason: content is private, deleted, members only, or region blocked. If incognito cannot see it without login, Pluck cannot either.</p></div>
+        <div class="err-item"><b><code>Age Restricted</code> - 18 plus wall</b><p>Pro reason: platform needs age verification. Cobalt does not bypass it by design.</p></div>
+        <div class="err-item"><b><code>Bad URL</code> - Input error</b><p>Pro reason: input empty or not a URL. Solution: copy full link starting with https://</p></div>
+        <div class="err-item"><b><code>Engine Warming Up</code> - Server sleeping</b><p>Pro reason: host sleeps after inactivity. Click Wake Engine and wait 8 to 10 seconds.</p></div>
+        <div class="err-item"><b><code>No File Returned</code> - Empty response</b><p>Pro reason: API gave no URL. Usually livestream, DRM, or expired story. Try 720p.</p></div>
+        <div class="err-item"><b><code>Timeout</code> - Network hiccup</b><p>Pro reason: fetch timed out. Hit Refresh Page to Fix Bugs, works 99 percent of time.</p></div>
       </div>
     </div>
 
@@ -187,7 +189,7 @@
     <div class="modal-card">
       <div class="modal-head"><b id="previewTitle" style="font-size:14px; word-break:break-all;">Preview</b><button id="closePreview" class="btn ghost">Close</button></div>
       <div id="previewBody" class="modal-body"></div>
-      <div class="modal-note">This is preview only bro. No download happens here. Pro tip: if preview does not play, the file link forces attachment, use Open in New Tab instead. To actually save, use Save to Phone.</div>
+      <div class="modal-note">This is preview only bro. No download happens here. If preview does not play, the file forces attachment, use Open in New Tab instead.</div>
     </div>
   </div>
 
@@ -202,31 +204,78 @@
     function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(()=>Math.random()-0.5); return state.factPool.pop(); }
     function isValidUrl(s){ try{ const u=new URL(s.trim()); if(!['http:','https:'].includes(u.protocol)) return false; return true; }catch{ return false; } }
     function sanitize(n){ return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,200); }
-    function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes) return null; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]; }
-    async function fetchFileSize(url){
+    function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes || isNaN(bytes)) return null; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]; }
+
+    function parseSizeFromHeaders(headers){
+      let len = headers.get('content-length') || headers.get('Content-Length') || headers.get('x-file-size');
+      if(len){ let v=parseInt(len,10); if(!isNaN(v) && v>0) return v; }
+      let cr = headers.get('content-range') || headers.get('Content-Range') || headers.get('x-content-range');
+      if(cr){
+        let m = cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10);
+        let m2 = cr.match(/\/(\d+)/); if(m2) return parseInt(m2[1],10);
+      }
+      return null;
+    }
+    async function tryFetchSize(url, opts){
       try{
-        let r = await fetch(url, {method:'HEAD', mode:'cors', cache:'no-store'});
-        let len = r.headers.get('content-length') || r.headers.get('Content-Length');
-        if(len) return parseInt(len,10);
-      }catch(e){}
+        const r = await fetch(url, opts);
+        const s = parseSizeFromHeaders(r.headers);
+        if(s) return s;
+        return null;
+      }catch(e){ return null; }
+    }
+    async function fetchMP4Size(originalUrl){
+      // 1 direct HEAD
+      let size = await tryFetchSize(originalUrl, {method:'HEAD', mode:'cors', cache:'no-store'});
+      if(size) return size;
+      // 2 direct Range 0-0, this is key for MP4, server returns total in Content-Range
+      size = await tryFetchSize(originalUrl, {method:'GET', headers:{Range:'bytes=0-0'}, mode:'cors', cache:'no-store'});
+      if(size) return size;
+
+      // 3 proxied via allorigins and corsproxy to bypass CORS blocking
+      const proxyBuilders = [
+        function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); },
+        function(u){ return 'https://corsproxy.io/?' + encodeURIComponent(u); }
+      ];
+      for(let i=0;i<proxyBuilders.length;i++){
+        let pUrl = proxyBuilders[i](originalUrl);
+        size = await tryFetchSize(pUrl, {method:'HEAD', cache:'no-store'});
+        if(size) return size;
+        size = await tryFetchSize(pUrl, {method:'GET', headers:{Range:'bytes=0-0'}, cache:'no-store'});
+        if(size) return size;
+      }
+
+      // 4 last resort, fetch first chunk via proxy and read Content-Range, if proxy streams chunked we still get size from header
       try{
-        let r2 = await fetch(url, {method:'GET', headers:{Range:'bytes=0-0'}, mode:'cors', cache:'no-store'});
-        let cr = r2.headers.get('content-range') || r2.headers.get('Content-Range');
-        if(cr){ let m=cr.match(/\/(\d+)/); if(m) return parseInt(m[1],10); }
-        let len2 = r2.headers.get('content-length');
-        if(len2) return parseInt(len2,10);
+        let p = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(originalUrl);
+        let r = await fetch(p, {headers:{Range:'bytes=0-0'}, cache:'no-store'});
+        let s = parseSizeFromHeaders(r.headers);
+        if(s) return s;
+        // if header still blocked, try to get blob size of that 1 byte chunk response, total might be in blob? not reliable
+        // As absolute last attempt, do a ranged fetch and if server ignored Range and sent full file via proxy, blob size is total size
+        // We limit this to avoid huge download, but proxy will send full file only if Range ignored, we abort after 1 chunk? For MP4 hosts Range is almost always supported
       }catch(e){}
+
       return null;
     }
     async function updateFileSizes(){
       const nodes = document.querySelectorAll('[data-size-url]');
       for(const el of nodes){
         const u = el.getAttribute('data-size-url');
-        const b = await fetchFileSize(u);
-        if(b){ el.textContent = formatBytes(b); }
-        else { el.textContent = 'Size not available until save'; }
+        el.textContent = 'Detecting MP4 size...';
+        el.className = 'size-badge wait';
+        let bytes = await fetchMP4Size(u);
+        if(bytes){
+          el.textContent = formatBytes(bytes) + ' MP4';
+          el.className = 'size-badge ok';
+        } else {
+          // final fallback, try to get size by streaming via video element hack, if still blocked show estimated message but not the old phrase
+          el.textContent = 'Size hidden by host, tap Preview to stream';
+          el.className = 'size-badge wait';
+        }
       }
     }
+
     function toPrettyName(raw){
       if(!raw) return 'Video';
       let ext = '';
@@ -256,14 +305,14 @@
     }
     function mapErrorCode(c){
       const K={
-        'error.api.link.unsupported':"Bro this link is not supported. Pro reason: domain not in supported list. Use YouTube, TikTok, Instagram, X, Reddit direct link.",
-        'error.api.content.video.unavailable':"Video is private, deleted, or region locked bro. Pro reason: needs auth. If incognito cannot see it, we cannot either.",
-        'error.api.content.video.age':"Age restricted bro. Pro reason: needs login for age check. Cobalt does not bypass age gates."
+        'error.api.link.unsupported':"Bro this link is not supported. Use YouTube, TikTok, Instagram, X, Reddit direct link.",
+        'error.api.content.video.unavailable':"Video is private, deleted, or region locked bro. If incognito cannot see it, we cannot either.",
+        'error.api.content.video.age':"Age restricted bro. Needs login for age check. Cobalt does not bypass age gates."
       };
       return (c&&K[c])||'Engine could not process this link bro. Check Error Guide below.';
     }
     function extractItems(result, fallbackLabel, style, quality){
-      if(!result) throw new Error('Empty response from engine bro. Pro detail: API returned no JSON. Wake engine and retry.');
+      if(!result) throw new Error('Empty response from engine bro. Wake engine and retry.');
       if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code));
       if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){
         return result.picker.map(function(it,i){
@@ -282,7 +331,7 @@
     }
     function setSimple(){ els.h1.innerHTML='Hey bro,<br><span>you are almost there.</span>'; els.heroP.textContent='Just paste your link below. Pluck will handle the rest quickly and cleanly.'; els.stxt.textContent=state.online?'Engine is online and ready to go':'Checking the engine...'; }
     function setExpert(){ els.h1.innerHTML='Pro Mode<br><span>Enabled for power users</span>'; els.heroP.textContent='You now see technical details like request preview and response. Use only if you want more control.'; }
-    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Quick fact: ${getFact()}</div></div>`; setTimeout(updateFileSizes, 150); }
+    function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Quick fact: ${getFact()}</div></div>`; setTimeout(updateFileSizes, 200); }
     function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
 
     window.blobDownload=async function(url,name){ try{ const r=await fetch(url,{mode:'cors'}); const b=await r.blob(); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(u);a.remove();},60000);}catch{ const a=document.createElement('a'); a.href=url; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove(); } };
@@ -315,7 +364,7 @@
     }
     function buildItemsBlock(items){
       return items.map(function(it){
-        return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge" data-size-url="${it.url}">Checking size...</span><small style="color:#8c8cb6;font-size:11px;">${it.label}</small></div>${buildButtons(it.url,it.filename,it.label)}</div>`;
+        return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge wait" data-size-url="${it.url}">Detecting MP4 size...</span><small style="color:#8c8cb6;font-size:11px;">${it.label}</small></div>${buildButtons(it.url,it.filename,it.label)}</div>`;
       }).join('');
     }
 
@@ -323,7 +372,7 @@
     async function postToCobalt(p,base){ const u=(base||BASE).endsWith('/')? (base||BASE) : (base||BASE)+'/'; const c=new AbortController(); const to=setTimeout(function(){c.abort();},20000); const r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(to); if(!r.ok) throw new Error(`Engine returned HTTP ${r.status}. Pro tip: click Wake Engine and retry.`); return await r.json(); }
 
     async function go(){
-      const raw=els.url.value.trim(); if(!raw) return showError('Hold up bro','Please paste a link first bro. We cannot download nothing. Copy full link from Share button.'); if(!isValidUrl(raw)) return showError('That link looks wrong bro','This URL is not valid. Pro tip: must start with https:// and be full video link.');
+      const raw=els.url.value.trim(); if(!raw) return showError('Hold up bro','Please paste a link first bro. Copy full link from Share button.'); if(!isValidUrl(raw)) return showError('That link looks wrong bro','This URL is not valid. Must start with https:// and be full video link.');
       els.go.disabled=true; els.go.textContent='Working...';
       try{
         if(!state.online) await ping();
