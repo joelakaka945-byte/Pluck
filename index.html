@@ -380,10 +380,10 @@
     function sanitize(n){ return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,200); }
     function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes || isNaN(bytes)) return null; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]; }
     function parseSizeFromHeaders(headers){
-      let cr = headers.get('content-range') || headers.get('Content-Range') || headers.get('x-content-range');
-      if(cr){ let m = cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10); let m2 = cr.match(/\/(\d+)/); if(m2) return parseInt(m2[1],10); }
       let len = headers.get('content-length') || headers.get('Content-Length') || headers.get('x-file-size');
       if(len){ let v=parseInt(len,10); if(!isNaN(v) && v>0) return v; }
+      let cr = headers.get('content-range') || headers.get('Content-Range') || headers.get('x-content-range');
+      if(cr){ let m = cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10); let m2 = cr.match(/\/(\d+)/); if(m2) return parseInt(m2[1],10); }
       return null;
     }
     async function tryFetchSize(url, opts){ try{ const r = await fetch(url, opts); const s = parseSizeFromHeaders(r.headers); if(s) return s; return null; }catch(e){ return null; } }
