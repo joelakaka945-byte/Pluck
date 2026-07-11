@@ -124,6 +124,18 @@
  .modal-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
  .modal-body { background:#0c0c14; border:1px solid #2b2b4e; border-radius:12px; padding:10px; min-height:120px; }
  .modal-note { margin-top:10px; font-size:12px; color:#8c8cb6; line-height:1.5; text-align:center; }
+ .process-wrap { margin-top:16px; border:1px solid #2b2b4e; background:#0f0f1a; border-radius:16px; padding:14px; display:none; }
+ .process-head { font-size:13px; font-weight:800; margin-bottom:10px; letter-spacing:.02em; }
+ .process-log { display:grid; gap:8px; max-height:320px; overflow:auto; padding-right:4px; }
+ .log-entry { display:flex; gap:10px; align-items:flex-start; font-size:12px; line-height:1.5; padding:8px 10px; border-radius:10px; border:1px solid #23233f; background:#0c0c14; color:#9aa0c0; }
+ .log-entry.time { font-family:var(--mono); font-size:10.5px; color:#6d6d9a; min-width:62px; }
+ .log-entry.dot-sm { width:7px; height:7px; border-radius:50%; margin-top:5px; background:#3a3a5c; flex-shrink:0; }
+ .log-entry.active { border-color: rgba(139,92,246,.45); background: linear-gradient(180deg, rgba(139,92,246,.14), #0c0c14); color:#d8d8ff; }
+ .log-entry.active.dot-sm { background:#8b5cf6; box-shadow:0 0 0 4px rgba(139,92,246,.18); }
+ .log-entry.done { border-color: rgba(34,197,94,.25); color:#cbd5ff; }
+ .log-entry.done.dot-sm { background:#22c55e; }
+ .log-entry.error { border-color: rgba(239,68,68,.35); color:#ffd4d4; background: linear-gradient(180deg, rgba(239,68,68,.10), #0c0c14); }
+ .log-entry.error.dot-sm { background:#ef4444; }
   </style>
 </head>
 <body>
@@ -150,7 +162,15 @@
         <div class="controls">
           <select id="vq" class="sel"><option value="max">Quality: Maximum - Keep original quality</option><option value="1080">Quality: 1080p - Sharp full HD</option><option value="720" selected>Quality: 720p - Balanced quality and speed</option><option value="480">Quality: 480p - Smaller file, saves data</option></select>
           <select id="af" class="sel" style="display:none"><option value="best" selected>best</option></select>
-          <select id="fn" class="sel"><option value="classic">Filename: Classic - safe original name</option><option value="pretty">Filename: Pretty - clean readable name - FIXED</option><option value="basic">Filename: Basic - simple like video.mp4</option><option value="nerdy">Filename: Detailed - with quality and ID</option></select>
+          <select id="fn" class="sel">
+            <option value="classic">Filename: Classic - safe original name</option>
+            <option value="pretty">Filename: Pretty - clean readable name - FIXED</option>
+            <option value="basic">Filename: Basic - simple like video.mp4</option>
+            <option value="nerdy">Filename: Detailed - with quality and ID</option>
+            <option value="custom">Filename: Custom - you type your own name</option>
+          </select>
+          <input id="customName" class="sel" type="text" placeholder="Type your custom name here bro, example My Vacation Video" style="display:none; margin-top:8px;" maxlength="120" />
+          <div id="customHint" style="display:none; font-size:11px; color:#8c8cb6; margin-top:6px; line-height:1.5;">Pro tip bro, just type name without.mp4, we add extension automatically. Keep it clean, we remove bad characters for you.</div>
         </div>
         <div class="kv"><span>request preview</span><b class="mono" id="kvR">POST / { url, videoQuality }</b></div>
         <div class="kv"><span>last response</span><b id="kvResp" class="mono">Waiting for your link bro...</b></div>
@@ -158,6 +178,12 @@
       </div>
 
       <div class="actions"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear All</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
+
+      <div id="processWrap" class="process-wrap">
+        <div class="process-head">Live Process - What is happening behind the scenes</div>
+        <div id="processLog" class="process-log"></div>
+      </div>
+
       <div id="out" class="out"></div>
     </div>
 
@@ -172,10 +198,10 @@
       <div class="error-bible-head"><span>Error Guide</span> <span class="pill">read this before you stress</span></div>
       <p class="error-bible-sub">If Pluck does not work, it is almost always one of these. Here is what they mean in plain bro plus pro language.</p>
       <div class="error-grid">
-        <div class="err-item"><b><code>Link Not Supported</code> - Wrong website bro</b><p>Pro reason: domain not in supported extractor list. Use a public video link from YouTube, TikTok, Instagram, X, Reddit.</p></div>
-        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>Pro reason: content is private, deleted, members only, or region blocked. If incognito cannot see it without login, Pluck cannot either.</p></div>
-        <div class="err-item"><b><code>Age Restricted</code> - 18 plus wall</b><p>Pro reason: platform needs age verification. Cobalt does not bypass it by design.</p></div>
-        <div class="err-item"><b><code>Bad URL</code> - Input error</b><p>Pro reason: input empty or not a URL. Solution: copy full link starting with https://</p></div>
+        <div class="err-item"><b><code>Link Not Supported</code> - Wrong website bro</b><p>Pro reason: domain not in supported extractor list. Use YouTube, TikTok, Instagram, X, Reddit direct link.</p></div>
+        <div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>Pro reason: private, deleted, members only, or region blocked. If incognito cannot see it, Pluck cannot either.</p></div>
+        <div class="err-item"><b><code>Age Restricted</code> - 18 plus wall</b><p>Pro reason: needs age verification. Cobalt does not bypass it by design.</p></div>
+        <div class="err-item"><b><code>Bad URL</code> - Input error</b><p>Pro reason: input empty or not URL. Solution: copy full link starting with https://</p></div>
         <div class="err-item"><b><code>Engine Warming Up</code> - Server sleeping</b><p>Pro reason: host sleeps after inactivity. Click Wake Engine and wait 8 to 10 seconds.</p></div>
         <div class="err-item"><b><code>No File Returned</code> - Empty response</b><p>Pro reason: API gave no URL. Usually livestream, DRM, or expired story. Try 720p.</p></div>
         <div class="err-item"><b><code>Timeout</code> - Network hiccup</b><p>Pro reason: fetch timed out. Hit Refresh Page to Fix Bugs, works 99 percent of time.</p></div>
@@ -189,7 +215,7 @@
     <div class="modal-card">
       <div class="modal-head"><b id="previewTitle" style="font-size:14px; word-break:break-all;">Preview</b><button id="closePreview" class="btn ghost">Close</button></div>
       <div id="previewBody" class="modal-body"></div>
-      <div class="modal-note">This is preview only bro. No download happens here. If preview does not play, the file forces attachment, use Open in New Tab instead.</div>
+      <div class="modal-note">This is preview only bro. No download happens here. If preview does not play, file forces attachment, use Open in New Tab instead.</div>
     </div>
   </div>
 
@@ -199,109 +225,91 @@
     const FACTS = ["Octopuses have three hearts.","Honey never spoils.","A day on Venus is longer than a year on Venus.","Bananas are berries but strawberries are not.","Wombats poop cubes.","There are more trees than stars in the Milky Way.","Water can boil and freeze at the same time at its triple point.","Your stomach remakes its lining every 3 to 4 days.","Cows have best friends.","Sharks are older than trees."];
     let state = { fmt: "mp4", isExpert: false, online: false, factPool: [...FACTS].sort(() => Math.random() - 0.5) };
     const $ = s => document.querySelector(s);
-    const els = { dot: $('#dot'), stxt: $('#stxt'), ver: $('#ver'), lat: $('#lat'), out: $('#out'), ft: $('#ft'), epLab: $('#epLab'), h1: $('#h1'), heroP: $('#heroP'), kvR: $('#kvR'), kvResp: $('#kvResp'), url: $('#url'), go: $('#go'), test: $('#test') };
+    const els = { dot: $('#dot'), stxt: $('#stxt'), ver: $('#ver'), lat: $('#lat'), out: $('#out'), ft: $('#ft'), epLab: $('#epLab'), h1: $('#h1'), heroP: $('#heroP'), kvR: $('#kvR'), kvResp: $('#kvResp'), url: $('#url'), go: $('#go'), test: $('#test'), fn: $('#fn'), customName: $('#customName'), customHint: $('#customHint'), vq: $('#vq'), nm: $('#nm'), processWrap: $('#processWrap'), processLog: $('#processLog') };
+
+    function nowTime(){ const d=new Date(); return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}); }
+    function clearLog(){ els.processLog.innerHTML=''; els.processWrap.style.display='none'; }
+    function initLog(){ els.processLog.innerHTML=''; els.processWrap.style.display='block'; }
+    function addLog(id, text, status){
+      let row = document.getElementById('log-'+id);
+      if(!row){
+        row = document.createElement('div'); row.id='log-'+id; row.className='log-entry '+(status||'');
+        row.innerHTML='<div class="dot-sm"></div><div class="time">'+nowTime()+'</div><div class="msg" style="flex:1"></div>';
+        els.processLog.appendChild(row);
+      }
+      row.className='log-entry '+(status||'');
+      row.querySelector('.msg').textContent=text;
+      row.querySelector('.time').textContent=nowTime();
+      els.processLog.scrollTop = els.processLog.scrollHeight;
+      return row;
+    }
+    function updateLog(id, text, status){
+      let row=document.getElementById('log-'+id);
+      if(!row) return addLog(id,text,status);
+      row.className='log-entry '+(status||'');
+      if(text) row.querySelector('.msg').textContent=text;
+      row.querySelector('.time').textContent=nowTime();
+      els.processLog.scrollTop = els.processLog.scrollHeight;
+    }
 
     function getFact(){ if(!state.factPool.length) state.factPool=[...FACTS].sort(()=>Math.random()-0.5); return state.factPool.pop(); }
     function isValidUrl(s){ try{ const u=new URL(s.trim()); if(!['http:','https:'].includes(u.protocol)) return false; return true; }catch{ return false; } }
     function sanitize(n){ return (n||'pluck-media').replace(/[^a-z0-9.\-_ ]/gi,'_').slice(0,200); }
     function formatBytes(bytes){ if(bytes===0) return '0 B'; if(!bytes || isNaN(bytes)) return null; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]; }
-
     function parseSizeFromHeaders(headers){
       let len = headers.get('content-length') || headers.get('Content-Length') || headers.get('x-file-size');
       if(len){ let v=parseInt(len,10); if(!isNaN(v) && v>0) return v; }
       let cr = headers.get('content-range') || headers.get('Content-Range') || headers.get('x-content-range');
-      if(cr){
-        let m = cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10);
-        let m2 = cr.match(/\/(\d+)/); if(m2) return parseInt(m2[1],10);
-      }
+      if(cr){ let m = cr.match(/\/(\d+)\s*$/); if(m) return parseInt(m[1],10); let m2 = cr.match(/\/(\d+)/); if(m2) return parseInt(m2[1],10); }
       return null;
     }
     async function tryFetchSize(url, opts){
-      try{
-        const r = await fetch(url, opts);
-        const s = parseSizeFromHeaders(r.headers);
-        if(s) return s;
-        return null;
-      }catch(e){ return null; }
+      try{ const r = await fetch(url, opts); const s = parseSizeFromHeaders(r.headers); if(s) return s; return null; }catch(e){ return null; }
     }
     async function fetchMP4Size(originalUrl){
-      // 1 direct HEAD
       let size = await tryFetchSize(originalUrl, {method:'HEAD', mode:'cors', cache:'no-store'});
       if(size) return size;
-      // 2 direct Range 0-0, this is key for MP4, server returns total in Content-Range
       size = await tryFetchSize(originalUrl, {method:'GET', headers:{Range:'bytes=0-0'}, mode:'cors', cache:'no-store'});
       if(size) return size;
-
-      // 3 proxied via allorigins and corsproxy to bypass CORS blocking
-      const proxyBuilders = [
-        function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); },
-        function(u){ return 'https://corsproxy.io/?' + encodeURIComponent(u); }
-      ];
+      const proxyBuilders = [function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }, function(u){ return 'https://corsproxy.io/?' + encodeURIComponent(u); }];
       for(let i=0;i<proxyBuilders.length;i++){
         let pUrl = proxyBuilders[i](originalUrl);
-        size = await tryFetchSize(pUrl, {method:'HEAD', cache:'no-store'});
-        if(size) return size;
-        size = await tryFetchSize(pUrl, {method:'GET', headers:{Range:'bytes=0-0'}, cache:'no-store'});
-        if(size) return size;
+        size = await tryFetchSize(pUrl, {method:'HEAD', cache:'no-store'}); if(size) return size;
+        size = await tryFetchSize(pUrl, {method:'GET', headers:{Range:'bytes=0-0'}, cache:'no-store'}); if(size) return size;
       }
-
-      // 4 last resort, fetch first chunk via proxy and read Content-Range, if proxy streams chunked we still get size from header
-      try{
-        let p = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(originalUrl);
-        let r = await fetch(p, {headers:{Range:'bytes=0-0'}, cache:'no-store'});
-        let s = parseSizeFromHeaders(r.headers);
-        if(s) return s;
-        // if header still blocked, try to get blob size of that 1 byte chunk response, total might be in blob? not reliable
-        // As absolute last attempt, do a ranged fetch and if server ignored Range and sent full file via proxy, blob size is total size
-        // We limit this to avoid huge download, but proxy will send full file only if Range ignored, we abort after 1 chunk? For MP4 hosts Range is almost always supported
-      }catch(e){}
-
       return null;
     }
     async function updateFileSizes(){
       const nodes = document.querySelectorAll('[data-size-url]');
       for(const el of nodes){
         const u = el.getAttribute('data-size-url');
-        el.textContent = 'Detecting MP4 size...';
-        el.className = 'size-badge wait';
+        el.textContent = 'Detecting MP4 size...'; el.className='size-badge wait';
         let bytes = await fetchMP4Size(u);
-        if(bytes){
-          el.textContent = formatBytes(bytes) + ' MP4';
-          el.className = 'size-badge ok';
-        } else {
-          // final fallback, try to get size by streaming via video element hack, if still blocked show estimated message but not the old phrase
-          el.textContent = 'Size hidden by host, tap Preview to stream';
-          el.className = 'size-badge wait';
-        }
+        if(bytes){ el.textContent = formatBytes(bytes) + ' MP4'; el.className='size-badge ok'; }
+        else { el.textContent = 'Size hidden by host, tap Preview to stream'; el.className='size-badge wait'; }
       }
     }
-
     function toPrettyName(raw){
       if(!raw) return 'Video';
-      let ext = '';
-      let dot = raw.lastIndexOf('.');
-      if(dot>0){ ext = raw.slice(dot); raw = raw.slice(0,dot); }
+      let ext = ''; let dot = raw.lastIndexOf('.'); if(dot>0){ ext = raw.slice(dot); raw = raw.slice(0,dot); }
       try{ raw = decodeURIComponent(raw); }catch(e){}
-      raw = raw.replace(/[_\-.]+/g,' ');
-      raw = raw.replace(/\b(pluck|cobalt|video|audio|ytdl|download|instagram|tiktok|youtube|youtu|twitter|xcom|reddit)\b/gi,'');
-      raw = raw.replace(/\s+/g,' ').trim();
-      if(!raw) raw = 'Video';
-      raw = raw.split(' ').map(function(w){ return w? w.charAt(0).toUpperCase()+w.slice(1).toLowerCase() : ''; }).join(' ').trim();
+      raw = raw.replace(/[_\-.]+/g,' '); raw = raw.replace(/\b(pluck|cobalt|video|audio|ytdl|download|instagram|tiktok|youtube|youtu|twitter|xcom|reddit)\b/gi,'');
+      raw = raw.replace(/\s+/g,' ').trim(); if(!raw) raw='Video';
+      raw = raw.split(' ').map(function(w){ return w? w.charAt(0).toUpperCase()+w.slice(1).toLowerCase():''; }).join(' ').trim();
       return raw + ext;
     }
-    function applyFilenameStyle(original, style, quality, index, type){
-      let ext = '.mp4';
-      if(type==='photo') ext='.jpg'; else if(type==='gif') ext='.gif';
-      let dot = original.lastIndexOf('.');
-      if(dot>-1){ ext = original.slice(dot).toLowerCase(); original = original.slice(0,dot); }
-      if(style==='pretty'){
-        let base = toPrettyName(original);
-        if(quality && quality!=='max'){ base += ' ' + quality + 'p'; } else if(quality==='max'){ base += ' Original Quality'; }
-        return sanitize(base + ext);
+    function applyFilenameStyle(original, style, quality, index, type, custom){
+      let ext = '.mp4'; if(type==='photo') ext='.jpg'; else if(type==='gif') ext='.gif';
+      let dot = original.lastIndexOf('.'); if(dot>-1){ ext = original.slice(dot).toLowerCase(); original = original.slice(0,dot); }
+      if(style==='custom'){
+        let c = (custom||'').trim(); if(!c) c='My Video';
+        c = c.replace(/\.[a-z0-9]{2,4}$/i,''); c = sanitize(c); if(!c) c='My Video';
+        return c + ext;
       }
-      if(style==='basic'){ return sanitize('video' + (index>0?'-'+(index+1):'') + ext); }
-      if(style==='nerdy'){ return sanitize(original + '_' + quality + '_' + Date.now().toString().slice(-5) + ext); }
-      return sanitize(original + ext);
+      if(style==='pretty'){ let base = toPrettyName(original); if(quality && quality!=='max'){ base+=' '+quality+'p'; } else if(quality==='max'){ base+=' Original Quality'; } return sanitize(base+ext); }
+      if(style==='basic'){ return sanitize('video'+(index>0?'-'+(index+1):'')+ext); }
+      if(style==='nerdy'){ return sanitize(original+'_'+quality+'_'+Date.now().toString().slice(-5)+ext); }
+      return sanitize(original+ext);
     }
     function mapErrorCode(c){
       const K={
@@ -311,26 +319,26 @@
       };
       return (c&&K[c])||'Engine could not process this link bro. Check Error Guide below.';
     }
-    function extractItems(result, fallbackLabel, style, quality){
+    function extractItems(result, fallbackLabel, style, quality, custom){
       if(!result) throw new Error('Empty response from engine bro. Wake engine and retry.');
       if(result.status==='error') throw new Error(mapErrorCode(result.error&&result.error.code));
       if(result.status==='picker'&&Array.isArray(result.picker)&&result.picker.length){
         return result.picker.map(function(it,i){
           let extType = it.type||'video';
           let rawName = 'pluck-' + (i+1);
-          let finalName = applyFilenameStyle(rawName, style, quality, i, extType);
+          let finalName = applyFilenameStyle(rawName, style, quality, i, extType, custom);
           return {url:it.url,filename:finalName,label:it.type?it.type.toUpperCase():fallbackLabel};
         });
       }
       if(result.url){
         let raw = result.filename||'pluck-media.mp4';
-        let finalName = applyFilenameStyle(raw, style, quality, 0, 'video');
+        let finalName = applyFilenameStyle(raw, style, quality, 0, 'video', custom);
         return [{url:result.url,filename:finalName,label:fallbackLabel||'File'}];
       }
       throw new Error('No file came back bro. Usually livestream, DRM, or expired.');
     }
     function setSimple(){ els.h1.innerHTML='Hey bro,<br><span>you are almost there.</span>'; els.heroP.textContent='Just paste your link below. Pluck will handle the rest quickly and cleanly.'; els.stxt.textContent=state.online?'Engine is online and ready to go':'Checking the engine...'; }
-    function setExpert(){ els.h1.innerHTML='Pro Mode<br><span>Enabled for power users</span>'; els.heroP.textContent='You now see technical details like request preview and response. Use only if you want more control.'; }
+    function setExpert(){ els.h1.innerHTML='Pro Mode<br><span>Enabled for power users</span>'; els.heroP.textContent='You now see technical details, custom filename, and live process log. Use only if you want more control.'; }
     function showOutput(t,title,c,d=null){ els.out.classList.add('show'); if(d) els.kvResp.textContent=JSON.stringify(d).slice(0,500); const cls=t==='ok'?'box ok':'box err'; els.out.innerHTML=`<div class="${cls}"><div style="font-weight:800;margin-bottom:8px">${title}</div>${c}<div style="margin-top:10px;font-size:12px;color:#8c8cb6">Quick fact: ${getFact()}</div></div>`; setTimeout(updateFileSizes, 200); }
     function showError(title,msg){ showOutput('err',title,`<pre>${msg}</pre>`); }
 
@@ -339,24 +347,14 @@
     window.shareFile=async function(url,name){ if(navigator.share){ try{ await navigator.share({title:name,url}); }catch{} } else copyLink(url); };
 
     window.openPreview=function(url,name,label){
-      const modal=document.getElementById('previewModal');
-      const body=document.getElementById('previewBody');
-      const ttl=document.getElementById('previewTitle');
-      ttl.textContent=name||'Preview';
-      body.innerHTML='';
+      const modal=document.getElementById('previewModal'); const body=document.getElementById('previewBody'); const ttl=document.getElementById('previewTitle');
+      ttl.textContent=name||'Preview'; body.innerHTML='';
       const isImage = /\.(jpg|jpeg|png|webp|gif)$/i.test(url) || (label && label.toLowerCase().indexOf('photo')>-1);
-      if(isImage){
-        const img=document.createElement('img'); img.src=url; img.style.width='100%'; img.style.borderRadius='12px'; img.alt=name; body.appendChild(img);
-      } else {
-        const v=document.createElement('video'); v.src=url; v.controls=true; v.playsInline=true; v.preload='metadata'; v.style.width='100%'; v.style.borderRadius='12px'; v.style.background='#000'; body.appendChild(v);
-      }
+      if(isImage){ const img=document.createElement('img'); img.src=url; img.style.width='100%'; img.style.borderRadius='12px'; img.alt=name; body.appendChild(img); }
+      else { const v=document.createElement('video'); v.src=url; v.controls=true; v.playsInline=true; v.preload='metadata'; v.style.width='100%'; v.style.borderRadius='12px'; v.style.background='#000'; body.appendChild(v); }
       modal.style.display='flex'; document.body.style.overflow='hidden';
     };
-    window.closePreview=function(){
-      const modal=document.getElementById('previewModal');
-      const body=document.getElementById('previewBody');
-      if(modal){ modal.style.display='none'; body.innerHTML=''; document.body.style.overflow=''; }
-    };
+    window.closePreview=function(){ const modal=document.getElementById('previewModal'); const body=document.getElementById('previewBody'); if(modal){ modal.style.display='none'; body.innerHTML=''; document.body.style.overflow=''; } };
 
     function buildButtons(url,fn,label){
       const n=sanitize(fn); const su=String(url).replace(/'/g,"%27"); const sn=String(n).replace(/'/g,"\\'"); const lbl=String(label||'File').replace(/'/g,"\\'");
@@ -372,23 +370,62 @@
     async function postToCobalt(p,base){ const u=(base||BASE).endsWith('/')? (base||BASE) : (base||BASE)+'/'; const c=new AbortController(); const to=setTimeout(function(){c.abort();},20000); const r=await fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(p),signal:c.signal}); clearTimeout(to); if(!r.ok) throw new Error(`Engine returned HTTP ${r.status}. Pro tip: click Wake Engine and retry.`); return await r.json(); }
 
     async function go(){
-      const raw=els.url.value.trim(); if(!raw) return showError('Hold up bro','Please paste a link first bro. Copy full link from Share button.'); if(!isValidUrl(raw)) return showError('That link looks wrong bro','This URL is not valid. Must start with https:// and be full video link.');
+      const raw=els.url.value.trim(); if(!raw) return showError('Hold up bro','Please paste a link first bro. Copy full link from Share button.');
+      if(!isValidUrl(raw)) return showError('That link looks wrong bro','This URL is not valid. Must start with https:// and be full video link.');
       els.go.disabled=true; els.go.textContent='Working...';
+      initLog();
       try{
-        if(!state.online) await ping();
-        const style=$('#fn').value; const quality=$('#vq').value;
-        const base={ url: raw, filenameStyle: style, disableMetadata: $('#nm').checked };
+        addLog('validate','Step 1: Validating your link format and protocol','active');
+        await new Promise(function(r){ setTimeout(r, 180); });
+        updateLog('validate','Step 1: Link looks valid, starts with https, good to go bro','done');
+
+        addLog('engine','Step 2: Checking if engine is awake and responding at '+BASE,'active');
+        if(!state.online){ updateLog('engine','Step 2: Engine was sleeping, trying to wake it up','active'); await ping(); }
+        updateLog('engine','Step 2: Engine status is '+(state.online?'online and ready':'still waking, will try anyway'),'done');
+
+        const style=els.fn.value; const quality=els.vq.value; const customName=els.customName.value.trim();
+        addLog('request','Step 3: Building request, quality='+quality+', filename mode='+style+(style==='custom' && customName? ', custom name='+customName : ''),'active');
+        await new Promise(function(r){ setTimeout(r, 150); });
+        updateLog('request','Step 3: Request built, bro. Pro detail: { url, videoQuality: '+quality+', filenameStyle: '+style+', disableMetadata: '+els.nm.checked+' }','done');
+
+        addLog('send','Step 4: Sending POST to Cobalt engine, this is the backend that extracts the real MP4','active');
+        const base={ url: raw, filenameStyle: style==='custom'?'classic':style, disableMetadata: els.nm.checked };
+        updateLog('send','Step 4: Request sent, waiting for response, usually 3 to 8 seconds','active');
         const result=await postToCobalt({...base, downloadMode:'auto', videoQuality: quality, audioFormat:'best' }, BASE);
-        const items=extractItems(result,'Full Video plus Audio', style, quality);
+        updateLog('send','Step 4: Got response from engine, status='+ (result.status||'unknown'),'done');
+
+        addLog('parse','Step 5: Parsing response and extracting direct media URLs','active');
+        await new Promise(function(r){ setTimeout(r, 120); });
+        const items=extractItems(result,'Full Video plus Audio', style, quality, customName);
+        updateLog('parse','Step 5: Found '+items.length+' file(s) to show you bro','done');
+
+        addLog('filename','Step 6: Generating final filename, pretty mode fixed, custom mode uses your text','active');
+        items.forEach(function(it,i){ addLog('file-'+i,'File '+(i+1)+': '+it.filename+' - label '+it.label,'done'); });
+        updateLog('filename','Step 6: Filenames ready, extension auto added, bad characters removed for safety','done');
+
+        addLog('size','Step 7: Detecting MP4 size via HEAD and Range bytes=0-0, with CORS proxy fallback','active');
+        updateLog('size','Step 7: Size detection started, you will see MB or GB appear under each file shortly','active');
+
+        addLog('ready','Step 8: Building preview player that streams only, no auto download','done');
+        addLog('done','Step 9: All done bro, scroll down to preview or save. If anything looks sus, hit Refresh Page to Fix Bugs','done');
+
         showOutput('ok','Nice bro, your video is ready',buildItemsBlock(items),result);
-      }catch(e){ showError('Request failed bro',e.message); }finally{ els.go.disabled=false; els.go.textContent='Pluck Now'; }
+        updateLog('size','Step 7: Size detection running in background, using Content-Length and Content-Range headers','done');
+      }catch(e){
+        addLog('error','Error happened bro: '+e.message,'error');
+        showError('Request failed bro',e.message);
+      }finally{ els.go.disabled=false; els.go.textContent='Pluck Now'; }
     }
 
     els.go.addEventListener('click',go); els.url.addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
+    els.fn.addEventListener('change', function(){
+      if(this.value==='custom'){ els.customName.style.display='block'; els.customHint.style.display='block'; els.customName.focus(); }
+      else { els.customName.style.display='none'; els.customHint.style.display='none'; }
+    });
     $('#bS').addEventListener('click',function(){ state.isExpert=false; $('#bS').classList.add('on'); $('#bE').classList.remove('on'); $('#ex').classList.remove('show'); setSimple(); });
     $('#bE').addEventListener('click',function(){ state.isExpert=true; $('#bE').classList.add('on'); $('#bS').classList.remove('on'); $('#ex').classList.add('show'); setExpert(); });
-    $('#wake').addEventListener('click',async function(){ els.stxt.textContent='Waking engine...'; try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(ping,2000); });
-    $('#clear').addEventListener('click',function(){ els.url.value=''; els.out.classList.remove('show'); els.out.innerHTML=''; });
+    $('#wake').addEventListener('click',async function(){ els.stxt.textContent='Waking engine...'; addLog('wake','Manual wake triggered by you bro, pinging engine','active'); try{ await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{} setTimeout(function(){ ping().then(function(ok){ updateLog('wake', ok?'Engine woke up successfully bro':'Still sleeping, give it 5 more seconds','done'); }); },2000); });
+    $('#clear').addEventListener('click',function(){ els.url.value=''; els.out.classList.remove('show'); els.out.innerHTML=''; clearLog(); });
     document.getElementById('closePreview').addEventListener('click', closePreview);
     document.getElementById('previewModal').addEventListener('click', function(e){ if(e.target===this) closePreview(); });
     window.addEventListener('keydown', function(e){ if(e.key==='Escape') closePreview(); });
