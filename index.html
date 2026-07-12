@@ -367,7 +367,10 @@ const ENDPOINT=BASE+"/";
 const PROXY_DIRECT=u=>u;
 const PROXY_CORS=u=>`https://corsproxy.io/?${encodeURIComponent(u)}`;
 const PROXY_ALLORIGINS=u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`;
-const PROXIES=[PROXY_DIRECT,PROXY_CORS,PROXY_ALLORIGINS];
+const PROXY_THING=u=>`https://thingproxy.freeboard.io/fetch/${u}`;
+const PROXY_CORSFIX=u=>`https://proxy.corsfix.com/?${encodeURIComponent(u)}`;
+const PROXY_CORS_LOL=u=>`https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(u)}`;
+const PROXIES=[PROXY_DIRECT,PROXY_CORS,PROXY_ALLORIGINS,PROXY_THING,PROXY_CORSFIX];
 const FACTS=["Pluck works directly in your browser.","Preview before you save.","Custom filenames are created locally.","Works with public links only.","Fast and private processing.","Optimized for mobile and desktop."];
 let state={isExpert:false,online:false,factPool:[...FACTS].sort(()=>Math.random()-0.5)};
 
@@ -415,27 +418,65 @@ function showOutput(t,ti,html){if(!els.out)return;els.out.classList.add('show');
 function showError(t,m){showOutput('err',t,`<pre>${String(m).slice(0,1500)}</pre>`);}
 async function fetchBlobSafe(url,useProxy,onProgress,expectedName){
   let isBlob=String(url).startsWith('blob:')||String(url).startsWith('data:');
-  let list=isBlob?[PROXY_DIRECT]:(useProxy?PROXIES:[PROXY_DIRECT]);
+  let isAudio=String(expectedName||'').toLowerCase().endsWith('.mp3')||String(expectedName||'').toLowerCase().includes('audio');
+  let isCross=/googlevideo|tiktok|instagram|fbcdn|cdninstagram|video.twimg|tiktokcdn|musical\.ly/i.test(String(url));
+  let baseList=isBlob?[PROXY_DIRECT]:(useProxy?PROXIES:[PROXY_DIRECT]);
+  let list=isCross&&useProxy&&!isBlob?baseList.slice(1).concat(baseList.slice(0,1)):baseList;
   let lastErr=null; let expectedMime=getMimeForName(expectedName||'video.mp4');
   for(let mk of list){
+    let pUrl='';
     try{
-      let pUrl=mk(url); addLog('dl','Fetching '+(pUrl===url?'direct':'via fallback')+'...','active');
-      let res=await fetchWithTimeout(pUrl,{cache:'no-store',redirect:'follow'},60000);
-      if(!res.ok) throw new Error('HTTP '+res.status);
+      pUrl=mk(url);
+      addLog('dl','Fetching '+(pUrl===url?'direct':'via '+(pUrl.includes('corsproxy.io')?'corsproxy':pUrl.includes('allorigins')?'allorigins':pUrl.includes('thingproxy')?'thingproxy':'fallback'))+'...','active');
+      let timeout=isAudio?90000:60000;
+      let res=await fetchWithTimeout(pUrl,{cache:'no-store',redirect:'follow',mode:'cors',credentials:'omit',referrerPolicy:'no-referrer'},timeout);
+      if(!res||!res.ok) throw new Error('HTTP '+(res?res.status:'no response'));
+      let ct=(res.headers.get('content-type')||'').toLowerCase();
+      if(ct.includes('text/html')&&!isBlob) throw new Error('Invalid media response (html)');
       let total=parseInt(res.headers.get('content-length')||'0',10); let chunks=[]; let rec=0;
-      if(res.body&&res.body.getReader()){
-        let reader=res.body.getReader();
-        while(true){let {done,value}=await reader.read(); if(done)break; if(!value||value.byteLength===0) continue;
-          if(rec===0){ try{ let head=new TextDecoder().decode(value.slice(0,120)).trim().toLowerCase(); if(head.startsWith('<!doctype')||head.startsWith('<html')) throw new Error('Invalid media response'); }catch(e){ if(e.message.includes('Invalid')) throw e; } }
-          chunks.push(value); rec+=value.byteLength;
-          if(onProgress){ if(total) onProgress(Math.round(rec/total*100),rec,total); else onProgress(Math.min(95,Math.round(rec/1024/1024*5)),rec,0); }
+      let useStream=!isAudio&&res.body&&typeof res.body.getReader==='function';
+      if(useStream){
+        try{
+          let reader=res.body.getReader();
+          while(true){
+            let {done,value}=await reader.read();
+            if(done)break;
+            if(!value||value.byteLength===0) continue;
+            if(rec===0){
+              try{ let head=new TextDecoder().decode(value.slice(0,180)).trim().toLowerCase(); if(head.startsWith('<!doctype')||head.startsWith('<html')||head.startsWith('{"error')) throw new Error('Invalid media response'); }catch(e){ if(String(e.message).includes('Invalid')) throw e; }
+            }
+            chunks.push(value); rec+=value.byteLength;
+            if(onProgress){ if(total) onProgress(Math.round(rec/total*100),rec,total); else onProgress(Math.min(96,Math.round(rec/1024/1024*6)),rec,0); }
+          }
+        }catch(streamErr){
+          if(String(streamErr.message).includes('Invalid')) throw streamErr;
+          let buf=await res.clone().arrayBuffer().catch(()=>null);
+          if(!buf) throw streamErr;
+          chunks=[new Uint8Array(buf)]; rec=buf.byteLength;
         }
-      }else{ let buf=await res.arrayBuffer(); chunks=[new Uint8Array(buf)]; rec=buf.byteLength; }
-      if(rec<1024) throw new Error('File too small '+rec); if(total&&rec<total*0.8) throw new Error('Incomplete '+rec+'/'+total);
-      let blob=new Blob(chunks,{type:expectedMime}); if(blob.size<1024) throw new Error('Blob empty'); addLog('dl','Received '+formatBytes(blob.size),'done'); return blob;
-    }catch(e){ lastErr=e; addLog('dl','Fallback try failed: '+e.message,'error'); continue; }
+      }else{
+        let buf=await res.arrayBuffer();
+        chunks=[new Uint8Array(buf)]; rec=buf.byteLength;
+        if(onProgress) onProgress(100,rec,total||rec);
+      }
+      if(rec<800) throw new Error('File too small '+rec);
+      if(total&&rec<total*0.75) throw new Error('Incomplete '+rec+'/'+total);
+      let blob=new Blob(chunks,{type:expectedMime});
+      if(blob.size<800) throw new Error('Blob empty');
+      addLog('dl','Received '+formatBytes(blob.size)+' via '+(pUrl===url?'direct':'proxy'),'done');
+      return blob;
+    }catch(e){
+      lastErr=e;
+      let msg=String(e.message||e);
+      if(msg.includes('Load failed')||msg.includes('Failed to fetch')||msg.includes('NetworkError')){
+        addLog('dl','Fallback try failed (network/CORS): trying next proxy...','error');
+      }else{
+        addLog('dl','Fallback try failed: '+msg.slice(0,120),'error');
+      }
+      continue;
+    }
   }
-  throw lastErr||new Error('Download failed');
+  throw lastErr||new Error('Download failed - all proxies failed');
 }
 async function triggerBlobDownload(blob,filename){
   if(!blob||blob.size<1024) throw new Error('Blocked empty file');
@@ -443,8 +484,42 @@ async function triggerBlobDownload(blob,filename){
   if(isIOS){ let viewBlob=new Blob([await blob.arrayBuffer()],{type:getMimeForName(filename)}); let viewUrl=URL.createObjectURL(viewBlob); window.open(viewUrl,'_blank','noopener'); setTimeout(()=>{try{window.openPreview(viewUrl,filename);}catch{}},300); setProgress(100,'Open - Use Share > Save'); setTimeout(()=>URL.revokeObjectURL(viewUrl),60000); return; }
   let downloadBlob=new Blob([await blob.arrayBuffer()],{type:'application/octet-stream'}); let blobUrl=URL.createObjectURL(downloadBlob); let a=document.createElement('a'); a.href=blobUrl; a.download=filename; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>{try{a.click()}catch{}},180); setTimeout(()=>{URL.revokeObjectURL(blobUrl); try{a.remove()}catch{}},9000);
 }
-async function blobDownload(url,name,useProxy=true){ let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{if(total)setProgress(pct,formatBytes(rec)+' / '+formatBytes(total));else setProgress(pct,formatBytes(rec));},name); await triggerBlobDownload(blob,name); setProgress(100,'Done '+formatBytes(blob.size)); }
-async function directDownload(url,name){ try{ return await blobDownload(url,name||'video.mp4',true);}catch(e){ window.open(url,'_blank','noopener'); throw e; } }
+async function blobDownload(url,name,useProxy=true){
+  try{
+    let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{if(total)setProgress(pct,formatBytes(rec)+' / '+formatBytes(total));else setProgress(pct,formatBytes(rec));},name);
+    await triggerBlobDownload(blob,name);
+    setProgress(100,'Done '+formatBytes(blob.size));
+    return true;
+  }catch(e){
+    addLog('dl','Blob fetch failed, trying direct open: '+e.message,'error');
+    try{
+      let a=document.createElement('a');
+      a.href=url;
+      a.target='_blank';
+      a.rel='noopener';
+      a.download=name||'media';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(()=>{try{a.remove();}catch{}},2000);
+      setProgress(100,'Opened - use Save/Share in new tab');
+      addLog('dl','Opened original URL as fallback','done');
+      return true;
+    }catch(_){
+      throw e;
+    }
+  }
+}
+async function directDownload(url,name){
+  try{ return await blobDownload(url,name||'video.mp4',true); }
+  catch(e){
+    try{
+      window.open(url,'_blank','noopener');
+      setProgress(100,'Opened in new tab - long-press to save');
+      addLog('dl','Opened original in new tab (fallback)','done');
+      return true;
+    }catch(_){ throw e; }
+  }
+}
 async function fetchBlobForShare(url){ try{ if(String(url).startsWith('blob:')){let r=await fetch(url);return await r.blob();} return await fetchBlobSafe(url,true,null,'video.mp4'); }catch{return null;} }
 window.fetchBlobForShare=fetchBlobForShare;
 async function filePickerSave(url,name,useProxy=true){ const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent); if(!window.showSaveFilePicker||isMobile){ return blobDownload(url,name,useProxy); } let writable=null; try{ let h=await window.showSaveFilePicker({suggestedName:name||'video.mp4'}); writable=await h.createWritable(); let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{if(total)setProgress(pct,formatBytes(rec)+' / '+formatBytes(total));else setProgress(pct,formatBytes(rec));},name); if(blob.size<1024) throw new Error('Empty'); await writable.write(blob); await writable.close(); writable=null; setProgress(100,'Saved '+formatBytes(blob.size)); }catch(e){ try{if(writable)await writable.abort();}catch{} return blobDownload(url,name,useProxy); } }
