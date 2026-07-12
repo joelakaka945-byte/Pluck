@@ -51,6 +51,41 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .process-wrap{margin-top:16px;border:1px solid var(--border-soft);background:var(--surface-2);border-radius:16px;padding:14px;display:none}.process-head{font-size:13px;font-weight:800;margin-bottom:10px;display:flex;justify-content:space-between}.process-log{display:grid;gap:8px;max-height:320px;overflow:auto}.log-entry{display:flex;gap:10px;font-size:11.5px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface-1);color:var(--dim)}.log-entry.active{border-color:var(--accent-solid);background:linear-gradient(180deg,var(--glow-1),var(--surface-1));color:var(--text)}.log-entry.done{border-color:rgba(34,197,94,.25)}.log-entry.error{border-color:rgba(239,68,68,.35);color:#ffd4d4}
 .modal-backdrop{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:16px}.modal-card{width:100%;max-width:720px;max-height:90vh;overflow:auto;background:linear-gradient(180deg,var(--card-bg-2),var(--card-bg));border:1px solid var(--border-strong);border-radius:18px;padding:16px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.modal-body{background:var(--surface-1);border:1px solid var(--border-soft);border-radius:12px;padding:10px;min-height:120px}
 .footer-note{text-align:center;margin-top:12px;color:var(--faint);font-size:11px;font-family:var(--mono)}
+
+/* === Added Animations - UI unchanged, only motion === */
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmerMove{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
+@keyframes btnGlow{0%,100%{box-shadow:0 0 0 0 var(--glow-1)}50%{box-shadow:0 0 0 10px transparent}}
+@keyframes floatSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes pulseBorder{0%,100%{border-color:var(--border)}50%{border-color:var(--border-strong)}}
+.wrap > *{animation:fadeUp.6s ease both}
+.top{animation:cardIn.6s ease both}
+.hero{animation:fadeUp.7s.05s ease both}
+.card{animation:cardIn.7s.1s ease both;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:translateX(-100%);animation:shimmerMove 4.5s 1.2s ease-in-out infinite;pointer-events:none}
+.btn{transition:transform.15s ease, box-shadow.2s ease, filter.2s ease, opacity.2s}
+.btn:active{transform:scale(.96)}
+.btn.primary{animation:btnGlow 3.2s ease-in-out infinite}
+.btn.primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.brand-icon{animation:floatSoft 3.8s ease-in-out infinite}
+.field{transition:border-color.2s, box-shadow.25s, transform.2s}
+.field:focus-within{transform:translateY(-1px);box-shadow:0 0 0 4px var(--glow-1),0 0 4px rgba(139,92,246,.18)}
+.sw{transition:all.25s cubic-bezier(.34,1.2,.64,1)}
+.sw.on{transform:scale(1.03)}
+.file-row{animation:fadeUp.4s ease both;transition:transform.2s, border-color.2s}
+.file-row:hover{transform:translateY(-2px);border-color:var(--border-strong)}
+#fill{position:relative;overflow:hidden}
+#fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-100%);animation:shimmerMove 1.6s linear infinite}
+.log-entry{animation:fadeUp.25s ease both}
+.guide-wrap,.error-bible,.highlights,.fun,.refresh-area{animation:fadeUp.6s ease both}
+.guide-wrap{animation-delay:.15s}.highlights{animation-delay:.12s}.error-bible{animation-delay:.18s}
+.pill{transition:transform.2s, border-color.2s}
+.pill:hover{transform:translateY(-1px);border-color:var(--border-strong)}
+#pasteBtn{transition:all.2s ease}
+#pasteBtn:active{transform:scale(.92)}
+.modal-card{animation:cardIn.35s cubic-bezier(.34,1.2,.64,1) both}
+
 </style>
 </head>
 <body>
@@ -284,7 +319,36 @@ document.addEventListener('DOMContentLoaded', () => {
     let clear=$('#clear');if(clear)clear.addEventListener('click',()=>{if(els.url)els.url.value='';if(els.out){els.out.classList.remove('show');els.out.innerHTML='';}clearLog();});
     let cp=$('#closePreview');if(cp)cp.addEventListener('click',()=>window.closePreview());
     let pm=$('#previewModal');if(pm)pm.addEventListener('click',e=>{if(e.target===e.currentTarget)window.closePreview();});
-    let pasteBtn=$('#pasteBtn');if(pasteBtn)pasteBtn.addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();if(t&&els.url){els.url.value=t.trim();els.url.focus();}}catch{try{if(els.url){els.url.focus();document.execCommand('paste');}}catch{}}});
+    let pasteBtn=$('#pasteBtn');
+    if(pasteBtn)pasteBtn.addEventListener('click', async()=>{
+      if(!els.url) return;
+      const orig=pasteBtn.textContent;
+      try{
+        let text='';
+        if(navigator.clipboard && navigator.clipboard.readText){
+          text = await navigator.clipboard.readText();
+        }
+        if(text && text.trim()){
+          els.url.value=text.trim();
+          els.url.focus();
+          els.url.dispatchEvent(new Event('input',{bubbles:true}));
+          pasteBtn.textContent='Pasted!';
+          pasteBtn.style.transform='scale(1.05)';
+          setTimeout(()=>{pasteBtn.textContent=orig;pasteBtn.style.transform='';},1200);
+          return;
+        }
+        throw new Error('empty');
+      }catch(err){
+        els.url.focus();
+        try{ els.url.select(); }catch{}
+        pasteBtn.textContent='Now long-press > Paste';
+        let ph=els.url.placeholder;
+        els.url.placeholder='Tap and hold here then tap Paste';
+        try{ document.execCommand('paste'); }catch{}
+        setTimeout(()=>{ pasteBtn.textContent=orig; els.url.placeholder=ph; },2500);
+      }
+    });
+    if(els.url) els.url.addEventListener('paste', (e)=>{ setTimeout(()=>{ els.url.value=els.url.value.trim(); },0); });
     let rb=$('#refreshBtn');if(rb)rb.addEventListener('click',async()=>{rb.disabled=true;rb.textContent='Refreshing...';let u=new URL(location.href);u.searchParams.set('_r',Date.now().toString());location.href=u.toString();});
     let guideHead=$('#guideHead'),guideBody=$('#guideBody'),guideBtn=$('#guideToggleBtn');
     function toggleGuide(){if(!guideBody||!guideBtn)return;let open=guideBody.classList.contains('open');if(open){guideBody.classList.remove('open');guideBtn.textContent='Open Guide';}else{guideBody.classList.add('open');guideBtn.textContent='Close Guide';}}
