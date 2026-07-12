@@ -41,8 +41,8 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .brand-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--accent);color:#fff;box-shadow:0 0 18px var(--glow-1),0 0 32px var(--glow-2);animation:floatSoft 3.8s ease-in-out infinite}
 .status{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);box-shadow:0 0 12px var(--glow-1)}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 6px rgba(245,158,11,.18),0 0 14px rgba(245,158,11,.4);animation:pulse 1.6s infinite}
-.dot.ok{background:var(--ok);box-shadow:0 0 0 6px rgba(34,197,94,.18),0 0 16px rgba(34,197,94,.45);animation:none}
-.dot.bad{background:var(--bad);box-shadow:0 0 0 6px rgba(239,68,68,.18);animation:none}
+.dot.ok{background:var(--ok);box-shadow:0 0 6px rgba(34,197,94,.18),0 0 16px rgba(34,197,94,.45);animation:none}
+.dot.bad{background:var(--bad);box-shadow:0 0 0 6px rgba(239,68,.18);animation:none}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
 .hero{margin:22px 6px 14px;text-align:left}
 .hero h1{font-size:clamp(34px,8vw,46px);line-height:.95;letter-spacing:-.05em;font-weight:800;background:linear-gradient(180deg,#fff 30%,rgba(255,255,255,.65));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 24px var(--glow-1),0 0 48px var(--glow-2)}
@@ -51,7 +51,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .card{border:1px solid var(--border);background:linear-gradient(180deg,var(--card-bg-2),var(--card-bg));backdrop-filter:blur(22px) saturate(1.35);-webkit-backdrop-filter:blur(22px) saturate(1.35);border-radius:22px;padding:18px;position:relative;overflow:hidden;box-shadow:0 0 0 1px rgba(139,92,246,.12),0 10px 40px rgba(0,0,0,.38),0 0 42px var(--glow-1),0 0 72px var(--glow-2);transition:border-color.3s,box-shadow.3s}
 .card:hover{border-color:var(--border-strong);box-shadow:0 0 0 1px rgba(139,92,246,.18),0 16px 52px rgba(0,0,0,.5),0 0 64px var(--glow-1),0 0 96px var(--glow-2)}
 .card::before{content:'';position:absolute;top:0;left:0;width:65%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transform:translateX(-100%);animation:shimmerMove 4.5s 1.2s ease-in-out infinite;pointer-events:none;z-index:1}
-.switch{display:inline-flex;gap:4px;padding:4px;background:var(--surface-1);border:1px solid var(--border-soft);border-radius:999px;position:relative;box-shadow:inset 0 0 12px rgba(0,0,0,.4),0 0 18px var(--glow-1)}
+.switch{display:inline-flex;gap:4px;padding:4px;background:var(--surface-1);border:1px solid var(--border-soft);border-radius:999px;position:relative;box-shadow:inset 0 12px rgba(0,0,0,.4),0 0 18px var(--glow-1)}
 .sw{padding:8px 16px;border-radius:999px;border:0;background:transparent;color:var(--dim);font-weight:700;font-size:13px;cursor:pointer;transition:all.3s var(--ease-spring);position:relative;z-index:2}
 .sw.on{background:var(--accent);color:#fff;transform:scale(1.03);box-shadow:0 0 14px var(--glow-1),0 0 28px var(--glow-2),0 2px 12px rgba(0,0,0,.4)}
 .meta-pills{display:flex;gap:6px;flex-wrap:wrap}
@@ -141,7 +141,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 @keyframes floatSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 #fill{position:relative;overflow:hidden;border-radius:999px;box-shadow:0 0 12px var(--glow-1)}
 #fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transform:translateX(-100%);animation:shimmerMove 1.6s linear infinite}
-.hero h1{background:linear-gradient(180deg,#fff 20%,rgba(255,255,255,.88) 45%,rgba(255,255,255,.58) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:heroBreath 4.6s ease-in-out infinite alternate,textFloatSoft 6.5s ease-in-out infinite!important;letter-spacing:-.055em}
+.hero h1{background:linear-gradient(180deg,#fff 20%,rgba(255,255,.88) 45%,rgba(255,255,255,.58) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:heroBreath 4.6s ease-in-out infinite alternate,textFloatSoft 6.5s ease-in-out infinite!important;letter-spacing:-.055em}
 .hero h1 span{background:linear-gradient(90deg,#8b5cf6 0%,#ec4899 25%,#22d3ee 50%,#8b5cf6 75%,#ec4899 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradientVibe 5s linear infinite,shineWipe 2.8s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(139,92,246,.42))}
 @keyframes gradientVibe{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes textFloatSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.2px)}}
@@ -478,48 +478,101 @@ async function fetchBlobSafe(url,useProxy,onProgress,expectedName){
   }
   throw lastErr||new Error('Download failed - all proxies failed');
 }
-async function triggerBlobDownload(blob,filename){
-  if(!blob||blob.size<1024) throw new Error('Blocked empty file');
-  const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-  if(isIOS){ let viewBlob=new Blob([await blob.arrayBuffer()],{type:getMimeForName(filename)}); let viewUrl=URL.createObjectURL(viewBlob); window.open(viewUrl,'_blank','noopener'); setTimeout(()=>{try{window.openPreview(viewUrl,filename);}catch{}},300); setProgress(100,'Open - Use Share > Save'); setTimeout(()=>URL.revokeObjectURL(viewUrl),60000); return; }
-  let downloadBlob=new Blob([await blob.arrayBuffer()],{type:'application/octet-stream'}); let blobUrl=URL.createObjectURL(downloadBlob); let a=document.createElement('a'); a.href=blobUrl; a.download=filename; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>{try{a.click()}catch{}},180); setTimeout(()=>{URL.revokeObjectURL(blobUrl); try{a.remove()}catch{}},9000);
+function isIOSDevice(){
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 }
-async function blobDownload(url,name,useProxy=true){
+async function iosSaveWithShare(blob,filename){
   try{
-    let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{if(total)setProgress(pct,formatBytes(rec)+' / '+formatBytes(total));else setProgress(pct,formatBytes(rec));},name);
-    await triggerBlobDownload(blob,name);
-    setProgress(100,'Done '+formatBytes(blob.size));
-    return true;
+    if(navigator.canShare && navigator.share){
+      let file=new File([blob], filename, {type: blob.type || getMimeForName(filename)});
+      if(navigator.canShare({files:[file]})){
+        await navigator.share({files:[file], title: filename, text: 'Save '+filename});
+        addLog('ios','Saved via iOS Share Sheet','done');
+        setProgress(100,'Saved via Share Sheet');
+        return true;
+      }
+    }
   }catch(e){
-    addLog('dl','Blob fetch failed, trying direct open: '+e.message,'error');
-    try{
+    addLog('ios','Share failed: '+e.message,'error');
+  }
+  return false;
+}
+async function triggerBlobDownload(blob,filename){
+  if(!blob||blob.size<800) throw new Error('Empty file blocked');
+  let ios=isIOSDevice();
+  let blobUrl=URL.createObjectURL(blob);
+  try{
+    if(ios){
+      let shared=await iosSaveWithShare(blob,filename);
+      if(shared){ URL.revokeObjectURL(blobUrl); return; }
+      window.openPreview(blobUrl, filename);
+      setProgress(100,'Preview opened - tap Share > Save to Files');
+      addLog('dl','iOS preview opened - use Share button','done');
+      setTimeout(()=>URL.revokeObjectURL(blobUrl), 120000);
+      return;
+    }else{
       let a=document.createElement('a');
-      a.href=url;
-      a.target='_blank';
-      a.rel='noopener';
-      a.download=name||'media';
+      a.href=blobUrl;
+      a.download=filename||'download.mp4';
+      a.style.display='none';
       document.body.appendChild(a);
       a.click();
-      setTimeout(()=>{try{a.remove();}catch{}},2000);
-      setProgress(100,'Opened - use Save/Share in new tab');
-      addLog('dl','Opened original URL as fallback','done');
+      addLog('dl','Download started '+filename+' ('+formatBytes(blob.size)+')','done');
+      setProgress(100,'Downloading '+formatBytes(blob.size));
+      setTimeout(()=>{ URL.revokeObjectURL(blobUrl); try{a.remove();}catch{} }, 15000);
+      return;
+    }
+  }catch(e){
+    URL.revokeObjectURL(blobUrl);
+    throw e;
+  }
+}
+async function blobDownload(url,name,useProxy=true){
+  let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{
+    if(total) setProgress(pct, formatBytes(rec)+' / '+formatBytes(total));
+    else setProgress(pct, formatBytes(rec));
+  }, name);
+  await triggerBlobDownload(blob,name);
+  return true;
+}
+async function directDownload(url,name){
+  try{
+    return await blobDownload(url,name||'video.mp4',true);
+  }catch(e){
+    addLog('dl','Direct open fallback: '+e.message,'error');
+    try{
+      window.open(url,'_blank','noopener');
+      setProgress(100,'Opened original - long-press video to save');
+      addLog('dl','Opened original in new tab','done');
       return true;
     }catch(_){
       throw e;
     }
   }
 }
-async function directDownload(url,name){
-  try{ return await blobDownload(url,name||'video.mp4',true); }
-  catch(e){
-    try{
-      window.open(url,'_blank','noopener');
-      setProgress(100,'Opened in new tab - long-press to save');
-      addLog('dl','Opened original in new tab (fallback)','done');
-      return true;
-    }catch(_){ throw e; }
+async function iosSave(url,name){
+  let filename=name||'media.mp4';
+  try{
+    addLog('ios','Preparing '+filename+' for iOS Save...','active');
+    setProgress(10,'Preparing for iOS');
+    let blob=await fetchBlobSafe(url,true,(pct,rec,total)=>{
+      if(total) setProgress(10+Math.round(pct*0.8), formatBytes(rec)+' / '+formatBytes(total));
+      else setProgress(20, formatBytes(rec));
+    }, filename);
+    setProgress(95,'Opening Share Sheet');
+    let shared=await iosSaveWithShare(blob,filename);
+    if(!shared){
+      let blobUrl=URL.createObjectURL(blob);
+      window.openPreview(blobUrl, filename);
+      setProgress(100,'Tap Share in preview > Save to Files');
+    }
+  }catch(e){
+    addLog('ios','iOS Save failed, opening original: '+e.message,'error');
+    window.open(url,'_blank','noopener');
+    setProgress(100,'Opened - use Share > Save');
   }
 }
+window.iosSave=iosSave;
 async function fetchBlobForShare(url){ try{ if(String(url).startsWith('blob:')){let r=await fetch(url);return await r.blob();} return await fetchBlobSafe(url,true,null,'video.mp4'); }catch{return null;} }
 window.fetchBlobForShare=fetchBlobForShare;
 async function filePickerSave(url,name,useProxy=true){ const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent); if(!window.showSaveFilePicker||isMobile){ return blobDownload(url,name,useProxy); } let writable=null; try{ let h=await window.showSaveFilePicker({suggestedName:name||'video.mp4'}); writable=await h.createWritable(); let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{if(total)setProgress(pct,formatBytes(rec)+' / '+formatBytes(total));else setProgress(pct,formatBytes(rec));},name); if(blob.size<1024) throw new Error('Empty'); await writable.write(blob); await writable.close(); writable=null; setProgress(100,'Saved '+formatBytes(blob.size)); }catch(e){ try{if(writable)await writable.abort();}catch{} return blobDownload(url,name,useProxy); } }
@@ -532,10 +585,16 @@ window.openPreview=function(u,n){
   else{ let v=document.createElement('video'); v.src=u; v.controls=true; v.playsInline=true; v.setAttribute('webkit-playsinline',''); v.style.width='100%'; v.style.borderRadius='12px'; v.style.background='#000'; wrap.appendChild(v); }
   b.appendChild(wrap);
   let act=document.createElement('div'); act.style.display='grid'; act.style.gap='9px'; act.style.marginTop='14px';
-  act.innerHTML=`<button class="btn primary" id="modalDL" style="width:100%">Download ${isAud?'MP3':'Video'}</button><div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalShare">Share</button><button class="btn ghost" id="modalSave">Save to Disk</button></div><div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalCopy">Copy Link</button><a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Original</a></div>`;
+  let isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  act.innerHTML=`<button class="btn primary" id="modalDL" style="width:100%">⬇ Download ${isAud?'MP3':'Video'}</button>
+  ${isIOS?`<button class="btn primary" id="modalIOSSave" style="width:100%;background:linear-gradient(135deg,#22d3ee,#0ea5e9)">🍎 iOS Save - Tap to Save to Files</button>`:``}
+  <div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalShare">Share</button><button class="btn ghost" id="modalSave">Save to Disk</button></div>
+  <div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalCopy">Copy Link</button><a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Original</a></div>`;
   b.appendChild(act);
   setTimeout(()=>{
     let dl=document.getElementById('modalDL'); if(dl) dl.addEventListener('click',async()=>{try{dl.textContent='Downloading...'; await window.directDownload(window._previewUrl,window._previewName); dl.textContent='Done';}catch(e){dl.textContent='Try Open Original';}});
+    let iosSv=document.getElementById('modalIOSSave'); if(iosSv) iosSv.addEventListener('click',()=>{ window.iosSave(window._previewUrl, window._previewName); });
+    let sv=document.getElementById('modalSave');
     let sh=document.getElementById('modalShare'); if(sh) sh.addEventListener('click',async()=>{
       let url=window._previewUrl, name=window._previewName;
       try{
@@ -548,15 +607,48 @@ window.openPreview=function(u,n){
         }
       }catch(e){} window.open(url,'_blank','noopener');
     });
-    let sv=document.getElementById('modalSave'); if(sv) sv.addEventListener('click',()=>{window.filePickerSave(window._previewUrl,window._previewName,true);});
+    if(sv) sv.addEventListener('click',()=>{window.filePickerSave(window._previewUrl,window._previewName,true);});
     let cp=document.getElementById('modalCopy'); if(cp) cp.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(window._previewUrl); cp.textContent='Copied!'; setTimeout(()=>cp.textContent='Copy Link',1500);}catch{prompt('Copy:',window._previewUrl);}});
   },0);
   m.classList.add('show'); m.style.display='flex'; document.body.style.overflow='hidden';
 };
 window.closePreview=function(){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'); if(!m) return; m.classList.remove('show'); setTimeout(()=>{m.style.display='none';},250); if(b){b.querySelectorAll('video,audio').forEach(el=>{try{el.pause();}catch{}}); b.innerHTML='';} document.body.style.overflow='';};
-function buildButtons(u,fn){let encU=encodeURIComponent(u);let encN=encodeURIComponent(fn);return `<button class="btn primary" style="width:100%;margin-bottom:9px" data-action="preview" data-url="${encU}" data-name="${encN}">Preview</button><div class="dl-grid"><button class="btn primary" data-action="direct" data-url="${encU}" data-name="${encN}">Download</button><button class="btn ghost" data-action="stream" data-url="${encU}" data-name="${encN}">Save to Disk</button><button class="btn ghost" data-action="blob" data-url="${encU}" data-name="${encN}">Blob Save</button><a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Original</a></div>`;}
+function buildButtons(u,fn){
+  let encU=encodeURIComponent(u);let encN=encodeURIComponent(fn);
+  let isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  let iosBtn=isIOS?`<button class="btn primary" data-action="iossave" data-url="${encU}" data-name="${encN}" style="background:linear-gradient(135deg,#22d3ee,#0ea5e9);box-shadow:0 0 18px rgba(34,211,238,.5)">🍎 iOS Save ${fn.toLowerCase().endsWith('.mp3')?'MP3':'Video'}</button>`:``;
+  return `<button class="btn primary" style="width:100%;margin-bottom:9px" data-action="preview" data-url="${encU}" data-name="${encN}">Preview</button>
+  <div class="dl-grid">
+    <button class="btn primary" data-action="direct" data-url="${encU}" data-name="${encN}">⬇ Download</button>
+    <button class="btn ghost" data-action="stream" data-url="${encU}" data-name="${encN}">Save to Disk</button>
+    ${iosBtn}
+    <button class="btn ghost" data-action="blob" data-url="${encU}" data-name="${encN}">Blob Save</button>
+    <a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Original</a>
+  </div>`;
+}
 function buildItemsBlock(items){return items.map(it=>{return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge">${it.label}</span></div>${buildButtons(it.url,it.filename)}</div>`;}).join('');}
-function bindDynamicButtons(){document.querySelectorAll('[data-action]').forEach(btn=>{if(btn._bound)return;btn._bound=true;btn.addEventListener('click',async e=>{e.preventDefault();let url=decodeURIComponent(btn.getAttribute('data-url')||'');let name=decodeURIComponent(btn.getAttribute('data-name')||'video.mp4');let act=btn.getAttribute('data-action');try{if(act==='preview')window.openPreview(url,name);else if(act==='direct')await directDownload(url,name);else if(act==='stream')await filePickerSave(url,name,true);else if(act==='blob')await blobDownload(url,name,true);}catch(err){addLog('err','Download error: '+err.message,'error');showError('Download failed',err.message);}});});}
+function bindDynamicButtons(){
+  document.querySelectorAll('[data-action]').forEach(btn=>{
+    if(btn._bound) return; btn._bound=true;
+    btn.addEventListener('click',async e=>{
+      e.preventDefault();
+      let url=decodeURIComponent(btn.getAttribute('data-url')||'');
+      let name=decodeURIComponent(btn.getAttribute('data-name')||'video.mp4');
+      let act=btn.getAttribute('data-action');
+      try{
+        if(act==='preview') window.openPreview(url,name);
+        else if(act==='direct') await directDownload(url,name);
+        else if(act==='stream') await filePickerSave(url,name,true);
+        else if(act==='blob') await blobDownload(url,name,true);
+        else if(act==='iossave') await iosSave(url,name);
+      }catch(err){
+        if(String(err.message).includes('Opened')||String(err.message).includes('Share')) return;
+        addLog('err','Action error: '+err.message,'error');
+        showError('Download issue',err.message+' - Try Open Original or iOS Save button');
+      }
+    });
+  });
+}
 async function ping(){let t0=performance.now();if(els.dot)els.dot.className='dot';if(els.stxt)els.stxt.textContent='Checking engine...';const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),5000);try{let r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors',signal:ctrl.signal});clearTimeout(to);let ms=Math.round(performance.now()-t0);if(els.lat)els.lat.textContent=ms+' ms';let j=await r.json();if(!j||!j.cobalt)throw new Error('bad json');state.online=true;if(els.dot)els.dot.className='dot ok';if(els.ver)els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`;if(els.stxt)els.stxt.textContent='Engine online';return true;}catch(e){clearTimeout(to);state.online=false;if(els.dot)els.dot.className='dot bad';if(els.ver)els.ver.textContent='offline';if(els.lat)els.lat.textContent='--';if(els.stxt)els.stxt.textContent='Engine offline - tap Wake';return false;}}
 async function go(){let raw=els.url?els.url.value.trim():'';if(!raw)return showError('Input required','Paste https:// link');if(!isValidUrl(raw))return showError('Invalid URL','Must start with https://');window._currentPlatform=getPlatform(raw);if(els.go){els.go.disabled=true;els.go.textContent='Processing...';}initLog();try{addLog('01','Validate URL','active');setProgress(10,'Validating');await new Promise(r=>setTimeout(r,40));addLog('01','URL ok','done');addLog('02','Check engine','active');setProgress(25,'Engine check');if(!state.online)await ping();addLog('02',state.online?'online':'waking','done');setProgress(35,'Engine ok');let isPro=state.isExpert;let opts={mode:$('#mode')?.value||'auto',quality:$('#vq')?.value||'720',style:$('#fn')?.value||'classic',disableMetadata:$('#nm')?.checked};let payload=buildValidPayload(raw,opts,isPro);if(els.kvR)els.kvR.textContent=JSON.stringify(payload);if(els.jsonPreview)els.jsonPreview.textContent=JSON.stringify(payload,null,2);addLog('03','Request ready','done');setProgress(45,'Request ready');addLog('04','Contacting engine','active');setProgress(60,'Sending');let headers=new Headers();headers.set('Accept','application/json');headers.set('Content-Type','application/json');let r=await fetchWithTimeout(BASE+'/',{method:'POST',mode:'cors',headers:headers,body:JSON.stringify(payload)},15000);let result=await r.json();if(result&&result.status==='error'&&result.error&&result.error.code==='error.api.header.accept'){let h2=new Headers();h2.set('Accept','application/json');h2.set('Content-Type','application/json');let r2=await fetchWithTimeout(BASE+'/',{method:'POST',headers:h2,body:JSON.stringify(payload)},15000);result=await r2.json();r=r2;}if(!r.ok||result.status==='error')throw new Error(result.error&&result.error.code?mapError(result.error.code):'Engine error');addLog('04','Response received','done');setProgress(75,'Response ok');let customName=$('#customName')?.value?.trim()||'';let items=extractItems(result,payload.filenameStyle,payload.videoQuality,customName,payload.downloadMode);addLog('05','Found '+items.length+' file(s)','done');setProgress(85,items.length+' files');showOutput('ok','Ready to save',buildItemsBlock(items));setProgress(100,'Ready');addLog('06','Done','done');}catch(e){addLog('err','ERR '+e.message,'error');setProgress(0,'Failed');showError('Failed',e.message);}finally{if(els.go){els.go.disabled=false;els.go.textContent='Download';}}}
 function updateModeUI(){let m=$('#mode')?.value;let vq=$('#vq');if(m==='audio'){if(vq){vq.style.opacity='0.35';vq.style.pointerEvents='none';}}else{if(vq){vq.style.opacity='1';vq.style.pointerEvents='auto';}}}
