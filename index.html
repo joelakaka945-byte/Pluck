@@ -141,8 +141,6 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 @keyframes floatSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 #fill{position:relative;overflow:hidden;border-radius:999px;box-shadow:0 0 12px var(--glow-1)}
 #fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transform:translateX(-100%);animation:shimmerMove 1.6s linear infinite}
-
-/* === SHINY VIBEY TEXT - RESTORED === */
 .hero h1{background:linear-gradient(180deg,#fff 20%,rgba(255,255,255,.88) 45%,rgba(255,255,255,.58) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:heroBreath 4.6s ease-in-out infinite alternate,textFloatSoft 6.5s ease-in-out infinite!important;letter-spacing:-.055em}
 .hero h1 span{background:linear-gradient(90deg,#8b5cf6 0%,#ec4899 25%,#22d3ee 50%,#8b5cf6 75%,#ec4899 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradientVibe 5s linear infinite,shineWipe 2.8s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(139,92,246,.42))}
 @keyframes gradientVibe{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
@@ -167,8 +165,6 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 @keyframes guideTitleShine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
 #ft{background:linear-gradient(90deg,var(--muted),#a5b4fc,var(--muted));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:funFactVibe 3.6s ease-in-out infinite alternate}
 @keyframes funFactVibe{0%{background-position:0% 50%;filter:brightness(.98)}100%{background-position:100% 50%;filter:brightness(1.16)}}
-
-/* === MEGA GLOW BOOST + DEEP OCEAN PRO === */
 body.is-expert.bg{
   background:
     radial-gradient(1100px 800px at 12% -8%, rgba(34,211,238,.52), transparent 58%),
@@ -211,8 +207,6 @@ body.is-expert.expert-box{border-color:rgba(34,211,238,.18);background:rgba(10,2
 body.is-expert.hero h1{filter:drop-shadow(0 0 22px rgba(34,211,238,.32)) drop-shadow(0 0 48px rgba(6,182,212,.22))}
 body.is-expert.hero h1 span{background:linear-gradient(90deg,#22d3ee 0%,#38bdf8 25%,#0ea5e9 50%,#22d3ee 75%,#06b6d4 100%);background-size:320% 100%;filter:drop-shadow(0 0 22px rgba(34,211,238,.5))}
 body.is-expert #fill{background:linear-gradient(90deg,#22d3ee,#0ea5e9,#06b6d4);box-shadow:0 0 12px rgba(34,211,238,.6),0 0 24px rgba(6,182,212,.4)}
-
-/* === WATER FLOW MODE TRANSITION - LAG REDUCED + GLOW KEPT === */
 .water-transition{
   position:fixed;
   inset:-40%;
@@ -228,17 +222,13 @@ body.is-expert #fill{background:linear-gradient(90deg,#22d3ee,#0ea5e9,#06b6d4);b
   transform:translateZ(0);
   filter:blur(0px) saturate(1.2);
 }
-.water-transition.active{
-  animation:waterFlowPro 1.35s cubic-bezier(.22,.61,.36,1) forwards;
-}
+.water-transition.active{animation:waterFlowPro 1.35s cubic-bezier(.22,.61,.36,1) forwards;}
 @keyframes waterFlowPro{
   0%{opacity:0;transform:translate3d(-28%,-12%,0) rotate(-6deg) scale(0.96);background-position:0% 15%,100% 85%,-120% 0%;filter:blur(12px) brightness(1.2)}
   18%{opacity:0.85;filter:blur(2px) brightness(1.15)}
   55%{opacity:0.9;transform:translate3d(8%,4%,0) rotate(1.5deg) scale(1.04);background-position:52% 48%,48% 52%,20% 0%;filter:blur(0px) brightness(1.1)}
   100%{opacity:0;transform:translate3d(30%,12%,0) rotate(6deg) scale(1.12);background-position:100% 85%,0% 15%,220% 0%;filter:blur(18px) brightness(1.25)}
 }
-
-/* Smooth slow morph for all UI - GPU accelerated, no lag */
 html{scroll-behavior:auto}
 body,.top,.card,.field,.btn,.pill,.hl-badge,.size-badge,.expert-box,.box,.file-row,.guide-wrap,.error-bible,.process-wrap,.switch,.sel,.terminal,.modal-card{
   transition:
@@ -254,12 +244,7 @@ body,.top,.card,.field,.btn,.pill,.hl-badge,.size-badge,.expert-box,.box,.file-r
   transform:translateZ(0);
   backface-visibility:hidden;
 }
-.bg{
-  transition:all 1.2s cubic-bezier(.4,0,.2,1)!important;
-  will-change:transform,filter,opacity;
-  transform:translateZ(0);
-}
-/* Keep glow strong during transition */
+.bg{transition:all 1.2s cubic-bezier(.4,0,.2,1)!important;will-change:transform,filter,opacity;transform:translateZ(0);}
 body.is-transitioning.top,
 body.is-transitioning.card,
 body.is-transitioning.field,
@@ -274,13 +259,6 @@ body.is-transitioning.file-row{
     0 0 96px var(--glow-2),
     0 0 140px var(--glow-1)!important;
 }
-body.is-transitioning.brand-icon,
-body.is-transitioning.btn.primary,
-body.is-transitioning.sw.on{
-  filter:brightness(1.15) saturate(1.2) drop-shadow(0 0 18px var(--glow-1))!important;
-}
-
-/* Water ripple on switch */
 .switch{position:relative;overflow:hidden}
 .switch::after{
   content:'';
@@ -293,16 +271,8 @@ body.is-transitioning.sw.on{
   z-index:1;
   border-radius:999px;
 }
-body.is-transitioning.switch::after{
-  transform:translateX(120%);
-}
-
-/* Reduce layout thrash - use transform instead of top/left */
-.hero h1,.hero p,.pill,.hl-badge{
-  transform:translateZ(0);
-  will-change:auto;
-}
-
+body.is-transitioning.switch::after{transform:translateX(120%);}
+.hero h1,.hero p,.pill,.hl-badge{transform:translateZ(0);will-change:auto;}
 </style>
 </head>
 <body>
@@ -311,7 +281,7 @@ body.is-transitioning.switch::after{
 <div class="wrap">
 <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking engine...</span></div></div>
 <div class="hero">
-<h1 id="h1">Welcome,<br><span>You are almost ready.</span></h1>
+<h1 id="h1">Pluck Universal<br><span>Paste any link to get started.</span></h1>
 <p id="heroP">Paste any public link from Instagram, TikTok, YouTube, X or Reddit. Fast, private and universal.</p>
 </div>
 <div class="card" id="mainTool">
@@ -415,7 +385,6 @@ function triggerWaterFlow(toExpert){
   }
   document.body.classList.add('is-transitioning');
   overlay.classList.add('active');
-  // Haptic light
   try{if(navigator.vibrate) navigator.vibrate(12);}catch{}
   setTimeout(()=>{document.body.classList.remove('is-transitioning');},1350);
   setTimeout(()=>{overlay.classList.remove('active');},1450);
@@ -440,8 +409,8 @@ function applyFilenameStyle(o,s,q,i,t,c,mode){let isAudio=(mode==='audio')||Stri
 function mapError(c){const K={'error.api.link.unsupported':"Link not supported.",'error.api.content.video.unavailable':"Private or unavailable.",'error.api.content.video.age':"Age restricted."};return K[c]||c||'Engine error'}
 function extractItems(r,s,q,c,mode){if(!r)throw new Error('Empty response');if(r.status==='error')throw new Error(mapError(r.error&&r.error.code));if(r.status==='picker'&&Array.isArray(r.picker)){let filtered=r.picker.filter(it=>{let t=String(it.type||'').toLowerCase();let u=String(it.url||'').toLowerCase();if(t==='photo'||t==='image')return false;if(u.endsWith('.jpg')||u.endsWith('.jpeg')||u.endsWith('.png')||u.endsWith('.webp'))return false;return true;});if(!filtered.length) filtered=r.picker.filter(it=>String(it.type||'').toLowerCase()==='video');if(!filtered.length) filtered=r.picker.filter(it=>String(it.type||'').toLowerCase()==='audio');if(!filtered.length) filtered=[r.picker[0]];return filtered.map((it,i)=>{let isAud=(mode==='audio')||String(it.type||'').toLowerCase()==='audio';let fn=isAud?'audio.mp3':'video.mp4';return{url:it.url,filename:applyFilenameStyle(fn,s,q,i,isAud?'audio':'video',c,mode),label:isAud?'AUDIO':'VIDEO'};});}if(r.url){let isAud=(mode==='audio');let fn=isAud?'audio.mp3':'video.mp4';return[{url:r.url,filename:applyFilenameStyle(r.filename||fn,s,q,0,isAud?'audio':'video',c,mode),label:isAud?'AUDIO':'VIDEO'}];}throw new Error('No file returned');}
 function buildValidPayload(rawUrl,o,isPro){const url=String(rawUrl||'').trim();if(!isPro){return{url,downloadMode:'auto',videoQuality:'720',filenameStyle:'classic',audioFormat:'mp3',disableMetadata:false};}const allowedModes=['auto','audio'],allowedQ=['max','1080','720','480'],allowedStyle=['classic','pretty','basic','nerdy'];let mode=allowedModes.includes(o.mode)?o.mode:'auto';let quality=allowedQ.includes(String(o.quality))?String(o.quality):'720';let style=o.style==='custom'?'classic':(allowedStyle.includes(o.style)?o.style:'classic');let body={url,downloadMode:mode,videoQuality:quality,filenameStyle:style,audioFormat:'mp3',disableMetadata:!!o.disableMetadata};if(mode==='audio')delete body.videoQuality;return body;}
-function setSimple(){if(els.h1)els.h1.innerHTML='Welcome,<br><span>You are almost ready.</span>';document.body.classList.remove('is-expert')}
-function setExpert(){if(els.h1)els.h1.innerHTML='Pro Mode<br><span>Deep ocean glow active</span>';document.body.classList.add('is-expert');}
+function setSimple(){if(els.h1)els.h1.innerHTML='Pluck Universal<br><span>Paste any link to get started.</span>';document.body.classList.remove('is-expert')}
+function setExpert(){if(els.h1)els.h1.innerHTML='Pro Mode<br><span>Advanced controls unlocked.</span>';document.body.classList.add('is-expert');}
 function showOutput(t,ti,html){if(!els.out)return;els.out.classList.add('show');let cl=t==='ok'?'box ok':'box err';els.out.innerHTML=`<div class="${cl}"><div style="font-weight:800;margin-bottom:8px">${ti}</div>${html}<div style="margin-top:10px;font-size:12px;color:var(--dim)">${getFact()}</div></div>`;bindDynamicButtons();}
 function showError(t,m){showOutput('err',t,`<pre>${String(m).slice(0,1500)}</pre>`);}
 async function fetchBlobSafe(url,useProxy,onProgress,expectedName){
