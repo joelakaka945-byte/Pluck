@@ -184,168 +184,102 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:999px}
 ::-webkit-scrollbar-thumb:hover{background:var(--accent-solid)}
 ::selection{background:var(--accent-solid);color:#fff}
-body, body.is-expert { transition: background-color 0.9s var(--ease-smooth); }
-.top,.card,.field,.btn,.pill,.expert-box,.file-row,.hl-badge,.guide-wrap,.error-bible,.process-wrap,.switch,.sel,.terminal,.box {
-  transition: background 0.85s var(--ease-smooth), background-color 0.85s var(--ease-smooth), border-color 0.85s var(--ease-smooth), box-shadow 0.85s var(--ease-smooth), color 0.6s ease, filter 0.85s ease, transform 0.35s var(--ease-spring);
-}
-body.is-expert.top { box-shadow:0 6px 32px rgba(34,211,238,.18),0 4px 24px rgba(0,0,0,.28); animation: proGlowIn 1.2s var(--ease-spring) both; }
-body.is-expert.card { box-shadow:0 14px 48px rgba(34,211,238,.18),0 8px 32px rgba(0,0,0,.32); animation: proGlowIn 1.2s var(--ease-spring) 0.08s both; }
-@keyframes proGlowIn { 0%{filter:brightness(.96) saturate(.92); transform:translateY(0) scale(.995)} 45%{filter:brightness(1.1) saturate(1.2); transform:translateY(-1px) scale(1.006)} 100%{filter:brightness(1) saturate(1); transform:translateY(0) scale(1)} }
-.brand-icon{position:relative;overflow:hidden}
-.brand-icon::after{content:'';position:absolute;inset:-45%;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.55),transparent 32%);animation:spinShine 3s linear infinite;mix-blend-mode:overlay;opacity:0;transition:opacity.6s}
-.top:hover.brand-icon::after{opacity:.9}
-@keyframes spinShine{to{transform:rotate(360deg)}}
-.card::after{content:'';position:absolute;inset:-30%;background:radial-gradient(420px 220px at 30% 18%,var(--glow-1),transparent 65%),radial-gradient(380px 200px at 82% 20%,var(--glow-2),transparent 65%);opacity:0;transition:opacity.9s ease;pointer-events:none;z-index:0}
-.card:hover::after{opacity:.85}
-.primary{position:relative;isolation:isolate}
-.primary::after{content:'';position:absolute;inset:-3px;border-radius:16px;background:var(--accent);filter:blur(14px);opacity:.42;z-index:-1;animation:pulseGlow 2.8s ease-in-out infinite}
-.primary:hover::after{opacity:.72;filter:blur(18px)}
-@keyframes pulseGlow{0%,100%{transform:scale(.95);opacity:.32}50%{transform:scale(1.06);opacity:.66}}
-.sw.on{position:relative;overflow:hidden}
-.sw.on::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transform:translateX(-115%);animation:shineSweep 2.3s ease-in-out infinite}
-@keyframes shineSweep{0%{transform:translateX(-115%)}60%{transform:translateX(115%)}100%{transform:translateX(115%)}}
-.switch{position:relative}
-.switch::before{content:'';position:absolute;inset:2px;border-radius:999px;background:var(--accent);opacity:0;filter:blur(12px);transition:opacity.9s var(--ease-smooth),transform.9s var(--ease-smooth);transform:scale(.88);pointer-events:none}
-body.is-expert.switch::before{opacity:.26;transform:scale(1)}
-.pill,.hl-badge{position:relative;overflow:hidden}
-.pill::after,.hl-badge::after{content:'';position:absolute;top:0;left:-120%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transition:left.62s ease}
-.pill:hover::after,.hl-badge:hover::after{left:120%}
-.file-row:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.28);border-color:var(--border-strong)}
-.hero h1{animation:heroBreath 4.6s ease-in-out infinite alternate}
-@keyframes heroBreath{0%{text-shadow:0 0 18px var(--glow-1)}100%{text-shadow:0 0 32px var(--glow-1),0 0 64px var(--glow-2)}}
-.dot.ok{animation:dotPulse 2.2s ease-in-out infinite}
-@keyframes dotPulse{0%,100%{box-shadow:0 0 0 5px rgba(34,197,94,.18),0 0 12px rgba(34,197,94,.24)}50%{box-shadow:0 0 0 9px rgba(34,197,94,.08),0 0 20px rgba(34,197,94,.36)}}
-#fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.52),transparent);transform:translateX(-100%);animation:barShine 1.8s linear infinite}
-@keyframes barShine{to{transform:translateX(200%)}}
-.fun::after{content:'';position:absolute;top:0;left:0;width:38%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transform:skewX(-18deg) translateX(-100%);animation:funSweep 3.6s ease-in-out infinite}
-@keyframes funSweep{0%{transform:skewX(-18deg) translateX(-180%)}55%{transform:skewX(-18deg) translateX(340%)}100%{transform:skewX(-18deg) translateX(340%)}}
-.hero h1{position:relative;background: linear-gradient(180deg,#fff 20%,rgba(255,255,255,.88) 45%,rgba(255,255,255,.58) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation: heroBreath 4.6s ease-in-out infinite alternate, textFloatSoft 6.5s ease-in-out infinite!important;letter-spacing:-0.055em;}
-.hero h1 span{background: linear-gradient(90deg,#8b5cf6 0%,#ec4899 25%,#22d3ee 50%,#8b5cf6 75%,#ec4899 100%);background-size: 300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation: gradientVibe 5s linear infinite, shineWipe 2.8s ease-in-out infinite;position:relative;filter: drop-shadow(0 0 18px rgba(139,92,246,.32));}
-@keyframes gradientVibe{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes textFloatSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.2px)}}
-@keyframes shineWipe{0%{filter:drop-shadow(0 0 12px rgba(139,92,246,.22)) brightness(1)}50%{filter:drop-shadow(0 0 22px rgba(34,211,238,.42)) brightness(1.12)}100%{filter:drop-shadow(0 0 12px rgba(139,92,246,.22)) brightness(1)}}
-.hero p{animation: textReveal 0.9s cubic-bezier(.4,0,.2,1) 0.25s both, textGlowSoft 4s ease-in-out 1s infinite alternate;}
-@keyframes textReveal{from{opacity:0;transform:translateY(8px);filter:blur(6px)}to{opacity:.9;transform:translateY(0);filter:blur(0)}}
-@keyframes textGlowSoft{from{text-shadow:0 0 0 transparent}to{text-shadow:0 0 18px rgba(139,92,246,.18)}}
-.brand{letter-spacing:-0.02em;animation: brandTextVibe 3.8s ease-in-out infinite;background: linear-gradient(90deg,#fff 30%,rgba(255,255,255,.86));-webkit-background-clip:text;background-clip:text;}
-@keyframes brandTextVibe{0%,100%{filter:brightness(1) drop-shadow(0 0 0 transparent); letter-spacing:-0.02em}50%{filter:brightness(1.08) drop-shadow(0 0 12px rgba(139,92,246,.22)); letter-spacing:-0.015em}}
-.btn{position:relative;overflow:hidden;}
-.btn::after{content:'';position:absolute;top:0; left:-120%;width:80%; height:100%;background: linear-gradient(90deg, transparent, rgba(255,255,255,.38), transparent);transform:skewX(-18deg);transition:left.55s ease;pointer-events:none;z-index:2;}
-.btn:hover::after{ left:130%; }
-.btn.primary{text-shadow:0 1px 0 rgba(0,0,0,.18), 0 0 14px rgba(255,255,255,.22);animation: btnGlow 3.2s ease-in-out infinite, btnTextPulse 2.6s ease-in-out infinite;}
-@keyframes btnTextPulse{0%,100%{letter-spacing:0em; filter:brightness(1)}50%{letter-spacing:0.01em; filter:brightness(1.08)}}
-.pill,.hl-badge,.size-badge{position:relative;overflow:hidden;}
-.pill b,.hl-badge strong{position:relative;background: linear-gradient(90deg, var(--text) 0%, #c4b5fd 50%, var(--text) 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation: pillTextShine 3.8s linear infinite;transition: filter.25s ease;}
-@keyframes pillTextShine{0%{background-position:-100% 0}100%{background-position:200% 0}}
-.pill:hover b,.hl-badge:hover strong{filter: drop-shadow(0 0 8px rgba(139,92,246,.42));}
-#epLab, #ver, #lat{font-variant-ligatures:common-ligatures;animation: monoFlicker 4.2s ease-in-out infinite alternate;}
-@keyframes monoFlicker{0%{opacity:.92; text-shadow:0 0 0 transparent}100%{opacity:1; text-shadow:0 0 10px var(--glow-1)}}
-.expert-box h4{background: linear-gradient(90deg, var(--accent-solid), #a78bfa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation: h4Vibe 3s ease-in-out infinite alternate;}
-@keyframes h4Vibe{from{filter:brightness(.98) drop-shadow(0 0 0 transparent)}to{filter:brightness(1.18) drop-shadow(0 0 10px var(--glow-1))}}
-.file-info b{background: linear-gradient(90deg,#fff 20%,#e9d5ff 50%,#fff 80%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation: fileNameShine 4.5s ease-in-out infinite;}
-@keyframes fileNameShine{0%{background-position:-80% 0; filter:brightness(1)}50%{background-position:80% 0; filter:brightness(1.12)}100%{background-position:-80% 0; filter:brightness(1)}}
-.guide-head b,.error-bible-head span{background: linear-gradient(90deg,#fff 0%,#ddd6fe 50%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation: guideTitleShine 5s linear infinite;}
-@keyframes guideTitleShine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-#ft{position:relative;background: linear-gradient(90deg,var(--muted),#a5b4fc,var(--muted));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation: funFactVibe 3.6s ease-in-out infinite alternate;}
-@keyframes funFactVibe{0%{background-position:0% 50%; filter:brightness(.98)}100%{background-position:100% 50%; filter:brightness(1.12)}}
 </style>
 </head>
 <body>
 <div class="bg"></div>
 <div class="wrap">
 <div class="top"><div class="brand"><span class="brand-icon">P</span> Pluck</div><div class="status"><span id="dot" class="dot"></span><span id="stxt">Checking engine...</span></div></div>
+
 <div class="hero">
 <h1 id="h1">Welcome,<br><span>You are almost ready.</span></h1>
-<p id="heroP">Compatible with Instagram, TikTok, YouTube, X and Reddit. Paste any public link below. Wide paste bar, MP4 video and MP3 audio only, no pictures, real download.</p>
+<p id="heroP">Paste any public link from Instagram, TikTok, YouTube, X or Reddit. Fast, private and universal.</p>
 </div>
+
 <div class="card" id="mainTool">
 <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;">
 <div class="switch"><button id="bS" class="sw on">Standard Mode</button><button id="bE" class="sw">Pro Mode</button></div>
 <div class="meta-pills"><span class="pill">Engine <b id="ver">checking</b></span><span class="pill" id="lat">-- ms</span><span class="pill mono" id="epLab">engine ready</span></div>
 </div>
+
 <div class="row">
 <div class="field">
-<input id="url" type="url" placeholder="Paste Instagram or TikTok link here, must start with https://" autocomplete="off" spellcheck="false" />
+<input id="url" type="url" placeholder="Paste link here, must start with https://" autocomplete="off" spellcheck="false" />
 <button id="pasteBtn" type="button" class="btn ghost">Paste</button>
 </div>
 <button id="go" class="btn primary">Download</button>
 </div>
+
 <div id="ex" class="expert">
 <div class="expert-grid">
-<div class="expert-box" id="videoBox"><h4>Video [PRO] - Resolution</h4>
+<div class="expert-box" id="videoBox"><h4>Video Quality</h4>
 <select id="mode" class="sel"><option value="auto" selected>auto - Video+Audio</option><option value="audio">audio - Audio only</option></select>
-<select id="vq" class="sel" style="margin-top:8px"><option value="max">Quality: Maximum - Keep original quality</option><option value="1080">Quality: 1080p - Sharp full HD</option><option value="720" selected>Quality: 720p - Balanced quality and speed</option><option value="480">Quality: 480p - Smaller file, saves data</option></select>
-<div style="font-size:11px;color:var(--dim);margin-top:6px">Resolution ignored when Mode = audio. Locked to MP4.</div>
+<select id="vq" class="sel" style="margin-top:8px"><option value="max">Maximum quality</option><option value="1080">1080p - Full HD</option><option value="720" selected>720p - Balanced</option><option value="480">480p - Smaller file</option></select>
+<div style="font-size:11px;color:var(--dim);margin-top:6px">Quality is ignored when audio only is selected.</div>
 </div>
-<div class="expert-box" id="audioBox"><h4>Audio Only [PRO] - MP3 Locked</h4>
-<select id="af" class="sel"><option value="mp3" selected>mp3 - universal fix</option></select>
-<div style="font-size:11px;color:var(--dim);margin-top:6px">Locked to MP3 for universal playback. No m4a/opus.</div>
+<div class="expert-box" id="audioBox"><h4>Audio Format</h4>
+<select id="af" class="sel"><option value="mp3" selected>mp3 - universal</option></select>
+<div style="font-size:11px;color:var(--dim);margin-top:6px">Universal format for all devices.</div>
 </div>
-<div class="expert-box"><h4>Filename & Engine [PRO]</h4>
-<select id="fn" class="sel"><option value="classic">Filename: Classic - Safe original name</option><option value="pretty">Filename: Pretty - Clean readable name</option><option value="basic">Filename: Basic - Simple like video.mp4</option><option value="nerdy">Filename: Detailed - Includes quality and ID</option><option value="custom">Filename: Custom - Enter your own name</option></select>
-<input id="customName" class="sel" type="text" placeholder="Enter your custom filename here, for example My Instagram Save" style="display:none;margin-top:8px" maxlength="120" />
-<div id="customHint" style="display:none;font-size:11px;color:var(--dim);margin-top:6px;line-height:1.5">Extension added automatically.mp4 /.mp3</div>
-<label class="check"><input id="nm" type="checkbox"> Disable additional metadata for slightly faster processing</label>
-<label class="check"><input id="useProxy" type="checkbox" checked> Use proxy fallback</label>
-<label class="check"><input id="useStream" type="checkbox" checked> Prefer Stream to Disk</label>
+<div class="expert-box"><h4>Filename & Options</h4>
+<select id="fn" class="sel"><option value="classic">Filename: Classic</option><option value="pretty">Filename: Pretty</option><option value="basic">Filename: Basic</option><option value="nerdy">Filename: Detailed</option><option value="custom">Filename: Custom</option></select>
+<input id="customName" class="sel" type="text" placeholder="Enter custom name" style="display:none;margin-top:8px" maxlength="120" />
+<div id="customHint" style="display:none;font-size:11px;color:var(--dim);margin-top:6px">Extension added automatically</div>
+<label class="check"><input id="nm" type="checkbox"> Disable extra metadata</label>
+<label class="check"><input id="useProxy" type="checkbox" checked> Use fallback when needed</label>
+<label class="check"><input id="useStream" type="checkbox" checked> Prefer direct save</label>
 </div>
 </div>
 <div class="kv"><span>validated payload</span><b id="kvR">{}</b></div>
 <div class="terminal" id="jsonPreview">{}</div>
 <div class="kv"><span>last response</span><b id="kvResp">Waiting for your link...</b></div>
 </div>
+
 <div class="actions"><button id="wake" class="btn ghost">Wake Engine</button><button id="clear" class="btn ghost">Clear All</button><a id="test" target="_blank" rel="noopener" class="btn ghost" style="text-decoration:none">Test Engine</a></div>
-<div id="processWrap" class="process-wrap"><div class="process-head"><span>Live Process - Real Progress</span><span class="pill" id="memPill">No half files</span></div><div id="processLog" class="process-log"></div><div style="margin-top:10px"><div style="height:10px;background:var(--surface-1);border:1px solid var(--border);border-radius:999px;overflow:hidden"><div id="fill" style="height:100%;width:0%;background:var(--accent);transition:width.25s ease"></div></div><div style="display:flex;justify-content:space-between;margin-top:6px"><span id="pct" class="pill">0%</span><span id="sz" class="pill">Waiting</span></div></div>
+
+<div id="processWrap" class="process-wrap"><div class="process-head"><span>Live Process</span><span class="pill" id="memPill">Live Progress</span></div><div id="processLog" class="process-log"></div><div style="margin-top:10px"><div style="height:10px;background:var(--surface-1);border:1px solid var(--border);border-radius:999px;overflow:hidden"><div id="fill" style="height:100%;width:0%;background:var(--accent);transition:width.25s ease"></div></div><div style="display:flex;justify-content:space-between;margin-top:6px"><span id="pct" class="pill">0%</span><span id="sz" class="pill">Waiting</span></div></div>
 <div id="out" class="out"></div>
 </div>
+
 <div class="highlights"><div class="hl-row">
-<span class="hl-badge"><strong>MP4 Only</strong> video downloads</span>
-<span class="hl-badge"><strong>MP3 Only</strong> audio</span>
-<span class="hl-badge"><strong>Wide Paste Bar</strong> 52px tall</span>
 <span class="hl-badge"><strong>Works on Instagram</strong></span>
 <span class="hl-badge"><strong>Works on TikTok</strong></span>
 <span class="hl-badge"><strong>Works on YouTube</strong></span>
-<span class="hl-badge"><strong>Works on X and Reddit</strong></span>
-<span class="hl-badge">Accurate file size detection</span>
-<span class="hl-badge">Custom filenames</span>
-<span class="hl-badge">Preview before save</span>
+<span class="hl-badge"><strong>Works on X</strong> and Reddit</span>
 <span class="hl-badge">No watermark</span>
-<span class="hl-badge">Fast engine response</span>
+<span class="hl-badge">Fast downloads</span>
 <span class="hl-badge">Private processing</span>
+<span class="hl-badge">Preview before save</span>
+<span class="hl-badge">Custom filenames</span>
 <span class="hl-badge">Optimized for all devices</span>
-<span class="hl-badge">Live process log</span>
-<span class="hl-badge">Secure streaming</span>
 </div></div>
+
 <div class="guide-wrap" id="guideWrap">
-<div class="guide-head" id="guideHead"><b>Complete User Guide - Everything Explained - Tap to Open or Close</b><button class="guide-toggle" id="guideToggleBtn">Open Guide</button></div>
+<div class="guide-head" id="guideHead"><b>How to use Pluck - Tap to Open</b><button class="guide-toggle" id="guideToggleBtn">Open Guide</button></div>
 <div class="guide-body" id="guideBody">
-<div class="qa-item"><button class="qa-q" data-qa="1">What is Pluck and how does the engine work <span class="icon">+</span></button><div class="qa-a" id="qa-1"><strong>Answer:</strong> Pluck is a clean UI. You paste a link, we create a secure request and send it to your private engine. The engine returns a direct MP4 or MP3. Preview streams, download uses a safe blob.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="2">Does it work with Instagram and TikTok <span class="icon">+</span></button><div class="qa-a" id="qa-2"><strong>Yes, supported:</strong> Instagram Reels, Posts, Stories if public. TikTok standard videos, usually without watermark if engine provides it. Private/followers only requires login, engine cannot access. Public links best. Same for YouTube, X, Reddit.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="3">How do I use it step by step <span class="icon">+</span></button><div class="qa-a" id="qa-3"><ul><li><strong>1 Paste:</strong> Copy full link via Share button, must start with https://. Paste bar is wide, 52px tall, Paste button inside.</li><strong>2 Click Download:</strong> Tool at top visible without scrolling.</li><li><strong>3 View live log:</strong> 9 steps with real progress bar.</li><li><strong>4 Preview:</strong> Streams only, no save yet.</li><li><strong>5 Download method:</strong> Direct for Android/Desktop, Share to Save for iPhone, Blob Save fallback.</li><li><strong>6 If issue:</strong> Refresh Page to Fix Issues clears cache with?_r timestamp.</li></ul></div></div>
-<div class="qa-item"><button class="qa-q" data-qa="4">Which download button should I use for Android, iPhone, or PC <span class="icon">+</span></button><div class="qa-a" id="qa-4"><ul><li><strong>Preview No Download:</strong> Works all devices, streaming only.</li><li><strong>Direct Download - Android/Desktop:</strong> Uses anchor with application/octet-stream blob, saves to Downloads.</li><li><strong>Blob Save - iPhone:</strong> Safari ignores download attribute, so we fetch blob and open object URL, Share API forces Save dialog.</li><li><strong>File Picker Save:</strong> Uses showSaveFilePicker if supported, lets you choose folder.</li><li><strong>Open in New Tab:</strong> Fallback, long press Save Video.</li><li><strong>Share and Copy Link:</strong> Share opens system sheet, Copy places direct link in clipboard.</li></ul></div></div>
-<div class="qa-item"><button class="qa-q" data-qa="5">How do custom and pretty filenames work <span class="icon">+</span></button><div class="qa-a" id="qa-5"><strong>Classic</strong> safe name from engine. <strong>Pretty</strong> cleans underscores, decodes URI, removes pluck/cobalt/video, Title Case + quality. <strong>Basic</strong> video.mp4. <strong>Detailed</strong> adds quality+ID. <strong>Custom</strong> enter name without.mp4, invalid chars replaced, correct.mp4/.mp3 added.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="6">How is the MP4 file size detected <span class="icon">+</span></button><div class="qa-a" id="qa-6">Try HEAD to read Content-Length. If blocked by CORS, try GET Range to read Content-Range. If still blocked, retry via secure proxy fallback which adds the needed CORS headers.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="7">What does the live process log display <span class="icon">+</span></button><div class="qa-a" id="qa-7">Nine steps: 1 validation, 2 engine check/wake, 3 request building, 4 POST to Cobalt, 5 wait 3-10s, 6 parse URLs filter photos, 7 filename generation, 8 size detection via proxy, 9 completion. Real progress bar via reader.read().</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="8">What do the error messages mean and how to fix them <span class="icon">+</span></button><div class="qa-a" id="qa-8"><ul><li><strong>Link Not Supported:</strong> Domain not in engine list, use public Instagram/TikTok/YouTube/X/Reddit.</li><li><strong>Private or Unavailable:</strong> Private/deleted/region locked, incognito test fails.</li><li><strong>Age Restricted:</strong> Login required, engine does not bypass.</li><li><strong>Bad URL:</strong> Must start https://</li><li><strong>Engine Warming Up:</strong> Free hosting sleep, click Wake Engine 8-10s.</li><li><strong>No File Returned:</strong> Livestream/DRM/expired story, try 720p.</li><li><strong>Timeout:</strong> Network, click Refresh with?_r.</li></ul></div></div>
-<div class="qa-item"><button class="qa-q" data-qa="9">Why does Refresh Page to Fix Issues work <span class="icon">+</span></button><div class="qa-a" id="qa-9">Old version cleared localStorage, sessionStorage, cookies, Cache API, IndexedDB, service workers on every load. Now we use soft refresh with?_r timestamp to bust cache without wiping storage. Fixes outdated state.</div></div>
-<div class="qa-item"><button class="qa-q" data-qa="10">Is my link safe and private <span class="icon">+</span></button><div class="qa-a" id="qa-10">Yes. Your link is sent only to your private engine for processing. No link storage, no watermark. Size checks use a secure proxy only for headers when needed. Filenames are handled locally.</div></div>
+<div class="qa-item"><button class="qa-q" data-qa="1">What does Pluck do <span class="icon">+</span></button><div class="qa-a" id="qa-1"><strong>Answer:</strong> Paste a public link and Pluck asks your private engine for a direct file. You can preview then save.</div></div>
+<div class="qa-item"><button class="qa-q" data-qa="2">Which links work <span class="icon">+</span></button><div class="qa-a" id="qa-2">Public posts from Instagram, TikTok, YouTube, X and Reddit. Private or login-only content cannot be accessed.</div></div>
+<div class="qa-item"><button class="qa-q" data-qa="3">How to download <span class="icon">+</span></button><div class="qa-a" id="qa-3"><ul><li><strong>1.</strong> Copy link via Share</li><li><strong>2.</strong> Paste and tap Download</li><li><strong>3.</strong> Preview, then choose save method for your device</li></ul></div></div>
+<div class="qa-item"><button class="qa-q" data-qa="4">Audio and video <span class="icon">+</span></button><div class="qa-a" id="qa-4">Choose Auto for video with audio, or Audio only to get MP3. Filenames are created locally.</div></div>
+<div class="qa-item"><button class="qa-q" data-qa="5">Is it private <span class="icon">+</span></button><div class="qa-a" id="qa-5">Your link is sent only to your engine. No storage, no watermark, files are streamed directly to you.</div></div>
 </div></div>
-<div class="refresh-area"><button id="refreshBtn" class="refresh-main">Refresh Page to Fix Issues</button><div class="refresh-note">If you encounter any issues, please refresh. This clears cache with a timestamp and reloads a fresh copy.</div></div>
+
+<div class="refresh-area"><button id="refreshBtn" class="refresh-main">Refresh Page to Fix Issues</button><div class="refresh-note">Reloads a fresh copy with a timestamp to clear cache.</div></div>
 <div class="fun"><b>Quick Fact:</b> <span id="ft"></span></div>
-<div class="error-bible"><div class="error-bible-head"><span>Error Guide</span> <span class="pill">Read this before you worry - Wide Bar Fix</span></div><p class="error-bible-sub">Quick reference, also explained in FAQ above. All URLs preserved.</p><div class="error-grid">
-<div class="err-item"><b><code>Link Not Supported</code> - Incorrect website</b><p>Please use public link from Instagram, TikTok, YouTube, X, Reddit.</p></div>
-<div class="err-item"><b><code>Private or Unavailable</code> - Video is locked</b><p>If cannot view in incognito, engine cannot access.</p></div>
-<div class="err-item"><b><code>Age Restricted</code> - Age verification required</b><p>Login required, engine does not bypass.</p></div>
-<div class="err-item"><b><code>Bad URL</code> - Input error</b><p>Link must start https:// and be copied from Share button.</p></div>
-<div class="err-item"><b><code>Engine Warming Up</code> - Sleep mode</b><p>Click Wake Engine and wait 8-10s for the engine to start.</p></div>
-<div class="err-item"><b><code>No File Returned</code> - No content</b><p>Livestream, DRM, expired story. Try 720p.</p></div>
-<div class="err-item"><b><code>Timeout</code> - Network</b><p>Click Refresh Page to Fix Issues.</p></div>
-<div class="err-item"><b><code>Picture instead of video</code></b><p>Fixed: filtered photo types and image extensions from picker. Forced MP4 and MP3 only.</p></div>
-<div class="err-item"><b><code>Download failed / 0B / Half file</code></b><p>Fixed: uses safe blob download with size checks and streaming to prevent empty files.</p></div>
+
+<div class="error-bible"><div class="error-bible-head"><span>Error Guide</span> <span class="pill">Help & Fixes</span></div><p class="error-bible-sub">Quick reference for common messages.</p><div class="error-grid">
+<div class="err-item"><b><code>Link Not Supported</code></b><p>Use a public link from the supported platforms.</p></div>
+<div class="err-item"><b><code>Private or Unavailable</code></b><p>If you cannot view it in incognito, the engine cannot either.</p></div>
+<div class="err-item"><b><code>Age Restricted</code></b><p>Requires login, not supported.</p></div>
+<div class="err-item"><b><code>Bad URL</code></b><p>Link must start with https://</p></div>
+<div class="err-item"><b><code>Engine Warming Up</code></b><p>Tap Wake Engine and wait a few seconds.</p></div>
+<div class="err-item"><b><code>No File Returned</code></b><p>Livestream, DRM or expired story. Try a different quality.</p></div>
+<div class="err-item"><b><code>Timeout</code></b><p>Network issue. Refresh and try again.</p></div>
 </div></div>
-<div class="footer-note mono">Engine ready - MP4 / MP3 only - Wide paste bar 100% width</div>
+<div class="footer-note mono">Engine ready</div>
 </div>
-<div id="previewModal" class="modal-backdrop"><div class="modal-card"><div class="modal-head"><b id="previewTitle">Preview</b><button id="closePreview" class="btn ghost">Close</button></div><div id="previewBody" class="modal-body"></div><div class="modal-note">Preview only. iOS ignores download attribute for cross-origin, so use Share > Save to Files. Android uses octet-stream.</div></div></div>
+
+<div id="previewModal" class="modal-backdrop"><div class="modal-card"><div class="modal-head"><b id="previewTitle">Preview</b><button id="closePreview" class="btn ghost">Close</button></div><div id="previewBody" class="modal-body"></div><div class="modal-note">Preview only. Use the download buttons to save to your device.</div></div></div>
 
 <script>
 'use strict';
@@ -356,7 +290,7 @@ const PROXY_DIRECT = u=>u;
 const PROXY_CORS = u=>`https://corsproxy.io/?${encodeURIComponent(u)}`;
 const PROXY_ALLORIGINS = u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`;
 const PROXIES=[PROXY_DIRECT,PROXY_CORS,PROXY_ALLORIGINS];
-const FACTS=["Locked to MP4 video and MP3 audio only.","Thumbnails filtered - no more JPG downloads.","Android fix forces real download with octet-stream.","iOS fix uses Share to Save.","Proxy fallback validates file size, no 0B.","HTML error pages blocked to prevent fake mp4."];
+const FACTS=["Pluck works directly in your browser.","Preview before you save.","Custom filenames are created locally.","Works with public links only.","Fast and private processing.","Optimized for mobile and desktop.","Honey never spoils.","Octopuses have three hearts."];
 let state={isExpert:false,online:false,factPool:[...FACTS].sort(()=>Math.random()-0.5)};
 const $=s=>document.querySelector(s);
 const els={dot:$('#dot'),stxt:$('#stxt'),ver:$('#ver'),lat:$('#lat'),out:$('#out'),ft:$('#ft'),epLab:$('#epLab'),h1:$('#h1'),kvR:$('#kvR'),kvResp:$('#kvResp'),url:$('#url'),go:$('#go'),test:$('#test'),fn:$('#fn'),customName:$('#customName'),customHint:$('#customHint'),vq:$('#vq'),mode:$('#mode'),nm:$('#nm'),processWrap:$('#processWrap'),processLog:$('#processLog'),fill:$('#fill'),pct:$('#pct'),sz:$('#sz'),af:$('#af'),useProxy:$('#useProxy'),useStream:$('#useStream'),jsonPreview:$('#jsonPreview')};
@@ -376,80 +310,45 @@ function toPrettyName(r){if(!r)return'Video';let e='';let d=r.lastIndexOf('.');i
 function getMimeForName(name){let ext='.'+(String(name).split('.').pop()||'mp4').toLowerCase();if(ext==='.mp3')return'audio/mpeg';return'video/mp4';}
 
 function applyFilenameStyle(o,s,q,i,t,c,mode){
-  let isAudio = (mode==='audio') || String(t||'').toLowerCase()==='audio';
-  let e = isAudio? '.mp3' : '.mp4';
-  let base = String(o|| (isAudio?'audio':'video'));
-  let d = base.lastIndexOf('.');
-  if(d>-1) base = base.slice(0,d);
-  if(s==='custom'){
-    let cu=(c||'').trim()||(isAudio?'My Audio':'My Video');
-    return sanitize(cu.replace(/\.[a-z0-9]{2,4}$/i,''))+e;
-  }
-  if(s==='pretty'){
-    let b=toPrettyName(base);
-    if(q&&q!=='max'&&!isAudio) b+=' '+q+'p';
-    return sanitize(b+e);
-  }
+  let isAudio=(mode==='audio')||String(t).toLowerCase()==='audio';
+  let e=isAudio?'.mp3':'.mp4';
+  let base=String(o|| (isAudio?'audio':'video'));
+  let d=base.lastIndexOf('.'); if(d>-1) base=base.slice(0,d);
+  if(s==='custom'){let cu=(c||'').trim()||(isAudio?'My Audio':'My Video');return sanitize(cu.replace(/\.[a-z0-9]{2,4}$/i,''))+e;}
+  if(s==='pretty'){let b=toPrettyName(base); if(q&&q!=='max'&&!isAudio) b+=' '+q+'p'; return sanitize(b+e);}
   if(s==='basic') return sanitize((isAudio?'audio':'video')+(i?'-'+(i+1):'')+e);
   if(s==='nerdy') return sanitize(base+'_'+(q||'mp3')+'_'+Date.now().toString().slice(-5)+e);
   return sanitize(base+e);
 }
-
-function mapError(c){const K={'error.api.link.unsupported':"Link Not Supported - use Instagram/TikTok/YouTube/X/Reddit",'error.api.content.video.unavailable':"Private or Unavailable - incognito test fails",'error.api.content.video.age':"Age Restricted - login required"};return K[c]||c||'Engine error'}
-
-function extractItems(r,f,s,q,c,mode){
-  if(!r)throw new Error('Empty response from engine');
+function mapError(c){const K={'error.api.link.unsupported':"Link not supported.",'error.api.content.video.unavailable':"Private or unavailable.",'error.api.content.video.age':"Age restricted."};return K[c]||c||'Engine error'}
+function extractItems(r,s,q,c,mode){
+  if(!r)throw new Error('Empty response');
   if(r.status==='error')throw new Error(mapError(r.error&&r.error.code));
   if(r.status==='picker'&&Array.isArray(r.picker)){
-    let filtered = r.picker.filter(it=>{
-      let t=String(it.type||'').toLowerCase();
-      let url=String(it.url||'').toLowerCase();
-      if(t==='photo'||t==='image')return false;
-      if(url.endsWith('.jpg')||url.endsWith('.jpeg')||url.endsWith('.png')||url.endsWith('.webp')||url.endsWith('.heic'))return false;
-      return true;
-    });
-    if(!filtered.length) filtered = r.picker.filter(it=>String(it.type||'').toLowerCase()==='video');
-    if(!filtered.length) filtered = r.picker.filter(it=>String(it.type||'').toLowerCase()==='audio');
+    let filtered=r.picker.filter(it=>{let t=String(it.type||'').toLowerCase();let u=String(it.url||'').toLowerCase();if(t==='photo'||t==='image')return false;if(u.endsWith('.jpg')||u.endsWith('.jpeg')||u.endsWith('.png')||u.endsWith('.webp'))return false;return true;});
+    if(!filtered.length) filtered=r.picker.filter(it=>String(it.type||'').toLowerCase()==='video');
+    if(!filtered.length) filtered=r.picker.filter(it=>String(it.type||'').toLowerCase()==='audio');
     if(!filtered.length) filtered=[r.picker[0]];
-    return filtered.map((it,i)=>{
-      let isAud = (mode==='audio') || String(it.type||'').toLowerCase()==='audio';
-      let forcedName = isAud? 'audio.mp3' : 'video.mp4';
-      return {url:it.url,filename:applyFilenameStyle(forcedName,s,q,i,isAud?'audio':'video',c,mode),label:isAud?'MP3 AUDIO':'MP4 VIDEO'};
-    });
+    return filtered.map((it,i)=>{let isAud=(mode==='audio')||String(it.type||'').toLowerCase()==='audio';let fn=isAud?'audio.mp3':'video.mp4';return{url:it.url,filename:applyFilenameStyle(fn,s,q,i,isAud?'audio':'video',c,mode),label:isAud?'AUDIO':'VIDEO'};});
   }
-  if(r.url){
-    let isAud = (mode==='audio');
-    let forcedName = isAud? 'audio.mp3' : 'video.mp4';
-    return [{url:r.url,filename:applyFilenameStyle(r.filename||forcedName,s,q,0,isAud?'audio':'video',c,mode),label:isAud?'MP3 AUDIO':'MP4 VIDEO'}];
-  }
-  throw new Error('No file returned - livestream/DRM/private')
+  if(r.url){let isAud=(mode==='audio');let fn=isAud?'audio.mp3':'video.mp4';return[{url:r.url,filename:applyFilenameStyle(r.filename||fn,s,q,0,isAud?'audio':'video',c,mode),label:isAud?'AUDIO':'VIDEO'}];}
+  throw new Error('No file returned');
 }
-
-function buildValidPayload(rawUrl,o,isPro){
-  const url=String(rawUrl||'').trim();
-  if(!isPro){return{url,downloadMode:'auto',videoQuality:'720',filenameStyle:'classic',audioFormat:'mp3',disableMetadata:false};}
-  const allowedModes=['auto','audio'],allowedQ=['max','1080','720','480'],allowedStyle=['classic','pretty','basic','nerdy'];
-  let mode=allowedModes.includes(o.mode)?o.mode:'auto';
-  let quality=allowedQ.includes(String(o.quality))?String(o.quality):'720';
-  let style=o.style==='custom'?'classic':(allowedStyle.includes(o.style)?o.style:'classic');
-  let body={url,downloadMode:mode,videoQuality:quality,filenameStyle:style,audioFormat:'mp3',disableMetadata:!!o.disableMetadata};
-  if(mode==='audio') delete body.videoQuality;
-  return body;
-}
-
-function setSimple(){if(els.h1)els.h1.innerHTML='Welcome,<br><span>MP4 Video / MP3 Audio Only</span>';document.body.classList.remove('is-expert')}
-function setExpert(){if(els.h1)els.h1.innerHTML='Pro Mode<br><span>MP4 + MP3 Locked - No Pictures - Wide Bar</span>';document.body.classList.add('is-expert');}
+function buildValidPayload(rawUrl,o,isPro){const url=String(rawUrl||'').trim();if(!isPro){return{url,downloadMode:'auto',videoQuality:'720',filenameStyle:'classic',audioFormat:'mp3',disableMetadata:false};}const allowedModes=['auto','audio'],allowedQ=['max','1080','720','480'],allowedStyle=['classic','pretty','basic','nerdy'];let mode=allowedModes.includes(o.mode)?o.mode:'auto';let quality=allowedQ.includes(String(o.quality))?String(o.quality):'720';let style=o.style==='custom'?'classic':(allowedStyle.includes(o.style)?o.style:'classic');let body={url,downloadMode:mode,videoQuality:quality,filenameStyle:style,audioFormat:'mp3',disableMetadata:!!o.disableMetadata};if(mode==='audio')delete body.videoQuality;return body;}
+function setSimple(){if(els.h1)els.h1.innerHTML='Welcome,<br><span>You are almost ready.</span>';document.body.classList.remove('is-expert')}
+function setExpert(){if(els.h1)els.h1.innerHTML='Pro Mode<br><span>More controls for you</span>';document.body.classList.add('is-expert');}
 function showOutput(t,ti,html){if(!els.out)return;els.out.classList.add('show');let cl=t==='ok'?'box ok':'box err';els.out.innerHTML=`<div class="${cl}"><div style="font-weight:800;margin-bottom:8px">${ti}</div>${html}<div style="margin-top:10px;font-size:12px;color:var(--dim)">${getFact()}</div></div>`;bindDynamicButtons();}
 function showError(t,m){showOutput('err',t,`<pre>${String(m).slice(0,1500)}</pre>`);}
 
-async function fetchBlobSafe(url,useProxy,onProgress){
+async function fetchBlobSafe(url,useProxy,onProgress,expectedName){
   let isBlob=String(url).startsWith('blob:')||String(url).startsWith('data:');
   let list=isBlob?[PROXY_DIRECT]:(useProxy?PROXIES:[PROXY_DIRECT]);
   let lastErr=null;
+  let expectedMime=getMimeForName(expectedName||'video.mp4');
   for(let mk of list){
     try{
       let pUrl=mk(url);
-      addLog('dl','Trying '+(pUrl===url?'direct':'proxy')+'...','active');
+      addLog('dl','Fetching '+(pUrl===url?'direct':'via fallback')+'...','active');
       let res=await fetchWithTimeout(pUrl,{cache:'no-store',redirect:'follow'},60000);
       if(!res.ok) throw new Error('HTTP '+res.status);
       let total=parseInt(res.headers.get('content-length')||'0',10);
@@ -457,118 +356,127 @@ async function fetchBlobSafe(url,useProxy,onProgress){
       if(res.body&&res.body.getReader){
         let reader=res.body.getReader();
         while(true){
-          let{done,value}=await reader.read();
-          if(done)break;
-          if(!value||value.byteLength===0)continue;
+          let {done,value}=await reader.read(); if(done)break;
+          if(!value||value.byteLength===0) continue;
           if(rec===0){
             try{
-              let head=new TextDecoder().decode(value.slice(0,200)).toLowerCase();
-              if(head.includes('<!doctype')||head.includes('<html')||head.includes('<head')) throw new Error('Proxy returned HTML page not media');
-            }catch(e){ if(e.message.includes('HTML')) throw e; }
+              let head=new TextDecoder().decode(value.slice(0,120)).trim().toLowerCase();
+              if(head.startsWith('<!doctype')||head.startsWith('<html')||head.startsWith('<head')) throw new Error('Invalid media response');
+            }catch(e){ if(e.message.includes('Invalid media')) throw e; }
           }
-          chunks.push(value);rec+=value.byteLength;
-          if(onProgress){ if(total) onProgress(Math.round(rec/total*100),rec,total); else onProgress(Math.min(95,Math.round(rec/1024/1024*4)),rec,0); }
+          chunks.push(value); rec+=value.byteLength;
+          if(onProgress){ if(total) onProgress(Math.round(rec/total*100),rec,total); else onProgress(Math.min(95,Math.round(rec/1024/1024*5)),rec,0); }
         }
-      }else{
-        let buf=await res.arrayBuffer();chunks=[new Uint8Array(buf)];rec=buf.byteLength;
-      }
-      if(rec<1024) throw new Error('0B file blocked rec='+rec);
-      if(total&&rec<total*0.85) throw new Error('Half file blocked '+rec+'/'+total);
-      let mime = getMimeForName('video.mp4');
-      let blob=new Blob(chunks,{type:mime});
-      if(blob.size<1024) throw new Error('Blob 0B');
-      try{
-        let slice=blob.slice(0,512);let txt=await slice.text();let low=txt.toLowerCase().trim();
-        if(low.startsWith('<!doctype')||low.startsWith('<html')||low.includes('<head')) throw new Error('Blob is HTML not media');
-      }catch(e){ if(e.message.includes('HTML')) throw e; }
-      addLog('dl','OK '+formatBytes(blob.size),'done');return blob;
-    }catch(e){lastErr=e;addLog('dl','Failed: '+e.message,'error');continue;}
+      }else{ let buf=await res.arrayBuffer(); chunks=[new Uint8Array(buf)]; rec=buf.byteLength; }
+      if(rec<1024) throw new Error('File too small '+rec+' bytes');
+      if(total&&rec<total*0.80) throw new Error('Incomplete file '+rec+'/'+total);
+      let blob=new Blob(chunks,{type:expectedMime});
+      if(blob.size<1024) throw new Error('Blob empty');
+      addLog('dl','Received '+formatBytes(blob.size),'done');
+      return blob;
+    }catch(e){ lastErr=e; addLog('dl','Fallback try failed: '+e.message,'error'); continue; }
   }
-  throw lastErr||new Error('All proxies failed');
+  throw lastErr||new Error('Download failed');
 }
 
 async function triggerBlobDownload(blob,filename){
-  if(!blob||blob.size<1024) throw new Error('Blocked 0B file - corrupted');
+  if(!blob||blob.size<1024) throw new Error('Blocked empty file');
   const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   if(isIOS){
     let viewBlob=new Blob([await blob.arrayBuffer()],{type:getMimeForName(filename)});
     let viewUrl=URL.createObjectURL(viewBlob);
     window.open(viewUrl,'_blank','noopener');
     setTimeout(()=>{try{window.openPreview(viewUrl,filename,'');}catch{}},300);
-    setProgress(100,'Opened - Tap Share > Save to Files');
-    setTimeout(()=>URL.revokeObjectURL(viewUrl),60000);return;
+    setProgress(100,'Open - Use Share > Save');
+    setTimeout(()=>URL.revokeObjectURL(viewUrl),60000); return;
   }
   let downloadBlob=new Blob([await blob.arrayBuffer()],{type:'application/octet-stream'});
   let blobUrl=URL.createObjectURL(downloadBlob);
-  let a=document.createElement('a');a.href=blobUrl;a.download=filename;a.style.display='none';document.body.appendChild(a);
-  a.click();setTimeout(()=>{try{a.click()}catch{}},180);
-  setTimeout(()=>{URL.revokeObjectURL(blobUrl);try{a.remove()}catch{}},9000);
+  let a=document.createElement('a'); a.href=blobUrl; a.download=filename; a.style.display='none'; document.body.appendChild(a);
+  a.click(); setTimeout(()=>{try{a.click()}catch{}},180);
+  setTimeout(()=>{URL.revokeObjectURL(blobUrl); try{a.remove()}catch{}},9000);
 }
 
 async function blobDownload(url,name,useProxy=true){
-  let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{if(total)setProgress(pct,formatBytes(rec)+' / '+formatBytes(total));else setProgress(pct,formatBytes(rec));});
-  if(blob.size<1024)throw new Error('0B after fetch blocked');
+  let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{if(total)setProgress(pct,formatBytes(rec)+' / '+formatBytes(total));else setProgress(pct,formatBytes(rec));},name);
   await triggerBlobDownload(blob,name);
-  setProgress(100,'Full file '+formatBytes(blob.size)+' - downloading');
+  setProgress(100,'Done '+formatBytes(blob.size));
 }
-async function directDownload(url,name){try{return await blobDownload(url,name||'video.mp4',true);}catch(e){window.open(url,'_blank','noopener');throw e;}}
-async function fetchBlobForShare(url){try{if(String(url).startsWith('blob:')){let r=await fetch(url);return await r.blob();}return await fetchBlobSafe(url,true);}catch{return null;}}window.fetchBlobForShare=fetchBlobForShare;
+async function directDownload(url,name){ try{ return await blobDownload(url,name||'video.mp4',true);}catch(e){ window.open(url,'_blank','noopener'); throw e; } }
+async function fetchBlobForShare(url){ try{ if(String(url).startsWith('blob:')){let r=await fetch(url);return await r.blob();} return await fetchBlobSafe(url,true,null,'video.mp4'); }catch{return null;} }
+window.fetchBlobForShare=fetchBlobForShare;
+
 async function filePickerSave(url,name,useProxy=true){
   const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if(!window.showSaveFilePicker||isMobile){return blobDownload(url,name,useProxy);}
+  if(!window.showSaveFilePicker||isMobile){ return blobDownload(url,name,useProxy); }
   let writable=null;
   try{
     let h=await window.showSaveFilePicker({suggestedName:name||'video.mp4'});
     writable=await h.createWritable();
-    let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{if(total)setProgress(pct,formatBytes(rec)+' / '+formatBytes(total));else setProgress(pct,formatBytes(rec));});
-    if(blob.size<1024)throw new Error('0B blocked');
-    await writable.write(blob);await writable.close();writable=null;
-    setProgress(100,'Saved '+formatBytes(blob.size));alert('Saved '+formatBytes(blob.size));
-  }catch(e){try{if(writable)await writable.abort();}catch{}return blobDownload(url,name,useProxy);}
+    let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{if(total)setProgress(pct,formatBytes(rec)+' / '+formatBytes(total));else setProgress(pct,formatBytes(rec));},name);
+    if(blob.size<1024) throw new Error('Empty file');
+    await writable.write(blob); await writable.close(); writable=null;
+    setProgress(100,'Saved '+formatBytes(blob.size));
+  }catch(e){ try{if(writable)await writable.abort();}catch{} return blobDownload(url,name,useProxy); }
 }
 
-window.openPreview=function(u,n,l){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'),t=document.getElementById('previewTitle');if(!m||!b)return;window._previewUrl=u;window._previewName=n||'video.mp4';t.textContent=n||'Preview';b.innerHTML='';let ext='.'+(String(n).split('.').pop()||'').toLowerCase();let isAud=ext==='.mp3';let mediaWrap=document.createElement('div');if(isAud){let a=document.createElement('audio');a.src=u;a.controls=true;a.style.width='100%';mediaWrap.appendChild(a);}else{let v=document.createElement('video');v.src=u;v.controls=true;v.playsInline=true;v.setAttribute('webkit-playsinline','');v.style.width='100%';v.style.borderRadius='12px';v.style.background='#000';mediaWrap.appendChild(v);}b.appendChild(mediaWrap);let act=document.createElement('div');act.style.display='grid';act.style.gap='9px';act.style.marginTop='14px';act.innerHTML=`<button class="btn primary" id="modalDL" style="width:100%">⬇ Download ${isAud?'MP3':'MP4'} - Real File</button><div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalShare">Share / Save to Files (iOS)</button><button class="btn ghost" id="modalSave">Stream to Disk</button></div><div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalCopy">Copy Link</button><a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Raw - ${u.slice(0,38)}...</a></div>`;b.appendChild(act);setTimeout(()=>{let dl=document.getElementById('modalDL');if(dl)dl.addEventListener('click',async()=>{try{dl.textContent='Downloading...';await window.directDownload(window._previewUrl,window._previewName);dl.textContent='⬇ Download Done';}catch(e){dl.textContent='Try Open Raw';}});let sh=document.getElementById('modalShare');if(sh)sh.addEventListener('click',async()=>{let url=window._previewUrl,name=window._previewName;try{if(navigator.canShare&&navigator.share){let blob=await window.fetchBlobForShare(url);if(blob){let file=new File([blob],name,{type:blob.type||'video/mp4'});if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});return;}}}}catch{}window.open(url,'_blank','noopener');});let sv=document.getElementById('modalSave');if(sv)sv.addEventListener('click',()=>{window.filePickerSave(window._previewUrl,window._previewName,true);});let cp=document.getElementById('modalCopy');if(cp)cp.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(window._previewUrl);cp.textContent='Copied!';setTimeout(()=>cp.textContent='Copy Link',1500);}catch{prompt('Copy:',window._previewUrl);}});},0);m.classList.add('show');m.style.display='flex';document.body.style.overflow='hidden';};
-window.closePreview=function(){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody');if(!m)return;m.classList.remove('show');setTimeout(()=>{m.style.display='none';},300);if(b){b.querySelectorAll('video,audio').forEach(el=>{try{el.pause();}catch{}});b.innerHTML='';}document.body.style.overflow='';};
+window.openPreview=function(u,n){
+  let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'),t=document.getElementById('previewTitle');
+  if(!m||!b) return; window._previewUrl=u; window._previewName=n||'video.mp4';
+  t.textContent=n||'Preview'; b.innerHTML='';
+  let ext='.'+(String(n).split('.').pop()||'').toLowerCase(); let isAud=ext==='.mp3';
+  let wrap=document.createElement('div');
+  if(isAud){ let a=document.createElement('audio'); a.src=u; a.controls=true; a.style.width='100%'; wrap.appendChild(a); }
+  else{ let v=document.createElement('video'); v.src=u; v.controls=true; v.playsInline=true; v.setAttribute('webkit-playsinline',''); v.style.width='100%'; v.style.borderRadius='12px'; v.style.background='#000'; wrap.appendChild(v); }
+  b.appendChild(wrap);
+  let act=document.createElement('div'); act.style.display='grid'; act.style.gap='9px'; act.style.marginTop='14px';
+  act.innerHTML=`<button class="btn primary" id="modalDL" style="width:100%">Download ${isAud?'MP3':'Video'}</button><div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalShare">Share</button><button class="btn ghost" id="modalSave">Save to Disk</button></div><div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalCopy">Copy Link</button><a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Original</a></div>`;
+  b.appendChild(act);
+  setTimeout(()=>{
+    let dl=document.getElementById('modalDL'); if(dl) dl.addEventListener('click',async()=>{try{dl.textContent='Downloading...'; await window.directDownload(window._previewUrl,window._previewName); dl.textContent='Done';}catch(e){dl.textContent='Try Open Original';}});
+    let sh=document.getElementById('modalShare'); if(sh) sh.addEventListener('click',async()=>{let url=window._previewUrl,name=window._previewName; try{ if(navigator.canShare&&navigator.share){ let blob=await window.fetchBlobForShare(url); if(blob){ let file=new File([blob],name,{type:blob.type||'video/mp4'}); if(navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:name}); return; } } } }catch{} window.open(url,'_blank','noopener'); });
+    let sv=document.getElementById('modalSave'); if(sv) sv.addEventListener('click',()=>{window.filePickerSave(window._previewUrl,window._previewName,true);});
+    let cp=document.getElementById('modalCopy'); if(cp) cp.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(window._previewUrl); cp.textContent='Copied!'; setTimeout(()=>cp.textContent='Copy Link',1500);}catch{prompt('Copy:',window._previewUrl);}});
+  },0);
+  m.classList.add('show'); m.style.display='flex'; document.body.style.overflow='hidden';
+};
+window.closePreview=function(){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'); if(!m) return; m.classList.remove('show'); setTimeout(()=>{m.style.display='none';},250); if(b){b.querySelectorAll('video,audio').forEach(el=>{try{el.pause();}catch{}}); b.innerHTML='';} document.body.style.overflow='';};
 
-function buildButtons(u,fn,lb){let encU=encodeURIComponent(u);let encN=encodeURIComponent(fn);let encL=encodeURIComponent(lb||'file');return `<button class="btn primary" style="width:100%;margin-bottom:9px" data-action="preview" data-url="${encU}" data-name="${encN}" data-label="${encL}">Preview - No Download</button><div class="dl-grid"><button class="btn primary" data-action="direct" data-url="${encU}" data-name="${encN}">Download MP4 / MP3</button><button class="btn ghost" data-action="stream" data-url="${encU}" data-name="${encN}">Stream to Disk</button><button class="btn ghost" data-action="blob" data-url="${encU}" data-name="${encN}">Blob Save</button><a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Raw</a></div>`;}
-function buildItemsBlock(items){return items.map(it=>{return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge">${it.label}</span></div>${buildButtons(it.url,it.filename,it.label)}</div>`;}).join('');}
+function buildButtons(u,fn){let encU=encodeURIComponent(u);let encN=encodeURIComponent(fn);return `<button class="btn primary" style="width:100%;margin-bottom:9px" data-action="preview" data-url="${encU}" data-name="${encN}">Preview</button><div class="dl-grid"><button class="btn primary" data-action="direct" data-url="${encU}" data-name="${encN}">Download</button><button class="btn ghost" data-action="stream" data-url="${encU}" data-name="${encN}">Save to Disk</button><button class="btn ghost" data-action="blob" data-url="${encU}" data-name="${encN}">Blob Save</button><a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Original</a></div>`;}
+function buildItemsBlock(items){return items.map(it=>{return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge">${it.label}</span></div>${buildButtons(it.url,it.filename)}</div>`;}).join('');}
 function bindDynamicButtons(){document.querySelectorAll('[data-action]').forEach(btn=>{if(btn._bound)return;btn._bound=true;btn.addEventListener('click',async e=>{e.preventDefault();let url=decodeURIComponent(btn.getAttribute('data-url')||'');let name=decodeURIComponent(btn.getAttribute('data-name')||'video.mp4');let act=btn.getAttribute('data-action');try{if(act==='preview')window.openPreview(url,name);else if(act==='direct')await directDownload(url,name);else if(act==='stream')await filePickerSave(url,name,true);else if(act==='blob')await blobDownload(url,name,true);}catch(err){addLog('err','Download error: '+err.message,'error');showError('Download failed',err.message);}});});}
 
-async function ping(){let t0=performance.now();if(els.dot)els.dot.className='dot';if(els.stxt)els.stxt.textContent='Checking engine...';const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),5000);try{let r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors',signal:ctrl.signal});clearTimeout(to);let ms=Math.round(performance.now()-t0);if(els.lat)els.lat.textContent=ms+' ms';let j=await r.json();if(!j||!j.cobalt)throw new Error('bad json');state.online=true;if(els.dot)els.dot.className='dot ok';if(els.ver)els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`;if(els.stxt)els.stxt.textContent='Engine online';return true;}catch(e){clearTimeout(to);state.online=false;if(els.dot)els.dot.className='dot bad';if(els.ver)els.ver.textContent='sleeping';if(els.lat)els.lat.textContent='timeout';if(els.stxt)els.stxt.textContent='Engine sleeping - tap Wake';return false;}}
+async function ping(){let t0=performance.now();if(els.dot)els.dot.className='dot';if(els.stxt)els.stxt.textContent='Checking engine...';const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),5000);try{let r=await fetch(ENDPOINT,{cache:'no-store',mode:'cors',signal:ctrl.signal});clearTimeout(to);let ms=Math.round(performance.now()-t0);if(els.lat)els.lat.textContent=ms+' ms';let j=await r.json();if(!j||!j.cobalt)throw new Error('bad json');state.online=true;if(els.dot)els.dot.className='dot ok';if(els.ver)els.ver.textContent=`cobalt ${j.cobalt.version||'10.x'}`;if(els.stxt)els.stxt.textContent='Engine online';return true;}catch(e){clearTimeout(to);state.online=false;if(els.dot)els.dot.className='dot bad';if(els.ver)els.ver.textContent='offline';if(els.lat)els.lat.textContent='--';if(els.stxt)els.stxt.textContent='Engine offline - tap Wake';return false;}}
 
 async function go(){
-  let raw=els.url?els.url.value.trim():'';if(!raw)return showError('Input required','Paste https:// link');
-  if(!isValidUrl(raw))return showError('Invalid URL','Must start with https://');
+  let raw=els.url?els.url.value.trim():'';if(!raw)return showError('Input required','Paste https:// link');if(!isValidUrl(raw))return showError('Invalid URL','Must start with https://');
   window._currentPlatform=getPlatform(raw);
   if(els.go){els.go.disabled=true;els.go.textContent='Processing...';}initLog();
   try{
-    addLog('01','Validate URL','active');setProgress(10,'Validating');await new Promise(r=>setTimeout(r,60));addLog('01','URL ok - '+window._currentPlatform,'done');
+    addLog('01','Validate URL','active');setProgress(10,'Validating');await new Promise(r=>setTimeout(r,40));addLog('01','URL ok','done');
     addLog('02','Check engine','active');setProgress(25,'Engine check');if(!state.online)await ping();addLog('02',state.online?'online':'waking','done');setProgress(35,'Engine ok');
     let isPro=state.isExpert;let opts={mode:$('#mode')?.value||'auto',quality:$('#vq')?.value||'720',style:$('#fn')?.value||'classic',disableMetadata:$('#nm')?.checked};
     let payload=buildValidPayload(raw,opts,isPro);
-    window._currentMode=payload.downloadMode;
     if(els.kvR)els.kvR.textContent=JSON.stringify(payload);if(els.jsonPreview)els.jsonPreview.textContent=JSON.stringify(payload,null,2);
-    addLog('03','Payload validated - MP4/MP3 only','done');setProgress(45,'Payload ok');
-    addLog('04','POST to engine','active');setProgress(60,'Posting to engine');
+    addLog('03','Request ready','done');setProgress(45,'Request ready');
+    addLog('04','Contacting engine','active');setProgress(60,'Sending');
     let headers=new Headers();headers.set('Accept','application/json');headers.set('Content-Type','application/json');
     let r=await fetchWithTimeout(BASE+'/',{method:'POST',mode:'cors',headers:headers,body:JSON.stringify(payload)},15000);
     let result=await r.json();
     if(result&&result.status==='error'&&result.error&&result.error.code==='error.api.header.accept'){
-      addLog('04','Retrying with strict headers','active');
-      let h2=new Headers();h2.append('Accept','application/json');h2.append('Content-Type','application/json');
+      let h2=new Headers();h2.set('Accept','application/json');h2.set('Content-Type','application/json');
       let r2=await fetchWithTimeout(BASE+'/',{method:'POST',headers:h2,body:JSON.stringify(payload)},15000);result=await r2.json();r=r2;
     }
-    if(!r.ok||result.status==='error')throw new Error(result.error&&result.error.code?result.error.code+': Header check failed. Hard refresh.':'Engine error');
-    addLog('04','Response ok','done');setProgress(75,'Response ok');
+    if(!r.ok||result.status==='error')throw new Error(result.error&&result.error.code?mapError(result.error.code):'Engine error');
+    addLog('04','Response received','done');setProgress(75,'Response ok');
     let customName=$('#customName')?.value?.trim()||'';
-    let items=extractItems(result,'MP4 VIDEO',payload.filenameStyle,payload.videoQuality,customName,payload.downloadMode);
-    addLog('05','Found '+items.length+' file(s) - MP4/MP3 verified','done');setProgress(85,items.length+' file(s)');
-    showOutput('ok','Success - MP4 / MP3 Ready - No Corruption',buildItemsBlock(items));
-    setProgress(100,'Ready');addLog('06','Ready - engine online','done');
+    let items=extractItems(result,payload.filenameStyle,payload.videoQuality,customName,payload.downloadMode);
+    addLog('05','Found '+items.length+' file(s)','done');setProgress(85,items.length+' files');
+    showOutput('ok','Ready to save',buildItemsBlock(items));
+    setProgress(100,'Ready');addLog('06','Done','done');
   }catch(e){addLog('err','ERR '+e.message,'error');setProgress(0,'Failed');showError('Failed',e.message);}
   finally{if(els.go){els.go.disabled=false;els.go.textContent='Download';}}
 }
-
 function updateModeUI(){let m=$('#mode')?.value;let vq=$('#vq');if(m==='audio'){if(vq){vq.style.opacity='0.35';vq.style.pointerEvents='none';}}else{if(vq){vq.style.opacity='1';vq.style.pointerEvents='auto';}}}
 
 try{
@@ -579,31 +487,22 @@ if(bS)bS.addEventListener('click',()=>{state.isExpert=false;bS.classList.add('on
 if(bE)bE.addEventListener('click',()=>{state.isExpert=true;bE.classList.add('on');if(bS)bS.classList.remove('on');if(ex)ex.classList.add('show');setExpert();});
 if(els.fn)els.fn.addEventListener('change',function(){let c=$('#customName'),h=$('#customHint');if(this.value==='custom'){if(c)c.style.display='block';if(h)h.style.display='block';}else{if(c)c.style.display='none';if(h)h.style.display='none';}});
 let modeEl=$('#mode');if(modeEl)modeEl.addEventListener('change',updateModeUI);
-let wake=$('#wake');if(wake)wake.addEventListener('click',async()=>{if(els.stxt)els.stxt.textContent='Waking engine...';try{await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{}setTimeout(()=>ping(),800);});
+let wake=$('#wake');if(wake)wake.addEventListener('click',async()=>{if(els.stxt)els.stxt.textContent='Waking...';try{await fetch(ENDPOINT,{method:'HEAD',mode:'no-cors'});}catch{}setTimeout(()=>ping(),800);});
 let clear=$('#clear');if(clear)clear.addEventListener('click',()=>{if(els.url)els.url.value='';if(els.out){els.out.classList.remove('show');els.out.innerHTML='';}clearLog();});
 let cp=$('#closePreview');if(cp)cp.addEventListener('click',()=>window.closePreview());
 let pm=$('#previewModal');if(pm)pm.addEventListener('click',e=>{if(e.target===e.currentTarget)window.closePreview();});
 let pasteBtn=$('#pasteBtn');
-if(pasteBtn)pasteBtn.addEventListener('click', async()=>{
-if(!els.url) return;const orig=pasteBtn.textContent;
-try{
-let text='';if(navigator.clipboard && navigator.clipboard.readText){ text = await navigator.clipboard.readText(); }
-if(text && text.trim()){ els.url.value=text.trim(); els.url.focus(); els.url.dispatchEvent(new Event('input',{bubbles:true})); pasteBtn.textContent='Pasted!'; setTimeout(()=>{pasteBtn.textContent=orig;},1200); return; }
-throw new Error('empty');
-}catch(err){ els.url.focus(); try{ els.url.select(); }catch{} pasteBtn.textContent='Now long-press > Paste'; setTimeout(()=>{ pasteBtn.textContent=orig; },2500); }
-});
-if(els.url) els.url.addEventListener('paste', ()=>{ setTimeout(()=>{ els.url.value=els.url.value.trim(); },0); });
-let rb=$('#refreshBtn');if(rb)rb.addEventListener('click',async()=>{rb.disabled=true;rb.textContent='Refreshing...';let u=new URL(location.href);u.searchParams.set('_r',Date.now().toString());location.href=u.toString();});
+if(pasteBtn)pasteBtn.addEventListener('click',async()=>{if(!els.url)return;const orig=pasteBtn.textContent;try{let t='';if(navigator.clipboard&&navigator.clipboard.readText){t=await navigator.clipboard.readText();}if(t&&t.trim()){els.url.value=t.trim();els.url.focus();pasteBtn.textContent='Pasted!';setTimeout(()=>pasteBtn.textContent=orig,1100);return;}throw new Error('empty');}catch{els.url.focus();try{els.url.select();}catch{}pasteBtn.textContent='Long-press to paste';setTimeout(()=>pasteBtn.textContent=orig,2000);}});
+if(els.url)els.url.addEventListener('paste',()=>{setTimeout(()=>{els.url.value=els.url.value.trim();},0);});
+let rb=$('#refreshBtn');if(rb)rb.addEventListener('click',()=>{let u=new URL(location.href);u.searchParams.set('_r',Date.now().toString());location.href=u.toString();});
 let guideHead=$('#guideHead'),guideBody=$('#guideBody'),guideBtn=$('#guideToggleBtn');
-function toggleGuide(){if(!guideBody||!guideBtn)return;let open=guideBody.classList.contains('open');if(open){guideBody.classList.remove('open');guideBtn.textContent='Open Guide';}else{guideBody.classList.add('open');guideBtn.textContent='Close Guide';}}
+function toggleGuide(){if(!guideBody||!guideBtn)return;let o=guideBody.classList.contains('open');if(o){guideBody.classList.remove('open');guideBtn.textContent='Open Guide';}else{guideBody.classList.add('open');guideBtn.textContent='Close Guide';}}
 if(guideHead)guideHead.addEventListener('click',toggleGuide);if(guideBtn)guideBtn.addEventListener('click',e=>{e.stopPropagation();toggleGuide();});
-document.querySelectorAll('.qa-q').forEach(q=>{q.addEventListener('click',()=>{let id=q.getAttribute('data-qa');let a=document.getElementById('qa-'+id);let ic=q.querySelector('.icon');if(!a)return;let open=a.classList.contains('open');if(open){a.classList.remove('open');if(ic)ic.textContent='+';}else{a.classList.add('open');if(ic)ic.textContent='-';}});});
+document.querySelectorAll('.qa-q').forEach(q=>{q.addEventListener('click',()=>{let id=q.getAttribute('data-qa');let a=document.getElementById('qa-'+id);let ic=q.querySelector('.icon');if(!a)return;let o=a.classList.contains('open');if(o){a.classList.remove('open');if(ic)ic.textContent='+';}else{a.classList.add('open');if(ic)ic.textContent='-';}});});
 if(els.test)els.test.href=BASE;if(els.epLab)els.epLab.textContent='engine ready';if(els.ft)els.ft.textContent=getFact();setSimple();
-}catch(e){console.error('init error',e);}
+}catch(e){console.error(e);}
 window.blobDownload=blobDownload;window.directDownload=directDownload;window.filePickerSave=filePickerSave;
 ping();
-window.addEventListener('error',ev=>{try{addLog('err','JS Error: '+ev.message,'error');}catch{}});
-window.addEventListener('unhandledrejection',ev=>{try{addLog('err','Promise: '+(ev.reason&&ev.reason.message?ev.reason.message:ev.reason),'error');}catch{}});
 });
 </script>
 </body>
