@@ -156,7 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const PROXIES=[u=>u,u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`];
   function getMimeForName(name){let ext='.'+(String(name).split('.').pop()||'mp4').toLowerCase();return mimeFromExt(ext);}
   async function fetchBlobSafe(url,useProxy,onProgress){
-    let list=useProxy?PROXIES:[PROXIES[0]];let lastErr=null;
+    let isBlob = String(url).startsWith('blob:') || String(url).startsWith('data:');
+    let list=isBlob? [PROXIES[0]] : (useProxy?PROXIES:[PROXIES[0]]);let lastErr=null;
     for(let mk of list){
       try{
         let pUrl=mk(url); addLog('dl','Trying proxy...','active');
@@ -203,13 +204,64 @@ document.addEventListener('DOMContentLoaded', () => {
     setProgress(100,'Full file '+formatBytes(blob.size)+' - downloading');
   }
   async function directDownload(url,name){ try{ return await blobDownload(url,name||'video.mp4',true); }catch(e){ window.open(url,'_blank','noopener'); throw e; } }
+  async function fetchBlobForShare(url){ try{ if(String(url).startsWith('blob:')){ let r=await fetch(url); return await r.blob(); } return await fetchBlobSafe(url,true); }catch{ return null; } }
+  window.fetchBlobForShare=fetchBlobForShare;
   async function filePickerSave(url,name,useProxy=true){
     const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     if(!window.showSaveFilePicker||isMobile){ return blobDownload(url,name,useProxy); }
     let writable=null; try{ let h=await window.showSaveFilePicker({suggestedName:name||'video.mp4'}); writable=await h.createWritable(); let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{ if(total) setProgress(pct,formatBytes(rec)+' / '+formatBytes(total)); else setProgress(pct,formatBytes(rec)); }); if(blob.size<1024) throw new Error('0B'); await writable.write(blob); await writable.close(); writable=null; setProgress(100,'Saved '+formatBytes(blob.size)); alert('Saved full file '+formatBytes(blob.size)); }catch(e){ try{if(writable) await writable.abort();}catch{} return blobDownload(url,name,useProxy); }
   }
 
-  window.openPreview=function(u,n){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'),t=document.getElementById('previewTitle');if(!m||!b)return;t.textContent=n||'Preview';b.innerHTML='';let ext='.'+(String(n).split('.').pop()||'').toLowerCase();let isImg=/\.(jpg|jpeg|png|webp|gif)$/i.test(ext)||/\.(jpg|jpeg|png|webp)$/i.test(u);let isAud=/\.(mp3|ogg|wav|opus|m4a)$/i.test(ext);if(isImg){let i=document.createElement('img');i.src=u;i.style.width='100%';i.style.borderRadius='12px';b.appendChild(i);}else if(isAud){let a=document.createElement('audio');a.src=u;a.controls=true;a.style.width='100%';b.appendChild(a);}else{let v=document.createElement('video');v.src=u;v.controls=true;v.playsInline=true;v.style.width='100%';v.style.borderRadius='12px';v.style.background='#000';b.appendChild(v);}m.style.display='flex';document.body.style.overflow='hidden';};
+  window.openPreview=function(u,n,l){
+    let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'),t=document.getElementById('previewTitle');
+    if(!m||!b)return;
+    window._previewUrl=u; window._previewName=n||'video.mp4';
+    t.textContent=n||'Preview';
+    b.innerHTML='';
+    let ext='.'+(String(n).split('.').pop()||'').toLowerCase();
+    let isImg=/\.(jpg|jpeg|png|webp|gif)$/i.test(ext)||/\.(jpg|jpeg|png|webp)$/i.test(u);
+    let isAud=/\.(mp3|ogg|wav|opus|m4a)$/i.test(ext);
+    let mediaWrap=document.createElement('div');
+    if(isImg){let i=document.createElement('img');i.src=u;i.style.width='100%';i.style.borderRadius='12px';mediaWrap.appendChild(i);}
+    else if(isAud){let a=document.createElement('audio');a.src=u;a.controls=true;a.style.width='100%';a.style.display='block';b.appendChild(a);mediaWrap.appendChild(a);}
+    else{let v=document.createElement('video');v.src=u;v.controls=true;v.playsInline=true;v.setAttribute('webkit-playsinline','');v.style.width='100%';v.style.borderRadius='12px';v.style.background='#000';mediaWrap.appendChild(v);}
+    b.appendChild(mediaWrap);
+    let act=document.createElement('div');
+    act.style.display='grid';act.style.gap='9px';act.style.marginTop='14px';
+    act.innerHTML=`
+      <button class="btn primary" id="modalDL" style="width:100%">⬇ Download - Real File (Fixes Streaming)</button>
+      <div class="dl-grid" style="margin-top:0">
+        <button class="btn ghost" id="modalShare">Share / Save to Files (iOS)</button>
+        <button class="btn ghost" id="modalSave">Stream to Disk</button>
+      </div>
+      <div class="dl-grid" style="margin-top:0">
+        <button class="btn ghost" id="modalCopy">Copy Link</button>
+        <a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Raw</a>
+      </div>
+      <div style="font-size:11px;color:var(--dim);text-align:center;margin-top:4px">iPhone: Tap Share then Save to Files or Save Video. Android: Tap Download, check Notifications.</div>
+    `;
+    b.appendChild(act);
+    setTimeout(()=>{
+      let dl=document.getElementById('modalDL');
+      if(dl) dl.addEventListener('click', async ()=>{ try{ dl.textContent='Downloading...'; await window.directDownload(window._previewUrl, window._previewName); dl.textContent='⬇ Download - Real File (Fixes Streaming)'; }catch(e){ dl.textContent='Try Open Raw + Long-press Save'; } });
+      let sh=document.getElementById('modalShare');
+      if(sh) sh.addEventListener('click', async ()=>{
+        let url=window._previewUrl, name=window._previewName;
+        try{
+          if(navigator.canShare && navigator.share){
+            let blob = await window.fetchBlobForShare(url);
+            if(blob){ let file=new File([blob], name, {type: blob.type||'video/mp4'}); if(navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:name}); return; } }
+          }
+        }catch{}
+        window.open(url,'_blank','noopener');
+      });
+      let sv=document.getElementById('modalSave');
+      if(sv) sv.addEventListener('click', ()=>{ window.filePickerSave(window._previewUrl, window._previewName, true); });
+      let cp=document.getElementById('modalCopy');
+      if(cp) cp.addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(window._previewUrl); cp.textContent='Copied!'; setTimeout(()=>cp.textContent='Copy Link',1500);}catch{ prompt('Copy:',window._previewUrl);} });
+    },0);
+    m.style.display='flex';document.body.style.overflow='hidden';
+  };
   window.closePreview=function(){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody');if(!m)return;m.style.display='none';if(b){b.querySelectorAll('video,audio').forEach(el=>{try{el.pause();}catch{}});b.innerHTML='';}document.body.style.overflow='';};
 
   function buildButtons(u,fn,lb){let encU=encodeURIComponent(u);let encN=encodeURIComponent(fn);let encL=encodeURIComponent(lb||'file');return `<button class="btn primary" style="width:100%;margin-bottom:9px" data-action="preview" data-url="${encU}" data-name="${encN}" data-label="${encL}">Preview - No Download</button><div class="dl-grid"><button class="btn primary" data-action="direct" data-url="${encU}" data-name="${encN}">Direct Download (Android+iOS Fixed)</button><button class="btn ghost" data-action="stream" data-url="${encU}" data-name="${encN}">Stream to Disk - Full File</button><button class="btn ghost" data-action="blob" data-url="${encU}" data-name="${encN}">Blob Save - Full + Verified</button><a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Raw</a><button class="btn ghost" data-action="copy" data-url="${encU}">Copy Link</button></div>`;}
