@@ -39,7 +39,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .top:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(139,92,246,.18),0 12px 40px rgba(0,0,0,.45),0 0 52px var(--glow-1)}
 .brand{font-weight:800;display:flex;gap:9px;align-items:center;font-size:18px;letter-spacing:-.02em}
 .brand-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--accent);color:#fff;box-shadow:0 0 18px var(--glow-1),0 0 32px var(--glow-2);animation:floatSoft 3.8s ease-in-out infinite}
-.status{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);box-shadow:0 0 12px var(--glow-1)}
+.status{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);padding:4px 10px;border-radius:999px;background:rgba(255,255,.04);border:1px solid rgba(255,255,255,.06);box-shadow:0 0 12px var(--glow-1)}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 6px rgba(245,158,11,.18),0 0 14px rgba(245,158,11,.4);animation:pulse 1.6s infinite}
 .dot.ok{background:var(--ok);box-shadow:0 0 6px rgba(34,197,94,.18),0 0 16px rgba(34,197,94,.45);animation:none}
 .dot.bad{background:var(--bad);box-shadow:0 0 0 6px rgba(239,68,.18);animation:none}
@@ -51,7 +51,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .card{border:1px solid var(--border);background:linear-gradient(180deg,var(--card-bg-2),var(--card-bg));backdrop-filter:blur(22px) saturate(1.35);-webkit-backdrop-filter:blur(22px) saturate(1.35);border-radius:22px;padding:18px;position:relative;overflow:hidden;box-shadow:0 0 0 1px rgba(139,92,246,.12),0 10px 40px rgba(0,0,0,.38),0 0 42px var(--glow-1),0 0 72px var(--glow-2);transition:border-color.3s,box-shadow.3s}
 .card:hover{border-color:var(--border-strong);box-shadow:0 0 0 1px rgba(139,92,246,.18),0 16px 52px rgba(0,0,0,.5),0 0 64px var(--glow-1),0 0 96px var(--glow-2)}
 .card::before{content:'';position:absolute;top:0;left:0;width:65%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transform:translateX(-100%);animation:shimmerMove 4.5s 1.2s ease-in-out infinite;pointer-events:none;z-index:1}
-.switch{display:inline-flex;gap:4px;padding:4px;background:var(--surface-1);border:1px solid var(--border-soft);border-radius:999px;position:relative;box-shadow:inset 0 12px rgba(0,0,0,.4),0 0 18px var(--glow-1)}
+.switch{display:inline-flex;gap:4px;padding:4px;background:var(--surface-1);border:1px solid var(--border-soft);border-radius:999px;position:relative;box-shadow:inset 0 0 12px rgba(0,0,0,.4),0 0 18px var(--glow-1)}
 .sw{padding:8px 16px;border-radius:999px;border:0;background:transparent;color:var(--dim);font-weight:700;font-size:13px;cursor:pointer;transition:all.3s var(--ease-spring);position:relative;z-index:2}
 .sw.on{background:var(--accent);color:#fff;transform:scale(1.03);box-shadow:0 0 14px var(--glow-1),0 0 28px var(--glow-2),0 2px 12px rgba(0,0,0,.4)}
 .meta-pills{display:flex;gap:6px;flex-wrap:wrap}
@@ -125,7 +125,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .log-entry{display:flex;gap:10px;font-size:11.5px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface-1);color:var(--dim)}
 .log-entry.active{border-color:var(--accent-solid);background:linear-gradient(180deg,var(--glow-1),var(--surface-1));color:var(--text);box-shadow:0 0 14px var(--glow-1)}
 .log-entry.done{border-color:rgba(34,197,94,.3);box-shadow:0 0 12px rgba(34,197,94,.2)}
-.log-entry.error{border-color:rgba(239,68,68,.4)}
+.log-entry.error{border-color:rgba(239,68,.4)}
 .modal-backdrop{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity.3s}
 .modal-backdrop.show{opacity:1}
 .modal-card{width:100%;max-width:720px;max-height:90vh;overflow:auto;background:linear-gradient(180deg,var(--card-bg-2),var(--card-bg));border:1px solid var(--border-strong);border-radius:18px;padding:16px;box-shadow:0 0 0 1px rgba(139,92,246,.15),0 24px 72px rgba(0,0,0,.6),0 0 48px var(--glow-1)}
@@ -141,7 +141,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 @keyframes floatSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 #fill{position:relative;overflow:hidden;border-radius:999px;box-shadow:0 0 12px var(--glow-1)}
 #fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transform:translateX(-100%);animation:shimmerMove 1.6s linear infinite}
-.hero h1{background:linear-gradient(180deg,#fff 20%,rgba(255,255,.88) 45%,rgba(255,255,255,.58) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:heroBreath 4.6s ease-in-out infinite alternate,textFloatSoft 6.5s ease-in-out infinite!important;letter-spacing:-.055em}
+.hero h1{background:linear-gradient(180deg,#fff 20%,rgba(255,255,255,.88) 45%,rgba(255,255,255,.58) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:heroBreath 4.6s ease-in-out infinite alternate,textFloatSoft 6.5s ease-in-out infinite!important;letter-spacing:-.055em}
 .hero h1 span{background:linear-gradient(90deg,#8b5cf6 0%,#ec4899 25%,#22d3ee 50%,#8b5cf6 75%,#ec4899 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradientVibe 5s linear infinite,shineWipe 2.8s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(139,92,246,.42))}
 @keyframes gradientVibe{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes textFloatSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.2px)}}
@@ -195,7 +195,7 @@ body.is-expert.field{
   box-shadow:inset 0 0 0 1px rgba(34,211,238,.08),0 0 22px rgba(34,211,238,.18),0 0 42px rgba(6,182,212,.12);
 }
 body.is-expert.field:focus-within{
-  border-color:#22d3ee; box-shadow:inset 0 0 0 1px #22d3ee,0 0 0 6px rgba(34,211,238,.22),0 0 42px rgba(34,211,238,.42),0 0 72px rgba(6,182,212,.24);
+  border-color:#22d3ee; box-shadow:inset 0 0 1px #22d3ee,0 0 0 6px rgba(34,211,238,.22),0 0 42px rgba(34,211,238,.42),0 0 72px rgba(6,182,212,.24);
 }
 body.is-expert.btn.primary{
   background:linear-gradient(135deg,#22d3ee 0%,#0ea5e9 55%,#0284c7 100%);
@@ -475,12 +475,17 @@ async function fetchBlobSafe(url,useProxy,onProgress,expectedName){
       }
       continue;
     }
-  }
   throw lastErr||new Error('Download failed - all proxies failed');
 }
 function isIOSDevice(){
   return /iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 }
+function isAndroidDevice(){
+  return /Android/i.test(navigator.userAgent);
+}
+window._blobCache = window._blobCache || new Map();
+window._blobCacheMeta = window._blobCacheMeta || new Map();
+
 async function iosSaveWithShare(blob,filename){
   try{
     if(navigator.canShare && navigator.share){
@@ -493,53 +498,67 @@ async function iosSaveWithShare(blob,filename){
       }
     }
   }catch(e){
-    addLog('ios','Share failed: '+e.message,'error');
+    addLog('ios','Share failed: '+ (e.message||e),'error');
   }
   return false;
+}
+function triggerSyncDownload(blob,filename){
+  let blobUrl=URL.createObjectURL(blob);
+  try{
+    let a=document.createElement('a');
+    a.href=blobUrl;
+    a.download=filename||'download.mp4';
+    a.style.display='none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{ try{URL.revokeObjectURL(blobUrl);}catch{} try{a.remove();}catch{} }, 60000);
+    return true;
+  }catch(e){
+    try{URL.revokeObjectURL(blobUrl);}catch{}
+    throw e;
+  }
 }
 async function triggerBlobDownload(blob,filename){
   if(!blob||blob.size<800) throw new Error('Empty file blocked');
   let ios=isIOSDevice();
-  let blobUrl=URL.createObjectURL(blob);
-  try{
-    if(ios){
-      let shared=await iosSaveWithShare(blob,filename);
-      if(shared){ URL.revokeObjectURL(blobUrl); return; }
-      window.openPreview(blobUrl, filename);
-      setProgress(100,'Preview opened - tap Share > Save to Files');
-      addLog('dl','iOS preview opened - use Share button','done');
-      setTimeout(()=>URL.revokeObjectURL(blobUrl), 120000);
-      return;
-    }else{
-      let a=document.createElement('a');
-      a.href=blobUrl;
-      a.download=filename||'download.mp4';
-      a.style.display='none';
-      document.body.appendChild(a);
-      a.click();
-      addLog('dl','Download started '+filename+' ('+formatBytes(blob.size)+')','done');
-      setProgress(100,'Downloading '+formatBytes(blob.size));
-      setTimeout(()=>{ URL.revokeObjectURL(blobUrl); try{a.remove();}catch{} }, 15000);
-      return;
-    }
-  }catch(e){
-    URL.revokeObjectURL(blobUrl);
-    throw e;
+  if(ios){
+    let shared=await iosSaveWithShare(blob,filename);
+    if(shared) return;
+    let blobUrl=URL.createObjectURL(blob);
+    window.openPreview(blobUrl, filename);
+    setProgress(100,'Preview opened - tap Share > Save to Files');
+    addLog('dl','iOS preview opened - use Share button','done');
+    setTimeout(()=>{ try{URL.revokeObjectURL(blobUrl);}catch{} }, 120000);
+    return;
+  }else{
+    return triggerSyncDownload(blob,filename);
   }
 }
 async function blobDownload(url,name,useProxy=true){
+  if(window._blobCache.has(url)){
+    let cached=window._blobCache.get(url);
+    return triggerSyncDownload(cached, name);
+  }
   let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{
     if(total) setProgress(pct, formatBytes(rec)+' / '+formatBytes(total));
     else setProgress(pct, formatBytes(rec));
   }, name);
-  await triggerBlobDownload(blob,name);
+  try{ window._blobCache.set(url, blob); window._blobCacheMeta.set(url, {name:name, time:Date.now()}); }catch{}
+  try{
+    await triggerBlobDownload(blob,name);
+  }catch(e){
+    addLog('dl','Ready - tap Download again to save (Android activation)','active');
+    setProgress(100,'Ready - Tap Download again');
+    throw new Error('Ready - Tap Download again to save');
+  }
   return true;
 }
 async function directDownload(url,name){
   try{
     return await blobDownload(url,name||'video.mp4',true);
   }catch(e){
-    addLog('dl','Direct open fallback: '+e.message,'error');
+    if(String(e.message).includes('Tap Download again')) throw e;
+    addLog('dl','Direct open fallback: '+(e.message||e),'error');
     try{
       window.open(url,'_blank','noopener');
       setProgress(100,'Opened original - long-press video to save');
@@ -553,12 +572,21 @@ async function directDownload(url,name){
 async function iosSave(url,name){
   let filename=name||'media.mp4';
   try{
+    if(window._blobCache.has(url)){
+      let cached=window._blobCache.get(url);
+      let shared=await iosSaveWithShare(cached, filename);
+      if(shared) return;
+      let blobUrl=URL.createObjectURL(cached);
+      window.openPreview(blobUrl, filename);
+      return;
+    }
     addLog('ios','Preparing '+filename+' for iOS Save...','active');
     setProgress(10,'Preparing for iOS');
     let blob=await fetchBlobSafe(url,true,(pct,rec,total)=>{
       if(total) setProgress(10+Math.round(pct*0.8), formatBytes(rec)+' / '+formatBytes(total));
       else setProgress(20, formatBytes(rec));
     }, filename);
+    try{ window._blobCache.set(url, blob); }catch{}
     setProgress(95,'Opening Share Sheet');
     let shared=await iosSaveWithShare(blob,filename);
     if(!shared){
@@ -567,7 +595,7 @@ async function iosSave(url,name){
       setProgress(100,'Tap Share in preview > Save to Files');
     }
   }catch(e){
-    addLog('ios','iOS Save failed, opening original: '+e.message,'error');
+    addLog('ios','iOS Save failed, opening original: '+(e.message||e),'error');
     window.open(url,'_blank','noopener');
     setProgress(100,'Opened - use Share > Save');
   }
@@ -585,9 +613,9 @@ window.openPreview=function(u,n){
   else{ let v=document.createElement('video'); v.src=u; v.controls=true; v.playsInline=true; v.setAttribute('webkit-playsinline',''); v.style.width='100%'; v.style.borderRadius='12px'; v.style.background='#000'; wrap.appendChild(v); }
   b.appendChild(wrap);
   let act=document.createElement('div'); act.style.display='grid'; act.style.gap='9px'; act.style.marginTop='14px';
-  let isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  let isIOSModal=isIOSDevice();
   act.innerHTML=`<button class="btn primary" id="modalDL" style="width:100%">⬇ Download ${isAud?'MP3':'Video'}</button>
-  ${isIOS?`<button class="btn primary" id="modalIOSSave" style="width:100%;background:linear-gradient(135deg,#22d3ee,#0ea5e9)">🍎 iOS Save - Tap to Save to Files</button>`:``}
+  ${isIOSModal?`<button class="btn primary" id="modalIOSSave" style="width:100%;background:linear-gradient(135deg,#22d3ee,#0ea5e9)">🍎 iOS Save - Tap to Save to Files</button>`:``}
   <div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalShare">Share</button><button class="btn ghost" id="modalSave">Save to Disk</button></div>
   <div class="dl-grid" style="margin-top:0"><button class="btn ghost" id="modalCopy">Copy Link</button><a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Original</a></div>`;
   b.appendChild(act);
@@ -615,8 +643,10 @@ window.openPreview=function(u,n){
 window.closePreview=function(){let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'); if(!m) return; m.classList.remove('show'); setTimeout(()=>{m.style.display='none';},250); if(b){b.querySelectorAll('video,audio').forEach(el=>{try{el.pause();}catch{}}); b.innerHTML='';} document.body.style.overflow='';};
 function buildButtons(u,fn){
   let encU=encodeURIComponent(u);let encN=encodeURIComponent(fn);
-  let isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  let isIOS=isIOSDevice();
+  let isAndroid=isAndroidDevice();
   let iosBtn=isIOS?`<button class="btn primary" data-action="iossave" data-url="${encU}" data-name="${encN}" style="background:linear-gradient(135deg,#22d3ee,#0ea5e9);box-shadow:0 0 18px rgba(34,211,238,.5)">🍎 iOS Save ${fn.toLowerCase().endsWith('.mp3')?'MP3':'Video'}</button>`:``;
+  let androidHint=isAndroid?`<div style="font-size:10px;color:var(--dim);margin-top:6px">If first tap doesn't save, tap again - Android needs 2 taps</div>`:``;
   return `<button class="btn primary" style="width:100%;margin-bottom:9px" data-action="preview" data-url="${encU}" data-name="${encN}">Preview</button>
   <div class="dl-grid">
     <button class="btn primary" data-action="direct" data-url="${encU}" data-name="${encN}">⬇ Download</button>
@@ -624,7 +654,7 @@ function buildButtons(u,fn){
     ${iosBtn}
     <button class="btn ghost" data-action="blob" data-url="${encU}" data-name="${encN}">Blob Save</button>
     <a href="${u}" target="_blank" rel="noopener" class="btn ghost" style="text-align:center;text-decoration:none">Open Original</a>
-  </div>`;
+  </div>${androidHint}`;
 }
 function buildItemsBlock(items){return items.map(it=>{return `<div class="file-row"><div class="file-info"><b>${it.filename}</b><span class="size-badge">${it.label}</span></div>${buildButtons(it.url,it.filename)}</div>`;}).join('');}
 function bindDynamicButtons(){
@@ -635,16 +665,29 @@ function bindDynamicButtons(){
       let url=decodeURIComponent(btn.getAttribute('data-url')||'');
       let name=decodeURIComponent(btn.getAttribute('data-name')||'video.mp4');
       let act=btn.getAttribute('data-action');
+      let originalText=btn.textContent;
       try{
         if(act==='preview') window.openPreview(url,name);
-        else if(act==='direct') await directDownload(url,name);
+        else if(act==='direct'){
+          btn.textContent='⏳ Preparing...';
+          await directDownload(url,name);
+          btn.textContent='✓ Tap again to Save';
+          setTimeout(()=>{ btn.textContent=originalText; }, 4000);
+        }
         else if(act==='stream') await filePickerSave(url,name,true);
         else if(act==='blob') await blobDownload(url,name,true);
         else if(act==='iossave') await iosSave(url,name);
       }catch(err){
-        if(String(err.message).includes('Opened')||String(err.message).includes('Share')) return;
-        addLog('err','Action error: '+err.message,'error');
-        showError('Download issue',err.message+' - Try Open Original or iOS Save button');
+        let msg=String(err.message||'');
+        if(msg.includes('Tap Download again')||msg.includes('Tap again to Save')){
+          btn.textContent='👆 Tap again to Save';
+          setTimeout(()=>{ btn.textContent=originalText; }, 5000);
+          return;
+        }
+        if(msg.includes('Opened')||msg.includes('Share')) return;
+        addLog('err','Action error: '+msg,'error');
+        showError('Download issue',msg+' - Try Open Original or iOS Save button');
+        btn.textContent=originalText;
       }
     });
   });
