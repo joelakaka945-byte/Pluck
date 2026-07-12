@@ -173,21 +173,34 @@ document.addEventListener('DOMContentLoaded', () => {
       }catch(e){ lastErr=e; addLog('dl','Proxy failed: '+e.message,'error'); continue; }
     } throw lastErr||new Error('All proxies failed');
   }
-  function triggerBlobDownload(blob,filename){
+  async function triggerBlobDownload(blob,filename){
     if(!blob||blob.size<1024) throw new Error('Blocked 0B file');
     const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-    let blobUrl=URL.createObjectURL(blob);
     if(isIOS){
-      window.open(blobUrl,'_blank','noopener');
-      setTimeout(()=>{try{window.openPreview(blobUrl,filename,'');}catch{}},300);
+      let viewBlob = new Blob([await blob.arrayBuffer()], {type: getMimeForName(filename)});
+      let viewUrl = URL.createObjectURL(viewBlob);
+      window.open(viewUrl,'_blank','noopener');
+      setTimeout(()=>{try{window.openPreview(viewUrl,filename,'');}catch{}},300);
       setProgress(100,'Opened - Tap Share > Save to Files on iOS');
-      setTimeout(()=>URL.revokeObjectURL(blobUrl),60000); return;
+      setTimeout(()=>URL.revokeObjectURL(viewUrl),60000);
+      return;
     }
-    let a=document.createElement('a'); a.href=blobUrl; a.download=filename; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>{try{a.click()}catch{}},180); setTimeout(()=>{URL.revokeObjectURL(blobUrl);try{a.remove()}catch{}},9000);
+    let downloadBlob = new Blob([await blob.arrayBuffer()], {type: 'application/octet-stream'});
+    let blobUrl = URL.createObjectURL(downloadBlob);
+    let a=document.createElement('a');
+    a.href=blobUrl;
+    a.download=filename;
+    a.style.display='none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{try{a.click()}catch{}},180);
+    setTimeout(()=>{URL.revokeObjectURL(blobUrl);try{a.remove()}catch{}},9000);
   }
   async function blobDownload(url,name,useProxy=true){
     let blob=await fetchBlobSafe(url,useProxy,(pct,rec,total)=>{ if(total) setProgress(pct,formatBytes(rec)+' / '+formatBytes(total)); else setProgress(pct,formatBytes(rec)); });
-    let fixed=new Blob([await blob.arrayBuffer()],{type:getMimeForName(name)}); if(fixed.size<1024) throw new Error('0B after fix'); triggerBlobDownload(fixed,name); setProgress(100,'Full file '+formatBytes(fixed.size));
+    if(blob.size<1024) throw new Error('0B after fetch');
+    await triggerBlobDownload(blob,name);
+    setProgress(100,'Full file '+formatBytes(blob.size)+' - downloading');
   }
   async function directDownload(url,name){ try{ return await blobDownload(url,name||'video.mp4',true); }catch(e){ window.open(url,'_blank','noopener'); throw e; } }
   async function filePickerSave(url,name,useProxy=true){
