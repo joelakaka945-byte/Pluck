@@ -108,7 +108,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 <div class="footer-note mono">Engine https://cobalt-production-2c27.up.railway.app - mp3 default, real progress, no half files</div>
 </div>
 
-<div id="previewModal" class="modal-backdrop"><div class="modal-card"><div class="modal-head"><b id="previewTitle">Preview</b><button id="closePreview" class="btn ghost">Close</button></div><div id="previewBody" class="modal-body"></div></div>
+<div id="previewModal" class="modal-backdrop"><div class="modal-card"><div class="modal-head"><b id="previewTitle">Preview</b><button id="closePreview" class="btn ghost">Close</button></div><div id="previewBody" class="modal-body"></div></div></div>
 
 <script>
 const BASE="https://cobalt-production-2c27.up.railway.app";const ENDPOINT=BASE+"/";
@@ -207,7 +207,35 @@ window.blobDownload=async function(url,name,useProxy=true){
   }
   setProgress(0,'Failed - no half file saved'); throw lastErr||new Error('All proxies failed');
 };
-window.directDownload=function(url,name){let a=document.createElement('a');a.href=url;a.download=name||'video.mp4';a.rel='noopener';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),1200)}
+
+// --- FIXED FOR ANDROID / iOS ---
+// Old version used <a href="cross-origin-url" download> which Android blocks.
+// New version always creates a same-origin blob: URL first, which Android allows.
+window.directDownload = async function(url, name){
+  const fileName = name || 'video.mp4';
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  try{
+    if(url.startsWith('blob:')){
+      let a=document.createElement('a');
+      a.href=url; a.download=fileName; a.style.display='none';
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>a.remove(),1000);
+      return;
+    }
+    // For both mobile and desktop, use verified blob download to avoid CORS fail
+    return await window.blobDownload(url, fileName, true);
+  }catch(e){
+    if(isMobile){
+      // iOS fallback - let user long-press Save
+      window.open(url, '_blank', 'noopener');
+    }else{
+      // desktop fallback - try open raw
+      try{ window.open(url, '_blank', 'noopener'); }catch{}
+      throw e;
+    }
+  }
+};
+
 window.filePickerSave=async function(url,name,useProxy=true,useStream=true){
   let writable=null;
   try{
@@ -219,7 +247,6 @@ window.filePickerSave=async function(url,name,useProxy=true,useStream=true){
       try{
         let res=await fetch(mk(url),{cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status); if(!res.body) throw new Error('No body');
         let total=parseInt(res.headers.get('Content-Length')||'0',10); let rd=res.body.getReader(); let rec=0;
-        // reset writable if retrying second proxy
         if(rec===0 && writable){ try{await writable.truncate(0);}catch{} }
         while(true){let {done,value}=await rd.read(); if(done)break; await writable.write(value); rec+=value.byteLength;
           if(total) setProgress(Math.round(rec/total*100), formatBytes(rec)+' / '+formatBytes(total));
@@ -238,7 +265,6 @@ window.filePickerSave=async function(url,name,useProxy=true,useStream=true){
 };
 window.copyLink=async function(u){try{await navigator.clipboard.writeText(u);alert('Copied')}catch{prompt('Copy:',u)}};
 window.openPreview=function(u,n,l){
-  let plat=window._currentPlatform||'generic';
   let m=document.getElementById('previewModal'),b=document.getElementById('previewBody'),t=document.getElementById('previewTitle');t.textContent=n||'Preview';b.innerHTML='';
   let ext='.'+(n.split('.').pop()||'').toLowerCase(); let isImg=/\.(jpg|jpeg|png|webp|gif)$/i.test(u)|| (l&&l.toLowerCase().includes('photo'));
   let isAud=/\.(mp3|ogg|wav|opus|m4a)$/i.test(ext)|| (l&&l.toLowerCase().includes('audio'));
